@@ -576,11 +576,17 @@ const geminiAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 const groqAI   = process.env.GROQ_API_KEY ? new Groq({ apiKey: process.env.GROQ_API_KEY }) : null;
 
 const parseJSON = (raw) => {
+  if (!raw || typeof raw !== 'string' || raw.trim() === '') throw new Error('Empty AI response');
   const match = raw.match(/```json\s*([\s\S]+?)\s*```/) || raw.match(/\{[\s\S]+\}/);
-  return JSON.parse(match ? (match[1] || match[0]) : raw);
+  const str = match ? (match[1] || match[0]) : raw;
+  try {
+    return JSON.parse(str);
+  } catch {
+    throw new Error(`JSON parse failed: ${str.slice(0, 120)}`);
+  }
 };
 
-// Groq fallback — only called when Gemini quota is exhausted
+// Groq fallback
 const groqFallback = async (prompt, maxTokens = 4000) => {
   if (!groqAI) throw new Error('Groq not configured');
   const res = await groqAI.chat.completions.create({
@@ -590,10 +596,15 @@ const groqFallback = async (prompt, maxTokens = 4000) => {
     temperature: 0.55,
     max_tokens: Math.min(maxTokens, 6000),
   });
-  return JSON.parse(res.choices[0].message.content);
+  const content = res.choices[0].message.content;
+  try {
+    return JSON.parse(content);
+  } catch {
+    throw new Error(`Groq JSON parse failed: ${content?.slice(0, 120)}`);
+  }
 };
 
-// Gemini text — JSON output, auto-fallback to Groq on quota error
+// Gemini text — JSON output, fallback to Groq on any failure
 const aiGenerateGemini = async (prompt, maxTokens = 4000, _attempt = 0) => {
   try {
     const model = geminiAI.getGenerativeModel({
@@ -601,15 +612,16 @@ const aiGenerateGemini = async (prompt, maxTokens = 4000, _attempt = 0) => {
       generationConfig: { maxOutputTokens: Math.min(maxTokens, 8192), temperature: 0.55 },
     });
     const result = await model.generateContent(prompt + '\n\nأجب بـ JSON صارم فقط بدون أي نص خارج الـ JSON.');
-    return parseJSON(result.response.text());
+    const text = result.response.text();
+    return parseJSON(text);
   } catch (e) {
     const is429 = e.status === 429 || e.message?.includes('429') || e.message?.includes('quota');
     if (is429 && _attempt < 1) {
       await new Promise(r => setTimeout(r, 3000));
       return aiGenerateGemini(prompt, maxTokens, _attempt + 1);
     }
-    if (is429) {
-      logger.warn('Gemini quota exhausted — switching to Groq fallback');
+    if (groqAI) {
+      logger.warn(`Gemini failed (${e.message?.slice(0, 60)}) — switching to Groq`);
       return groqFallback(prompt, maxTokens);
     }
     throw e;
