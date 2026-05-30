@@ -1,0 +1,988 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محلل المتجر الذكي — أدوات التاجر</title>
+<meta name="description" content="أداة ذكية مجانية لتحليل متجرك الإلكتروني على سلة وزد — احصل على تقرير شامل بنقاط القوة والضعف والتوصيات.">
+<meta property="og:title" content="محلل المتجر الذكي — أدوات التاجر">
+<meta property="og:description" content="حلّل متجرك مجاناً بالذكاء الاصطناعي واحصل على توصيات عملية لرفع المبيعات.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+
+<style>
+  .analyzer-section {
+    padding: 8rem 2rem 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .analyzer-form {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .analyzer-form::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-3) 100%);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .analyzer-form::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+    transform: translate(30%, -30%);
+    pointer-events: none;
+  }
+  @media (max-width: 768px) {
+    .analyzer-form { padding: 2rem 1.5rem; }
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 1rem;
+    position: relative;
+  }
+  @media (max-width: 768px) {
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* Scraped data section */
+  .scraped-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .scraped-section h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; }
+  .scraped-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .8rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+  .scraped-badge {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .3rem .8rem;
+    border-radius: var(--radius-full);
+    font-size: .82rem;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+  }
+  .scraped-badge .ok { color: #22c55e; }
+  .scraped-badge .no { color: #ef4444; }
+  .platform-badge {
+    padding: .4rem 1.2rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .scraped-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 768px) {
+    .scraped-cols { grid-template-columns: 1fr; }
+  }
+  .scraped-col-title {
+    font-weight: 600;
+    margin-bottom: .8rem;
+    font-size: .95rem;
+  }
+  .scraped-item {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .25rem 0;
+    font-size: .85rem;
+  }
+  .scraped-meta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-bottom: 1.5rem;
+  }
+  .meta-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: .35rem .75rem;
+    font-size: .8rem;
+  }
+  
+  /* Screenshots */
+  .screenshots-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .screenshots-header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .screenshots-header h3 { font-size: 1.4rem; font-weight: 700; margin: 0; }
+  .vision-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: .75rem;
+    font-weight: 700;
+    padding: .25rem .7rem;
+    border-radius: 99px;
+    border: 1px solid var(--line-accent);
+  }
+  .screenshots-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.25rem;
+  }
+  @media (max-width: 600px) {
+    .screenshots-grid { grid-template-columns: 1fr; }
+  }
+  .screenshot-frame {
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .screenshot-label {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .8rem;
+    color: var(--ink-dim);
+    padding: .45rem .75rem;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--line);
+  }
+  .screenshot-img {
+    width: 100%;
+    display: block;
+    background: var(--bg-alt);
+  }
+
+  /* Results */
+  .results {
+    display: none;
+    margin-top: 3rem;
+  }
+  .results.visible {
+    display: block;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Score circle */
+  .score-section {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding: 3rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-3) 100%);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  @media (max-width: 768px) {
+    .score-section { grid-template-columns: 1fr; text-align: center; }
+  }
+  .score-circle {
+    width: 180px;
+    height: 180px;
+    position: relative;
+  }
+  .score-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .score-bg {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 8;
+  }
+  .score-fg {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .score-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: var(--font-arabic);
+    font-weight: 800;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .score-label {
+    font-size: 0.85rem;
+    color: var(--ink-dim);
+    margin-top: 0.3rem;
+  }
+  .score-info h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .score-info p {
+    color: var(--ink-dim);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+  }
+  .score-grade {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .grade-excellent { background: rgba(74,222,128,0.15); color: var(--success); }
+  .grade-good { background: var(--accent-soft); color: var(--accent); }
+  .grade-medium { background: rgba(255,107,53,0.15); color: var(--accent-warm); }
+  .grade-poor { background: rgba(255,77,77,0.15); color: var(--danger); }
+  
+  /* Metrics grid */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 768px) {
+    .metrics-grid { grid-template-columns: 1fr; }
+  }
+  .metric {
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 1.8rem;
+    transition: all var(--transition);
+  }
+  .metric:hover {
+    border-color: var(--line-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(168,85,247,0.08);
+  }
+  .metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .metric-name {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .metric-score {
+    font-family: var(--font-arabic);
+    font-weight: 800;
+    font-size: 1.4rem;
+  }
+  .metric-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-card);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .metric-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+    border-radius: 3px;
+    transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: right;
+  }
+  .metric-detail {
+    color: var(--ink-dim);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  /* Issues list */
+  .issues-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .issues-section h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .issues-section > p {
+    color: var(--ink-dim);
+    margin-bottom: 2rem;
+  }
+  .issue {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--line);
+    align-items: start;
+  }
+  .issue:first-of-type { border-top: none; padding-top: 0; }
+  .issue-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .issue-icon.high { background: rgba(255,77,77,0.15); color: var(--danger); }
+  .issue-icon.medium { background: rgba(255,107,53,0.15); color: var(--accent-warm); }
+  .issue-icon.low { background: var(--accent-soft); color: var(--accent); }
+  .issue-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .issue-content p {
+    color: var(--ink-dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .issue-priority {
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .priority-high { background: rgba(255,77,77,0.15); color: var(--danger); }
+  .priority-medium { background: rgba(255,107,53,0.15); color: var(--accent-warm); }
+  .priority-low { background: var(--accent-soft); color: var(--accent); }
+  
+  /* Loading */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  .loading.visible { display: block; }
+  .loading-spinner { width: 60px; height: 60px; }
+  .loading-text {
+    color: var(--ink-dim);
+    font-size: 1.1rem;
+  }
+  .loading-step {
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  
+  /* CTA */
+  .upgrade-cta {
+    background: linear-gradient(135deg, var(--bg-alt) 0%, var(--bg-card) 100%);
+    border: 1px solid var(--line-accent);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .upgrade-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 60%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .upgrade-cta-content { position: relative; }
+  .upgrade-cta h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .upgrade-cta p {
+    color: var(--ink-dim);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text">
+      <span class="logo-text-ar">أدوات التاجر</span>
+      <span class="logo-text-en">Tajer Tools</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html" class="active">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+</nav>
+
+<!-- ============ HEADER ============ -->
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 01</span>
+      <h1>محلل <em>المتجر</em> الذكي</h1>
+      <p>أدخل رابط متجرك على سلة أو زد، نحلله بناءً على 15 معياراً ونعطيك تقريراً مفصلاً عن نقاط القوة والضعف، مع توصيات قابلة للتنفيذ فوراً.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ANALYZER ============ -->
+<section class="analyzer-section">
+  <div class="analyzer-form" data-reveal>
+    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; position: relative;">ابدأ التحليل</h2>
+    <p style="color: var(--ink-dim); margin-bottom: 2rem; position: relative;">أدخل رابط متجرك أدناه. التحليل يستغرق من دقيقة إلى دقيقتين بسبب التقاط الصور وتحليل الذكاء الاصطناعي.</p>
+    
+    <div class="form-row">
+      <input type="url" id="storeUrl" class="input" placeholder="https://my-store.salla.sa" />
+      <input type="text" id="category" class="input" placeholder="تخصص المتجر (اختياري) — مثل: أزياء، إلكترونيات، طعام..." style="flex:1" />
+      <button id="analyzeBtn" class="btn-primary">
+        حلل الآن
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">يجري تحليل متجرك الآن...</div>
+    <div class="loading-step" id="loadingStep">فحص سرعة الموقع</div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+    <!-- Overall Score -->
+    <div class="score-section">
+      <div class="score-circle">
+        <svg class="score-svg" viewBox="0 0 100 100">
+          <circle class="score-bg" cx="50" cy="50" r="45"/>
+          <circle class="score-fg" cx="50" cy="50" r="45" 
+                  stroke-dasharray="282.74" stroke-dashoffset="282.74" id="scoreFg"/>
+        </svg>
+        <div class="score-text">
+          <div class="score-num" id="scoreNum">0</div>
+          <div class="score-label">من 100</div>
+        </div>
+      </div>
+      <div class="score-info">
+        <h2>التقييم العام</h2>
+        <p id="scoreDesc">نحلل متجرك على 15 معياراً متنوعاً تشمل السرعة، الـ SEO، تجربة المستخدم، الأمان، وغيرها.</p>
+        <span class="score-grade" id="scoreGrade">يحتاج تحسين</span>
+      </div>
+    </div>
+
+    <!-- Scraped Technical Data -->
+    <div id="scrapedDataSection"></div>
+
+    <!-- Strengths / Weaknesses summary -->
+    <div id="strengthsWrap"></div>
+
+    <!-- Metrics -->
+    <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem;">تفاصيل المعايير (15 محور)</h3>
+    <div class="metrics-grid" id="metricsGrid"></div>
+
+    <!-- Quick Wins -->
+    <div class="issues-section" id="quickWinsSection" style="display:none;margin-bottom:2rem;">
+      <h3 style="color:#22c55e;display:flex;align-items:center;gap:.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>إصلاحات سريعة — طبّقها اليوم</h3>
+      <p>هذه الإصلاحات يمكن تطبيقها خلال 24 ساعة وستحدث فرقاً فورياً</p>
+      <div id="quickWinsList"></div>
+    </div>
+
+    <!-- Issues & Recommendations -->
+    <div class="issues-section">
+      <h3>التوصيات المفصّلة مرتبة حسب الأولوية</h3>
+      <p>كل توصية تحتوي على شرح تفصيلي والأثر المتوقع على مبيعاتك</p>
+      <div id="issuesList"></div>
+    </div>
+
+    <!-- Upgrade CTA -->
+    <div class="upgrade-cta">
+      <div class="upgrade-cta-content">
+        <span class="badge badge-warm" style="margin-bottom: 1rem; display:inline-flex; align-items:center; gap:.4rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>تحتاج مساعدة في التنفيذ؟</span>
+        <h3>فريقنا جاهز يصلح كل المشاكل لك</h3>
+        <p>بدل ما تقضي أسابيع تصلح متجرك بنفسك، فريقنا من المصممين والمسوّقين ينفذ كل التوصيات خلال أسبوع واحد بأسعار مدروسة.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="services.html" class="btn-primary">
+            احجز استشارة مجانية
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </a>
+          <a href="#" class="btn-secondary" onclick="downloadReport(event)">حمّل التقرير PDF</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية، وفريق متخصص جاهز عند الطلب.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="../index.html">الرئيسية</a>
+      <a href="tools.html">الأدوات المجانية</a>
+      <a href="coupons.html">الكوبونات</a>
+      <a href="calendar.html">تقويم المواسم</a>
+      <a href="services.html">الخدمات</a>
+    </div>
+    <div class="footer-col">
+      <h4>الفريق</h4>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">احجز معنا</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="#">تواصل معنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">إخلاء المسؤولية</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">adwat-altajer.com</div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+  // ============ Analyzer Logic ============
+  const loadingSteps = [
+    'جاري فتح رابط المتجر...',
+    'كشف المنصة والتقنيات المستخدمة...',
+    'فحص طرق الدفع المتاحة...',
+    'فحص حسابات التواصل الاجتماعي...',
+    'أخذ لقطات شاشة (ديسكتوب + جوال)...',
+    'تحليل SEO والمحتوى...',
+    'التحليل البصري بـ Gemini Vision...',
+    'إعداد التقرير النهائي...'
+  ];
+
+  function renderScreenshots(screenshots, visionUsed) {
+    const sec = document.getElementById('scrapedDataSection');
+    if (!screenshots || !screenshots.pages || !sec) return;
+
+    const pagesHtml = screenshots.pages.map((pg, i) => {
+      const frames = [];
+      if (pg.desktop) {
+        const isFirst = i === 0;
+        frames.push(`
+          <div class="screenshot-frame" style="${isFirst ? 'grid-column:1/3;' : ''}">
+            <div class="screenshot-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              ${pg.label} — ديسكتوب
+            </div>
+            <img class="screenshot-img" src="data:image/jpeg;base64,${pg.desktop}" alt="${pg.label}" loading="lazy" />
+          </div>`);
+      }
+      if (pg.mobile) {
+        frames.push(`
+          <div class="screenshot-frame">
+            <div class="screenshot-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg>
+              ${pg.label} — جوال
+            </div>
+            <img class="screenshot-img" src="data:image/jpeg;base64,${pg.mobile}" alt="${pg.label} جوال" loading="lazy" />
+          </div>`);
+      }
+      return frames.join('');
+    }).join('');
+
+    const totalImgs = screenshots.pages.reduce((n, pg) => n + (pg.desktop ? 1 : 0) + (pg.mobile ? 1 : 0), 0);
+
+    const div = document.createElement('div');
+    div.className = 'screenshots-section';
+    div.innerHTML = `
+      <div class="screenshots-header">
+        <h3 style="display:flex;align-items:center;gap:.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>لقطات شاشة المتجر</h3>
+        ${visionUsed
+          ? `<span class="vision-badge" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>حُلِّل بصرياً بـ Gemini Vision — ${totalImgs} صورة من ${screenshots.pages.length} صفحة</span>`
+          : '<span style="font-size:.8rem;color:var(--ink-dim);">التحليل البصري غير مفعّل — أضف GEMINI_API_KEY</span>'}
+      </div>
+      <div class="screenshots-grid">${pagesHtml}</div>
+    `;
+    sec.appendChild(div);
+  }
+
+  function renderScrapedData(scraped) {
+    const sec = document.getElementById('scrapedDataSection');
+    if (!scraped || !sec) return;
+
+    const ck = v => v
+      ? '<span class="ok">✓</span>'
+      : '<span class="no">✗</span>';
+
+    const platformColors = {
+      'سلة': '#4f46e5', 'زد': '#0ea5e9', 'Shopify': '#96bf48',
+      'WooCommerce (WordPress)': '#7f54b3', 'Magento': '#ee672d',
+      'BigCommerce': '#34313f', 'OpenCart': '#009ac7', 'ExpandCart': '#ff6b35',
+    };
+    const pc = platformColors[scraped.platform] || 'var(--accent)';
+
+    const metaChips = [
+      scraped.contactEmail ? `<div class="meta-chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${scraped.contactEmail}</div>` : '',
+      scraped.phoneNumbers?.length ? scraped.phoneNumbers.map(p => `<div class="meta-chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.06 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${p}</div>`).join('') : '',
+      `<div class="meta-chip">H1: <strong>${scraped.h1s?.length || 0}</strong></div>`,
+      `<div class="meta-chip">صور بدون Alt: <strong style="color:${(scraped.imgsMissingAlt||0) > 0 ? '#ef4444' : '#22c55e'}">${scraped.imgsMissingAlt||0}/${scraped.totalImgs||0}</strong></div>`,
+      `<div class="meta-chip">سكريبتات: <strong>${scraped.scriptsCount||0}</strong></div>`,
+      scraped.lang && scraped.lang !== 'غير محددة' ? `<div class="meta-chip">اللغة: ${scraped.lang}</div>` : '',
+    ].filter(Boolean).join('');
+
+    const signals = [
+      { label: 'SSL آمن', val: scraped.hasSSL },
+      { label: 'CDN', val: scraped.hasCDN },
+      { label: 'Schema.org', val: scraped.hasStructuredData },
+      { label: 'Robots Meta', val: scraped.hasRobotsMeta },
+      { label: 'بحث داخلي', val: scraped.hasSearch },
+      { label: 'سلة التسوق', val: scraped.hasCart },
+      { label: 'المفضلة', val: scraped.hasWishlist },
+      { label: 'قائمة جوال', val: scraped.hasMobileMenu },
+    ];
+
+    const socialEntries = Object.entries(scraped.socialLinks || {});
+
+    sec.innerHTML = `
+      <div class="scraped-section">
+        <h3 style="display:flex;align-items:center;gap:.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>نتائج الفحص التقني المباشر</h3>
+        <div class="scraped-badges">
+          <div class="platform-badge" style="background:${pc}22;border:1px solid ${pc}55;color:${pc};display:inline-flex;align-items:center;gap:.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57l1.65-7.43H6"/></svg>${scraped.platform}</div>
+          ${(scraped.themeName || scraped.themeCode) ? `<div class="scraped-badge" style="display:inline-flex;align-items:center;gap:.35rem;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>${scraped.themeName || scraped.themeCode}</div>` : ''}
+          ${signals.map(s => `<div class="scraped-badge">${ck(s.val)} ${s.label}</div>`).join('')}
+        </div>
+        <div class="scraped-meta-chips">${metaChips}</div>
+        <div class="scraped-cols">
+          <div>
+            <div class="scraped-col-title" style="display:flex;align-items:center;gap:.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>طرق الدفع (${scraped.paymentMethods?.length || 0})</div>
+            ${scraped.paymentMethods?.length
+              ? scraped.paymentMethods.map(p => `<div class="scraped-item"><span class="ok">✓</span>${p}</div>`).join('')
+              : '<div style="font-size:.85rem;color:var(--ink-dim);">لم يُكتشف شيء — أضف أيقونات واضحة</div>'}
+          </div>
+          <div>
+            <div class="scraped-col-title" style="display:flex;align-items:center;gap:.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>حسابات التواصل (${socialEntries.length})</div>
+            ${socialEntries.length
+              ? socialEntries.map(([name, link]) => `<div class="scraped-item"><span class="ok">✓</span><a href="${link}" target="_blank" rel="noopener" style="color:var(--ink-dim);text-decoration:none;">${name}</a></div>`).join('')
+              : '<div style="font-size:.85rem;color:var(--ink-dim);">لم تُكتشف حسابات — أضف روابط ظاهرة</div>'}
+          </div>
+          <div>
+            <div class="scraped-col-title" style="display:flex;align-items:center;gap:.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>التقنيات (${scraped.technologies?.length || 0})</div>
+            ${scraped.technologies?.length
+              ? scraped.technologies.map(t => `<div class="scraped-item"><span style="color:var(--accent);">◆</span>${t}</div>`).join('')
+              : '<div style="font-size:.85rem;color:var(--ink-dim);">لم يُكتشف شيء</div>'}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('analyzeBtn').addEventListener('click', async () => {
+    if (!auth.isLoggedIn()) {
+      showModal({ type: 'warning', title: 'يجب تسجيل الدخول', message: 'سجّل دخولك لاستخدام هذه الأداة.', actions: [
+        { label: 'إلغاء', style: 'secondary', close: true },
+        { label: 'تسجيل الدخول', style: 'primary', onClick: () => window.location.href = 'login.html' },
+      ]});
+      return;
+    }
+
+    const url = document.getElementById('storeUrl').value.trim();
+    const category = document.getElementById('category').value;
+
+    if (!url) { showError('حقل مطلوب', 'من فضلك أدخل رابط متجرك'); return; }
+    if (!url.startsWith('http')) { showError('رابط غير صحيح', 'أدخل رابطاً يبدأ بـ https://'); return; }
+
+    const btn = document.getElementById('analyzeBtn');
+    btn.disabled = true;
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    results.classList.remove('visible');
+    loading.classList.add('visible');
+
+    // Animate loading steps while API call runs
+    const stepEl = document.getElementById('loadingStep');
+    let stepIndex = 0;
+    const stepInterval = setInterval(() => {
+      stepEl.textContent = loadingSteps[stepIndex % loadingSteps.length];
+      stepIndex++;
+    }, 900);
+
+    let response;
+    try {
+      response = await api.analyze(url, category);
+    } catch (err) {
+      showToolError(err, 'analyzer');
+      return;
+    } finally {
+      clearInterval(stepInterval);
+      loading.classList.remove('visible');
+      btn.disabled = false;
+    }
+
+    // Render real scraped data + screenshots
+    results.classList.add('visible');
+    renderScrapedData(response.scraped);
+    renderScreenshots(response.screenshots, response.visionUsed);
+
+    // Map API response to UI data structure
+    const analysis = {
+      metrics: (response.criteria || []).map(c => ({
+        name: c.name,
+        score: c.score,
+        actions: c.actions || [],
+        details: { good: c.feedback, medium: c.feedback, poor: c.feedback }
+      })),
+    };
+    const overallScore = response.overallScore || 0;
+
+    if (response.summary) {
+      document.getElementById('scoreDesc').textContent = response.summary;
+    }
+    
+    // Animate score
+    const scoreFg = document.getElementById('scoreFg');
+    const scoreNum = document.getElementById('scoreNum');
+    const grade = document.getElementById('scoreGrade');
+    const desc = document.getElementById('scoreDesc');
+    const circumference = 2 * Math.PI * 45;
+    scoreFg.style.strokeDasharray = circumference;
+    scoreFg.style.strokeDashoffset = circumference - (overallScore / 100) * circumference;
+    
+    // Animate number
+    let current = 0;
+    const target = overallScore;
+    const startTime = performance.now();
+    function animateScore(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / 1500, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      scoreNum.textContent = Math.floor(eased * target);
+      if (progress < 1) requestAnimationFrame(animateScore);
+    }
+    requestAnimationFrame(animateScore);
+    
+    // Set grade
+    if (overallScore >= 85) {
+      grade.textContent = 'ممتاز';
+      grade.className = 'score-grade grade-excellent';
+      desc.textContent = 'متجرك في حالة ممتازة. هناك تحسينات بسيطة يمكنها رفعك للمستوى الأعلى.';
+    } else if (overallScore >= 70) {
+      grade.textContent = 'جيد';
+      grade.className = 'score-grade grade-good';
+      desc.textContent = 'متجرك جيد لكن فيه فرص واضحة للتحسين قد ترفع مبيعاتك 30-50%.';
+    } else if (overallScore >= 55) {
+      grade.textContent = 'متوسط';
+      grade.className = 'score-grade grade-medium';
+      desc.textContent = 'متجرك يحتاج تحسينات مهمة. الفرص ضخمة لو تم تنفيذ التوصيات.';
+    } else {
+      grade.textContent = 'يحتاج تحسين';
+      grade.className = 'score-grade grade-poor';
+      desc.textContent = 'متجرك يخسر عملاء كثيرين بسبب مشاكل تقنية وتجربة مستخدم ضعيفة.';
+    }
+    
+    // Render strengths/weaknesses summary above metrics
+    const strengthsWrap = document.getElementById('strengthsWrap');
+    if (strengthsWrap) {
+      const str = Array.isArray(response.strengths) ? response.strengths : [];
+      const wkn = Array.isArray(response.weaknesses) ? response.weaknesses : [];
+      strengthsWrap.innerHTML = str.length || wkn.length ? `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
+          <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:var(--radius-md);padding:1.5rem;">
+            <h4 style="color:#22c55e;margin-bottom:1rem;">نقاط القوة</h4>
+            ${str.map(s=>`<div style="display:flex;gap:.5rem;padding:.35rem 0;font-size:.88rem;"><span style="color:#22c55e;">✓</span><span>${s}</span></div>`).join('')}
+          </div>
+          <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);padding:1.5rem;">
+            <h4 style="color:#ef4444;margin-bottom:1rem;">نقاط الضعف</h4>
+            ${wkn.map(w=>`<div style="display:flex;gap:.5rem;padding:.35rem 0;font-size:.88rem;"><span style="color:#ef4444;">✗</span><span>${w}</span></div>`).join('')}
+          </div>
+        </div>` : '';
+    }
+
+    // Render metrics
+    const metricsGrid = document.getElementById('metricsGrid');
+    metricsGrid.innerHTML = '';
+    analysis.metrics.forEach((m, i) => {
+      const detailKey = m.score >= 75 ? 'good' : m.score >= 55 ? 'medium' : 'poor';
+      const color = m.score >= 75 ? 'var(--success)' : m.score >= 55 ? 'var(--accent-warm)' : 'var(--danger)';
+      const card = document.createElement('div');
+      card.className = 'metric';
+      card.style.animationDelay = `${i * 0.1}s`;
+      const actions = m.actions || [];
+      card.innerHTML = `
+        <div class="metric-header">
+          <div class="metric-name">${m.name}</div>
+          <div class="metric-score" style="color: ${color}">${m.score}<span style="font-size: 0.6em; color: var(--ink-dim);">/100</span></div>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-bar-fill" style="width: ${m.score}%; background: ${color};"></div>
+        </div>
+        <div class="metric-detail">${m.details[detailKey]}</div>
+        ${actions.length ? `<div style="margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--line);">
+          ${actions.map(a=>`<div style="display:flex;gap:.4rem;align-items:start;font-size:.8rem;color:var(--ink-dim);margin-bottom:.3rem;"><span style="color:var(--accent);flex-shrink:0;">→</span><span>${a}</span></div>`).join('')}
+        </div>` : ''}
+      `;
+      metricsGrid.appendChild(card);
+    });
+    
+    // Quick Wins
+    const quickWins = response.quickWins || [];
+    const quickWinsEl = document.getElementById('quickWinsList');
+    if (quickWinsEl && quickWins.length) {
+      quickWinsEl.innerHTML = quickWins.map(w => `
+        <div style="display:flex;gap:.7rem;align-items:start;padding:.6rem 0;border-bottom:1px solid var(--line);">
+          <span style="color:#22c55e;flex-shrink:0;display:flex;align-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+          <span style="line-height:1.7;">${w}</span>
+        </div>`).join('');
+      document.getElementById('quickWinsSection').style.display = 'block';
+    }
+
+    // Render issues / recommendations
+    const issuesList = document.getElementById('issuesList');
+    issuesList.innerHTML = '';
+    const recommendations = response.recommendations || [];
+    const priorityLabels = { high: 'عاجل', medium: 'مهم', low: 'تحسين' };
+
+    if (recommendations.length && typeof recommendations[0] === 'object') {
+      // New structured format
+      recommendations.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'issue';
+        const icons = {
+          high: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>',
+          medium: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>',
+          low: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>'
+        };
+        div.innerHTML = `
+          <div class="issue-icon ${r.priority}">${icons[r.priority] || icons.medium}</div>
+          <div class="issue-content">
+            <h4>${r.title}</h4>
+            <p>${r.detail || ''}</p>
+            ${r.impact ? `<div style="margin-top:.4rem;font-size:.8rem;color:var(--accent);font-weight:600;">الأثر المتوقع: ${r.impact}</div>` : ''}
+          </div>
+          <span class="issue-priority priority-${r.priority}">${priorityLabels[r.priority] || r.priority}</span>
+        `;
+        issuesList.appendChild(div);
+      });
+    } else {
+      // Fallback: old string format or weaknesses list
+      const items = recommendations.length ? recommendations :
+        [...(response.weaknesses||[]).map(w=>({priority:'high',title:w,detail:''})),
+         ...(response.strengths||[]).map(s=>({priority:'low',title:s,detail:''}))];
+      items.forEach(item => {
+        const r = typeof item === 'string' ? {priority:'medium',title:item,detail:''} : item;
+        const div = document.createElement('div');
+        div.className = 'issue';
+        div.innerHTML = `<div class="issue-content" style="grid-column:1/-1;"><h4>${r.title}</h4><p>${r.detail||''}</p></div>`;
+        issuesList.appendChild(div);
+      });
+    }
+    
+    loading.classList.remove('visible');
+    results.classList.add('visible');
+    showToast('تم التحليل بنجاح!', 'success');
+
+    // Usage counter
+    if (response.used !== undefined && response.limit !== null) {
+      let counter = document.getElementById('analyzerUsageCounter');
+      if (!counter) {
+        counter = document.createElement('div');
+        counter.id = 'analyzerUsageCounter';
+        counter.className = 'usage-counter';
+        document.getElementById('analyzeBtn').insertAdjacentElement('afterend', counter);
+      }
+      const pct = Math.round((response.used / response.limit) * 100);
+      counter.className = `usage-counter${pct >= 80 ? ' critical' : pct >= 60 ? ' low' : ''}`;
+      counter.innerHTML = `<span>استخدمت ${response.used} من ${response.limit}</span><div class="usage-bar"><div class="usage-fill" style="width:${pct}%"></div></div>`;
+    }
+
+    setTimeout(() => results.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  });
+
+  function downloadReport(e) {
+    e.preventDefault();
+    window.print();
+  }
+</script>
+
+</body>
+</html>

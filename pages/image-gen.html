@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولّد صور المنتجات — أدوات التاجر</title>
+<meta name="description" content="ولّد صور منتجات احترافية بالذكاء الاصطناعي — خلفية بيضاء، lifestyle، فاخر، flat lay وأكثر. مجاناً للتجار السعوديين.">
+<meta property="og:title" content="مولّد صور المنتجات بالذكاء الاصطناعي — أدوات التاجر">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+
+<style>
+  .imggen-section {
+    padding: 8rem 2rem 6rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .imggen-layout {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .imggen-layout { grid-template-columns: 1fr; }
+  }
+
+  .imggen-form-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    position: sticky;
+    top: 6rem;
+  }
+  .imggen-form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 100%);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .imggen-form-card { position: sticky; top: 5.5rem; }
+
+  .form-field { margin-bottom: 1.25rem; }
+  .form-field label {
+    display: block;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--ink-dim);
+    margin-bottom: .4rem;
+  }
+
+  /* Style selector */
+  .style-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: .5rem;
+    margin-bottom: 1.25rem;
+  }
+  .style-card {
+    border: 2px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: .6rem .3rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--transition);
+    background: var(--bg-card);
+  }
+  .style-card:hover { border-color: var(--line-accent); }
+  .style-card.active { border-color: var(--accent); background: var(--accent-soft); }
+  .style-card .style-icon { font-size: 1.4rem; margin-bottom: .2rem; }
+  .style-card .style-name { font-size: .7rem; color: var(--ink-dim); line-height: 1.2; }
+  .style-card.active .style-name { color: var(--accent); font-weight: 600; }
+
+  /* Result area */
+  .imggen-result {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+  }
+  .imggen-placeholder {
+    text-align: center;
+    padding: 3rem;
+    color: var(--ink-dim);
+  }
+  .imggen-placeholder .placeholder-icon {
+    font-size: 5rem;
+    opacity: .25;
+    margin-bottom: 1rem;
+  }
+  .imggen-placeholder h3 { font-size: 1.3rem; font-weight: 600; color: var(--ink); margin-bottom: .5rem; }
+
+  .imggen-output { width: 100%; }
+  .imggen-img {
+    width: 100%;
+    display: block;
+  }
+  .imggen-actions {
+    display: flex;
+    gap: .75rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-card);
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+
+  /* Loading overlay */
+  .imggen-loading {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: var(--bg-alt);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    z-index: 2;
+  }
+  .imggen-loading.visible { display: flex; }
+  .imggen-spinner {
+    width: 56px; height: 56px;
+    border: 4px solid var(--line-strong);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .imggen-loading-text { color: var(--ink-dim); font-size: 1rem; }
+  .imggen-loading-step { color: var(--accent); font-weight: 600; font-size: .9rem; }
+
+  /* Tips */
+  .tips-section {
+    margin-top: 2rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 2rem;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 768px) {
+    .tips-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    font-size: .87rem;
+  }
+  .tip-card .tip-icon { font-size: 1.5rem; margin-bottom: .4rem; }
+  .tip-card strong { display: block; margin-bottom: .25rem; }
+  .tip-card p { color: var(--ink-dim); margin: 0; line-height: 1.5; }
+</style>
+</head>
+
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text">
+      <span class="logo-text-ar">أدوات التاجر</span>
+      <span class="logo-text-en">Tajer Tools</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html" class="active">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
+    <span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span>
+    <span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
+  </button>
+  <button class="mobile-menu-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 10</span>
+      <h1>مولّد <em>صور المنتجات</em> الذكي</h1>
+      <p>اكتب اسم منتجك واختر الأسلوب — يولّد الذكاء الاصطناعي صورة تسويقية احترافية في ثوانٍ. مثالي لصفحات سلة وزد وانستقرام.</p>
+    </div>
+  </div>
+</section>
+
+<section class="imggen-section">
+  <div class="imggen-layout">
+
+    <!-- Form -->
+    <div class="imggen-form-card">
+      <h2 style="font-size:1.3rem;margin-bottom:1.5rem;position:relative;">إعدادات الصورة</h2>
+
+      <div class="form-field">
+        <label>اسم المنتج *</label>
+        <input type="text" id="productName" class="input" placeholder="مثال: حقيبة جلد بني كلاسيكية" maxlength="120" />
+      </div>
+
+      <div class="form-field">
+        <label>وصف إضافي (اختياري)</label>
+        <textarea id="description" class="input" rows="3" placeholder="لون، مادة، حجم، خصائص مميزة..." style="resize:vertical;" maxlength="300"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label>ألوان التصميم المفضلة (اختياري)</label>
+        <input type="text" id="colors" class="input" placeholder="مثال: ذهبي، بنفسجي، أبيض" maxlength="80" />
+      </div>
+
+      <div class="form-field">
+        <label>أسلوب الصورة</label>
+        <div class="style-grid">
+          <div class="style-card active" data-style="white" onclick="selectStyle(this)">
+            <div class="style-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
+            <div class="style-name">خلفية بيضاء</div>
+          </div>
+          <div class="style-card" data-style="lifestyle" onclick="selectStyle(this)">
+            <div class="style-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 8v4l2 2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div>
+            <div class="style-name">Lifestyle</div>
+          </div>
+          <div class="style-card" data-style="luxury" onclick="selectStyle(this)">
+            <div class="style-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <div class="style-name">فاخر</div>
+          </div>
+          <div class="style-card" data-style="flat" onclick="selectStyle(this)">
+            <div class="style-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8L6 7h12l-2-4z"/></svg></div>
+            <div class="style-name">Flat Lay</div>
+          </div>
+          <div class="style-card" data-style="outdoor" onclick="selectStyle(this)">
+            <div class="style-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+            <div class="style-name">خارجي</div>
+          </div>
+        </div>
+      </div>
+
+      <button id="generateBtn" class="btn-primary" style="width:100%;justify-content:center;gap:.6rem;" onclick="generateImage()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        ولّد الصورة الآن
+      </button>
+
+      <div id="usageCounter" style="display:none;margin-top:1rem;"></div>
+    </div>
+
+    <!-- Result -->
+    <div>
+      <div class="imggen-result" id="resultBox">
+        <div class="imggen-loading" id="loadingOverlay">
+          <div class="imggen-spinner"></div>
+          <div class="imggen-loading-text">جاري توليد الصورة...</div>
+          <div class="imggen-loading-step" id="loadingStep">يعالج الطلب بـ Gemini</div>
+        </div>
+
+        <div class="imggen-placeholder" id="placeholder">
+          <div class="placeholder-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <h3>صورتك ستظهر هنا</h3>
+          <p>اكتب اسم المنتج واضغط "ولّد الصورة"</p>
+        </div>
+
+        <div class="imggen-output" id="output" style="display:none;">
+          <img id="generatedImg" class="imggen-img" alt="صورة المنتج المولّدة" />
+          <div class="imggen-actions">
+            <button class="btn-primary" onclick="downloadImage()" style="gap:.5rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              تحميل الصورة
+            </button>
+            <button class="btn-secondary" onclick="generateImage()" style="gap:.5rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+              ولّد مرة أخرى
+            </button>
+            <span id="imgMeta" style="font-size:.8rem;color:var(--ink-dim);align-self:center;margin-right:auto;"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="tips-section">
+        <h3 style="font-size:1.1rem;font-weight:700;">نصائح للحصول على أفضل نتيجة</h3>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+            <strong>كن محدداً</strong>
+            <p>أضف اللون والمادة والحجم — "عباية سوداء مطرزة بالذهب" أفضل من "عباية"</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="3.5"/><circle cx="6" cy="15.5" r="3.5"/><circle cx="18.5" cy="15.5" r="3.5"/></svg></div>
+            <strong>الألوان تصنع الفرق</strong>
+            <p>حدد ألوان براندك — ذهبي، بنفسجي، فضي — للحصول على صورة متناسقة مع هويتك</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+            <strong>للمنتجات الرقمية</strong>
+            <p>استخدم flat lay أو lifestyle — أنسب لعرض الكتب والكورسات والمنتجات الرقمية</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
+            <strong>سلة وزد</strong>
+            <p>الخلفية البيضاء الأنسب لصفحات المنتجات — تبرز المنتج وتسرّع قرار الشراء</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+            <strong>انستقرام وسناب</strong>
+            <p>اختر lifestyle أو فاخر — أكثر جذباً للعين في الفيد ويزيد التفاعل</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div>
+            <strong>جرب أكثر من مرة</strong>
+            <p>كل توليد يختلف — ولّد 3-4 صور واختر الأنسب لمتجرك</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي.</p>
+    </div>
+    <div class="footer-col">
+      <h4>الأدوات</h4>
+      <a href="analyzer.html">محلل المتجر</a>
+      <a href="generator.html">مولّد المحتوى</a>
+      <a href="image-gen.html">مولّد الصور</a>
+      <a href="coupons.html">الكوبونات</a>
+    </div>
+    <div class="footer-col">
+      <h4>الخدمات</h4>
+      <a href="services.html">احجز استشارة</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="blog.html">المدونة</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">adwat-altajer.com</div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+  let selectedStyle = 'white';
+  let currentMimeType = 'image/png';
+  let currentProductName = '';
+
+  const loadingSteps = [
+    'يفهم وصف منتجك...',
+    'يختار أفضل زاوية وإضاءة...',
+    'يولّد الصورة بـ Gemini...',
+    'ينهي التفاصيل الاحترافية...',
+  ];
+
+  function selectStyle(el) {
+    document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    selectedStyle = el.dataset.style;
+  }
+
+  async function generateImage() {
+    if (!auth.isLoggedIn()) {
+      showModal({ type: 'warning', title: 'يجب تسجيل الدخول', message: 'سجّل دخولك لاستخدام هذه الأداة.', actions: [
+        { label: 'إلغاء', style: 'secondary', close: true },
+        { label: 'تسجيل الدخول', style: 'primary', onClick: () => window.location.href = 'login.html' },
+      ]});
+      return;
+    }
+
+    const productName = document.getElementById('productName').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const colors = document.getElementById('colors').value.trim();
+
+    if (!productName) { showError('حقل مطلوب', 'أدخل اسم المنتج أولاً'); return; }
+
+    currentProductName = productName;
+
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('output').style.display = 'none';
+
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.classList.add('visible');
+
+    const stepEl = document.getElementById('loadingStep');
+    let stepIdx = 0;
+    const stepTimer = setInterval(() => {
+      stepEl.textContent = loadingSteps[stepIdx % loadingSteps.length];
+      stepIdx++;
+    }, 1800);
+
+    try {
+      const result = await api.generateImage({ productName, description, style: selectedStyle, colors });
+
+      clearInterval(stepTimer);
+      overlay.classList.remove('visible');
+      btn.disabled = false;
+
+      currentMimeType = result.mimeType || 'image/png';
+      const img = document.getElementById('generatedImg');
+      img.src = `data:${currentMimeType};base64,${result.image}`;
+      document.getElementById('imgMeta').textContent = `${selectedStyle} · ${productName}`;
+      document.getElementById('output').style.display = 'block';
+
+      if (result.used !== undefined && result.limit !== null && result.limit > 0) {
+        const counter = document.getElementById('usageCounter');
+        const pct = Math.min(100, Math.round((result.used / result.limit) * 100));
+        counter.style.display = 'block';
+        counter.className = `usage-counter${pct >= 80 ? ' critical' : pct >= 60 ? ' low' : ''}`;
+        counter.innerHTML = `<span>استخدمت ${result.used} من ${result.limit}</span><div class="usage-bar"><div class="usage-fill" style="width:${pct}%"></div></div>`;
+      }
+
+      showToast('تم توليد الصورة بنجاح!', 'success');
+
+    } catch (err) {
+      clearInterval(stepTimer);
+      overlay.classList.remove('visible');
+      btn.disabled = false;
+      document.getElementById('placeholder').style.display = 'flex';
+      showToolError(err, 'image-gen');
+    }
+  }
+
+  function downloadImage() {
+    const img = document.getElementById('generatedImg');
+    if (!img.src || img.src === window.location.href) return;
+    const ext = currentMimeType.includes('jpeg') ? 'jpg' : 'png';
+    const a = document.createElement('a');
+    a.href = img.src;
+    a.download = `${currentProductName || 'product'}-${selectedStyle}.${ext}`;
+    a.click();
+  }
+
+  // Enter key
+  document.getElementById('productName').addEventListener('keydown', e => {
+    if (e.key === 'Enter') generateImage();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /pages/admin.html
+Disallow: /pages/account.html
+Disallow: /pages/login.html
+
+Sitemap: https://adwat-altajer.com/sitemap.xml

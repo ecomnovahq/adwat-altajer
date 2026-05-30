@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Next.js build
+.next/
+out/
+
+# Environment — never commit secrets
+.env
+.env.local
+.env*.local
+backend/.env
+
+# Logs
+*.log
+*.err
+logs/
+
+# Build artifacts
+tsconfig.tsbuildinfo
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db

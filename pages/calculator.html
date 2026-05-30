@@ -1,0 +1,548 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة صافي الربح — أدوات التاجر</title>
+<meta name="description" content="حاسبة صافي الربح المجانية للتاجر السعودي — احسب ربحك الصافي بعد خصم تكلفة المنتج والشحن وعمولة المنصة وتكاليف الإعلانات.">
+<meta property="og:title" content="حاسبة صافي الربح — أدوات التاجر">
+<meta property="og:description" content="احسب صافي ربحك من كل منتج بعد جميع التكاليف — مجاناً للتجار السعوديين.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+
+<style>
+  .calc-section {
+    padding: 6rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+  @media (max-width: 1024px) {
+    .calc-grid { grid-template-columns: 1fr; }
+  }
+  
+  /* Inputs Panel */
+  .inputs-panel {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .inputs-panel::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, transparent 100%);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .panel-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .panel-subtitle {
+    color: var(--ink-dim);
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+  }
+  .input-group {
+    margin-bottom: 2rem;
+  }
+  .input-group-title {
+    font-family: var(--font-arabic);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 640px) {
+    .input-row { grid-template-columns: 1fr; }
+  }
+  .input-with-unit {
+    position: relative;
+  }
+  .input-with-unit .unit-label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-mid);
+    font-size: 0.9rem;
+    pointer-events: none;
+  }
+  .input-with-unit .input {
+    padding-left: 3rem;
+  }
+  
+  /* Results Panel */
+  .results-panel {
+    position: sticky;
+    top: 7rem;
+    align-self: start;
+  }
+  .net-profit-card {
+    background: linear-gradient(160deg, var(--bg-elevated) 0%, var(--bg-alt) 100%);
+    border: 1px solid var(--line-accent);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(168,85,247,0.1);
+  }
+  .net-profit-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 60%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .net-profit-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, transparent 100%);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .net-profit-content { position: relative; }
+  .net-profit-label {
+    font-size: 0.9rem;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+  .net-profit-value {
+    font-family: var(--font-arabic);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    transition: color 0.5s;
+  }
+  .net-profit-value.positive { color: var(--accent); }
+  .net-profit-value.negative { color: var(--danger); }
+  .net-profit-margin {
+    font-size: 1rem;
+    color: var(--ink-dim);
+  }
+  .net-profit-margin .margin-value {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  
+  /* Breakdown */
+  .breakdown-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+  }
+  .breakdown-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-row.total {
+    border-top: 2px solid var(--line-strong);
+    border-bottom: none;
+    padding-top: 1.2rem;
+    margin-top: 0.5rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .breakdown-label {
+    color: var(--ink-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .breakdown-row.total .breakdown-label {
+    color: var(--ink);
+  }
+  .breakdown-value {
+    font-family: var(--font-arabic);
+    font-weight: 700;
+  }
+  .breakdown-value.income { color: var(--success); }
+  .breakdown-value.expense { color: var(--accent-warm); }
+  
+  /* Tips */
+  .tips-card {
+    background: var(--bg-card);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .tip {
+    display: flex;
+    align-items: start;
+    gap: 0.8rem;
+    padding: 0.8rem 0;
+    color: var(--ink-dim);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .tip-icon {
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+</style>
+</head>
+
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/>
+      <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
+      <polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/>
+    </svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html" class="active">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
+    <span class="icon-moon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></span>
+    <span class="icon-sun"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+  </button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 02</span>
+      <h1>حاسبة <em>صافي الربح</em></h1>
+      <p>أرقامك الحقيقية بدون مفاجآت. أدخل تكاليفك وأسعارك، نعطيك صافي ربحك الفعلي بعد كل العمولات والمصاريف المخفية.</p>
+    </div>
+  </div>
+</section>
+
+<section class="calc-section">
+  <div class="calc-grid">
+    <!-- Inputs -->
+    <div class="inputs-panel">
+      <div class="panel-title">أدخل بياناتك</div>
+      <p class="panel-subtitle">كل تغيير يحدّث النتيجة فوراً</p>
+      
+      <div class="input-group">
+        <div class="input-group-title">المنتج والسعر</div>
+        <div class="input-row">
+          <div>
+            <label class="label">سعر البيع</label>
+            <div class="input-with-unit">
+              <span class="unit-label">ر.س</span>
+              <input type="number" id="sellPrice" class="input" value="250" min="0" />
+            </div>
+          </div>
+          <div>
+            <label class="label">تكلفة المنتج (الشراء)</label>
+            <div class="input-with-unit">
+              <span class="unit-label">ر.س</span>
+              <input type="number" id="costPrice" class="input" value="100" min="0" />
+            </div>
+          </div>
+        </div>
+        <div class="input-row">
+          <div>
+            <label class="label">عدد الوحدات المتوقع بيعها/شهر</label>
+            <input type="number" id="quantity" class="input" value="50" min="1" />
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-group-title">رسوم المنصة</div>
+        <div class="input-row">
+          <div>
+            <label class="label">المنصة</label>
+            <select id="platform" class="select">
+              <option value="salla-basic">سلة بيسك (مجاني)</option>
+              <option value="salla-plus" selected>سلة بلس (99 ر.س/شهر)</option>
+              <option value="salla-pro">سلة برو (199 ر.س/شهر)</option>
+              <option value="zid-lite">زد لايت (149 ر.س/شهر)</option>
+              <option value="zid-growth">زد النمو (399 ر.س/شهر)</option>
+              <option value="zid-pro">زد الاحترافية (999 ر.س/شهر)</option>
+            </select>
+          </div>
+          <div>
+            <label class="label">عمولة بوابة الدفع</label>
+            <div class="input-with-unit">
+              <span class="unit-label">%</span>
+              <input type="number" id="paymentFee" class="input" value="2.5" min="0" step="0.1" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-group-title">الشحن والتسويق</div>
+        <div class="input-row">
+          <div>
+            <label class="label">تكلفة الشحن للقطعة</label>
+            <div class="input-with-unit">
+              <span class="unit-label">ر.س</span>
+              <input type="number" id="shippingCost" class="input" value="15" min="0" />
+            </div>
+          </div>
+          <div>
+            <label class="label">ميزانية إعلانات/شهر</label>
+            <div class="input-with-unit">
+              <span class="unit-label">ر.س</span>
+              <input type="number" id="adsBudget" class="input" value="2000" min="0" />
+            </div>
+          </div>
+        </div>
+        <div class="input-row">
+          <div>
+            <label class="label">نسبة الإرجاع</label>
+            <div class="input-with-unit">
+              <span class="unit-label">%</span>
+              <input type="number" id="returnRate" class="input" value="5" min="0" max="100" step="0.5" />
+            </div>
+          </div>
+          <div>
+            <label class="label">نسبة الضريبة (VAT)</label>
+            <div class="input-with-unit">
+              <span class="unit-label">%</span>
+              <input type="number" id="vat" class="input" value="15" min="0" max="100" step="0.5" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-panel">
+      <div class="net-profit-card">
+        <div class="net-profit-content">
+          <div class="net-profit-label">صافي ربحك الشهري</div>
+          <div class="net-profit-value positive" id="netProfit">0</div>
+          <div class="net-profit-margin">هامش الربح: <span class="margin-value" id="profitMargin">0%</span></div>
+        </div>
+      </div>
+
+      <div class="breakdown-card">
+        <h3>التفصيل الكامل</h3>
+        <div class="breakdown-row">
+          <span class="breakdown-label">إجمالي المبيعات</span>
+          <span class="breakdown-value income" id="totalRevenue">0 ر.س</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">تكلفة البضاعة</span>
+          <span class="breakdown-value expense" id="totalCost">- 0 ر.س</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">رسوم اشتراك المنصة</span>
+          <span class="breakdown-value expense" id="platformFee">- 0 ر.س</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">عمولة بوابة الدفع</span>
+          <span class="breakdown-value expense" id="paymentFeeTotal">- 0 ر.س</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">تكاليف الشحن</span>
+          <span class="breakdown-value expense" id="shippingTotal">- 0 ر.س</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">إعلانات وتسويق</span>
+          <span class="breakdown-value expense" id="adsTotal">- 0 ر.س</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">خسائر الإرجاع</span>
+          <span class="breakdown-value expense" id="returnsTotal">- 0 ر.س</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">ضريبة القيمة المضافة</span>
+          <span class="breakdown-value expense" id="vatTotal">- 0 ر.س</span>
+        </div>
+        <div class="breakdown-row total">
+          <span class="breakdown-label">صافي الربح</span>
+          <span class="breakdown-value" id="netProfitBreakdown" style="color: var(--accent);">0 ر.س</span>
+        </div>
+      </div>
+
+      <div class="tips-card">
+        <div class="tip">
+          <svg class="tip-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          <span>هامش الربح الصحي في التجارة الإلكترونية يتراوح بين 15-30%</span>
+        </div>
+        <div class="tip">
+          <svg class="tip-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          <span>راجع الأرقام كل شهر، التكاليف ترتفع بسرعة وأنت ما تشعر</span>
+        </div>
+        <div class="tip">
+          <svg class="tip-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          <span>كل 1% توفير في تكلفة الشراء = آلاف الريالات ربح إضافي سنوياً</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/>
+          <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
+          <polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/>
+        </svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="تويتر"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="انستغرام"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="tools.html">الأدوات</a>
+      <a href="coupons.html">الكوبونات</a>
+      <a href="calendar.html">المواسم</a>
+      <a href="works.html">أعمالنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>الفريق</h4>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">احجز معنا</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="#">تواصل معنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">سياسة الكوبونات</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر. جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line"></div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+</script>
+<script>
+  const platformFees = {
+    'salla-basic': 0,
+    'salla-plus': 99,
+    'salla-pro': 199,
+    'zid-lite': 149,
+    'zid-growth': 399,
+    'zid-pro': 999
+  };
+  
+  const inputs = ['sellPrice','costPrice','quantity','platform','paymentFee','shippingCost','adsBudget','returnRate','vat'];
+  
+  function calculate() {
+    const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
+    const costPrice = parseFloat(document.getElementById('costPrice').value) || 0;
+    const quantity = parseInt(document.getElementById('quantity').value) || 0;
+    const platform = document.getElementById('platform').value;
+    const paymentFeePct = parseFloat(document.getElementById('paymentFee').value) || 0;
+    const shippingCost = parseFloat(document.getElementById('shippingCost').value) || 0;
+    const adsBudget = parseFloat(document.getElementById('adsBudget').value) || 0;
+    const returnRate = parseFloat(document.getElementById('returnRate').value) || 0;
+    const vatPct = parseFloat(document.getElementById('vat').value) || 0;
+    
+    const totalRevenue = sellPrice * quantity;
+    const totalCost = costPrice * quantity;
+    const platformFee = platformFees[platform] || 0;
+    const paymentFeeTotal = totalRevenue * (paymentFeePct / 100);
+    const shippingTotal = shippingCost * quantity;
+    const returnsLoss = (sellPrice - costPrice) * quantity * (returnRate / 100);
+    const netRevenue = totalRevenue - paymentFeeTotal;
+    const vatTotal = netRevenue * (vatPct / 100) / (1 + vatPct/100); // VAT included
+    
+    const totalExpenses = totalCost + platformFee + paymentFeeTotal + shippingTotal + adsBudget + returnsLoss + vatTotal;
+    const netProfit = totalRevenue - totalExpenses;
+    const profitMargin = totalRevenue > 0 ? (netProfit / totalRevenue * 100) : 0;
+    
+    // Update display
+    const fmt = (n) => formatSAR(n);
+    document.getElementById('totalRevenue').textContent = fmt(totalRevenue);
+    document.getElementById('totalCost').textContent = '- ' + fmt(totalCost);
+    document.getElementById('platformFee').textContent = '- ' + fmt(platformFee);
+    document.getElementById('paymentFeeTotal').textContent = '- ' + fmt(paymentFeeTotal);
+    document.getElementById('shippingTotal').textContent = '- ' + fmt(shippingTotal);
+    document.getElementById('adsTotal').textContent = '- ' + fmt(adsBudget);
+    document.getElementById('returnsTotal').textContent = '- ' + fmt(returnsLoss);
+    document.getElementById('vatTotal').textContent = '- ' + fmt(vatTotal);
+    document.getElementById('netProfitBreakdown').textContent = fmt(netProfit);
+    
+    const profitEl = document.getElementById('netProfit');
+    profitEl.textContent = fmt(netProfit);
+    profitEl.className = 'net-profit-value ' + (netProfit >= 0 ? 'positive' : 'negative');
+    
+    const marginEl = document.getElementById('profitMargin');
+    marginEl.textContent = profitMargin.toFixed(1) + '%';
+    marginEl.style.color = profitMargin >= 15 ? 'var(--accent)' : profitMargin >= 5 ? 'var(--accent-warm)' : 'var(--danger)';
+  }
+  
+  inputs.forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', calculate);
+    el.addEventListener('change', calculate);
+  });
+  
+  calculate();
+</script>
+</body>
+</html>

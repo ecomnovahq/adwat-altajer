@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المدونة — أدوات التاجر</title>
+<meta name="description" content="مدونة أدوات التاجر — نصائح عملية ودراسات حالة لمساعدتك في تنمية متجرك الإلكتروني على سلة وزد في السوق السعودي.">
+<meta property="og:title" content="مدونة أدوات التاجر">
+<meta property="og:description" content="نصائح تسويقية، SEO، تصميم، وإدارة متجر إلكتروني للتاجر السعودي.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .blog-page { padding: 4rem 2rem 6rem; max-width: 1280px; margin: 0 auto; }
+
+  .blog-hero { text-align: center; margin-bottom: 3.5rem; }
+  .blog-hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-bottom: 0.75rem; }
+  .blog-hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .blog-hero p { color: var(--ink-dim); font-size: 1.05rem; max-width: 520px; margin: 0 auto; }
+
+  .filter-tabs { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-bottom: 3rem; }
+  .filter-tab { padding: 0.5rem 1.25rem; border-radius: var(--radius-full); border: 1px solid var(--line-strong); background: transparent; color: var(--ink-dim); font-family: var(--font-arabic); font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all var(--transition); }
+  .filter-tab:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .filter-tab.active { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border-color: transparent; box-shadow: 0 2px 12px rgba(168,85,247,0.3); }
+
+  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  @media (max-width: 1024px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px)  { .blog-grid { grid-template-columns: 1fr; } }
+
+  .blog-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; position: relative; transition: all 0.35s cubic-bezier(0.16,1,0.3,1); cursor: pointer; text-decoration: none; display: flex; flex-direction: column; }
+  .blog-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--accent-3)); z-index: 2; opacity: 0; transition: opacity var(--transition); }
+  .blog-card:hover { border-color: var(--line-accent); transform: translateY(-5px); box-shadow: 0 20px 50px -10px rgba(168,85,247,0.2); }
+  .blog-card:hover::before { opacity: 1; }
+
+  .blog-card-cover { height: 200px; background: linear-gradient(135deg, var(--bg-alt) 0%, var(--bg) 100%); overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+  .blog-card-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .blog-card-cover-placeholder { font-size: 3rem; opacity: 0.4; }
+  .blog-card-category { position: absolute; top: 0.75rem; right: 0.75rem; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px; }
+
+  .blog-card-body { padding: 1.4rem; flex: 1; display: flex; flex-direction: column; }
+  .blog-card-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 0.6rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .blog-card-excerpt { font-size: 0.85rem; color: var(--ink-dim); line-height: 1.65; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .blog-card-meta { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+  .blog-card-author { font-size: 0.78rem; color: var(--ink-dim); flex: 1; }
+  .blog-card-stats { display: flex; gap: 0.7rem; font-size: 0.75rem; color: var(--ink-dim); }
+  .blog-card-stat { display: flex; align-items: center; gap: 0.25rem; }
+
+  .blog-empty { text-align: center; padding: 6rem 2rem; color: var(--ink-dim); }
+  .blog-empty svg { opacity: 0.3; margin-bottom: 1rem; }
+
+  .blog-load-more { text-align: center; margin-top: 3rem; }
+  .blog-search-wrap { position: relative; max-width: 420px; margin: 0 auto 2rem; }
+  .blog-search-wrap svg { position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--ink-dim); pointer-events: none; }
+  .blog-search-input { width: 100%; padding: 0.7rem 2.5rem 0.7rem 1rem; background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-full); color: var(--ink); font-family: var(--font-arabic); font-size: 0.9rem; transition: border-color var(--transition); }
+  .blog-search-input:focus { outline: none; border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">
+      <svg width="22" height="30" viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/>
+        <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
+        <polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/>
+      </svg>
+      <span>أدوات التاجر</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html">الرئيسية</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="blog.html" class="active">المدونة</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn-primary" href="login.html">ابدأ مجاناً</a>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+  </div>
+</nav>
+
+<main class="blog-page">
+  <div class="blog-hero" data-reveal>
+    <h1>مدونة <em>أدوات التاجر</em></h1>
+    <p>نصائح عملية ودراسات حالة لمساعدتك في تنمية متجرك الإلكتروني</p>
+  </div>
+
+  <div class="blog-search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="search" id="blogSearch" class="blog-search-input" placeholder="ابحث في المقالات..." oninput="onSearch(this.value)">
+  </div>
+
+  <div class="filter-tabs" id="categoryTabs">
+    <button class="filter-tab active" onclick="filterCategory('all', this)">الكل</button>
+    <button class="filter-tab" onclick="filterCategory('تسويق', this)">تسويق</button>
+    <button class="filter-tab" onclick="filterCategory('تصميم', this)">تصميم</button>
+    <button class="filter-tab" onclick="filterCategory('سيو', this)">سيو</button>
+    <button class="filter-tab" onclick="filterCategory('إدارة المتجر', this)">إدارة المتجر</button>
+    <button class="filter-tab" onclick="filterCategory('نصائح', this)">نصائح</button>
+  </div>
+
+  <div class="blog-grid" id="blogGrid">
+    <div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--ink-dim);">
+      <div class="loading-spinner" style="width:48px;height:48px;margin:0 auto 1rem;"></div>
+      جاري التحميل...
+    </div>
+  </div>
+
+  <div class="blog-load-more" id="loadMoreWrap" style="display:none;">
+    <button class="btn-secondary" id="loadMoreBtn" onclick="loadMore()" style="padding:0.75rem 2rem;">
+      تحميل المزيد
+    </button>
+  </div>
+</main>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+let currentCategory = 'all';
+let currentSearch = '';
+let currentOffset = 0;
+const PAGE_SIZE = 9;
+let searchTimer = null;
+
+async function loadPosts(reset = false) {
+  if (reset) {
+    currentOffset = 0;
+    document.getElementById('blogGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--ink-dim);"><div class="loading-spinner" style="width:48px;height:48px;margin:0 auto 1rem;"></div>جاري التحميل...</div>';
+  }
+
+  const params = { limit: PAGE_SIZE, offset: currentOffset };
+  if (currentCategory !== 'all') params.category = currentCategory;
+  if (currentSearch) params.search = currentSearch;
+
+  const posts = await api.getBlogPosts(params).catch(() => []);
+  const grid = document.getElementById('blogGrid');
+
+  if (reset) grid.innerHTML = '';
+
+  if (!posts.length && reset) {
+    grid.innerHTML = `<div class="blog-empty" style="grid-column:1/-1;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <p style="margin-top:1rem;font-size:1rem;">لا توجد مقالات في هذا التصنيف</p>
+    </div>`;
+    document.getElementById('loadMoreWrap').style.display = 'none';
+    return;
+  }
+
+  posts.forEach(p => {
+    const card = document.createElement('a');
+    card.className = 'blog-card';
+    card.href = `blog-post.html?slug=${p.slug}`;
+    card.innerHTML = `
+      <div class="blog-card-cover">
+        ${p.cover_image
+          ? `<img src="${p.cover_image}" alt="${p.title}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=blog-card-cover-placeholder><svg width=40 height=40 viewBox=&quot;0 0 24 24&quot; fill=none stroke=currentColor stroke-width=1.5 stroke-linecap=round stroke-linejoin=round><path d=&quot;M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z&quot;/><polyline points=&quot;14 2 14 8 20 8&quot;/><line x1=16 y1=13 x2=8 y2=13/><line x1=16 y1=17 x2=8 y2=17/></svg></div>'">`
+          : `<div class="blog-card-cover-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>`}
+        <span class="blog-card-category">${p.category || 'عام'}</span>
+      </div>
+      <div class="blog-card-body">
+        <div class="blog-card-title">${p.title}</div>
+        <div class="blog-card-excerpt">${p.excerpt || ''}</div>
+        <div class="blog-card-meta">
+          <div class="blog-card-author">${p.author_name || 'فريق أدوات التاجر'}</div>
+          <div class="blog-card-stats">
+            <span class="blog-card-stat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${p.read_time || 3} د
+            </span>
+            <span class="blog-card-stat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              ${p.views || 0}
+            </span>
+          </div>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  currentOffset += posts.length;
+  document.getElementById('loadMoreWrap').style.display = posts.length === PAGE_SIZE ? 'block' : 'none';
+}
+
+function filterCategory(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  loadPosts(true);
+}
+
+function onSearch(val) {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    currentSearch = val.trim();
+    loadPosts(true);
+  }, 350);
+}
+
+function loadMore() {
+  loadPosts(false);
+}
+
+loadPosts(true);
+</script>
+</body>
+</html>

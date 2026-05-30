@@ -1,0 +1,1508 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم — أدوات التاجر</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  * { box-sizing: border-box; }
+  body { min-height: 100vh; display: flex; background: var(--bg); }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 260px; min-height: 100vh; background: var(--bg-alt);
+    border-left: 1px solid var(--line); display: flex; flex-direction: column;
+    position: fixed; right: 0; top: 0; z-index: 100;
+    transition: transform 0.3s;
+  }
+  .sidebar-logo { padding: 1.5rem; display: flex; align-items: center; gap: 0.7rem; border-bottom: 1px solid var(--line); }
+  .sidebar-logo svg { width: 30px; height: 42px; }
+  .sidebar-logo-name { font-weight: 700; font-size: 0.95rem; }
+  .sidebar-logo-sub { font-size: 0.7rem; color: var(--accent); font-weight: 600; }
+  .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+  .sidebar-section { padding: 0.5rem 1.2rem 0.2rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-dim); }
+  .sidebar-link {
+    display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1.2rem;
+    color: var(--ink-dim); text-decoration: none; font-size: 0.9rem; cursor: pointer;
+    transition: all 0.15s; border: none; background: none; width: 100%; text-align: right;
+  }
+  .sidebar-link:hover { color: var(--ink); background: var(--bg-card); }
+  .sidebar-link.active { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+  .sidebar-link svg { flex-shrink: 0; }
+  .sidebar-badge { margin-right: auto; background: var(--accent); color: var(--bg); font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 99px; }
+  .sidebar-footer { padding: 1rem 1.2rem; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 0.7rem; }
+  .sidebar-user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-soft); border: 1px solid var(--line-accent); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--accent); font-size: 0.9rem; flex-shrink: 0; }
+  .sidebar-user-name { font-size: 0.85rem; font-weight: 600; }
+  .sidebar-user-role { font-size: 0.7rem; color: var(--accent); }
+  .logout-btn { margin-right: auto; background: none; border: none; color: var(--ink-dim); cursor: pointer; padding: 0.3rem; border-radius: 6px; transition: all 0.15s; }
+  .logout-btn:hover { color: var(--danger, #ef4444); }
+
+  /* ── Main ── */
+  .main { margin-right: 260px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .top-bar { padding: 1rem 2rem; background: var(--nav-bg); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50; }
+  .top-bar-title { font-size: 1.1rem; font-weight: 700; }
+  .top-bar-actions { display: flex; gap: 0.6rem; align-items: center; }
+  .content { padding: 2rem; flex: 1; }
+
+  /* ── Stats ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1.5rem; }
+  .stat-label { font-size: 0.75rem; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .stat-value { font-size: 2rem; font-weight: 800; color: var(--accent); font-family: var(--font-arabic); }
+  .stat-sub { font-size: 0.75rem; color: var(--ink-dim); margin-top: 0.3rem; }
+
+  /* ── Section Panel ── */
+  .panel { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2rem; }
+  .panel-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .panel-title { font-weight: 700; font-size: 1rem; }
+  .panel-body { padding: 1.5rem; }
+
+  /* ── Table ── */
+  .admin-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .admin-table th { text-align: right; padding: 0.7rem 1rem; color: var(--ink-dim); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid var(--line); }
+  .admin-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .admin-table tr:last-child td { border-bottom: none; }
+  .admin-table tr:hover td { background: var(--bg-card); }
+
+  /* ── Badges ── */
+  .status-badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.7rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; }
+  .status-pending   { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .status-contacted { background: rgba(59,130,246,0.15); color: #3b82f6; }
+  .status-in_progress { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+  .status-completed { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .status-cancelled { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .platform-badge { font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 700; }
+  .platform-salla  { background: rgba(168,85,247,0.15); color: var(--accent); }
+  .platform-zid    { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .platform-both   { background: rgba(245,158,11,0.15); color: #f59e0b; }
+
+  /* ── Form Modal ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
+  .modal-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-weight: 700; }
+  .modal-close { background: none; border: none; color: var(--ink-dim); cursor: pointer; font-size: 1.2rem; padding: 0.2rem 0.5rem; border-radius: 6px; }
+  .modal-close:hover { color: var(--ink); background: var(--bg-card); }
+  .modal-body { padding: 1.5rem; }
+  .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--line); display: flex; gap: 0.8rem; justify-content: flex-end; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.82rem; color: var(--ink-dim); margin-bottom: 0.4rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* ── Actions ── */
+  .action-btn { background: none; border: none; cursor: pointer; padding: 0.3rem 0.5rem; border-radius: 6px; transition: all 0.15s; font-size: 0.78rem; font-family: var(--font-arabic); }
+  .action-edit   { color: var(--accent); } .action-edit:hover   { background: var(--accent-soft); }
+  .action-delete { color: #ef4444; }       .action-delete:hover { background: rgba(239,68,68,0.1); }
+  .action-toggle { color: var(--ink-dim); } .action-toggle:hover { background: var(--bg-card); }
+
+  /* ── Search ── */
+  .search-row { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+  .search-input { flex: 1; min-width: 200px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-right: 0; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* ── Section visibility ── */
+  .admin-section { display: none; }
+  .admin-section.active { display: block; }
+
+  /* ── Notifications ── */
+  .notif-btn { position: relative; background: none; border: none; color: var(--ink-dim); cursor: pointer; padding: 0.4rem; border-radius: 8px; transition: all 0.15s; }
+  .notif-btn:hover { color: var(--ink); background: var(--bg-card); }
+  .notif-dot { position: absolute; top: 3px; right: 3px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; border: 2px solid var(--nav-bg); display: none; }
+  .notif-dot.visible { display: block; }
+  .notif-count { position: absolute; top: -2px; right: -2px; background: #ef4444; color: #fff; font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
+  .notif-count.visible { display: flex; }
+  .notif-panel { position: absolute; top: calc(100% + 8px); left: 0; width: 340px; max-height: 420px; overflow-y: auto; background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 300; display: none; }
+  .notif-panel.open { display: block; }
+  .notif-panel-header { padding: 0.8rem 1rem; border-bottom: 1px solid var(--line); font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; justify-content: space-between; }
+  .notif-item { padding: 0.8rem 1rem; border-bottom: 1px solid var(--line); cursor: pointer; transition: background 0.15s; }
+  .notif-item:last-child { border-bottom: none; }
+  .notif-item:hover { background: var(--bg-card); }
+  .notif-item.unread { border-right: 3px solid var(--accent); }
+  .notif-item-title { font-size: 0.85rem; font-weight: 600; color: var(--ink); }
+  .notif-item-sub { font-size: 0.78rem; color: var(--ink-dim); margin-top: 0.25rem; }
+  .notif-empty { text-align: center; padding: 2rem; color: var(--ink-dim); font-size: 0.88rem; }
+  .notif-wrapper { position: relative; }
+
+  /* ── Toggle switch ── */
+  .toggle-switch { position: relative; width: 38px; height: 22px; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; inset: 0; background: var(--line-strong); border-radius: 22px; cursor: pointer; transition: 0.2s; }
+  .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+  input:checked + .toggle-slider { background: var(--accent); }
+  input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+  /* Color preview */
+  .color-preview { display: flex; align-items: center; gap: 0.5rem; }
+  .color-preview-box { width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--line); }
+
+  /* Work visual preview */
+  .gradient-preview { height: 40px; border-radius: 8px; margin-top: 0.5rem; }
+</style>
+</head>
+<body>
+
+<!-- ──────────────────── SIDEBAR ──────────────────────── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#a855f7"/>
+      <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
+      <polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/>
+    </svg>
+    <div>
+      <div class="sidebar-logo-name">أدوات التاجر</div>
+      <div class="sidebar-logo-sub">لوحة التحكم</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">الرئيسية</div>
+    <button class="sidebar-link active" onclick="showSection('dashboard')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      الإحصائيات
+    </button>
+
+    <div class="sidebar-section">المحتوى</div>
+    <button class="sidebar-link" onclick="showSection('bookings')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      الطلبات
+      <span class="sidebar-badge" id="pendingBadge">0</span>
+    </button>
+    <button class="sidebar-link" onclick="showSection('coupons')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h.01M17 17h.01M3 3l18 18M21 8V5a2 2 0 00-2-2H5a2 2 0 00-2 2v3M21 16v3a2 2 0 01-2 2H5a2 2 0 01-2-2v-3"/></svg>
+      الكوبونات
+    </button>
+    <button class="sidebar-link" onclick="showSection('works')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      الأعمال
+    </button>
+    <button class="sidebar-link" onclick="showSection('reviews')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      المراجعات
+    </button>
+
+    <button class="sidebar-link" onclick="showSection('blog')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      المدونة
+    </button>
+
+    <div class="sidebar-section">النظام</div>
+    <button class="sidebar-link" onclick="showSection('users')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      المستخدمون
+    </button>
+    <button class="sidebar-link" onclick="showSection('logs')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
+      سجل الأدوات
+    </button>
+    <button class="sidebar-link" onclick="showSection('tool-settings')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 19.07l-1.41 1.41M12 2v2M12 20v2M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M2 12h2M20 12h2"/></svg>
+      إعدادات الأدوات
+    </button>
+    <button class="sidebar-link" onclick="showSection('tool-requests')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      طلبات الوصول
+    </button>
+    <a class="sidebar-link" href="../index.html" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      عرض الموقع
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user-avatar" id="sidebarAvatar">م</div>
+    <div>
+      <div class="sidebar-user-name" id="sidebarName">المدير</div>
+      <div class="sidebar-user-role">أدمن</div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()" title="تسجيل خروج">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+    </button>
+  </div>
+</aside>
+
+<!-- ──────────────────── MAIN ──────────────────────────── -->
+<div class="main">
+  <div class="top-bar">
+    <div class="top-bar-title" id="topBarTitle">الإحصائيات</div>
+    <div class="top-bar-actions">
+      <div class="notif-wrapper">
+        <button class="notif-btn" id="notifBtn" onclick="toggleNotifPanel()" title="الإشعارات">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notif-count" id="notifCount"></span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-header">
+            <span>الإشعارات</span>
+            <button onclick="markAllRead()" style="background:none;border:none;color:var(--accent);font-size:0.78rem;cursor:pointer;font-family:var(--font-arabic);">تحديد الكل كمقروء</button>
+          </div>
+          <div id="notifList"><div class="notif-empty">لا توجد إشعارات</div></div>
+        </div>
+      </div>
+      <button class="btn-secondary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="refreshSection()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        تحديث
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── Dashboard ── -->
+    <div class="admin-section active" id="section-dashboard">
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-label">المستخدمون</div><div class="stat-value" id="stat-users">—</div></div>
+        <div class="stat-card"><div class="stat-label">إجمالي الطلبات</div><div class="stat-value" id="stat-bookings">—</div></div>
+        <div class="stat-card"><div class="stat-label">طلبات معلقة</div><div class="stat-value" id="stat-pending" style="color:#f59e0b">—</div></div>
+        <div class="stat-card"><div class="stat-label">الكوبونات النشطة</div><div class="stat-value" id="stat-coupons">—</div></div>
+        <div class="stat-card"><div class="stat-label">الأعمال المعروضة</div><div class="stat-value" id="stat-works">—</div></div>
+        <div class="stat-card"><div class="stat-label">استخدام الأدوات (30 يوم)</div><div class="stat-value" id="stat-tools">—</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">آخر الطلبات</div>
+          <button class="btn-secondary" style="padding:0.4rem 0.8rem;font-size:0.8rem;" onclick="showSection('bookings')">عرض الكل</button>
+        </div>
+        <div class="panel-body" style="padding:0;">
+          <table class="admin-table">
+            <thead><tr><th>الاسم</th><th>الخدمة</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+            <tbody id="recentBookingsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Bookings ── -->
+    <div class="admin-section" id="section-bookings">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">الطلبات والحجوزات</div>
+          <div class="search-row">
+            <select class="select" id="bookingStatusFilter" onchange="loadBookings()" style="width:auto;">
+              <option value="">كل الحالات</option>
+              <option value="pending">معلق</option>
+              <option value="contacted">تم التواصل</option>
+              <option value="in_progress">جاري التنفيذ</option>
+              <option value="completed">مكتمل</option>
+              <option value="cancelled">ملغي</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead><tr><th>الاسم</th><th>البريد</th><th>الجوال</th><th>الخدمة</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th></tr></thead>
+            <tbody id="bookingsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Coupons ── -->
+    <div class="admin-section" id="section-coupons">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">الكوبونات</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <button class="btn-secondary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="exportCSV('coupons')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:0.3rem;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              تصدير CSV
+            </button>
+            <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openCouponModal()">+ إضافة كوبون</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead><tr><th>الاسم</th><th>الكود</th><th>الخصم</th><th>المنصة</th><th>التصنيف</th><th>الانتهاء</th><th>مميز</th><th>نشط</th><th>إجراء</th></tr></thead>
+            <tbody id="couponsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Works ── -->
+    <div class="admin-section" id="section-works">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">الأعمال والمشاريع</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <button class="btn-secondary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="exportCSV('works')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:0.3rem;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              تصدير CSV
+            </button>
+            <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openWorkModal()">+ إضافة عمل</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead><tr><th>العنوان</th><th>التصنيف</th><th>الشارة</th><th>اللون</th><th>الترتيب</th><th>نشط</th><th>إجراء</th></tr></thead>
+            <tbody id="worksTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Reviews ── -->
+    <div class="admin-section" id="section-reviews">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">آراء العملاء</div>
+          <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openReviewModal()">+ إضافة مراجعة</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead><tr><th>الاسم</th><th>المتجر</th><th>التقييم</th><th>المراجعة</th><th>نشط</th><th>إجراء</th></tr></thead>
+            <tbody id="reviewsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Users ── -->
+    <div class="admin-section" id="section-users">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">المستخدمون المسجلون</div>
+          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+            <input type="text" class="admin-search" id="usersSearch" placeholder="ابحث بالاسم أو البريد..." oninput="filterUsers(this.value)" style="max-width:200px;">
+            <button class="btn-secondary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="exportCSV('users')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:0.3rem;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              تصدير CSV
+            </button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الدور</th><th>الأدوات</th><th>التاريخ</th><th>إجراء</th></tr></thead>
+            <tbody id="usersTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tool Logs ── -->
+    <div class="admin-section" id="section-logs">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">سجل استخدام الأدوات</div>
+          <select class="select" id="logToolFilter" onchange="loadLogs()" style="width:auto;">
+            <option value="">كل الأدوات</option>
+            <option value="analyzer">محلل المتجر</option>
+            <option value="generator">مولّد الأوصاف</option>
+          </select>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead><tr><th>الأداة</th><th>المستخدم</th><th>المدخل</th><th>التاريخ</th></tr></thead>
+            <tbody id="logsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tool Settings ── -->
+    <div class="admin-section" id="section-tool-settings">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">إعدادات الأدوات — مجاني / مدفوع</div></div>
+        <div id="toolSettingsPanel" style="padding:1rem 0;"></div>
+      </div>
+    </div>
+
+    <!-- ── Blog ── -->
+    <div class="admin-section" id="section-blog">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">مقالات المدونة</div>
+          <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openBlogModal()">+ إضافة مقال</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead><tr><th>العنوان</th><th>التصنيف</th><th>الكاتب</th><th>المشاهدات</th><th>حالة النشر</th><th>التاريخ</th><th>إجراء</th></tr></thead>
+            <tbody id="blogTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tool Access Requests ── -->
+    <div class="admin-section" id="section-tool-requests">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">طلبات الوصول للأدوات</div>
+          <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadToolRequests()">تحديث</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead><tr><th>المستخدم</th><th>الأداة</th><th>السبب</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th></tr></thead>
+            <tbody id="toolRequestsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ──────────────────── MODALS ──────────────────────────── -->
+
+<!-- Coupon Modal -->
+<div class="modal-overlay" id="couponModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="couponModalTitle">إضافة كوبون</div>
+      <button class="modal-close" onclick="closeModal('couponModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="couponId" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>اسم الكوبون *</label>
+          <input type="text" id="couponName" class="input" placeholder="سلة — باقة بلس" />
+        </div>
+        <div class="form-group">
+          <label>الكود *</label>
+          <input type="text" id="couponCode" class="input" placeholder="TAJER20" style="font-family:monospace;text-transform:uppercase;" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>الخصم *</label>
+          <input type="text" id="couponDiscount" class="input" placeholder="20% أو شهر مجاني" />
+        </div>
+        <div class="form-group">
+          <label>المنصة *</label>
+          <select id="couponPlatform" class="select">
+            <option value="salla">سلة</option>
+            <option value="zid">زد</option>
+            <option value="both">كلاهما</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>التصنيف</label>
+          <input type="text" id="couponCategory" class="input" placeholder="منصات، إضافات، أدوات..." />
+        </div>
+        <div class="form-group">
+          <label>تاريخ الانتهاء</label>
+          <input type="date" id="couponExpiry" class="input" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>الوصف</label>
+        <textarea id="couponDescription" class="textarea" rows="2" placeholder="وصف مختصر للكوبون..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>رابط التفعيل</label>
+        <input type="url" id="couponLink" class="input" placeholder="https://..." />
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="display:flex;align-items:center;gap:0.6rem;">
+          <label style="margin:0;">كوبون مميز</label>
+          <label class="toggle-switch"><input type="checkbox" id="couponFeatured" /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:0.6rem;" id="couponActiveGroup">
+          <label style="margin:0;">نشط</label>
+          <label class="toggle-switch"><input type="checkbox" id="couponActive" checked /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('couponModal')">إلغاء</button>
+      <button class="btn-primary" onclick="saveCoupon()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Work Modal -->
+<div class="modal-overlay" id="workModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="workModalTitle">إضافة عمل</div>
+      <button class="modal-close" onclick="closeModal('workModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="workId" />
+      <div class="form-group">
+        <label>العنوان *</label>
+        <input type="text" id="workTitle" class="input" placeholder="متجر عطورات فاخرة — سلة" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>التصنيف *</label>
+          <select id="workCategory" class="select">
+            <option value="store">تصميم متجر</option>
+            <option value="social">إدارة سوشيال</option>
+            <option value="seo">SEO وتحسين</option>
+            <option value="campaign">حملة موسمية</option>
+            <option value="brand">هوية بصرية</option>
+            <option value="dev">تحليل وتطوير</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>الشارة *</label>
+          <input type="text" id="workBadge" class="input" placeholder="تصميم متجر" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>الوصف</label>
+        <textarea id="workDescription" class="textarea" rows="2" placeholder="وصف مختصر للمشروع..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>لون البداية</label>
+          <div class="color-preview">
+            <input type="color" id="workGradientFrom" value="#0b0e17" style="width:40px;height:36px;border:none;background:none;cursor:pointer;" oninput="updateGradientPreview()" />
+            <input type="text" id="workGradientFromText" class="input" value="#0b0e17" style="flex:1;" oninput="syncColor('workGradientFrom','workGradientFromText')" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>لون الوسط</label>
+          <div class="color-preview">
+            <input type="color" id="workGradientVia" value="#1e2050" style="width:40px;height:36px;border:none;background:none;cursor:pointer;" oninput="updateGradientPreview()" />
+            <input type="text" id="workGradientViaText" class="input" value="#1e2050" style="flex:1;" oninput="syncColor('workGradientVia','workGradientViaText')" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>لون النهاية</label>
+          <div class="color-preview">
+            <input type="color" id="workGradientTo" value="#6366f1" style="width:40px;height:36px;border:none;background:none;cursor:pointer;" oninput="updateGradientPreview()" />
+            <input type="text" id="workGradientToText" class="input" value="#6366f1" style="flex:1;" oninput="syncColor('workGradientTo','workGradientToText')" />
+          </div>
+        </div>
+      </div>
+      <div class="gradient-preview" id="gradientPreview"></div>
+      <div class="form-row" style="margin-top:1rem;">
+        <div class="form-group">
+          <label>الترتيب</label>
+          <input type="number" id="workOrder" class="input" value="0" min="0" />
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:0.6rem;" id="workActiveGroup">
+          <label style="margin:0;">نشط</label>
+          <label class="toggle-switch"><input type="checkbox" id="workActive" checked /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('workModal')">إلغاء</button>
+      <button class="btn-primary" onclick="saveWork()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="reviewModalTitle">إضافة مراجعة</div>
+      <button class="modal-close" onclick="closeModal('reviewModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="reviewId" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>الاسم *</label>
+          <input type="text" id="reviewName" class="input" placeholder="محمد العتيبي" />
+        </div>
+        <div class="form-group">
+          <label>حرف الصورة</label>
+          <input type="text" id="reviewAvatar" class="input" placeholder="م" maxlength="2" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>المتجر</label>
+          <input type="text" id="reviewStore" class="input" placeholder="متجر رويال عطورات · سلة" />
+        </div>
+        <div class="form-group">
+          <label>التقييم</label>
+          <select id="reviewRating" class="select">
+            <option value="5">★★★★★ — 5</option>
+            <option value="4">★★★★☆ — 4</option>
+            <option value="3">★★★☆☆ — 3</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>نص المراجعة *</label>
+        <textarea id="reviewText" class="textarea" rows="3" placeholder="ما رأي العميل..."></textarea>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:0.6rem;" id="reviewActiveGroup">
+        <label style="margin:0;">نشط</label>
+        <label class="toggle-switch"><input type="checkbox" id="reviewActive" checked /><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('reviewModal')">إلغاء</button>
+      <button class="btn-primary" onclick="saveReview()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Status Modal -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <div class="modal-title">تحديث الطلب</div>
+      <button class="modal-close" onclick="closeModal('bookingModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="bookingId" />
+      <div class="form-group">
+        <label>الحالة</label>
+        <select id="bookingStatus" class="select">
+          <option value="pending">معلق</option>
+          <option value="contacted">تم التواصل</option>
+          <option value="in_progress">جاري التنفيذ</option>
+          <option value="completed">مكتمل</option>
+          <option value="cancelled">ملغي</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ملاحظات داخلية</label>
+        <textarea id="bookingNotes" class="textarea" rows="3" placeholder="ملاحظات للفريق..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('bookingModal')">إلغاء</button>
+      <button class="btn-primary" onclick="saveBooking()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Blog Modal -->
+<div class="modal-overlay" id="blogModal">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-header">
+      <div class="modal-title" id="blogModalTitle">إضافة مقال</div>
+      <button class="modal-close" onclick="closeModal('blogModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="blogId" />
+      <div class="form-group">
+        <label>عنوان المقال *</label>
+        <input type="text" id="blogTitle" class="input" placeholder="كيف تحسّن متجرك الإلكتروني في 7 خطوات" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>التصنيف</label>
+          <select id="blogCategory" class="select">
+            <option value="عام">عام</option>
+            <option value="تسويق">تسويق</option>
+            <option value="تصميم">تصميم</option>
+            <option value="سيو">سيو</option>
+            <option value="إدارة المتجر">إدارة المتجر</option>
+            <option value="نصائح">نصائح</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>اسم الكاتب</label>
+          <input type="text" id="blogAuthor" class="input" placeholder="فريق أدوات التاجر" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>وقت القراءة (دقائق)</label>
+          <input type="number" id="blogReadTime" class="input" value="3" min="1" max="60" />
+        </div>
+        <div class="form-group">
+          <label>الكلمات المفتاحية (مفصولة بفواصل)</label>
+          <input type="text" id="blogTags" class="input" placeholder="سلة، متجر، تسويق" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>رابط صورة الغلاف</label>
+        <input type="url" id="blogCoverImage" class="input" placeholder="https://..." />
+      </div>
+      <div class="form-group">
+        <label>المقتطف (وصف مختصر)</label>
+        <textarea id="blogExcerpt" class="textarea" rows="2" placeholder="ملخص المقال الذي يظهر في القائمة..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>محتوى المقال *</label>
+        <textarea id="blogContent" class="textarea" rows="10" placeholder="اكتب محتوى المقال هنا... (يدعم HTML)"></textarea>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:0.6rem;">
+        <label style="margin:0;">نشر المقال</label>
+        <label class="toggle-switch"><input type="checkbox" id="blogPublished" /><span class="toggle-slider"></span></label>
+        <span style="font-size:0.8rem;color:var(--ink-dim);">قم بالتفعيل لنشر المقال على الموقع</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('blogModal')">إلغاء</button>
+      <button class="btn-primary" onclick="saveBlogPost()">حفظ المقال</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/api.js"></script>
+<script>
+// ─── Notifications ────────────────────────────────────────────────────────────
+let notifications = JSON.parse(localStorage.getItem('admin_notifs') || '[]');
+
+function saveNotifs() { localStorage.setItem('admin_notifs', JSON.stringify(notifications)); }
+
+function addNotif(title, sub, action) {
+  notifications.unshift({ id: Date.now(), title, sub, read: false, action });
+  if (notifications.length > 50) notifications = notifications.slice(0, 50);
+  saveNotifs();
+  renderNotifs();
+}
+
+function renderNotifs() {
+  const list = document.getElementById('notifList');
+  const count = document.getElementById('notifCount');
+  const unread = notifications.filter(n => !n.read).length;
+
+  count.textContent = unread > 9 ? '9+' : unread;
+  count.classList.toggle('visible', unread > 0);
+
+  if (!notifications.length) {
+    list.innerHTML = '<div class="notif-empty">لا توجد إشعارات</div>';
+    return;
+  }
+
+  list.innerHTML = notifications.slice(0, 30).map(n => `
+    <div class="notif-item ${n.read ? '' : 'unread'}" onclick="readNotif(${n.id})">
+      <div class="notif-item-title">${n.title}</div>
+      <div class="notif-item-sub">${n.sub}</div>
+    </div>`).join('');
+}
+
+function readNotif(id) {
+  const n = notifications.find(n => n.id === id);
+  if (n) { n.read = true; saveNotifs(); renderNotifs(); if (n.action) n.action(); }
+}
+
+function markAllRead() {
+  notifications.forEach(n => n.read = true);
+  saveNotifs();
+  renderNotifs();
+}
+
+function toggleNotifPanel() {
+  document.getElementById('notifPanel').classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.notif-wrapper')) {
+    document.getElementById('notifPanel')?.classList.remove('open');
+  }
+});
+
+// Check for pending bookings and near-expiry coupons on load
+async function checkNotifications() {
+  try {
+    const { stats } = await api.admin.dashboard();
+    if (stats.pendingBookings > 0) {
+      const key = `notif_pending_${stats.pendingBookings}`;
+      if (!localStorage.getItem(key)) {
+        addNotif('طلبات معلقة جديدة', `${stats.pendingBookings} طلب بانتظار المتابعة`, () => showSection('bookings'));
+        localStorage.setItem(key, '1');
+      }
+    }
+    const coupons = await api.admin.allCoupons();
+    const soon = coupons.filter(c => {
+      if (!c.expiry_date) return false;
+      const days = Math.ceil((new Date(c.expiry_date) - new Date()) / 86400000);
+      return days >= 0 && days <= 7;
+    });
+    if (soon.length) {
+      const key = `notif_expiry_${soon.map(c=>c.id).join('_')}`;
+      if (!localStorage.getItem(key)) {
+        addNotif('كوبونات قريبة الانتهاء', `${soon.length} كوبون ينتهي خلال أسبوع`, () => showSection('coupons'));
+        localStorage.setItem(key, '1');
+      }
+    }
+  } catch {}
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+if (!auth.isAdmin()) {
+  window.location.href = 'login.html';
+}
+
+const user = auth.getUser();
+document.getElementById('sidebarAvatar').textContent = user?.name?.charAt(0) || 'م';
+document.getElementById('sidebarName').textContent = user?.name || 'المدير';
+
+let currentSection = 'dashboard';
+
+function doLogout() {
+  auth.clear();
+  window.location.href = 'login.html';
+}
+
+// ─── Section Navigation ───────────────────────────────────────────────────────
+function showSection(name) {
+  currentSection = name;
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+
+  const sectionTitles = {
+    dashboard: 'الإحصائيات', bookings: 'الطلبات والحجوزات',
+    coupons: 'الكوبونات', works: 'الأعمال', reviews: 'آراء العملاء',
+    blog: 'مقالات المدونة',
+    users: 'المستخدمون', logs: 'سجل الأدوات',
+    'tool-settings': 'إعدادات الأدوات', 'tool-requests': 'طلبات الوصول'
+  };
+  document.getElementById('topBarTitle').textContent = sectionTitles[name] || name;
+  document.querySelectorAll('.sidebar-link').forEach(l => {
+    if (l.getAttribute('onclick') === `showSection('${name}')`) l.classList.add('active');
+  });
+  refreshSection();
+}
+
+function refreshSection() {
+  const loaders = {
+    dashboard: loadDashboard, bookings: loadBookings,
+    coupons: loadCoupons, works: loadWorks,
+    reviews: loadReviews, blog: loadBlogPosts,
+    users: loadUsers, logs: loadLogs,
+    'tool-settings': loadToolSettings, 'tool-requests': loadToolRequests
+  };
+  loaders[currentSection]?.();
+}
+
+// ─── Modal Helpers ────────────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function fmt(dateStr) {
+  if (!dateStr) return '—';
+  return new Date(dateStr).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function statusBadge(s) {
+  const labels = { pending: 'معلق', contacted: 'تم التواصل', in_progress: 'جاري', completed: 'مكتمل', cancelled: 'ملغي' };
+  return `<span class="status-badge status-${s}">${labels[s] || s}</span>`;
+}
+
+function platformBadge(p) {
+  const labels = { salla: 'سلة', zid: 'زد', both: 'كلاهما' };
+  return `<span class="platform-badge platform-${p}">${labels[p] || p}</span>`;
+}
+
+// ─── Dashboard ────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const { stats, recentBookings } = await api.admin.dashboard();
+    document.getElementById('stat-users').textContent = stats.users;
+    document.getElementById('stat-bookings').textContent = stats.totalBookings;
+    document.getElementById('stat-pending').textContent = stats.pendingBookings;
+    document.getElementById('stat-coupons').textContent = stats.coupons;
+    document.getElementById('stat-works').textContent = stats.works;
+    document.getElementById('stat-tools').textContent = stats.toolUsage30d;
+    document.getElementById('pendingBadge').textContent = stats.pendingBookings;
+
+    document.getElementById('recentBookingsTable').innerHTML = recentBookings.map(b => `
+      <tr>
+        <td>${b.name}</td>
+        <td><span class="badge">${b.service_type || '—'}</span></td>
+        <td>${statusBadge(b.status)}</td>
+        <td style="color:var(--ink-dim);font-size:0.8rem;">${fmt(b.created_at)}</td>
+      </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد طلبات</td></tr>';
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// ─── CSV Export ──────────────────────────────────────────────────────────────
+function downloadCSV(filename, rows) {
+  if (!rows.length) { showError('تصدير', 'لا توجد بيانات للتصدير'); return; }
+  const headers = Object.keys(rows[0]);
+  const csv = [
+    headers.join(','),
+    ...rows.map(r => headers.map(h => {
+      const v = r[h] == null ? '' : String(r[h]).replace(/"/g, '""');
+      return `"${v}"`;
+    }).join(','))
+  ].join('\r\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+}
+
+async function exportCSV(type) {
+  try {
+    let rows, filename;
+    if (type === 'coupons') {
+      rows = await api.admin.allCoupons();
+      filename = `coupons_${new Date().toISOString().slice(0,10)}.csv`;
+    } else if (type === 'works') {
+      rows = await api.admin.allWorks();
+      filename = `works_${new Date().toISOString().slice(0,10)}.csv`;
+    } else if (type === 'users') {
+      const data = await api.admin.allUsers();
+      rows = (data.users || data).map(u => ({
+        id: u.id, name: u.name, email: u.email,
+        is_admin: u.is_admin, tools_access: u.tools_access, created_at: u.created_at
+      }));
+      filename = `users_${new Date().toISOString().slice(0,10)}.csv`;
+    }
+    downloadCSV(filename, rows);
+  } catch (err) {
+    showError('تصدير', err.message || 'حدث خطأ');
+  }
+}
+
+// ─── Bookings ─────────────────────────────────────────────────────────────────
+async function loadBookings() {
+  const status = document.getElementById('bookingStatusFilter')?.value;
+  const rows = await api.admin.allBookings(status).catch(() => []);
+  document.getElementById('bookingsTable').innerHTML = rows.map(b => `
+    <tr>
+      <td><strong>${b.name}</strong></td>
+      <td style="font-size:0.82rem;">${b.email}</td>
+      <td style="font-size:0.82rem;">${b.phone || '—'}</td>
+      <td><span class="badge" style="font-size:0.75rem;">${b.service_type || '—'}</span></td>
+      <td>${statusBadge(b.status)}</td>
+      <td style="color:var(--ink-dim);font-size:0.8rem;">${fmt(b.created_at)}</td>
+      <td>
+        <button class="action-btn action-edit" onclick="editBooking(${JSON.stringify(b).replace(/"/g,'&quot;')})">تعديل</button>
+        <button class="action-btn action-delete" onclick="deleteBooking(${b.id})">حذف</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد طلبات</td></tr>';
+}
+
+function editBooking(b) {
+  document.getElementById('bookingId').value = b.id;
+  document.getElementById('bookingStatus').value = b.status;
+  document.getElementById('bookingNotes').value = b.notes || '';
+  openModal('bookingModal');
+}
+
+async function saveBooking() {
+  const id = document.getElementById('bookingId').value;
+  await api.admin.updateBooking(id, {
+    status: document.getElementById('bookingStatus').value,
+    notes: document.getElementById('bookingNotes').value,
+  }).catch(err => showError('خطأ', err.message));
+  closeModal('bookingModal');
+  loadBookings();
+}
+
+async function deleteBooking(id) {
+  showConfirm('حذف الطلب', 'هل أنت متأكد من حذف هذا الطلب نهائياً؟', async () => {
+    await api.admin.deleteBooking(id).catch(err => showError('خطأ', err.message));
+    loadBookings();
+  }, 'حذف');
+}
+
+// ─── Coupons ─────────────────────────────────────────────────────────────────
+function expiryBadge(expiryDate) {
+  if (!expiryDate) return '<span style="color:var(--ink-dim);">—</span>';
+  const now = new Date();
+  const exp = new Date(expiryDate);
+  const daysLeft = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+  if (daysLeft < 0) {
+    return `<span style="color:#ef4444;font-weight:700;font-size:0.8rem;" title="منتهي">● ${fmt(expiryDate)}</span>`;
+  } else if (daysLeft <= 7) {
+    return `<span style="color:#f59e0b;font-weight:700;font-size:0.8rem;" title="${daysLeft} أيام متبقية">⚠ ${fmt(expiryDate)}</span>`;
+  }
+  return `<span style="font-size:0.8rem;color:var(--ink-dim);">${fmt(expiryDate)}</span>`;
+}
+
+async function loadCoupons() {
+  const rows = await api.admin.allCoupons().catch(() => []);
+  document.getElementById('couponsTable').innerHTML = rows.map(c => `
+    <tr>
+      <td><strong>${c.name}</strong></td>
+      <td><code style="background:var(--bg-card);padding:0.2rem 0.5rem;border-radius:4px;font-size:0.85rem;">${c.code}</code></td>
+      <td style="color:var(--accent);font-weight:700;">${c.discount}</td>
+      <td>${platformBadge(c.platform)}</td>
+      <td style="font-size:0.8rem;">${c.category || '—'}</td>
+      <td>${expiryBadge(c.expiry_date)}</td>
+      <td style="text-align:center;">${c.is_featured ? '★' : '—'}</td>
+      <td style="text-align:center;"><span style="color:${c.is_active ? '#22c55e' : '#ef4444'}">${c.is_active ? '●' : '○'}</span></td>
+      <td>
+        <button class="action-btn action-edit" onclick="editCoupon(${JSON.stringify(c).replace(/"/g,'&quot;')})">تعديل</button>
+        <button class="action-btn action-delete" onclick="deleteCoupon(${c.id})">حذف</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد كوبونات</td></tr>';
+}
+
+function openCouponModal() {
+  document.getElementById('couponId').value = '';
+  document.getElementById('couponModalTitle').textContent = 'إضافة كوبون';
+  ['couponName','couponCode','couponDiscount','couponCategory','couponDescription','couponLink'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('couponPlatform').value = 'salla';
+  document.getElementById('couponExpiry').value = '';
+  document.getElementById('couponFeatured').checked = false;
+  document.getElementById('couponActive').checked = true;
+  document.getElementById('couponActiveGroup').style.display = 'none';
+  openModal('couponModal');
+}
+
+function editCoupon(c) {
+  document.getElementById('couponId').value = c.id;
+  document.getElementById('couponModalTitle').textContent = 'تعديل كوبون';
+  document.getElementById('couponName').value = c.name;
+  document.getElementById('couponCode').value = c.code;
+  document.getElementById('couponDiscount').value = c.discount;
+  document.getElementById('couponPlatform').value = c.platform;
+  document.getElementById('couponCategory').value = c.category || '';
+  document.getElementById('couponExpiry').value = c.expiry_date ? c.expiry_date.split('T')[0] : '';
+  document.getElementById('couponDescription').value = c.description || '';
+  document.getElementById('couponLink').value = c.link || '';
+  document.getElementById('couponFeatured').checked = c.is_featured;
+  document.getElementById('couponActive').checked = c.is_active;
+  document.getElementById('couponActiveGroup').style.display = 'flex';
+  openModal('couponModal');
+}
+
+async function saveCoupon() {
+  const id = document.getElementById('couponId').value;
+  const data = {
+    name: document.getElementById('couponName').value,
+    code: document.getElementById('couponCode').value,
+    discount: document.getElementById('couponDiscount').value,
+    platform: document.getElementById('couponPlatform').value,
+    category: document.getElementById('couponCategory').value,
+    expiry_date: document.getElementById('couponExpiry').value || null,
+    description: document.getElementById('couponDescription').value,
+    link: document.getElementById('couponLink').value,
+    is_featured: document.getElementById('couponFeatured').checked,
+    is_active: document.getElementById('couponActive').checked,
+  };
+  try {
+    id ? await api.admin.updateCoupon(id, data) : await api.admin.createCoupon(data);
+    closeModal('couponModal');
+    loadCoupons();
+  } catch (err) { showError('خطأ في الحفظ', err.message); }
+}
+
+async function deleteCoupon(id) {
+  showConfirm('حذف الكوبون', 'هل أنت متأكد من حذف هذا الكوبون نهائياً؟', async () => {
+    await api.admin.deleteCoupon(id).catch(err => showError('خطأ', err.message));
+    loadCoupons();
+  }, 'حذف');
+}
+
+// ─── Works ────────────────────────────────────────────────────────────────────
+async function loadWorks() {
+  const rows = await api.admin.allWorks().catch(() => []);
+  document.getElementById('worksTable').innerHTML = rows.map(w => `
+    <tr>
+      <td><strong>${w.title}</strong><br><span style="font-size:0.78rem;color:var(--ink-dim);">${w.description?.substring(0,60) || ''}...</span></td>
+      <td><span class="badge">${w.category}</span></td>
+      <td style="font-size:0.82rem;">${w.badge_label}</td>
+      <td>
+        <div style="width:60px;height:20px;border-radius:4px;background:linear-gradient(to left,${w.gradient_to},${w.gradient_via},${w.gradient_from})"></div>
+      </td>
+      <td style="text-align:center;">${w.sort_order}</td>
+      <td style="text-align:center;"><span style="color:${w.is_active ? '#22c55e' : '#ef4444'}">${w.is_active ? '●' : '○'}</span></td>
+      <td>
+        <button class="action-btn action-edit" onclick="editWork(${JSON.stringify(w).replace(/"/g,'&quot;')})">تعديل</button>
+        <button class="action-btn action-delete" onclick="deleteWork(${w.id})">حذف</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد أعمال</td></tr>';
+}
+
+function openWorkModal() {
+  document.getElementById('workId').value = '';
+  document.getElementById('workModalTitle').textContent = 'إضافة عمل';
+  ['workTitle','workDescription'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('workBadge').value = '';
+  document.getElementById('workCategory').value = 'store';
+  document.getElementById('workGradientFrom').value = '#0b0e17';
+  document.getElementById('workGradientVia').value = '#1e2050';
+  document.getElementById('workGradientTo').value = '#6366f1';
+  ['workGradientFromText','workGradientViaText','workGradientToText'].forEach((id,i) => {
+    document.getElementById(id).value = ['#0b0e17','#1e2050','#6366f1'][i];
+  });
+  document.getElementById('workOrder').value = 0;
+  document.getElementById('workActive').checked = true;
+  document.getElementById('workActiveGroup').style.display = 'none';
+  updateGradientPreview();
+  openModal('workModal');
+}
+
+function editWork(w) {
+  document.getElementById('workId').value = w.id;
+  document.getElementById('workModalTitle').textContent = 'تعديل عمل';
+  document.getElementById('workTitle').value = w.title;
+  document.getElementById('workCategory').value = w.category;
+  document.getElementById('workBadge').value = w.badge_label;
+  document.getElementById('workDescription').value = w.description || '';
+  document.getElementById('workGradientFrom').value = w.gradient_from;
+  document.getElementById('workGradientVia').value = w.gradient_via;
+  document.getElementById('workGradientTo').value = w.gradient_to;
+  document.getElementById('workGradientFromText').value = w.gradient_from;
+  document.getElementById('workGradientViaText').value = w.gradient_via;
+  document.getElementById('workGradientToText').value = w.gradient_to;
+  document.getElementById('workOrder').value = w.sort_order;
+  document.getElementById('workActive').checked = w.is_active;
+  document.getElementById('workActiveGroup').style.display = 'flex';
+  updateGradientPreview();
+  openModal('workModal');
+}
+
+function syncColor(pickerId, textId) {
+  const val = document.getElementById(textId).value;
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById(pickerId).value = val;
+    updateGradientPreview();
+  }
+}
+
+function updateGradientPreview() {
+  const from = document.getElementById('workGradientFrom').value;
+  const via = document.getElementById('workGradientVia').value;
+  const to = document.getElementById('workGradientTo').value;
+  ['workGradientFromText','workGradientViaText','workGradientToText'].forEach((id,i) => {
+    document.getElementById(id).value = [from,via,to][i];
+  });
+  document.getElementById('gradientPreview').style.background = `linear-gradient(to left, ${to}, ${via}, ${from})`;
+}
+
+async function saveWork() {
+  const id = document.getElementById('workId').value;
+  const data = {
+    title: document.getElementById('workTitle').value,
+    category: document.getElementById('workCategory').value,
+    badge_label: document.getElementById('workBadge').value,
+    description: document.getElementById('workDescription').value,
+    gradient_from: document.getElementById('workGradientFrom').value,
+    gradient_via: document.getElementById('workGradientVia').value,
+    gradient_to: document.getElementById('workGradientTo').value,
+    sort_order: parseInt(document.getElementById('workOrder').value) || 0,
+    is_active: document.getElementById('workActive').checked,
+  };
+  try {
+    id ? await api.admin.updateWork(id, data) : await api.admin.createWork(data);
+    closeModal('workModal');
+    loadWorks();
+  } catch (err) { showError('خطأ في الحفظ', err.message); }
+}
+
+async function deleteWork(id) {
+  showConfirm('حذف العمل', 'هل أنت متأكد من حذف هذا العمل نهائياً؟', async () => {
+    await api.admin.deleteWork(id).catch(err => showError('خطأ', err.message));
+    loadWorks();
+  }, 'حذف');
+}
+
+// ─── Reviews ─────────────────────────────────────────────────────────────────
+async function loadReviews() {
+  const rows = await api.admin.allReviews().catch(() => []);
+  document.getElementById('reviewsTable').innerHTML = rows.map(r => `
+    <tr>
+      <td><strong>${r.name}</strong></td>
+      <td style="font-size:0.82rem;">${r.store || '—'}</td>
+      <td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td>
+      <td style="font-size:0.82rem;max-width:260px;">${r.review_text.substring(0,80)}...</td>
+      <td style="text-align:center;"><span style="color:${r.is_active ? '#22c55e' : '#ef4444'}">${r.is_active ? '●' : '○'}</span></td>
+      <td>
+        <button class="action-btn action-edit" onclick="editReview(${JSON.stringify(r).replace(/"/g,'&quot;')})">تعديل</button>
+        <button class="action-btn action-delete" onclick="deleteReview(${r.id})">حذف</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد مراجعات</td></tr>';
+}
+
+function openReviewModal() {
+  document.getElementById('reviewId').value = '';
+  document.getElementById('reviewModalTitle').textContent = 'إضافة مراجعة';
+  ['reviewName','reviewAvatar','reviewStore','reviewText'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('reviewRating').value = '5';
+  document.getElementById('reviewActive').checked = true;
+  document.getElementById('reviewActiveGroup').style.display = 'none';
+  openModal('reviewModal');
+}
+
+function editReview(r) {
+  document.getElementById('reviewId').value = r.id;
+  document.getElementById('reviewModalTitle').textContent = 'تعديل مراجعة';
+  document.getElementById('reviewName').value = r.name;
+  document.getElementById('reviewAvatar').value = r.avatar_letter || '';
+  document.getElementById('reviewStore').value = r.store || '';
+  document.getElementById('reviewRating').value = r.rating;
+  document.getElementById('reviewText').value = r.review_text;
+  document.getElementById('reviewActive').checked = r.is_active;
+  document.getElementById('reviewActiveGroup').style.display = 'flex';
+  openModal('reviewModal');
+}
+
+async function saveReview() {
+  const id = document.getElementById('reviewId').value;
+  const data = {
+    name: document.getElementById('reviewName').value,
+    avatar_letter: document.getElementById('reviewAvatar').value || document.getElementById('reviewName').value.charAt(0),
+    store: document.getElementById('reviewStore').value,
+    review_text: document.getElementById('reviewText').value,
+    rating: parseInt(document.getElementById('reviewRating').value),
+    is_active: document.getElementById('reviewActive').checked,
+  };
+  try {
+    id ? await api.admin.updateReview(id, data) : await api.admin.createReview(data);
+    closeModal('reviewModal');
+    loadReviews();
+  } catch (err) { showError('خطأ في الحفظ', err.message); }
+}
+
+async function deleteReview(id) {
+  showConfirm('حذف المراجعة', 'هل أنت متأكد من حذف هذه المراجعة نهائياً؟', async () => {
+    await api.admin.deleteReview(id).catch(err => showError('خطأ', err.message));
+    loadReviews();
+  }, 'حذف');
+}
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+let _allUsers = [];
+async function loadUsers() {
+  _allUsers = await api.admin.users().catch(() => []);
+  renderUsers(_allUsers);
+}
+
+function filterUsers(q) {
+  const term = q.toLowerCase();
+  renderUsers(term ? _allUsers.filter(u => u.name.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)) : _allUsers);
+}
+
+function renderUsers(rows) {
+  document.getElementById('usersTable').innerHTML = rows.map(u => {
+    const ta = u.tools_access || { analyzer: true, generator: true };
+    const analyzerOn = ta.analyzer !== false;
+    const generatorOn = ta.generator !== false;
+    const toolBadge = (label, on, tool, uid) =>
+      `<button onclick="toggleTool(${uid},'${tool}',${!on})" style="
+        background:${on ? 'var(--accent-soft)' : 'var(--bg-card)'};
+        color:${on ? 'var(--accent)' : 'var(--ink-dim)'};
+        border:1px solid ${on ? 'var(--accent)' : 'var(--line)'};
+        border-radius:20px; padding:0.15rem 0.55rem; font-size:0.72rem;
+        cursor:pointer; font-family:var(--font-arabic); white-space:nowrap;
+      ">${on ? '✓' : '✗'} ${label}</button>`;
+    return `<tr>
+      <td style="color:var(--ink-dim);font-size:0.8rem;">${u.id}</td>
+      <td><strong>${u.name}</strong></td>
+      <td style="font-size:0.82rem;">${u.email}</td>
+      <td><span class="badge" style="background:${u.is_admin?'var(--accent-soft)':'var(--bg-card)'};color:${u.is_admin?'var(--accent)':'var(--ink-dim)'};">${u.is_admin?'أدمن':'مستخدم'}</span></td>
+      <td style="display:flex;gap:0.3rem;flex-wrap:wrap;">
+        ${toolBadge('محلل', analyzerOn, 'analyzer', u.id)}
+        ${toolBadge('مولّد', generatorOn, 'generator', u.id)}
+      </td>
+      <td style="color:var(--ink-dim);font-size:0.8rem;">${fmt(u.created_at)}</td>
+      <td>
+        <button class="action-btn action-toggle" onclick="toggleAdmin(${u.id})">${u.is_admin?'إزالة أدمن':'جعله أدمن'}</button>
+        <button class="action-btn action-delete" onclick="deleteUser(${u.id})">حذف</button>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد مستخدمون</td></tr>';
+}
+
+async function toggleTool(userId, tool, newValue) {
+  const user = _allUsers.find(u => u.id === userId);
+  if (!user) return;
+  const ta = { ...(user.tools_access || { analyzer: true, generator: true }), [tool]: newValue };
+  await api.admin.updateUserTools(userId, ta).catch(err => showError('خطأ', err.message));
+  loadUsers();
+}
+
+async function toggleAdmin(id) {
+  await api.admin.toggleAdmin(id).catch(err => showError('خطأ', err.message));
+  loadUsers();
+}
+
+async function deleteUser(id) {
+  showConfirm('حذف المستخدم', 'هل أنت متأكد من حذف هذا المستخدم نهائياً؟', async () => {
+    await api.admin.deleteUser(id).catch(err => showError('خطأ', err.message));
+    loadUsers();
+  }, 'حذف');
+}
+
+// ─── Logs ─────────────────────────────────────────────────────────────────────
+async function loadLogs() {
+  const tool = document.getElementById('logToolFilter')?.value;
+  const rows = await api.admin.logs(tool).catch(() => []);
+  const toolLabels = { analyzer: 'محلل المتجر', generator: 'مولّد الأوصاف' };
+  document.getElementById('logsTable').innerHTML = rows.map(l => `
+    <tr>
+      <td><span class="badge">${toolLabels[l.tool_name] || l.tool_name}</span></td>
+      <td style="font-size:0.82rem;">${l.user_email || 'زائر'}</td>
+      <td style="font-size:0.8rem;color:var(--ink-dim);max-width:200px;">${JSON.stringify(l.input_data)?.substring(0,80) || '—'}...</td>
+      <td style="font-size:0.8rem;color:var(--ink-dim);">${fmt(l.created_at)}</td>
+    </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا يوجد سجل</td></tr>';
+}
+
+// ─── Tool Settings ────────────────────────────────────────────────────────────
+async function loadToolSettings() {
+  const tools = await api.admin.toolSettings().catch(() => []);
+  const panel = document.getElementById('toolSettingsPanel');
+  if (!tools.length) { panel.innerHTML = '<p style="color:var(--ink-dim);padding:1rem;">لا توجد أدوات مسجّلة</p>'; return; }
+
+  panel.innerHTML = tools.map(t => `
+    <div style="display:flex;align-items:center;gap:1rem;padding:1rem;border-bottom:1px solid var(--line);flex-wrap:wrap;">
+      <div style="flex:1;min-width:120px;"><strong>${t.display_name}</strong><br><span style="font-size:.75rem;color:var(--ink-dim);">${t.tool_name}</span></div>
+      <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;white-space:nowrap;">
+        <input type="checkbox" id="paid_${t.tool_name}" ${t.is_paid?'checked':''} onchange="saveToolSettings('${t.tool_name}')">
+        <span style="font-size:.85rem;">مدفوعة (يحتاج إذن)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:.5rem;white-space:nowrap;">
+        <span style="font-size:.85rem;">حد يومي:</span>
+        <input type="number" id="limit_${t.tool_name}" value="${t.daily_free_limit ?? ''}" min="1" max="1000"
+          placeholder="∞ غير محدود"
+          style="width:100px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-size:.85rem;"
+          onchange="saveToolSettings('${t.tool_name}')">
+        <span style="font-size:.75rem;color:var(--ink-dim);">مرة/يوم</span>
+      </label>
+      <span id="saved_${t.tool_name}" style="font-size:.78rem;color:var(--accent);opacity:0;transition:opacity .3s;">✓ محفوظ</span>
+    </div>`).join('');
+}
+
+async function saveToolSettings(toolName) {
+  const is_paid = document.getElementById(`paid_${toolName}`)?.checked;
+  const limitVal = document.getElementById(`limit_${toolName}`)?.value;
+  const daily_free_limit = limitVal ? parseInt(limitVal) : null;
+  await api.admin.updateToolSettings(toolName, { is_paid, daily_free_limit }).catch(err => showError('خطأ', err.message));
+  const saved = document.getElementById(`saved_${toolName}`);
+  if (saved) { saved.style.opacity = 1; setTimeout(() => saved.style.opacity = 0, 2000); }
+}
+
+// ─── Tool Access Requests ─────────────────────────────────────────────────────
+async function loadToolRequests() {
+  const rows = await api.admin.toolRequests().catch(() => []);
+  const toolLabels = { analyzer: 'محلل المتجر', generator: 'مولّد المحتوى' };
+  const statusMap = { pending: { label: 'معلق', color: 'var(--gold,#f59e0b)' }, approved: { label: 'موافق', color: '#22c55e' }, rejected: { label: 'مرفوض', color: '#ef4444' } };
+  document.getElementById('toolRequestsTable').innerHTML = rows.map(r => {
+    const st = statusMap[r.status] || statusMap.pending;
+    return `<tr>
+      <td><strong>${r.user_name}</strong><br><span style="font-size:.78rem;color:var(--ink-dim);">${r.user_email}</span></td>
+      <td><span class="badge">${toolLabels[r.tool_name] || r.tool_name}</span></td>
+      <td style="font-size:.82rem;max-width:200px;">${r.reason || '—'}</td>
+      <td><span class="badge" style="color:${st.color};background:${st.color}22;">${st.label}</span></td>
+      <td style="font-size:.78rem;color:var(--ink-dim);">${fmt(r.created_at)}</td>
+      <td>${r.status === 'pending' ? `
+        <button class="action-btn action-toggle" onclick="decideRequest(${r.id},'approved')">موافقة</button>
+        <button class="action-btn action-delete" onclick="decideRequest(${r.id},'rejected')">رفض</button>` : '—'}
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد طلبات</td></tr>';
+}
+
+async function decideRequest(id, status) {
+  const label = status === 'approved' ? 'الموافقة' : 'الرفض';
+  showConfirm(`تأكيد ${label}`, `هل تريد ${label} على هذا الطلب؟`, async () => {
+    await api.admin.updateToolRequest(id, { status }).catch(err => showError('خطأ', err.message));
+    if (status === 'approved') showSuccess('تمت الموافقة', 'تم منح المستخدم الوصول للأداة تلقائياً.');
+    updatePendingBadge();
+    loadToolRequests();
+  }, label);
+}
+
+// ─── Blog ─────────────────────────────────────────────────────────────────────
+async function loadBlogPosts() {
+  const rows = await api.admin.allBlogPosts().catch(() => []);
+  document.getElementById('blogTable').innerHTML = rows.map(p => `
+    <tr>
+      <td><strong>${p.title}</strong></td>
+      <td><span class="badge">${p.category || 'عام'}</span></td>
+      <td style="font-size:0.82rem;">${p.author_name || '—'}</td>
+      <td style="text-align:center;color:var(--ink-dim);">${p.views || 0}</td>
+      <td style="text-align:center;"><span style="color:${p.is_published ? '#22c55e' : '#f59e0b'}">${p.is_published ? '● منشور' : '○ مسودة'}</span></td>
+      <td style="font-size:0.8rem;color:var(--ink-dim);">${fmt(p.created_at)}</td>
+      <td>
+        <button class="action-btn action-edit" onclick="editBlogPost(${JSON.stringify(p).replace(/"/g,'&quot;')})">تعديل</button>
+        <button class="action-btn action-delete" onclick="deleteBlogPost(${p.id})">حذف</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد مقالات</td></tr>';
+}
+
+function openBlogModal() {
+  document.getElementById('blogId').value = '';
+  document.getElementById('blogModalTitle').textContent = 'إضافة مقال';
+  ['blogTitle','blogAuthor','blogCoverImage','blogExcerpt','blogContent','blogTags'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('blogCategory').value = 'عام';
+  document.getElementById('blogReadTime').value = 3;
+  document.getElementById('blogPublished').checked = false;
+  openModal('blogModal');
+}
+
+function editBlogPost(p) {
+  document.getElementById('blogId').value = p.id;
+  document.getElementById('blogModalTitle').textContent = 'تعديل مقال';
+  document.getElementById('blogTitle').value = p.title;
+  document.getElementById('blogCategory').value = p.category || 'عام';
+  document.getElementById('blogAuthor').value = p.author_name || '';
+  document.getElementById('blogReadTime').value = p.read_time || 3;
+  document.getElementById('blogTags').value = (p.tags || []).join('، ');
+  document.getElementById('blogCoverImage').value = p.cover_image || '';
+  document.getElementById('blogExcerpt').value = p.excerpt || '';
+  document.getElementById('blogContent').value = p.content || '';
+  document.getElementById('blogPublished').checked = p.is_published;
+  openModal('blogModal');
+}
+
+async function saveBlogPost() {
+  const id = document.getElementById('blogId').value;
+  const tagsRaw = document.getElementById('blogTags').value;
+  const data = {
+    title: document.getElementById('blogTitle').value,
+    category: document.getElementById('blogCategory').value,
+    author_name: document.getElementById('blogAuthor').value || 'فريق أدوات التاجر',
+    read_time: parseInt(document.getElementById('blogReadTime').value) || 3,
+    tags: tagsRaw ? tagsRaw.split(/[,،]/).map(t => t.trim()).filter(Boolean) : [],
+    cover_image: document.getElementById('blogCoverImage').value,
+    excerpt: document.getElementById('blogExcerpt').value,
+    content: document.getElementById('blogContent').value,
+    is_published: document.getElementById('blogPublished').checked,
+  };
+  try {
+    id ? await api.admin.updateBlogPost(id, data) : await api.admin.createBlogPost(data);
+    closeModal('blogModal');
+    loadBlogPosts();
+  } catch (err) { showError('خطأ في الحفظ', err.message); }
+}
+
+async function deleteBlogPost(id) {
+  showConfirm('حذف المقال', 'هل أنت متأكد من حذف هذا المقال نهائياً؟', async () => {
+    await api.admin.deleteBlogPost(id).catch(err => showError('خطأ', err.message));
+    loadBlogPosts();
+  }, 'حذف');
+}
+
+// ─── Close modal on overlay click ────────────────────────────────────────────
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+// ─── Pending Badge (bookings + tool requests) ─────────────────────────────────
+async function updatePendingBadge() {
+  const [requests] = await Promise.all([
+    api.admin.toolRequests().catch(() => []),
+  ]);
+  const pendingRequests = requests.filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('pendingBadge');
+  if (badge && pendingRequests > 0) {
+    badge.textContent = pendingRequests;
+    badge.style.background = '#ef4444';
+  }
+}
+
+// ─── Initial load ─────────────────────────────────────────────────────────────
+loadDashboard();
+updatePendingBadge();
+updateGradientPreview();
+renderNotifs();
+checkNotifications();
+</script>
+</body>
+</html>

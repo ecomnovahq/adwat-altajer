@@ -1,0 +1,390 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حملة إطلاق المنتج — أدوات التاجر</title>
+<meta name="description" content="خطة حملة إطلاق منتج كاملة بالذكاء الاصطناعي — رسائل تسويقية، جدول نشر، وأفكار إعلانية لإطلاق منتجك في السوق السعودي.">
+<meta property="og:title" content="مولّد حملة إطلاق المنتج — أدوات التاجر">
+<meta property="og:description" content="خطة حملة إطلاق منتج شاملة بالذكاء الاصطناعي للتاجر السعودي.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .lc-section { padding: 6rem 2rem; max-width: 1400px; margin: 0 auto; }
+  .lc-grid { display: grid; grid-template-columns: 380px 1fr; gap: 3rem; align-items: start; }
+  @media (max-width: 1100px) { .lc-grid { grid-template-columns: 1fr; } }
+  .lc-loading { display: none; text-align: center; padding: 4rem 2rem; }
+  .lc-loading.visible { display: block; }
+  .lc-loading .loading-spinner { width: 56px; height: 56px; }
+  .lc-hero { background: linear-gradient(135deg, rgba(168,85,247,0.08) 0%, transparent 60%), var(--bg-elevated); border: 1px solid var(--line-accent); border-radius: var(--radius-lg); padding: 2rem 2.5rem; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
+  .lc-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, transparent 100%); }
+  .lc-hashtag { font-family: var(--font-arabic); font-size: 1.8rem; font-weight: 800; color: var(--accent); margin-bottom: 0.5rem; }
+  .lc-theme { font-size: 1rem; color: var(--ink-dim); margin-bottom: 1rem; }
+  .lc-insight { font-size: 0.9rem; line-height: 1.8; color: var(--ink); }
+  .lc-phase { background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); margin-bottom: 1.5rem; overflow: hidden; transition: border-color var(--transition); }
+  .lc-phase:hover { border-color: var(--line-accent); }
+  .lc-phase-header { padding: 1.2rem 1.8rem; background: var(--bg-card); cursor: pointer; display: flex; align-items: center; gap: 1rem; user-select: none; transition: background var(--transition); }
+  .lc-phase-header:hover { background: var(--bg-elevated); }
+  .lc-phase-badge { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; padding: 0.25rem 0.85rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; flex-shrink: 0; box-shadow: 0 2px 8px rgba(168,85,247,0.3); }
+  .lc-phase-badge.warm { background: linear-gradient(135deg, #ea6a1a 0%, var(--accent-warm) 100%); box-shadow: 0 2px 8px rgba(249,115,22,0.3); }
+  .lc-phase-badge.green { background: linear-gradient(135deg, #059669 0%, #10b981 100%); box-shadow: 0 2px 8px rgba(16,185,129,0.3); }
+  .lc-phase-title { font-weight: 700; font-size: 1.05rem; flex: 1; }
+  .lc-phase-goal { font-size: 0.8rem; color: var(--ink-dim); }
+  .lc-phase-arrow { color: var(--ink-dim); font-size: 0.75rem; transition: transform 0.2s; }
+  .lc-phase.open .lc-phase-arrow { transform: rotate(180deg); }
+  .lc-phase-body { display: none; padding: 1.5rem 1.8rem; }
+  .lc-phase.open .lc-phase-body { display: block; }
+  .lc-day { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1rem; }
+  .lc-day:last-child { margin-bottom: 0; }
+  .lc-day-label { font-weight: 700; font-size: 0.85rem; color: var(--accent); margin-bottom: 0.3rem; }
+  .lc-day-focus { font-size: 0.78rem; color: var(--ink-dim); margin-bottom: 1rem; }
+  .lc-content-row { margin-bottom: 0.8rem; }
+  .lc-content-label { font-size: 0.72rem; font-weight: 700; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.3rem; }
+  .lc-content-text { font-size: 0.88rem; line-height: 1.8; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 0.75rem 0.9rem; white-space: pre-line; }
+  .lc-tip { font-size: 0.78rem; color: var(--ink-dim); background: var(--bg-alt); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; margin-top: 0.5rem; display: flex; gap: 0.4rem; }
+  .lc-tip-icon { flex-shrink: 0; display: flex; align-items: center; color: var(--accent); }
+  .lc-row-footer { display: flex; justify-content: flex-end; margin-top: 0.4rem; }
+  .lc-ads { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  @media (max-width: 768px) { .lc-ads { grid-template-columns: 1fr; } }
+  .lc-ad-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1.2rem; }
+  .lc-ad-platform { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.8rem; }
+  .lc-kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+  @media (max-width: 600px) { .lc-kpis { grid-template-columns: 1fr; } }
+  .lc-kpi { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1rem; font-size: 0.88rem; display: flex; gap: 0.6rem; align-items: start; }
+  .lc-kpi-num { font-weight: 700; color: var(--accent); flex-shrink: 0; }
+  .lc-email-card { background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 1.5rem; }
+  .lc-email-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.2rem; }
+  .lc-email-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .lc-email-field label { font-size: 0.75rem; color: var(--ink-dim); margin-bottom: 0.3rem; display: block; }
+  .lc-email-value { font-size: 0.9rem; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 0.6rem 0.8rem; }
+  .copy-icon-btn { background: var(--bg-card); border: 1px solid var(--line); color: var(--ink-dim); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-family: var(--font-arabic); transition: all 0.2s; }
+  .copy-icon-btn:hover { color: var(--accent); border-color: var(--line-accent); }
+  .copy-icon-btn.copied { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .usage-counter { margin-top: 1rem; font-size: 0.82rem; color: var(--ink-dim); }
+  .usage-counter .usage-bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 0.4rem; }
+  .usage-counter .usage-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+  .usage-counter.low .usage-fill { background: var(--accent-warm); }
+  .usage-counter.critical .usage-fill { background: var(--danger); }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html" class="active">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 08</span>
+      <h1>حملة إطلاق <em>منتج كاملة</em></h1>
+      <p>أدخل بيانات منتجك وستحصل على خطة تسويقية متكاملة: teaser قبل الإطلاق، يوم الإطلاق، ومتابعة ما بعد — مع كل المحتوى جاهزاً للنسخ.</p>
+    </div>
+  </div>
+</section>
+
+<section class="lc-section">
+  <div class="lc-grid">
+    <div class="panel">
+      <h2>بيانات المنتج</h2>
+      <p class="panel-sub">كلما كانت التفاصيل أكثر، كانت الحملة أقوى</p>
+
+      <div class="field">
+        <label class="label">اسم المنتج <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="productName" class="input" placeholder="مثل: ساعة يد فاخرة للرجال" />
+      </div>
+      <div class="field">
+        <label class="label">مميزات وتفاصيل المنتج <span style="color:var(--danger)">*</span></label>
+        <textarea id="productFeatures" class="textarea" style="min-height:100px" placeholder="مثل: فولاذ مقاوم للصدأ، وجه كلاسيكي، مقاومة للماء حتى 50م، ضمان سنتين..."></textarea>
+      </div>
+      <div class="field">
+        <label class="label">السعر (ريال) <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="price" class="input" placeholder="مثل: 299" />
+      </div>
+      <div class="field">
+        <label class="label">اسم المتجر</label>
+        <input type="text" id="storeName" class="input" placeholder="مثل: متجر الراقي" />
+      </div>
+      <div class="field">
+        <label class="label">التصنيف</label>
+        <input type="text" id="category" class="input" placeholder="مثل: إكسسوارات رجالية" />
+      </div>
+      <div class="field">
+        <label class="label">الجمهور المستهدف</label>
+        <input type="text" id="targetAudience" class="input" placeholder="مثل: رجال سعوديون 25-45 سنة" />
+      </div>
+      <div class="field">
+        <label class="label">تاريخ الإطلاق (اختياري)</label>
+        <input type="date" id="launchDate" class="input" />
+      </div>
+
+      <button id="generateBtn" class="btn-primary" style="width:100%;margin-top:1rem;justify-content:center;">
+        ولّد الحملة الآن
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+    </div>
+
+    <div>
+      <div id="lcOutput">
+        <div class="output-empty">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+          <p>أدخل بيانات منتجك واضغط "ولّد الحملة الآن"</p>
+        </div>
+      </div>
+      <div class="lc-loading" id="lcLoading">
+        <div class="loading-spinner"></div>
+        <div style="color:var(--ink-dim);margin-top:0.5rem;">جاري بناء حملة الإطلاق...</div>
+        <div id="lcStep" style="color:var(--accent);font-weight:600;margin-top:0.5rem;">يحلل المنتج والجمهور...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي.</p>
+    </div>
+    <div class="footer-col"><h4>المنصة</h4><a href="../index.html">الرئيسية</a><a href="tools.html">الأدوات</a><a href="services.html">الخدمات</a></div>
+    <div class="footer-col"><h4>الفريق</h4><a href="about.html">من نحن</a><a href="services.html">احجز معنا</a></div>
+    <div class="footer-col"><h4>قانوني</h4><a href="#">سياسة الخصوصية</a></div>
+  </div>
+  <div class="footer-bottom"><div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div><div class="footer-accent-line">adwat-altajer.com</div></div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+const SVG = {
+  instagram: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>`,
+  tiktok:    `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34v-7.3a8.16 8.16 0 004.78 1.52V6.08a4.85 4.85 0 01-1.01-.39z"/></svg>`,
+  twitter:   `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+  whatsapp:  `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`,
+  blast:     `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>`,
+  story:     `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="15" height="14" rx="2"/><path d="M17 9l5-3v14l-5-3V9z"/></svg>`,
+  meta:      `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
+  snapchat:  `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.206 1.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.342 4.831l-.002.058c-.013.295-.024.572-.031.785.135.048.346.11.614.11.327 0 .652-.073.96-.219.227-.105.375-.155.497-.155.788 0 1.243.855.55 1.3-.09.056-.216.123-.378.184.178.092.37.207.556.348.397.293.713.622.874.993.213.496-.011.971-.511 1.05-.089.014-.184.019-.291.019-.38 0-.825-.08-1.28-.157-.288-.049-.599-.102-.929-.132-.026.048-.052.097-.083.147-.466.764-1.146 1.302-1.99 1.532-.25.067-.503.1-.752.1-.276 0-.555-.041-.831-.123-.547-.163-1.073-.486-1.574-.962-.499.476-1.026.8-1.573.962-.277.082-.556.123-.832.123-.248 0-.502-.033-.751-.1-.845-.23-1.524-.768-1.991-1.532-.031-.05-.057-.099-.083-.147-.33.03-.64.083-.929.132-.454.077-.899.157-1.279.157-.107 0-.202-.005-.291-.019-.5-.079-.724-.554-.511-1.05.16-.371.477-.7.874-.993.187-.14.378-.256.557-.348-.163-.061-.289-.128-.378-.184-.693-.445-.238-1.3.55-1.3.121 0 .27.05.496.155.309.146.633.219.961.219.268 0 .48-.062.614-.11l-.032-.785-.002-.059c-.06-1.612-.187-3.638.342-4.831C7.859 2.069 11.219 1.793 12.206 1.793z"/></svg>`,
+  mail:      `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+  sun:       `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`,
+  moon:      `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>`,
+  sunrise:   `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 00-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/></svg>`,
+  bulb:      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/></svg>`,
+};
+
+function cpBtn(id) {
+  return `<button class="copy-icon-btn" onclick="(function(b){var el=document.getElementById('${id}');if(!el)return;navigator.clipboard.writeText(el.innerText.trim());b.textContent='تم ✓';b.classList.add('copied');setTimeout(()=>{b.textContent='انسخ';b.classList.remove('copied')},1800)})(this)">انسخ</button>`;
+}
+
+function contentRow(label, icon, text, id) {
+  if (!text) return '';
+  return `<div class="lc-content-row">
+    <div class="lc-content-label">${icon} ${label}</div>
+    <div class="lc-content-text" id="${id}">${esc(text)}</div>
+    <div class="lc-row-footer">${cpBtn(id)}</div>
+  </div>`;
+}
+
+function renderDay(day, prefix) {
+  let html = `<div class="lc-day">
+    <div class="lc-day-label">${esc(day.day||'')}</div>
+    <div class="lc-day-focus">${esc(day.focus||'')}</div>`;
+  const id = (k) => prefix + '_' + k;
+  html += contentRow('إنستقرام', SVG.instagram, day.instagram, id('ig'));
+  html += contentRow('تيك توك', SVG.tiktok, day.tiktok, id('tt'));
+  html += contentRow('قصة إنستقرام', SVG.story, day.story, id('st'));
+  html += contentRow('واتساب', SVG.whatsapp, day.whatsapp, id('wa'));
+  html += contentRow('واتساب للكل', SVG.blast, day.whatsapp_blast, id('wb'));
+  html += contentRow('تويتر', SVG.twitter, day.twitter, id('tw'));
+  if (day.tip) html += `<div class="lc-tip">${esc(day.tip)}</div>`;
+  html += '</div>';
+  return html;
+}
+
+function renderLaunchDay(ld, prefix) {
+  if (!ld) return '';
+  let html = '';
+  const slots = [
+    { key: 'morning', label: 'الصباح', icon: SVG.sunrise },
+    { key: 'afternoon', label: 'بعد الظهر', icon: SVG.sun },
+    { key: 'evening', label: 'المساء', icon: SVG.moon },
+  ];
+  slots.forEach(s => {
+    const slot = ld[s.key]; if (!slot) return;
+    html += `<div class="lc-day"><div class="lc-day-label">${s.icon} ${s.label}${slot.time?' — '+esc(slot.time):''}</div>`;
+    html += contentRow('إنستقرام', SVG.instagram, slot.instagram, prefix+'_'+s.key+'_ig');
+    html += contentRow('قصة إنستقرام', SVG.story, slot.instagram_story, prefix+'_'+s.key+'_st');
+    html += contentRow('تيك توك', SVG.tiktok, slot.tiktok, prefix+'_'+s.key+'_tt');
+    html += contentRow('واتساب', SVG.whatsapp, slot.whatsapp, prefix+'_'+s.key+'_wa');
+    html += contentRow('واتساب للكل', SVG.blast, slot.whatsapp_blast, prefix+'_'+s.key+'_wb');
+    html += contentRow('تويتر', SVG.twitter, slot.twitter, prefix+'_'+s.key+'_tw');
+    html += '</div>';
+  });
+  if (ld.adCopy) {
+    html += '<h4 style="margin:1rem 0 0.8rem;font-size:0.95rem;">الإعلانات المدفوعة</h4><div class="lc-ads">';
+    if (ld.adCopy.meta) { const id = prefix+'_ad_meta'; html += `<div class="lc-ad-card"><div class="lc-ad-platform">${SVG.meta} Meta / Instagram</div><div class="lc-content-text" id="${id}">${esc(ld.adCopy.meta)}</div><div class="lc-row-footer">${cpBtn(id)}</div></div>`; }
+    if (ld.adCopy.snapchat) { const id = prefix+'_ad_snap'; html += `<div class="lc-ad-card"><div class="lc-ad-platform">${SVG.snapchat} سناب شات</div><div class="lc-content-text" id="${id}">${esc(ld.adCopy.snapchat)}</div><div class="lc-row-footer">${cpBtn(id)}</div></div>`; }
+    if (ld.adCopy.tiktok_ad) { const id = prefix+'_ad_tt'; html += `<div class="lc-ad-card"><div class="lc-ad-platform">${SVG.tiktok} تيك توك</div><div class="lc-content-text" id="${id}">${esc(ld.adCopy.tiktok_ad)}</div><div class="lc-row-footer">${cpBtn(id)}</div></div>`; }
+    html += '</div>';
+  }
+  return html;
+}
+
+function renderCampaign(data) {
+  let html = '';
+  html += `<div class="lc-hero">
+    <div class="lc-hashtag">${esc(data.campaignHashtag||'')}</div>
+    <div class="lc-theme">${esc(data.campaignTheme||'')}</div>
+    <div class="lc-insight">${esc(data.targetInsight||'')}</div>
+  </div>`;
+
+  if (data.kpis?.length) {
+    html += '<div class="lc-kpis">' + data.kpis.map((k,i) =>
+      `<div class="lc-kpi"><span class="lc-kpi-num">${i+1}</span><span>${esc(k)}</span></div>`
+    ).join('') + '</div>';
+  }
+
+  const phases = [
+    { key: 'preLaunch', badge: '', label: data.preLaunch?.title || 'ما قبل الإطلاق', goal: data.preLaunch?.goal },
+    { key: 'launchDay', badge: 'warm', label: data.launchDay?.title || 'يوم الإطلاق', goal: data.launchDay?.goal },
+    { key: 'postLaunch', badge: 'green', label: data.postLaunch?.title || 'ما بعد الإطلاق' },
+  ];
+
+  phases.forEach((ph, pi) => {
+    const phData = data[ph.key];
+    if (!phData) return;
+    const phId = 'lcPhase_' + pi;
+    let bodyHtml = '';
+
+    if (ph.key === 'launchDay') {
+      bodyHtml = renderLaunchDay(phData, 'ld');
+    } else {
+      const days = phData.days || [];
+      days.forEach((day, di) => { bodyHtml += renderDay(day, ph.key + '_' + di); });
+    }
+
+    html += `<div class="lc-phase${pi===0?' open':''}" id="${phId}">
+      <div class="lc-phase-header" onclick="document.getElementById('${phId}').classList.toggle('open')">
+        <span class="lc-phase-badge ${ph.badge}">${pi===0?'قبل':''}${pi===1?'يوم الإطلاق':''}${pi===2?'بعد':''}</span>
+        <div>
+          <div class="lc-phase-title">${esc(ph.label)}</div>
+          ${ph.goal?`<div class="lc-phase-goal">${esc(ph.goal)}</div>`:''}
+        </div>
+        <span class="lc-phase-arrow">▼</span>
+      </div>
+      <div class="lc-phase-body">${bodyHtml}</div>
+    </div>`;
+  });
+
+  if (data.emailCampaign) {
+    const em = data.emailCampaign;
+    const emId = 'lc_email_body';
+    html += `<div class="lc-email-card">
+      <h3 style="display:flex;align-items:center;gap:.5rem">${SVG.mail} حملة البريد الإلكتروني</h3>
+      <div class="lc-email-meta">
+        <div class="lc-email-field"><label>عنوان البريد</label><div class="lc-email-value">${esc(em.subject||'')}</div></div>
+        <div class="lc-email-field"><label>نص المعاينة</label><div class="lc-email-value">${esc(em.preview||'')}</div></div>
+      </div>
+      <div class="lc-content-text" id="${emId}">${esc(em.body||'')}</div>
+      <div class="lc-row-footer" style="margin-top:0.5rem">${cpBtn(emId)}</div>
+    </div>`;
+  }
+
+  if (data.tips?.length) {
+    html += '<div style="background:var(--bg-alt);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.5rem 2rem">';
+    html += '<h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">نصائح التنفيذ</h3>';
+    data.tips.forEach((t,i) => {
+      html += `<div class="lc-tip" style="margin-bottom:0.5rem"><span class="lc-tip-icon">${SVG.bulb}</span><span><strong>${i+1}.</strong> ${esc(t)}</span></div>`;
+    });
+    html += '</div>';
+  }
+
+  return html;
+}
+
+const steps = ['يحلل المنتج والجمهور...','يبني استراتيجية الإطلاق...','يكتب محتوى ما قبل الإطلاق...','يكتب محتوى يوم الإطلاق...','يجهز الإعلانات المدفوعة...','يكمل خطة ما بعد الإطلاق...'];
+
+document.getElementById('generateBtn').addEventListener('click', async () => {
+  if (!auth.isLoggedIn()) {
+    showModal({type:'warning',title:'يجب تسجيل الدخول',message:'سجّل دخولك لاستخدام هذه الأداة.',actions:[{label:'إلغاء',style:'secondary',close:true},{label:'تسجيل الدخول',style:'primary',onClick:()=>window.location.href='login.html'}]});
+    return;
+  }
+  const productName = document.getElementById('productName').value.trim();
+  const productFeatures = document.getElementById('productFeatures').value.trim();
+  const price = document.getElementById('price').value.trim();
+  if (!productName) { showError('حقل مطلوب','أدخل اسم المنتج'); return; }
+  if (!productFeatures) { showError('حقل مطلوب','أدخل مميزات المنتج'); return; }
+  if (!price) { showError('حقل مطلوب','أدخل سعر المنتج'); return; }
+
+  const btn = document.getElementById('generateBtn');
+  const output = document.getElementById('lcOutput');
+  const loading = document.getElementById('lcLoading');
+  const stepEl = document.getElementById('lcStep');
+  btn.disabled = true;
+  output.style.display = 'none';
+  loading.classList.add('visible');
+
+  let si = 0;
+  const stepInt = setInterval(() => { stepEl.textContent = steps[si % steps.length]; si++; }, 2500);
+
+  try {
+    const result = await api.launchCampaign({
+      productName, productFeatures, price,
+      storeName: document.getElementById('storeName').value.trim(),
+      category: document.getElementById('category').value.trim(),
+      targetAudience: document.getElementById('targetAudience').value.trim(),
+      launchDate: document.getElementById('launchDate').value,
+    });
+
+    clearInterval(stepInt);
+    output.style.display = 'block';
+    output.innerHTML = renderCampaign(result);
+    showToast('تم بناء حملة الإطلاق بنجاح!', 'success');
+
+    if (result.used !== undefined && result.limit !== null && result.limit > 0) {
+      let counter = document.getElementById('lcUsageCounter');
+      if (!counter) { counter = document.createElement('div'); counter.id = 'lcUsageCounter'; counter.className = 'usage-counter'; btn.insertAdjacentElement('afterend', counter); }
+      const pct = Math.min(100, Math.round((result.used / result.limit) * 100));
+      counter.className = 'usage-counter' + (pct >= 80 ? ' critical' : pct >= 60 ? ' low' : '');
+      counter.innerHTML = '<span>استخدمت ' + result.used + ' من ' + result.limit + '</span><div class="usage-bar"><div class="usage-fill" style="width:' + pct + '%"></div></div>';
+    }
+  } catch (err) {
+    clearInterval(stepInt);
+    output.style.display = 'block';
+    showToolError(err, 'launch-campaign');
+  } finally {
+    loading.classList.remove('visible');
+    btn.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>

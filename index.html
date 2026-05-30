@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أدوات التاجر — كل ما يحتاجه التاجر السعودي في مكان واحد</title>
+<meta name="description" content="منصة عربية شاملة للتاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية على سلة وزد، تقويم المواسم، وخدمات احترافية.">
+<meta property="og:title" content="أدوات التاجر — كل ما يحتاجه التاجر السعودي">
+<meta property="og:description" content="أدوات ذكية، كوبونات حصرية، وخدمات احترافية للتاجر السعودي على سلة وزد.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+/* ═══════════════════════════════════════════════════
+   INDEX PAGE — v4 Smooth
+═══════════════════════════════════════════════════ */
+
+/* ── Noise texture ── */
+.noise {
+  position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Top progress bar ── */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px; z-index: 9999;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--gold));
+  width: 0%; transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(168,85,247,0.6);
+}
+
+/* ── Side nav dots ── */
+#side-nav {
+  position: fixed; left: 1.5rem; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 0.65rem; z-index: 90;
+}
+.side-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--line-strong); border: 1.5px solid var(--line-strong);
+  cursor: pointer; transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+  position: relative;
+}
+.side-dot::after {
+  content: attr(data-label);
+  position: absolute; left: calc(100% + 12px); top: 50%; transform: translateY(-50%);
+  background: var(--bg-elevated); color: var(--ink-dim);
+  font-size: 0.72rem; font-weight: 600; white-space: nowrap;
+  padding: 0.25rem 0.65rem; border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  transform: translateY(-50%) translateX(-6px);
+}
+.side-dot:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+.side-dot.active {
+  background: var(--accent); border-color: var(--accent);
+  width: 9px; height: 9px;
+  box-shadow: 0 0 10px rgba(168,85,247,0.5);
+}
+@media (max-width: 900px) { #side-nav { display: none; } }
+
+/* ═══════════════════════════════════════ SECTIONS ═══ */
+.section {
+  min-height: 100vh; padding: 7rem 2rem;
+  display: flex; align-items: center; position: relative; overflow: hidden;
+}
+.section-inner { max-width: 1280px; margin: 0 auto; width: 100%; }
+.section-alt { background: var(--bg-alt); }
+
+/* ═══════════════════════════════════════════ HERO ═══ */
+#hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 8rem 2rem 5rem; text-align: center; position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.hero-bg-orb1 {
+  position: absolute; width: 800px; height: 500px;
+  background: radial-gradient(ellipse, rgba(168,85,247,0.2) 0%, transparent 68%);
+  top: 40%; left: 50%; transform: translate(-50%, -55%); filter: blur(50px);
+}
+.hero-bg-orb2 {
+  position: absolute; width: 500px; height: 400px;
+  background: radial-gradient(ellipse, rgba(234,179,8,0.12) 0%, transparent 65%);
+  top: 70%; left: 35%; transform: translate(-50%, -50%); filter: blur(65px);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(168,85,247,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168,85,247,0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 80%);
+}
+.hero-content { position: relative; z-index: 2; max-width: 880px; margin: 0 auto; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.42rem 1.1rem; border-radius: var(--radius-full);
+  border: 1px solid var(--line-accent); background: var(--accent-soft);
+  font-size: 0.75rem; font-weight: 700; color: var(--accent);
+  letter-spacing: 0.08em; margin-bottom: 2.25rem;
+  opacity: 0; animation: heroFadeUp 0.7s 0.15s ease forwards;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  animation: heroPulse 2s infinite;
+}
+@keyframes heroPulse { 0%,100%{box-shadow:0 0 0 0 rgba(168,85,247,0.6)} 50%{box-shadow:0 0 0 5px rgba(168,85,247,0)} }
+
+.hero-title {
+  font-size: clamp(2.8rem, 8vw, 5.8rem);
+  font-weight: 800; line-height: 1.06; letter-spacing: -0.04em;
+  margin-bottom: 1.5rem; color: var(--ink);
+  opacity: 0; animation: heroFadeUp 0.8s 0.3s ease forwards;
+}
+.hero-title .g-purple {
+  background: linear-gradient(135deg, var(--accent-3) 0%, var(--accent) 60%, var(--accent-2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-title .g-gold {
+  background: linear-gradient(135deg, #fcd34d 0%, var(--gold) 60%, #d97706 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-desc {
+  font-size: clamp(1rem, 2.5vw, 1.18rem); color: var(--ink-dim);
+  line-height: 1.85; max-width: 560px; margin: 0 auto 2.5rem;
+  opacity: 0; animation: heroFadeUp 0.8s 0.45s ease forwards;
+}
+
+.hero-actions {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  opacity: 0; animation: heroFadeUp 0.8s 0.6s ease forwards;
+}
+
+.hero-pills {
+  display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
+  margin-top: 3.5rem; padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  opacity: 0; animation: heroFadeUp 0.8s 0.75s ease forwards;
+}
+.hero-pill {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.82rem; color: var(--ink-dim);
+}
+.hero-pill-num { font-weight: 800; font-size: 1.1rem; color: var(--ink); }
+.hero-pill-num.p { color: var(--accent); }
+.hero-pill-num.g { color: var(--gold); }
+
+/* Floating cards */
+.hero-float {
+  position: absolute; z-index: 3;
+  background: var(--float-card-bg); border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md); padding: 0.85rem 1.1rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.8rem; font-weight: 600; color: var(--ink);
+  backdrop-filter: blur(16px);
+  animation: heroFloat 4s ease-in-out infinite;
+}
+.hero-float-left  { bottom: 22%; right: 3%; animation-delay: 0s; }
+.hero-float-right { top: 30%; left: 3%; animation-delay: 1.8s; }
+.hero-float-icon {
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-float-icon.p { background: var(--accent-soft); color: var(--accent); }
+.hero-float-icon.g { background: var(--gold-soft); color: var(--gold); }
+.hero-float-sub { font-size: 0.7rem; color: var(--ink-dim); font-weight: 400; }
+
+@keyframes heroFloat {
+  0%,100% { transform: translateY(0px) rotate(-1deg); }
+  50%      { transform: translateY(-10px) rotate(0.5deg); }
+}
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.scroll-cue {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  cursor: pointer; color: var(--ink-mid); font-size: 0.7rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  animation: scrollBounce 2.5s ease-in-out infinite; z-index: 2;
+}
+@keyframes scrollBounce {
+  0%,100%{transform:translateX(-50%) translateY(0)} 55%{transform:translateX(-50%) translateY(8px)}
+}
+
+/* ═══════════════════════════════════ PLATFORMS ═══ */
+.platforms-strip {
+  padding: 2.5rem 2rem; background: var(--bg-card);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  overflow: hidden; position: relative;
+}
+.platforms-strip::before, .platforms-strip::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+}
+.platforms-strip::before { right: 0; background: linear-gradient(to left, var(--bg-card), transparent); }
+.platforms-strip::after  { left: 0; background: linear-gradient(to right, var(--bg-card), transparent); }
+.platforms-label {
+  text-align: center; font-size: 0.72rem; color: var(--ink-mid); letter-spacing: 0.18em;
+  text-transform: uppercase; margin-bottom: 1.5rem;
+}
+.platforms-track {
+  display: flex; gap: 3rem; align-items: center;
+  animation: platformScroll 22s linear infinite;
+  width: max-content;
+}
+.platform-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.9rem; font-weight: 700; color: var(--ink-dim);
+  white-space: nowrap; padding: 0.5rem 1.25rem;
+  border: 1px solid var(--line); border-radius: var(--radius-full);
+  background: var(--bg-alt); transition: all var(--transition);
+}
+.platform-item:hover { color: var(--ink); border-color: var(--line-accent); }
+.platform-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+@keyframes platformScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ══════════════════════════════════════ TOOLS ═══ */
+.tools-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-top: 3rem;
+}
+@media (max-width: 900px) { .tools-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .tools-grid { grid-template-columns: 1fr; } }
+
+.tool-card {
+  background: var(--bg-card); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 1.6rem;
+  display: flex; align-items: flex-start; gap: 1rem;
+  text-decoration: none; color: inherit;
+  transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+  position: relative; overflow: hidden;
+}
+.tool-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--accent-3));
+  opacity: 0; transition: opacity 0.3s;
+}
+.tool-card:hover { border-color: var(--line-accent); transform: translateY(-5px) scale(1.01); box-shadow: 0 20px 56px rgba(168,85,247,0.16); }
+.tool-card:hover::after { opacity: 1; }
+.tool-card-icon {
+  width: 42px; height: 42px; flex-shrink: 0; border-radius: var(--radius-md);
+  background: var(--accent-soft); border: 1px solid var(--line-accent);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent); transition: all 0.3s;
+}
+.tool-card-icon.g { background: var(--gold-soft); border-color: rgba(234,179,8,0.28); color: var(--gold); }
+.tool-card:hover .tool-card-icon   { background: var(--accent); color: #fff; border-color: transparent; }
+.tool-card:hover .tool-card-icon.g { background: var(--gold);   color: #fff; border-color: transparent; }
+.tool-card-name { font-weight: 700; font-size: 0.93rem; margin-bottom: 0.3rem; }
+.tool-card-desc { font-size: 0.8rem; color: var(--ink-dim); line-height: 1.65; }
+.tool-tag {
+  display: inline-block; margin-top: 0.55rem; font-size: 0.65rem; font-weight: 700;
+  color: var(--accent); background: var(--accent-soft); border: 1px solid var(--line-accent);
+  border-radius: 99px; padding: 0.15rem 0.5rem; letter-spacing: 0.05em;
+}
+.tool-tag.g { color: var(--gold); background: var(--gold-soft); border-color: rgba(234,179,8,0.25); }
+
+/* ══════════════════════════════════ HOW IT WORKS ═══ */
+.how-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3.5rem;
+  position: relative;
+}
+.how-grid::before {
+  content: ''; position: absolute;
+  top: 3.5rem; right: calc(33% + 1.5rem); left: calc(33% + 1.5rem);
+  height: 1px;
+  background: linear-gradient(90deg, var(--line-accent), rgba(168,85,247,0.15));
+  pointer-events: none;
+}
+@media (max-width: 768px) { .how-grid { grid-template-columns: 1fr; } .how-grid::before { display: none; } }
+
+.how-step {
+  background: var(--bg-card); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 2rem 1.75rem;
+  transition: all 0.3s cubic-bezier(0.16,1,0.3,1); position: relative;
+}
+.how-step:hover { border-color: var(--line-accent); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(168,85,247,0.12); }
+.how-step-num {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  color: #fff; font-weight: 800; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.25rem; box-shadow: 0 4px 16px rgba(168,85,247,0.4);
+}
+.how-step-num.g-num {
+  background: linear-gradient(135deg, #d97706, var(--gold));
+  box-shadow: 0 4px 16px rgba(234,179,8,0.35);
+}
+.how-step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.how-step p  { font-size: 0.83rem; color: var(--ink-dim); line-height: 1.7; }
+
+/* ══════════════════════════════════════ STATS ═══ */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); overflow: hidden; margin-top: 4rem;
+}
+@media (max-width: 700px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+.stat-block {
+  background: var(--bg-card); padding: 3rem 2rem; text-align: center;
+  transition: background var(--transition);
+}
+.stat-block:hover { background: var(--bg-elevated); }
+.stat-num {
+  font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800;
+  letter-spacing: -0.04em; line-height: 1; margin-bottom: 0.5rem;
+}
+.stat-num.p {
+  background: linear-gradient(135deg, var(--accent-3), var(--accent));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.stat-num.g {
+  background: linear-gradient(135deg, #fbbf24, var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.stat-label { font-size: 0.82rem; color: var(--ink-dim); font-weight: 500; }
+
+/* Ticker */
+.ticker-wrap { overflow: hidden; width: 100%; position: relative; }
+.ticker-wrap::before, .ticker-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+}
+.ticker-wrap::before { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+.ticker-wrap::after  { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+.ticker { display: flex; gap: 3rem; animation: ticker 24s linear infinite; width: max-content; }
+.ticker-item { display: flex; align-items: center; gap: 0.7rem; font-size: 0.85rem; color: var(--ink-dim); white-space: nowrap; }
+.t-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.t-dot.g { background: var(--gold); }
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ══════════════════════════════════ WORKS GRID ═══ */
+.home-works-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3rem;
+}
+@media (max-width: 900px) { .home-works-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .home-works-grid { grid-column: 1fr; } }
+
+/* ══════════════════════════════════ REVIEWS GRID ═══ */
+.reviews-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3rem;
+}
+@media (max-width: 900px) { .reviews-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .reviews-grid { grid-template-columns: 1fr; } }
+
+/* ══════════════════════════════════════════ CTA ═══ */
+.cta-box {
+  border: 1px solid var(--line-accent); border-radius: var(--radius-xl);
+  padding: 5rem 3rem; text-align: center;
+  position: relative; overflow: hidden;
+  background: linear-gradient(150deg, rgba(168,85,247,0.07) 0%, rgba(8,6,15,0) 60%);
+}
+.cta-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-2) 30%, var(--accent) 50%, var(--accent-3) 70%, transparent);
+}
+.cta-title {
+  font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1.25rem;
+}
+.cta-title .g {
+  background: linear-gradient(135deg, #fbbf24, var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.cta-sub { color: var(--ink-dim); font-size: 1.05rem; max-width: 500px; margin: 0 auto 2.5rem; }
+
+/* ══════════════════════════════ SMOOTH NAV TRANSITIONS ═══ */
+.nav { transition: background 0.3s, box-shadow 0.3s, border-color 0.3s; }
+.nav.scrolled {
+  background: rgba(8,6,15,0.97);
+  box-shadow: 0 1px 0 rgba(168,85,247,0.15), 0 8px 32px rgba(0,0,0,0.4);
+}
+[data-theme="light"] .nav.scrolled { background: rgba(250,248,255,0.98); }
+
+/* ── Smooth section reveal ── */
+[data-reveal] {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+}
+[data-reveal].visible { opacity: 1; transform: none; }
+[data-reveal][data-delay="1"] { transition-delay: 0.1s; }
+[data-reveal][data-delay="2"] { transition-delay: 0.2s; }
+[data-reveal][data-delay="3"] { transition-delay: 0.32s; }
+[data-reveal][data-delay="4"] { transition-delay: 0.44s; }
+[data-reveal][data-delay="5"] { transition-delay: 0.55s; }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .section { padding: 5.5rem 1.25rem; }
+  #hero     { padding: 7rem 1.25rem 4rem; }
+  .hero-float { display: none; }
+  .cta-box { padding: 3.5rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div id="progress-bar"></div>
+
+<!-- ──────────────── SIDE NAV DOTS ──────────────── -->
+<nav id="side-nav" aria-label="قائمة الأقسام">
+  <div class="side-dot active" data-target="hero"          data-label="الرئيسية"></div>
+  <div class="side-dot"        data-target="tools-section" data-label="الأدوات"></div>
+  <div class="side-dot"        data-target="how-section"   data-label="كيف تعمل"></div>
+  <div class="side-dot"        data-target="stats-section" data-label="أرقام"></div>
+  <div class="side-dot"        data-target="works-section" data-label="أعمالنا"></div>
+  <div class="side-dot"        data-target="reviews-section" data-label="آراء العملاء"></div>
+  <div class="side-dot"        data-target="cta-section"   data-label="ابدأ الآن"></div>
+</nav>
+
+<!-- ════════════════════════════════════════ NAV ═══ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <svg width="22" height="31" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#a855f7"/>
+        <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
+        <polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/>
+      </svg>
+      أدوات التاجر
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">الرئيسية</a></li>
+      <li><a href="pages/tools.html">الأدوات</a></li>
+      <li><a href="pages/coupons.html">الكوبونات</a></li>
+      <li><a href="pages/calendar.html">المواسم</a></li>
+      <li><a href="pages/works.html">أعمالنا</a></li>
+      <li><a href="pages/services.html">الخدمات</a></li>
+      <li><a href="pages/blog.html">المدونة</a></li>
+      <li><a href="pages/about.html">عن المنصة</a></li>
+    </ul>
+
+    <div style="display:flex;align-items:center;gap:0.7rem;flex-shrink:0;">
+      <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
+        <span class="icon-moon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span>
+        <span class="icon-sun"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
+      </button>
+      <a href="pages/services.html" class="nav-cta">احجز استشارة</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="القائمة">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════ SECTION 1 — HERO ═══ -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-orb1"></div>
+    <div class="hero-bg-orb2"></div>
+    <div class="hero-grid"></div>
+  </div>
+
+  <!-- Floating cards -->
+  <div class="hero-float hero-float-left">
+    <div class="hero-float-icon g">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V22H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+    </div>
+    <div>
+      <div>كوبون خصم نشط</div>
+      <div class="hero-float-sub">+500 كوبون على سلة وزد</div>
+    </div>
+  </div>
+
+  <div class="hero-float hero-float-right">
+    <div class="hero-float-icon p">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 3v18h18M7 14l4-4 4 4 6-6"/></svg>
+    </div>
+    <div>
+      <div>محلل ذكي</div>
+      <div class="hero-float-sub">تقرير متجرك في ثوانٍ</div>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      منصة مبنية خصيصاً للسوق السعودي
+    </div>
+
+    <h1 class="hero-title">
+      كل ما يحتاجه<br>
+      <span class="g-purple">التاجر السعودي</span><br>
+      في <span class="g-gold">مكان واحد.</span>
+    </h1>
+
+    <p class="hero-desc">
+      أدوات تحليل ذكية، كوبونات حصرية، تقويم المواسم، وفريق متخصص ينفّذ لك. كل شي تحتاجه لمتجرك، بدون تعقيد.
+    </p>
+
+    <div class="hero-actions">
+      <a href="pages/tools.html" class="btn-primary" style="padding:0.9rem 2.2rem;font-size:1rem;">
+        ابدأ بالأدوات مجاناً
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <a href="pages/coupons.html" class="btn-secondary" style="padding:0.9rem 2rem;">شوف الكوبونات</a>
+    </div>
+
+    <div class="hero-pills">
+      <div class="hero-pill">
+        <span class="hero-pill-num p">+500</span>
+        <span>كوبون نشط</span>
+      </div>
+      <div style="width:1px;background:var(--line);"></div>
+      <div class="hero-pill">
+        <span class="hero-pill-num g">8</span>
+        <span>أدوات ذكية</span>
+      </div>
+      <div style="width:1px;background:var(--line);"></div>
+      <div class="hero-pill">
+        <span class="hero-pill-num p">100%</span>
+        <span>مجاني للبدء</span>
+      </div>
+      <div style="width:1px;background:var(--line);"></div>
+      <div class="hero-pill">
+        <span class="hero-pill-num g">+200</span>
+        <span>مشروع منجز</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue" onclick="scrollTo('tools-section')">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    اكتشف المزيد
+  </div>
+</section>
+
+<!-- ════════════════════════════ PLATFORMS STRIP ═══ -->
+<div class="platforms-strip">
+  <p class="platforms-label">منصات وخدمات مدعومة</p>
+  <div class="ticker-wrap">
+    <div class="platforms-track">
+      <div class="platform-item"><span class="platform-dot" style="background:#6366f1;"></span>سلة</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#22c55e;"></span>زد</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#f59e0b;"></span>شيبو</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#3b82f6;"></span>بايدو</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#ec4899;"></span>إكسباي</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#a855f7;"></span>هايد باي</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#10b981;"></span>مكان</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#f97316;"></span>ماي فاتورة</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#8b5cf6;"></span>تاب</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#06b6d4;"></span>إكسباندكارت</div>
+      <!-- duplicate for seamless loop -->
+      <div class="platform-item"><span class="platform-dot" style="background:#6366f1;"></span>سلة</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#22c55e;"></span>زد</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#f59e0b;"></span>شيبو</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#3b82f6;"></span>بايدو</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#ec4899;"></span>إكسباي</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#a855f7;"></span>هايد باي</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#10b981;"></span>مكان</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#f97316;"></span>ماي فاتورة</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#8b5cf6;"></span>تاب</div>
+      <div class="platform-item"><span class="platform-dot" style="background:#06b6d4;"></span>إكسباندكارت</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ SECTION 2 — TOOLS ═══ -->
+<section class="section section-alt" id="tools-section">
+  <div class="section-inner">
+    <div data-reveal>
+      <div class="section-eyebrow">الأدوات الذكية</div>
+      <h2 class="section-title">أدوات بنيناها<br><em>لمشاكل حقيقية</em></h2>
+      <p style="color:var(--ink-dim);max-width:480px;margin-top:0.5rem;font-size:0.95rem;">
+        كل أداة صُممت بناءً على احتياجات التجار — بدون تسجيل، بدون تعقيد.
+      </p>
+    </div>
+
+    <div class="tools-grid">
+      <a href="pages/analyzer.html" class="tool-card" data-reveal data-delay="1">
+        <div class="tool-card-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 4 4 6-6"/></svg>
+        </div>
+        <div>
+          <div class="tool-card-name">محلل المتجر</div>
+          <div class="tool-card-desc">تحليل شامل لمتجرك على سلة أو زد — نقاط القوة والضعف والتوصيات</div>
+          <span class="tool-tag">AI مدعوم</span>
+        </div>
+      </a>
+
+      <a href="pages/generator.html" class="tool-card" data-reveal data-delay="2">
+        <div class="tool-card-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <div>
+          <div class="tool-card-name">مولّد الأوصاف</div>
+          <div class="tool-card-desc">أوصاف منتجات احترافية في ثوانٍ — مُحسَّنة للبيع والسيو</div>
+          <span class="tool-tag">AI مدعوم</span>
+        </div>
+      </a>
+
+      <a href="pages/competitor.html" class="tool-card" data-reveal data-delay="3">
+        <div class="tool-card-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div>
+          <div class="tool-card-name">تحليل المنافسين</div>
+          <div class="tool-card-desc">قارن متجرك بمنافسيك واكتشف الفجوات والفرص</div>
+          <span class="tool-tag">AI مدعوم</span>
+        </div>
+      </a>
+
+      <a href="pages/social-plan.html" class="tool-card" data-reveal data-delay="1">
+        <div class="tool-card-icon g">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div>
+          <div class="tool-card-name">خطة سوشيال ميديا</div>
+          <div class="tool-card-desc">خطة محتوى أسبوعية جاهزة على كل المنصات</div>
+          <span class="tool-tag g">مجاني</span>
+        </div>
+      </a>
+
+      <a href="pages/whatsapp.html" class="tool-card" data-reveal data-delay="2">
+        <div class="tool-card-icon g">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        </div>
+        <div>
+          <div class="tool-card-name">ردود واتساب</div>
+          <div class="tool-card-desc">ردود احترافية جاهزة للعملاء بنبرة متجرك</div>
+          <span class="tool-tag g">مجاني</span>
+        </div>
+      </a>
+
+      <a href="pages/store-policies.html" class="tool-card" data-reveal data-delay="3">
+        <div class="tool-card-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div>
+          <div class="tool-card-name">سياسات المتجر</div>
+          <div class="tool-card-desc">سياسة الإرجاع والشحن والخصوصية بنقرة واحدة</div>
+          <span class="tool-tag">AI مدعوم</span>
+        </div>
+      </a>
+    </div>
+
+    <div style="text-align:center;margin-top:2.5rem;" data-reveal>
+      <a href="pages/tools.html" class="btn-secondary">عرض كل الأدوات ←</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ SECTION 3 — HOW IT WORKS ═══ -->
+<section class="section" id="how-section">
+  <div class="section-inner">
+    <div style="text-align:center;" data-reveal>
+      <div class="section-eyebrow purple" style="justify-content:center;">خطوات بسيطة</div>
+      <h2 class="section-title" style="text-align:center;">كيف تعمل <em>المنصة؟</em></h2>
+      <p style="color:var(--ink-dim);max-width:460px;margin:0.5rem auto 0;font-size:0.95rem;">
+        ثلاث خطوات وتبدأ تستفيد من كل أدوات التاجر
+      </p>
+    </div>
+
+    <div class="how-grid">
+      <div class="how-step" data-reveal data-delay="1">
+        <div class="how-step-num">١</div>
+        <h3>سجّل أو ابدأ بدون تسجيل</h3>
+        <p>بعض الأدوات مفتوحة للجميع بدون حساب. سجّل مجاناً للحصول على ميزات إضافية وتاريخ الاستخدام.</p>
+      </div>
+
+      <div class="how-step" data-reveal data-delay="2">
+        <div class="how-step-num g-num">٢</div>
+        <h3>اختر الأداة اللي تحتاجها</h3>
+        <p>من محلل المتجر إلى مولّد الأوصاف إلى خطة سوشيال ميديا — كل شي في مكان واحد.</p>
+      </div>
+
+      <div class="how-step" data-reveal data-delay="3">
+        <div class="how-step-num">٣</div>
+        <h3>احصل على النتائج فوراً</h3>
+        <p>تقارير وتوصيات احترافية خلال ثوانٍ. انسخها، طبّقها، وشوف الفرق في متجرك.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ SECTION 4 — STATS ═══ -->
+<section class="section section-alt" id="stats-section">
+  <div class="section-inner">
+    <div style="text-align:center;" data-reveal>
+      <div class="section-eyebrow purple" style="justify-content:center;">أرقام حقيقية</div>
+      <h2 class="section-title" style="text-align:center;">نتائج <em>تتكلم</em> عن نفسها</h2>
+    </div>
+
+    <div class="stats-row" data-reveal data-delay="1">
+      <div class="stat-block">
+        <div class="stat-num p">+<span data-counter="500">0</span></div>
+        <div class="stat-label">كوبون خصم نشط</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num g"><span data-counter="8">0</span></div>
+        <div class="stat-label">أداة ذكية مجانية</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num p"><span data-counter="95">0</span>%</div>
+        <div class="stat-label">رضا العملاء</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num g"><span data-counter="200">0</span>+</div>
+        <div class="stat-label">مشروع منجز</div>
+      </div>
+    </div>
+
+    <div class="ticker-wrap" style="margin-top:4rem;padding:1.25rem 0;border-top:1px solid var(--line);" data-reveal data-delay="2">
+      <div class="ticker">
+        <span class="ticker-item"><span class="t-dot"></span>محلل المتجر</span>
+        <span class="ticker-item"><span class="t-dot g"></span>كوبونات سلة</span>
+        <span class="ticker-item"><span class="t-dot"></span>سيو المنتجات</span>
+        <span class="ticker-item"><span class="t-dot g"></span>كوبونات زد</span>
+        <span class="ticker-item"><span class="t-dot"></span>خطة سوشيال</span>
+        <span class="ticker-item"><span class="t-dot g"></span>رمضان</span>
+        <span class="ticker-item"><span class="t-dot"></span>اليوم الوطني</span>
+        <span class="ticker-item"><span class="t-dot g"></span>بلاك فرايدي</span>
+        <span class="ticker-item"><span class="t-dot"></span>تحليل المنافسين</span>
+        <span class="ticker-item"><span class="t-dot g"></span>ردود واتساب</span>
+        <!-- duplicate -->
+        <span class="ticker-item"><span class="t-dot"></span>محلل المتجر</span>
+        <span class="ticker-item"><span class="t-dot g"></span>كوبونات سلة</span>
+        <span class="ticker-item"><span class="t-dot"></span>سيو المنتجات</span>
+        <span class="ticker-item"><span class="t-dot g"></span>كوبونات زد</span>
+        <span class="ticker-item"><span class="t-dot"></span>خطة سوشيال</span>
+        <span class="ticker-item"><span class="t-dot g"></span>رمضان</span>
+        <span class="ticker-item"><span class="t-dot"></span>اليوم الوطني</span>
+        <span class="ticker-item"><span class="t-dot g"></span>بلاك فرايدي</span>
+        <span class="ticker-item"><span class="t-dot"></span>تحليل المنافسين</span>
+        <span class="ticker-item"><span class="t-dot g"></span>ردود واتساب</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ SECTION 5 — WORKS ═══ -->
+<section class="section" id="works-section">
+  <div class="section-inner">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;" data-reveal>
+      <div>
+        <div class="section-eyebrow">معرض الأعمال</div>
+        <h2 class="section-title" style="margin-bottom:0;">أعمال <em>نفتخر</em> بها</h2>
+      </div>
+      <a href="pages/works.html" class="btn-secondary">عرض الكل ←</a>
+    </div>
+
+    <div class="home-works-grid" id="homeWorksGrid">
+      <div class="skeleton skeleton-card" style="height:300px;"></div>
+      <div class="skeleton skeleton-card" style="height:300px;"></div>
+      <div class="skeleton skeleton-card" style="height:300px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ SECTION 6 — REVIEWS ═══ -->
+<section class="section section-alt" id="reviews-section">
+  <div class="section-inner">
+    <div style="text-align:center;margin-bottom:0.5rem;" data-reveal>
+      <div class="section-eyebrow purple" style="justify-content:center;">آراء العملاء</div>
+      <h2 class="section-title" style="text-align:center;">ماذا يقول <em>عملاؤنا</em></h2>
+    </div>
+
+    <div class="reviews-grid" id="homeReviewsGrid">
+      <div class="skeleton skeleton-card" style="height:220px;"></div>
+      <div class="skeleton skeleton-card" style="height:220px;"></div>
+      <div class="skeleton skeleton-card" style="height:220px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ SECTION 7 — CTA ═══ -->
+<section class="section" id="cta-section">
+  <div class="section-inner">
+    <div class="cta-box" data-reveal>
+      <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,0.18) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(60px);pointer-events:none;"></div>
+      <div style="position:relative;z-index:1;">
+        <div class="section-eyebrow purple" style="justify-content:center;margin-bottom:1.25rem;">ابدأ اليوم</div>
+        <h2 class="cta-title">جاهز تنمّي<br><span class="g">متجرك؟</span></h2>
+        <p class="cta-sub">انضم لمئات التجار اللي يستخدمون أدوات التاجر يومياً. مجاني للبدء، بدون بيانات بنك.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <a href="pages/tools.html" class="btn-primary" style="padding:1rem 2.5rem;font-size:1.05rem;">ابدأ مجاناً الآن</a>
+          <a href="pages/services.html" class="btn-secondary" style="padding:1rem 2rem;">احجز استشارة</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ FOOTER ═══ -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--ink);font-weight:700;margin-bottom:0.75rem;">
+        <svg width="22" height="30" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#a855f7"/>
+          <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
+          <polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/>
+        </svg>
+        أدوات التاجر
+      </a>
+      <p>منصة شاملة للتاجر السعودي — أدوات ذكية، كوبونات حصرية، وخدمات احترافية.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="X"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>الأدوات</h4>
+      <a href="pages/analyzer.html">محلل المتجر</a>
+      <a href="pages/generator.html">مولّد الأوصاف</a>
+      <a href="pages/competitor.html">تحليل المنافسين</a>
+      <a href="pages/social-plan.html">خطة سوشيال</a>
+      <a href="pages/whatsapp.html">ردود واتساب</a>
+      <a href="pages/store-policies.html">سياسات المتجر</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="pages/coupons.html">الكوبونات</a>
+      <a href="pages/calendar.html">تقويم المواسم</a>
+      <a href="pages/works.html">أعمالنا</a>
+      <a href="pages/services.html">الخدمات</a>
+      <a href="pages/blog.html">المدونة</a>
+      <a href="pages/about.html">عن المنصة</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">إخلاء المسؤولية</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">adwat-altajer.com</div>
+  </div>
+</footer>
+
+<script src="assets/api.js"></script>
+<script>
+/* ══════════════════════════════════ SMOOTH NAV & SCROLL ═══ */
+
+const mainNav  = document.getElementById('mainNav');
+const progBar  = document.getElementById('progress-bar');
+const cursorGl = document.getElementById('cursorGlow');
+const sections = ['hero','tools-section','how-section','stats-section','works-section','reviews-section','cta-section'];
+
+// Cursor glow
+document.addEventListener('mousemove', e => {
+  cursorGl.style.left = e.clientX + 'px';
+  cursorGl.style.top  = e.clientY + 'px';
+});
+
+// Theme toggle
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const h = document.documentElement;
+  const next = h.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  h.setAttribute('data-theme', next);
+  localStorage.setItem('tajer-theme', next);
+});
+
+// Mobile menu
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+  const links = document.querySelector('.nav .nav-links');
+  links.classList.toggle('mobile-open');
+});
+
+// Smooth scroll to section
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Side dot click
+document.querySelectorAll('.side-dot').forEach(dot => {
+  dot.addEventListener('click', () => scrollTo(dot.dataset.target));
+});
+
+// Scroll cue click
+document.querySelector('.scroll-cue')?.addEventListener('click', () => scrollTo('tools-section'));
+
+// ── Scroll handler: progress bar + nav bg + active section ──
+let rafId;
+function onScroll() {
+  if (rafId) return;
+  rafId = requestAnimationFrame(() => {
+    rafId = null;
+    const scrollTop  = window.scrollY;
+    const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+    const pct        = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progBar.style.width = pct + '%';
+
+    // Nav bg
+    mainNav.classList.toggle('scrolled', scrollTop > 40);
+
+    // Active section
+    let activeId = sections[0];
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= 80) activeId = id;
+    }
+    document.querySelectorAll('.side-dot').forEach(dot => {
+      dot.classList.toggle('active', dot.dataset.target === activeId);
+    });
+  });
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// ── Intersection observer for reveal ──
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+
+// ── Counter animation ──
+function animateCounter(el, target, duration = 1600) {
+  const start = performance.now();
+  const step = ts => {
+    const t = Math.min((ts - start) / duration, 1);
+    const v = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.floor(v * target);
+    if (t < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+}
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('[data-counter]').forEach(el => animateCounter(el, +el.dataset.counter));
+      counterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const statsEl = document.getElementById('stats-section');
+if (statsEl) counterObs.observe(statsEl);
+
+// ── Works & Reviews from API ──
+(async () => {
+  function workCard(w) {
+    return `<div class="card work-card" data-reveal>
+      <div class="work-visual" style="--wv-from:${w.gradient_from};--wv-via:${w.gradient_via};--wv-to:${w.gradient_to}">
+        <div class="work-visual-mockup">
+          <div class="mock-bar accent"></div><div class="mock-bar"></div><div class="mock-bar short"></div>
+        </div>
+      </div>
+      <div class="work-info">
+        <span class="badge badge-label">${w.badge_label}</span>
+        <h3 class="work-title">${w.title}</h3>
+        <p class="work-desc">${(w.description||'').slice(0,90)}${(w.description||'').length>90?'...':''}</p>
+      </div>
+    </div>`;
+  }
+
+  function reviewCard(r) {
+    const stars = '★'.repeat(r.rating)+'☆'.repeat(5-r.rating);
+    return `<div class="review-card" data-reveal>
+      <div class="review-stars">${stars}</div>
+      <p class="review-text">"${r.review_text}"</p>
+      <div class="review-author">
+        <div class="review-avatar">${r.avatar_letter||r.name.charAt(0)}</div>
+        <div><div class="review-name">${r.name}</div><div class="review-store">${r.store||''}</div></div>
+      </div>
+    </div>`;
+  }
+
+  const worksGrid   = document.getElementById('homeWorksGrid');
+  const reviewsGrid = document.getElementById('homeReviewsGrid');
+
+  try {
+    const works = await api.getWorks();
+    worksGrid.innerHTML = works?.length
+      ? works.slice(0,6).map(workCard).join('')
+      : '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ink-dim);">لا توجد أعمال بعد</div>';
+    worksGrid.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+  } catch { worksGrid.innerHTML = ''; }
+
+  try {
+    const reviews = await api.getReviews();
+    reviewsGrid.innerHTML = reviews?.length
+      ? reviews.slice(0,6).map(reviewCard).join('')
+      : '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ink-dim);">لا توجد مراجعات بعد</div>';
+    reviewsGrid.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+  } catch { reviewsGrid.innerHTML = ''; }
+})();
+</script>
+</body>
+</html>

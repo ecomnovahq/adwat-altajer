@@ -1,0 +1,581 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محلل المنافسين — أدوات التاجر</title>
+<meta name="description" content="حلّل منافسيك في السوق السعودي بالذكاء الاصطناعي — اكتشف نقاط قوتهم وضعفهم وفرص التميز عنهم.">
+<meta property="og:title" content="محلل المنافسين — أدوات التاجر">
+<meta property="og:description" content="تحليل ذكي للمنافسين لمساعدة التاجر السعودي على التميز في سوقه.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .comp-section { padding: 8rem 2rem 6rem; max-width: 1200px; margin: 0 auto; }
+
+  /* Form */
+  .comp-form {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .comp-form::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-3) 100%);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .comp-form::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+    transform: translate(30%, -30%);
+    pointer-events: none;
+  }
+  @media (max-width: 768px) { .comp-form { padding: 2rem 1.5rem; } }
+  .comp-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 900px) { .comp-form-grid { grid-template-columns: 1fr; } }
+
+  /* Loading */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  .loading.visible { display: block; }
+  .loading-spinner { width: 60px; height: 60px; }
+  .loading-text { color: var(--ink-dim); font-size: 1.1rem; }
+  .loading-step { color: var(--accent); font-weight: 600; margin-top: 0.5rem; }
+
+  /* Results */
+  .results { display: none; margin-top: 3rem; }
+  .results.visible {
+    display: block;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Score comparison */
+  .score-compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-compare::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-3) 100%);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  @media (max-width: 768px) { .score-compare { grid-template-columns: 1fr; } }
+  .score-vs { font-family: var(--font-arabic); font-size: 1.8rem; font-weight: 800; color: var(--ink-dim); }
+  .score-store-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem; }
+  .score-circle-wrap { position: relative; width: 150px; height: 150px; margin: 0 auto 1rem; }
+  .score-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .score-bg { fill: none; stroke: var(--line-strong); stroke-width: 8; }
+  .score-fg-mine { fill: none; stroke: var(--accent); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .score-fg-comp { fill: none; stroke: var(--accent-warm); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .score-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .score-num { font-family: var(--font-arabic); font-size: 3rem; font-weight: 800; line-height: 1; }
+  .score-label { font-size: 0.8rem; color: var(--ink-dim); margin-top: 0.2rem; }
+
+  /* Summary card */
+  .summary-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .summary-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
+  .summary-card p { color: var(--ink-dim); line-height: 1.8; font-size: 0.97rem; }
+
+  /* Strengths / Weaknesses */
+  .sw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 768px) { .sw-grid { grid-template-columns: 1fr; } }
+  .sw-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+  }
+  .sw-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.2rem; }
+  .sw-store-label {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+  .sw-item { display: flex; gap: 0.5rem; padding: 0.35rem 0; font-size: 0.88rem; line-height: 1.6; }
+  .sw-strength .sw-item .dot { color: #22c55e; flex-shrink: 0; }
+  .sw-weakness .sw-item .dot { color: #ef4444; flex-shrink: 0; }
+  .sw-strength { background: rgba(34,197,94,.04); border-color: rgba(34,197,94,.2); }
+  .sw-weakness { background: rgba(239,68,68,.04); border-color: rgba(239,68,68,.2); }
+  .sw-strength h4 { color: #22c55e; }
+  .sw-weakness h4 { color: #ef4444; }
+
+  /* Comparison table */
+  .comp-table-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .comp-table-section h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 2rem; }
+  .comp-row { padding: 1.2rem 0; border-bottom: 1px solid var(--line); }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-row-aspect { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.8rem; }
+  .comp-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.6rem; }
+  .comp-bar-label { font-size: 0.78rem; color: var(--ink-dim); margin-bottom: 0.25rem; display: flex; justify-content: space-between; }
+  .bar-track { height: 6px; background: var(--bg-card); border-radius: 3px; overflow: hidden; }
+  .bar-fill-mine { height: 100%; background: var(--accent); border-radius: 3px; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+  .bar-fill-comp { height: 100%; background: var(--accent-warm); border-radius: 3px; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+  .comp-row-analysis { font-size: 0.88rem; color: var(--ink-dim); line-height: 1.7; }
+
+  /* Opportunities / Threats */
+  .ot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 768px) { .ot-grid { grid-template-columns: 1fr; } }
+  .opp-card, .threat-card {
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    border: 1px solid;
+  }
+  .opp-card { background: rgba(34,197,94,.04); border-color: rgba(34,197,94,.2); }
+  .threat-card { background: rgba(239,68,68,.04); border-color: rgba(239,68,68,.2); }
+  .opp-card h3 { color: #22c55e; font-size: 1.15rem; font-weight: 700; margin-bottom: 1.2rem; }
+  .threat-card h3 { color: #ef4444; font-size: 1.15rem; font-weight: 700; margin-bottom: 1.2rem; }
+  .ot-item { display: flex; gap: 0.65rem; align-items: start; padding: 0.4rem 0; font-size: 0.9rem; line-height: 1.65; }
+  .ot-item .num { font-weight: 700; flex-shrink: 0; min-width: 1.2rem; }
+  .opp-card .num { color: #22c55e; }
+  .threat-card .num { color: #ef4444; }
+
+  /* Strategy */
+  .strategy-section {
+    background: var(--bg-alt);
+    border: 1px solid var(--line-accent);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .strategy-section h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; }
+  .strategy-item { display: flex; gap: 1rem; align-items: start; padding: 0.9rem 0; border-bottom: 1px solid var(--line); }
+  .strategy-item:last-child { border-bottom: none; }
+  .strategy-num { width: 32px; height: 32px; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+  .strategy-text { font-size: 0.95rem; line-height: 1.75; }
+
+  /* Usage counter */
+  .usage-counter { margin-top: 1rem; font-size: 0.82rem; color: var(--ink-dim); }
+  .usage-counter .usage-bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 0.4rem; }
+  .usage-counter .usage-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s; }
+  .usage-counter.low .usage-fill { background: var(--accent-warm); }
+  .usage-counter.critical .usage-fill { background: var(--danger); }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html" class="active">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 05</span>
+      <h1>محلل <em>المنافسين</em></h1>
+      <p>أدخل رابط متجرك ورابط منافسك، نفحص كلا الموقعين مباشرة ونعطيك مقارنة تفصيلية بيانياً مع استراتيجية للتغلب عليهم.</p>
+    </div>
+  </div>
+</section>
+
+<section class="comp-section">
+
+  <!-- Form -->
+  <div class="comp-form" data-reveal>
+    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; position: relative;">ابدأ المقارنة</h2>
+    <p style="color: var(--ink-dim); margin-bottom: 2rem; position: relative;">أدخل الروابط أدناه والتحليل يستغرق أقل من دقيقة.</p>
+    <div class="comp-form-grid">
+      <input type="url" id="myUrl" class="input" placeholder="رابط متجرك — https://my-store.salla.sa" />
+      <input type="url" id="competitorUrl" class="input" placeholder="رابط متجر المنافس — https://..." />
+      <input type="text" id="category" class="input" placeholder="التخصص (اختياري) — مثل: أزياء، إلكترونيات..." />
+      <button id="analyzeBtn" class="btn-primary">
+        حلل الآن
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">يجري فحص المتجرين ومقارنتهما...</div>
+    <div class="loading-step" id="loadingStep">جاري فحص متجرك...</div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+
+    <!-- Score comparison -->
+    <div class="score-compare">
+      <div>
+        <div class="score-store-name" id="myStoreName">متجرك</div>
+        <div class="score-circle-wrap">
+          <svg class="score-svg" viewBox="0 0 100 100">
+            <circle class="score-bg" cx="50" cy="50" r="45"/>
+            <circle class="score-fg-mine" cx="50" cy="50" r="45" stroke-dasharray="282.74" stroke-dashoffset="282.74" id="mineScoreFg"/>
+          </svg>
+          <div class="score-inner">
+            <div class="score-num" id="mineScoreNum" style="color: var(--accent);">0</div>
+            <div class="score-label">من 100</div>
+          </div>
+        </div>
+        <div style="font-size: 0.78rem; color: var(--accent); font-weight: 600;">متجرك</div>
+      </div>
+
+      <div class="score-vs">VS</div>
+
+      <div>
+        <div class="score-store-name" id="compStoreName">المنافس</div>
+        <div class="score-circle-wrap">
+          <svg class="score-svg" viewBox="0 0 100 100">
+            <circle class="score-bg" cx="50" cy="50" r="45"/>
+            <circle class="score-fg-comp" cx="50" cy="50" r="45" stroke-dasharray="282.74" stroke-dashoffset="282.74" id="compScoreFg"/>
+          </svg>
+          <div class="score-inner">
+            <div class="score-num" id="compScoreNum" style="color: var(--accent-warm);">0</div>
+            <div class="score-label">من 100</div>
+          </div>
+        </div>
+        <div style="font-size: 0.78rem; color: var(--accent-warm); font-weight: 600;">المنافس</div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-card">
+      <h3>التلخيص التنفيذي</h3>
+      <p id="summaryText"></p>
+    </div>
+
+    <!-- Strengths/Weaknesses grid -->
+    <div class="sw-grid">
+      <div class="sw-card sw-strength">
+        <div class="sw-store-label" style="background: rgba(34,197,94,.15); color: #22c55e;">نقاط قوة متجرك</div>
+        <div id="myStrengths"></div>
+        <div style="margin-top: 1.5rem; border-top: 1px solid rgba(34,197,94,.2); padding-top: 1.2rem;">
+          <div class="sw-store-label" style="background: rgba(239,68,68,.15); color: #ef4444;">نقاط ضعف متجرك</div>
+          <div id="myWeaknesses"></div>
+        </div>
+      </div>
+      <div class="sw-card sw-strength" style="background: rgba(255,107,53,.04); border-color: rgba(255,107,53,.2);">
+        <div class="sw-store-label" style="background: rgba(255,107,53,.15); color: var(--accent-warm);">نقاط قوة المنافس</div>
+        <div id="compStrengths"></div>
+        <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,107,53,.2); padding-top: 1.2rem;">
+          <div class="sw-store-label" style="background: rgba(239,68,68,.15); color: #ef4444;">نقاط ضعف المنافس</div>
+          <div id="compWeaknesses"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="comp-table-section">
+      <h3>المقارنة التفصيلية (7 محاور)</h3>
+      <div id="compTableRows"></div>
+    </div>
+
+    <!-- Opportunities & Threats -->
+    <div class="ot-grid">
+      <div class="opp-card">
+        <h3>الفرص التنافسية</h3>
+        <div id="opportunitiesList"></div>
+      </div>
+      <div class="threat-card">
+        <h3>التهديدات الرئيسية</h3>
+        <div id="threatsList"></div>
+      </div>
+    </div>
+
+    <!-- Strategy -->
+    <div class="strategy-section">
+      <h3>الاستراتيجية المقترحة — خطوات فورية</h3>
+      <div id="strategyList"></div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية، وفريق متخصص جاهز عند الطلب.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="../index.html">الرئيسية</a>
+      <a href="tools.html">الأدوات المجانية</a>
+      <a href="coupons.html">الكوبونات</a>
+      <a href="calendar.html">تقويم المواسم</a>
+      <a href="services.html">الخدمات</a>
+    </div>
+    <div class="footer-col">
+      <h4>الفريق</h4>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">احجز معنا</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="#">تواصل معنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">إخلاء المسؤولية</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">adwat-altajer.com</div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+  const loadingSteps = [
+    'جاري فحص متجرك...',
+    'جاري فحص متجر المنافس...',
+    'مقارنة المنصات والتقنيات...',
+    'تحليل وسائل الدفع والتواصل...',
+    'مقارنة SEO والمحتوى...',
+    'إعداد التقرير الاستراتيجي...',
+  ];
+
+  function esc(str) {
+    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function animateScore(fgEl, numEl, target) {
+    const circumference = 2 * Math.PI * 45;
+    fgEl.style.strokeDasharray = circumference;
+    fgEl.style.strokeDashoffset = circumference - (target / 100) * circumference;
+    const startTime = performance.now();
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / 1500, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      numEl.textContent = Math.floor(eased * target);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function renderItems(items, dotClass, container) {
+    if (!container) return;
+    container.innerHTML = (items || []).map(item =>
+      '<div class="sw-item"><span class="dot ' + dotClass + '">' + (dotClass === 'ok' ? '✓' : '✗') + '</span><span>' + esc(item) + '</span></div>'
+    ).join('');
+  }
+
+  function renderResults(data) {
+    // Store names
+    document.getElementById('myStoreName').textContent = esc((data.myStore && data.myStore.name) || 'متجرك');
+    document.getElementById('compStoreName').textContent = esc((data.competitor && data.competitor.name) || 'المنافس');
+
+    // Scores
+    const myScore = (data.myStore && data.myStore.score) || 0;
+    const compScore = (data.competitor && data.competitor.score) || 0;
+    animateScore(document.getElementById('mineScoreFg'), document.getElementById('mineScoreNum'), myScore);
+    animateScore(document.getElementById('compScoreFg'), document.getElementById('compScoreNum'), compScore);
+
+    // Summary
+    document.getElementById('summaryText').textContent = data.summary || '';
+
+    // Strengths / Weaknesses
+    renderItems((data.myStore && data.myStore.strengths) || [], 'ok', document.getElementById('myStrengths'));
+    renderItems((data.myStore && data.myStore.weaknesses) || [], 'no', document.getElementById('myWeaknesses'));
+    renderItems((data.competitor && data.competitor.strengths) || [], 'ok', document.getElementById('compStrengths'));
+    renderItems((data.competitor && data.competitor.weaknesses) || [], 'no', document.getElementById('compWeaknesses'));
+
+    // Comparison table
+    const tableEl = document.getElementById('compTableRows');
+    if (tableEl) {
+      tableEl.innerHTML = (data.comparison || []).map(row => {
+        const myPct = ((row.myScore || 0) / 10) * 100;
+        const theirPct = ((row.theirScore || 0) / 10) * 100;
+        return '<div class="comp-row">' +
+          '<div class="comp-row-aspect">' + esc(row.aspect) + '</div>' +
+          '<div class="comp-bars">' +
+          '<div>' +
+          '<div class="comp-bar-label"><span>متجرك</span><span>' + (row.myScore || 0) + '/10</span></div>' +
+          '<div class="bar-track"><div class="bar-fill-mine" style="width:' + myPct + '%"></div></div>' +
+          '</div>' +
+          '<div>' +
+          '<div class="comp-bar-label"><span>المنافس</span><span>' + (row.theirScore || 0) + '/10</span></div>' +
+          '<div class="bar-track"><div class="bar-fill-comp" style="width:' + theirPct + '%"></div></div>' +
+          '</div>' +
+          '</div>' +
+          '<div class="comp-row-analysis">' + esc(row.analysis) + '</div>' +
+          '</div>';
+      }).join('');
+    }
+
+    // Opportunities
+    const oppEl = document.getElementById('opportunitiesList');
+    if (oppEl) {
+      oppEl.innerHTML = (data.opportunities || []).map((o, i) =>
+        '<div class="ot-item"><span class="num">' + (i + 1) + '</span><span>' + esc(o) + '</span></div>'
+      ).join('');
+    }
+
+    // Threats
+    const thrEl = document.getElementById('threatsList');
+    if (thrEl) {
+      thrEl.innerHTML = (data.threats || []).map((t, i) =>
+        '<div class="ot-item"><span class="num">' + (i + 1) + '</span><span>' + esc(t) + '</span></div>'
+      ).join('');
+    }
+
+    // Strategy
+    const stratEl = document.getElementById('strategyList');
+    if (stratEl) {
+      stratEl.innerHTML = (data.strategy || []).map((s, i) =>
+        '<div class="strategy-item"><div class="strategy-num">' + (i + 1) + '</div><div class="strategy-text">' + esc(s) + '</div></div>'
+      ).join('');
+    }
+  }
+
+  document.getElementById('analyzeBtn').addEventListener('click', async () => {
+    if (!auth.isLoggedIn()) {
+      showModal({ type: 'warning', title: 'يجب تسجيل الدخول', message: 'سجّل دخولك لاستخدام هذه الأداة.', actions: [
+        { label: 'إلغاء', style: 'secondary', close: true },
+        { label: 'تسجيل الدخول', style: 'primary', onClick: () => window.location.href = 'login.html' },
+      ]});
+      return;
+    }
+
+    const myUrl = document.getElementById('myUrl').value.trim();
+    const competitorUrl = document.getElementById('competitorUrl').value.trim();
+
+    if (!myUrl) { showError('حقل مطلوب', 'من فضلك أدخل رابط متجرك'); return; }
+    if (!competitorUrl) { showError('حقل مطلوب', 'من فضلك أدخل رابط متجر المنافس'); return; }
+    if (!myUrl.startsWith('http')) { showError('رابط غير صحيح', 'رابط متجرك يجب أن يبدأ بـ https://'); return; }
+    if (!competitorUrl.startsWith('http')) { showError('رابط غير صحيح', 'رابط المنافس يجب أن يبدأ بـ https://'); return; }
+
+    const btn = document.getElementById('analyzeBtn');
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    btn.disabled = true;
+    results.classList.remove('visible');
+    loading.classList.add('visible');
+
+    const stepEl = document.getElementById('loadingStep');
+    let stepIndex = 0;
+    const stepInterval = setInterval(() => {
+      stepEl.textContent = loadingSteps[stepIndex % loadingSteps.length];
+      stepIndex++;
+    }, 1200);
+
+    try {
+      const data = await api.competitor({
+        myUrl,
+        competitorUrl,
+        category: document.getElementById('category').value,
+      });
+
+      clearInterval(stepInterval);
+      loading.classList.remove('visible');
+      renderResults(data);
+      results.classList.add('visible');
+      showToast('تم التحليل بنجاح!', 'success');
+      setTimeout(() => results.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+
+      // Usage counter
+      if (data.used !== undefined && data.limit !== null) {
+        let counter = document.getElementById('compUsageCounter');
+        if (!counter) {
+          counter = document.createElement('div');
+          counter.id = 'compUsageCounter';
+          counter.className = 'usage-counter';
+          btn.insertAdjacentElement('afterend', counter);
+        }
+        const pct = Math.round((data.used / data.limit) * 100);
+        counter.className = 'usage-counter' + (pct >= 80 ? ' critical' : pct >= 60 ? ' low' : '');
+        counter.innerHTML = '<span>استخدمت ' + data.used + ' من ' + data.limit + '</span><div class="usage-bar"><div class="usage-fill" style="width:' + pct + '%"></div></div>';
+      }
+    } catch (err) {
+      clearInterval(stepInterval);
+      loading.classList.remove('visible');
+      showToolError(err, 'competitor');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>

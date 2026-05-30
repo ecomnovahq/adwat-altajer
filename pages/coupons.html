@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الكوبونات الحصرية — أدوات التاجر</title>
+<meta name="description" content="كوبونات حصرية للتجار السعوديين على منصتي سلة وزد — خصومات على الباقات، الإضافات، وأدوات التسويق. وفّر أكثر مع أدوات التاجر.">
+<meta property="og:title" content="الكوبونات الحصرية — أدوات التاجر">
+<meta property="og:description" content="خصومات حصرية على سلة وزد وأدوات التسويق للتاجر السعودي.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .coupons-section { padding: 4rem 2rem 6rem; max-width: 1600px; margin: 0 auto; }
+  .filters-bar { display: grid; grid-template-columns: 1fr auto; gap: 1rem; margin-bottom: 2rem; align-items: center; }
+  @media (max-width: 768px) { .filters-bar { grid-template-columns: 1fr; } }
+  .search-box { position: relative; }
+  .search-box svg { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--ink-mid); pointer-events: none; }
+  .search-input { width: 100%; background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-full); padding: 1rem 3rem 1rem 1.5rem; color: var(--ink); font-family: var(--font-arabic); font-size: 1rem; }
+  .search-input:focus { outline: none; border-color: var(--accent); }
+  .category-tabs { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+  .category-tab { background: var(--bg-alt); border: 1px solid var(--line); color: var(--ink-dim); padding: 0.6rem 1.2rem; border-radius: var(--radius-full); font-family: var(--font-arabic); font-size: 0.9rem; cursor: pointer; transition: all var(--transition); display: inline-flex; align-items: center; gap: 0.4rem; }
+  .category-tab:hover { color: var(--ink); border-color: var(--line-strong); }
+  .category-tab.active { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border-color: var(--accent); font-weight: 700; box-shadow: 0 3px 12px rgba(168,85,247,0.3); }
+  .category-tab .count { background: rgba(0,0,0,0.15); color: inherit; padding: 0.1rem 0.5rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; }
+  .category-tab.active .count { background: rgba(0,0,0,0.2); }
+  .coupons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  @media (max-width: 1024px) { .coupons-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .coupons-grid { grid-template-columns: 1fr; } }
+  .coupon { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 2rem; position: relative; transition: all var(--transition); overflow: hidden; }
+  .coupon::after { content: ''; position: absolute; top: 50%; right: -10px; width: 20px; height: 20px; background: var(--bg-alt); border-radius: 50%; transform: translateY(-50%); border: 1px solid var(--line); transition: background var(--transition); }
+  .coupon::before { content: ''; position: absolute; top: 50%; left: -10px; width: 20px; height: 20px; background: var(--bg-alt); border-radius: 50%; transform: translateY(-50%); border: 1px solid var(--line); transition: background var(--transition); }
+  .coupon:hover { border-color: var(--line-accent); transform: translateY(-5px); box-shadow: 0 20px 50px rgba(168,85,247,0.15), var(--shadow-md); }
+  .coupon.featured { background: linear-gradient(160deg, var(--bg-elevated) 0%, var(--bg-alt) 100%); border-color: var(--line-accent); box-shadow: 0 8px 40px rgba(168,85,247,0.12); }
+  .coupon-brand-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px dashed var(--line-strong); }
+  .coupon-name { font-weight: 700; font-size: 1.25rem; }
+  .coupon-cat { font-size: 0.7rem; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.15em; padding: 0.25rem 0.6rem; background: var(--bg); border-radius: var(--radius-full); border: 1px solid var(--line); }
+  .coupon-discount { font-family: var(--font-arabic); font-weight: 900; font-size: 3.5rem; color: var(--accent); line-height: 1; margin-bottom: 0.5rem; }
+  .coupon-discount .pct { font-size: 0.45em; color: var(--ink); }
+  .coupon-desc { color: var(--ink-dim); font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 3em; line-height: 1.6; }
+  .coupon-code-box { background: var(--bg); border: 1px dashed var(--line-strong); border-radius: 12px; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; font-family: monospace; font-size: 1rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .copy-btn { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border: none; padding: 0.4rem 0.9rem; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; font-family: var(--font-arabic); box-shadow: 0 2px 8px rgba(168,85,247,0.3); }
+  .copy-btn:hover { background: linear-gradient(135deg, #3730a3 0%, var(--accent-2) 100%); transform: translateY(-1px); }
+  .copy-btn.copied { background: linear-gradient(135deg, #059669 0%, #10b981 100%); box-shadow: 0 2px 8px rgba(16,185,129,0.3); }
+  .coupon-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--ink-dim); }
+  .featured-tag { position: absolute; top: 1rem; left: 1rem; background: linear-gradient(135deg, #ea6a1a 0%, var(--accent-warm) 100%); color: #fff; padding: 0.3rem 0.7rem; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 700; z-index: 2; box-shadow: 0 2px 8px rgba(249,115,22,0.3); }
+  .no-results { text-align: center; padding: 4rem 2rem; color: var(--ink-dim); display: none; }
+  .no-results.visible { display: block; }
+  .no-results svg { margin-bottom: 1rem; opacity: 0.3; }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html">الأدوات</a></li>
+    <li><a href="coupons.html" class="active">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">+30 كوبون حصري</span>
+      <h1>كوبونات <em>حصرية</em> لتاجر السعودية</h1>
+      <p>وفّر آلاف الريالات على أهم الخدمات اللي تحتاجها لإطلاق وتنمية متجرك. كوبونات حقيقية مع كل الشركاء الكبار.</p>
+    </div>
+  </div>
+</section>
+
+<section class="coupons-section">
+  <div class="filters-bar">
+    <div class="search-box">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن شركة، خدمة، أو كلمة..." />
+    </div>
+    <div style="color: var(--ink-dim); font-size: 0.9rem;">
+      <span id="totalCount">0</span> كوبون متاح
+    </div>
+  </div>
+  
+  <div class="category-tabs" id="categoryTabs"></div>
+  
+  <div class="coupons-grid" id="couponsGrid"></div>
+  
+  <div class="no-results" id="noResults">
+    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <h3 style="margin-bottom: 0.5rem;">ما وجدنا كوبونات</h3>
+    <p>جرب كلمات بحث أخرى أو اختر تصنيف مختلف</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية، وفريق متخصص جاهز عند الطلب.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="../index.html">الرئيسية</a>
+      <a href="tools.html">الأدوات المجانية</a>
+      <a href="coupons.html">الكوبونات</a>
+      <a href="calendar.html">تقويم المواسم</a>
+      <a href="services.html">الخدمات</a>
+    </div>
+    <div class="footer-col">
+      <h4>الفريق</h4>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">احجز معنا</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="#">تواصل معنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">إخلاء المسؤولية</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">adwat-altajer.com</div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+  const FALLBACK_COUPONS = [
+    // منصات
+    { name: 'منصة سلة', cat: 'platforms', catName: 'منصات متاجر', discount: 25, desc: 'خصم على باقات سلة برو وبلس للمشتركين الجدد', code: 'TAJER25', expires: 'صالح حتى 31/12', featured: true },
+    { name: 'منصة زد', cat: 'platforms', catName: 'منصات متاجر', discount: 20, desc: 'خصم على باقتي النمو والاحترافية مع الاشتراك السنوي', code: 'TAJER-ZID', expires: 'دائم', featured: true },
+    { name: 'WooCommerce', cat: 'platforms', catName: 'منصات متاجر', discount: 15, desc: 'خصم على استضافة WooCommerce المخصصة للسوق السعودي', code: 'WOO-SA', expires: 'صالح حتى 31/06', featured: false },
+    // شحن
+    { name: 'أرامكس', cat: 'shipping', catName: 'شحن وتوصيل', discount: 15, desc: 'خصم على شحنات التجارة الإلكترونية داخل المملكة', code: 'SHIP15', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'سمسا إكسبرس', cat: 'shipping', catName: 'شحن وتوصيل', discount: 30, desc: 'باقة سنوية مخفضة لتجار المتاجر الإلكترونية', code: 'SMSA-PRO', expires: 'صالح حتى 30/09', featured: true },
+    { name: 'البريد السعودي SPL', cat: 'shipping', catName: 'شحن وتوصيل', discount: 20, desc: 'أسعار خاصة للتجار على الشحن داخل وخارج المملكة', code: 'SPL-TJR', expires: 'دائم', featured: false },
+    { name: 'DHL Express', cat: 'shipping', catName: 'شحن وتوصيل', discount: 12, desc: 'خصم على الشحن الدولي السريع', code: 'DHL12', expires: 'صالح حتى 31/12', featured: false },
+    // دفع
+    { name: 'تابي Tabby', cat: 'payment', catName: 'دفع وتقسيط', discount: 50, desc: 'رسوم تفعيل مخفضة + 3 أشهر بدون عمولات إضافية', code: 'TABBY-START', expires: 'لمدة محدودة', featured: true },
+    { name: 'تمارا Tamara', cat: 'payment', catName: 'دفع وتقسيط', discount: 40, desc: 'إعفاء من رسوم التفعيل + باقة شهرين مجانية', code: 'TAMARA-NEW', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'موياسر Moyasar', cat: 'payment', catName: 'دفع وتقسيط', discount: 30, desc: 'تخفيض على رسوم بوابة الدفع للمتاجر الجديدة', code: 'MOYASAR30', expires: 'صالح حتى 30/06', featured: false },
+    { name: 'PayTabs', cat: 'payment', catName: 'دفع وتقسيط', discount: 25, desc: 'خصم على رسوم تفعيل بوابة الدفع', code: 'PAYTABS-AR', expires: 'صالح حتى 31/12', featured: false },
+    // تصميم وتسويق
+    { name: 'Canva Pro', cat: 'design', catName: 'تصميم وتسويق', discount: 40, desc: 'السنة الأولى من Canva Pro لتصميم بنرات ومحتوى متجرك', code: 'CANVA-AR', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'Figma Professional', cat: 'design', catName: 'تصميم وتسويق', discount: 30, desc: 'خصم على باقة فيغما للمصممين والوكالات', code: 'FIGMA30', expires: 'صالح حتى 30/09', featured: false },
+    { name: 'Adobe Creative Cloud', cat: 'design', catName: 'تصميم وتسويق', discount: 25, desc: 'خصم على باقة أدوبي الكاملة للسنة الأولى', code: 'ADOBE-MENA', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'Mailchimp', cat: 'design', catName: 'تصميم وتسويق', discount: 35, desc: 'خصم على باقات التسويق بالإيميل للتجار', code: 'MAILCH35', expires: 'صالح حتى 31/12', featured: false },
+    // إعلانات
+    { name: 'Meta Ads (فيسبوك/إنستا)', cat: 'ads', catName: 'إعلانات', discount: 100, desc: 'كوبون 200$ مجاناً للمعلنين الجدد', code: 'META200', expires: 'حسب التوفر', featured: true },
+    { name: 'TikTok Ads', cat: 'ads', catName: 'إعلانات', discount: 100, desc: 'كوبون 100$ ائتمان إعلاني عند الإطلاق الأول', code: 'TIKTOK100', expires: 'حسب التوفر', featured: false },
+    { name: 'Snapchat Ads', cat: 'ads', catName: 'إعلانات', discount: 100, desc: '$150 ائتمان إعلاني مجاني للحسابات الجديدة', code: 'SNAP150', expires: 'حسب التوفر', featured: false },
+    { name: 'Google Ads', cat: 'ads', catName: 'إعلانات', discount: 100, desc: 'كوبون 400 ريال عند صرف أول 400 ريال', code: 'GADS-SA', expires: 'حسب التوفر', featured: false },
+    // واتساب وخدمة عملاء
+    { name: 'WhatsApp Business API', cat: 'support', catName: 'خدمة عملاء', discount: 30, desc: 'خصم على باقة واتساب الأعمال عبر مزود معتمد', code: 'WA-BIZ', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'Intercom', cat: 'support', catName: 'خدمة عملاء', discount: 40, desc: 'خصم على باقات الدردشة الحية وخدمة العملاء', code: 'INTERCOM-AR', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'Crisp.chat', cat: 'support', catName: 'خدمة عملاء', discount: 25, desc: 'خصم على باقة Crisp Pro للدردشة الحية متعددة القنوات', code: 'CRISP25', expires: 'صالح حتى 30/09', featured: false },
+    // تحليلات
+    { name: 'Google Analytics 360', cat: 'analytics', catName: 'تحليلات', discount: 20, desc: 'خصم على باقة Analytics المتقدمة', code: 'GA360', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'Hotjar', cat: 'analytics', catName: 'تحليلات', discount: 35, desc: 'خصم على باقة Hotjar لتحليل سلوك زوار متجرك', code: 'HOTJAR35', expires: 'صالح حتى 31/12', featured: false },
+    // تصوير
+    { name: 'استوديو تصوير المنتجات', cat: 'photography', catName: 'تصوير', discount: 40, desc: 'خصم على جلسة تصوير منتجات احترافية في الرياض وجدة', code: 'STUDIO40', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'Shutterstock', cat: 'photography', catName: 'تصوير', discount: 30, desc: 'خصم على باقات الصور والفيديوهات الجاهزة', code: 'STOCK30', expires: 'صالح حتى 31/12', featured: false },
+    // محتوى
+    { name: 'كاتب محتوى عربي محترف', cat: 'content', catName: 'محتوى', discount: 20, desc: 'خصم على كتابة أوصاف المنتجات والمحتوى التسويقي', code: 'CONTENT20', expires: 'دائم', featured: false },
+    { name: 'Jasper AI', cat: 'content', catName: 'محتوى', discount: 30, desc: 'خصم على باقة Jasper لتوليد المحتوى التسويقي', code: 'JASPER30', expires: 'صالح حتى 31/12', featured: false },
+    // SEO
+    { name: 'Ahrefs', cat: 'seo', catName: 'SEO', discount: 25, desc: 'خصم على باقة Ahrefs للتحليل التنافسي والـ SEO', code: 'AHREFS25', expires: 'صالح حتى 31/12', featured: false },
+    { name: 'SEMrush', cat: 'seo', catName: 'SEO', discount: 30, desc: 'خصم على باقة SEMrush للتحليل والـ SEO', code: 'SEM30', expires: 'صالح حتى 31/12', featured: false }
+  ];
+  
+  const SVG = {
+    all:          `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`,
+    platforms:    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57l1.65-7.43H6"/></svg>`,
+    shipping:     `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+    payment:      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+    ads:          `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8.01V16H8l-4 4V4l4 4h14z"/></svg>`,
+    design:       `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="3.5"/><circle cx="6" cy="15.5" r="3.5"/><circle cx="18.5" cy="15.5" r="3.5"/></svg>`,
+    support:      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>`,
+    analytics:    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+    photography:  `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
+    content:      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+    seo:          `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+    star:         `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    flame:        `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>`,
+  };
+  const categories = [
+    { id: 'all', name: 'الكل', icon: SVG.all },
+    { id: 'platforms', name: 'منصات متاجر', icon: SVG.platforms },
+    { id: 'shipping', name: 'شحن', icon: SVG.shipping },
+    { id: 'payment', name: 'دفع', icon: SVG.payment },
+    { id: 'ads', name: 'إعلانات', icon: SVG.ads },
+    { id: 'design', name: 'تصميم', icon: SVG.design },
+    { id: 'support', name: 'خدمة عملاء', icon: SVG.support },
+    { id: 'analytics', name: 'تحليلات', icon: SVG.analytics },
+    { id: 'photography', name: 'تصوير', icon: SVG.photography },
+    { id: 'content', name: 'محتوى', icon: SVG.content },
+    { id: 'seo', name: 'SEO', icon: SVG.seo }
+  ];
+  
+  const catNameMap = {};
+  categories.forEach(c => { if (c.id !== 'all') catNameMap[c.id] = c.name; });
+
+  let coupons = [];
+  let activeCategory = 'all';
+  let searchQuery = '';
+
+  function renderCategoryTabs() {
+    const container = document.getElementById('categoryTabs');
+    container.innerHTML = categories.map(c => {
+      const count = c.id === 'all' ? coupons.length : coupons.filter(co => co.cat === c.id).length;
+      return `<button class="category-tab ${activeCategory === c.id ? 'active' : ''}" data-cat="${c.id}">
+        <span>${c.icon}</span>
+        <span>${c.name}</span>
+        <span class="count">${count}</span>
+      </button>`;
+    }).join('');
+    container.querySelectorAll('.category-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        activeCategory = tab.dataset.cat;
+        renderCategoryTabs();
+        renderCoupons();
+      });
+    });
+  }
+  
+  function renderCoupons() {
+    const grid = document.getElementById('couponsGrid');
+    const noResults = document.getElementById('noResults');
+    let filtered = coupons;
+    if (activeCategory !== 'all') filtered = filtered.filter(c => c.cat === activeCategory);
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(c => c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.catName.includes(searchQuery));
+    }
+    
+    document.getElementById('totalCount').textContent = filtered.length;
+    
+    if (filtered.length === 0) {
+      grid.innerHTML = '';
+      noResults.classList.add('visible');
+      return;
+    }
+    noResults.classList.remove('visible');
+    
+    grid.innerHTML = filtered.map(c => `
+      <div class="coupon ${c.featured ? 'featured' : ''}">
+        ${c.featured ? `<span class="featured-tag" style="display:inline-flex;align-items:center;gap:.3rem;">${SVG.star} مميز</span>` : ''}
+        <div class="coupon-brand-row">
+          <div class="coupon-name">${c.name}</div>
+          <span class="coupon-cat">${c.catName}</span>
+        </div>
+        <div class="coupon-discount">${c.discount}<span class="pct">%</span></div>
+        <div class="coupon-desc">${c.desc}</div>
+        <div class="coupon-code-box">
+          <span>${c.code}</span>
+          <button class="copy-btn" data-code="${c.code}">انسخ</button>
+        </div>
+        <div class="coupon-meta">
+          <span>${c.expires}</span>
+          <span style="display:inline-flex;align-items:center;gap:.3rem;">${c.featured ? `${SVG.flame} موصى به` : '✓ متاح'}</span>
+        </div>
+      </div>
+    `).join('');
+    
+    grid.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!auth.isLoggedIn()) {
+          showModal({ type: 'warning', title: 'يجب تسجيل الدخول', message: 'سجّل دخولك لنسخ رمز الكوبون.', actions: [
+            { label: 'إلغاء', style: 'secondary', close: true },
+            { label: 'تسجيل الدخول', style: 'primary', onClick: () => window.location.href = 'login.html' },
+          ]});
+          return;
+        }
+        navigator.clipboard.writeText(btn.dataset.code).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = 'تم النسخ ✓';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+        });
+      });
+    });
+  }
+  
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    searchQuery = e.target.value.trim();
+    renderCoupons();
+  });
+
+  async function loadCoupons() {
+    try {
+      const data = await api.getCoupons();
+      coupons = data.map(c => ({
+        name: c.name,
+        cat: c.category || 'other',
+        catName: catNameMap[c.category] || c.category || 'أخرى',
+        discount: c.discount_percentage,
+        desc: c.description,
+        code: c.code,
+        expires: c.expires_at ? `صالح حتى ${new Date(c.expires_at).toLocaleDateString('ar-SA')}` : 'دائم',
+        featured: c.is_featured,
+      }));
+    } catch {
+      coupons = FALLBACK_COUPONS;
+    }
+    renderCategoryTabs();
+    renderCoupons();
+  }
+
+  loadCoupons();
+</script>
+
+</body>
+</html>

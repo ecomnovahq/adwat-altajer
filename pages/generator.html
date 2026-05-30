@@ -1,0 +1,441 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولّد أوصاف المنتجات — أدوات التاجر</title>
+<meta name="description" content="مولّد أوصاف منتجات احترافي بالذكاء الاصطناعي — أنشئ أوصافاً عربية محسّنة لـ SEO لمتجرك على سلة وزد في ثوانٍ.">
+<meta property="og:title" content="مولّد أوصاف المنتجات — أدوات التاجر">
+<meta property="og:description" content="أنشئ أوصاف منتجات عربية احترافية ومحسّنة لـ SEO بالذكاء الاصطناعي مجاناً.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .gen-section { padding: 6rem 2rem; max-width: 1400px; margin: 0 auto; }
+  .gen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  @media (max-width: 1024px) { .gen-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .gen-section { padding: 5rem 1.25rem; } }
+  .gen-loading { display: none; text-align: center; padding: 3rem; }
+  .gen-loading.visible { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html" class="active">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 03</span>
+      <h1>مولّد <em>أوصاف المنتجات</em></h1>
+      <p>اكتب اسم منتجك وميزاته، نولّد لك وصفاً عربياً احترافياً محسّناً لـ SEO، مع عناوين بديلة، كلمات مفتاحية، ومحتوى للسوشيال ميديا.</p>
+    </div>
+  </div>
+</section>
+
+<section class="gen-section">
+  <div class="gen-grid">
+    <div class="panel">
+      <h2>بيانات المنتج</h2>
+      <p class="panel-sub">كلما كانت البيانات تفصيلية، كان الوصف أقوى</p>
+      
+      <div class="field">
+        <label class="label">اسم المنتج <span style="color: var(--danger);">*</span></label>
+        <input type="text" id="productName" class="input" placeholder="مثل: قميص كتاني مريح للرجال" />
+      </div>
+      
+      <div class="field">
+        <label class="label">التصنيف</label>
+        <input type="text" id="productCategory" class="input" placeholder="مثل: أزياء، إلكترونيات، عطور، طعام، رياضة..." />
+      </div>
+      
+      <div class="field">
+        <label class="label">المميزات الأساسية <span style="color: var(--danger);">*</span></label>
+        <textarea id="productFeatures" class="textarea" placeholder="اكتب الميزات سطر تلو الآخر، مثل:&#10;قطن 100% مستورد&#10;تفصيل مريح وعملي&#10;متوفر بـ 5 ألوان"></textarea>
+      </div>
+      
+      <div class="field">
+        <label class="label">الجمهور المستهدف</label>
+        <input type="text" id="targetAudience" class="input" placeholder="مثل: الرجال من 25-45 سنة، يحبون العطور الفاخرة" />
+      </div>
+      
+      <div class="field">
+        <label class="label">نبرة الكتابة</label>
+        <div class="tone-options">
+          <div class="tone-option active" data-tone="luxury"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> فاخرة</div>
+          <div class="tone-option" data-tone="friendly"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> ودودة</div>
+          <div class="tone-option" data-tone="professional"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> احترافية</div>
+          <div class="tone-option" data-tone="youthful"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> شبابية</div>
+        </div>
+      </div>
+      
+      <button id="generateBtn" class="btn-primary" style="width: 100%; margin-top: 1rem; justify-content: center;">
+        ولّد الوصف الآن
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+    </div>
+
+    <div class="panel">
+      <h2>النتيجة</h2>
+      <p class="panel-sub">جاهزة للنسخ والاستخدام مباشرة</p>
+      
+      <div id="output">
+        <div class="output-empty">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <path d="M14 2v6h6"/>
+          </svg>
+          <p>أدخل بيانات منتجك واضغط "ولّد الوصف الآن" لتشاهد النتيجة هنا</p>
+        </div>
+      </div>
+      
+      <div class="gen-loading" id="genLoading">
+        <div class="loading-spinner"></div>
+        <div style="color: var(--ink-dim);">جاري توليد المحتوى...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية، وفريق متخصص جاهز عند الطلب.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="../index.html">الرئيسية</a>
+      <a href="tools.html">الأدوات المجانية</a>
+      <a href="coupons.html">الكوبونات</a>
+      <a href="calendar.html">تقويم المواسم</a>
+      <a href="services.html">الخدمات</a>
+    </div>
+    <div class="footer-col">
+      <h4>الفريق</h4>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">احجز معنا</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="#">تواصل معنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">إخلاء المسؤولية</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">adwat-altajer.com</div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+  let selectedTone = 'luxury';
+
+  document.querySelectorAll('.tone-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.tone-option').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      selectedTone = opt.dataset.tone;
+    });
+  });
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function copyBtn(getText) {
+    return `<button class="copy-icon-btn" onclick="(function(btn){var t=${getText};navigator.clipboard.writeText(t);btn.textContent='تم ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='انسخ';btn.classList.remove('copied')},1800);})(this)">انسخ</button>`;
+  }
+
+  function cpBtn(id) {
+    return `<button class="copy-icon-btn" onclick="var el=document.getElementById('${id}');navigator.clipboard.writeText(el.innerText.trim());this.textContent='تم ✓';this.classList.add('copied');setTimeout(()=>{this.textContent='انسخ';this.classList.remove('copied')},1800)">انسخ</button>`;
+  }
+
+  let _genImgData = null;
+
+  function downloadGenImg() {
+    if (!_genImgData) return;
+    const a = document.createElement('a');
+    a.href = `data:${_genImgData.mimeType};base64,${_genImgData.image}`;
+    a.download = `${_genImgData.name || 'product'}-image.png`;
+    a.click();
+  }
+
+  function renderOutput(result) {
+    const titles = result.alternativeTitles || [];
+    const allTitles = [result.title, ...titles].filter(Boolean);
+    const kw = result.keywords || {};
+    const kwFlat = Array.isArray(kw) ? kw : [...(kw.primary||[]), ...(kw.secondary||[]), ...(kw.longTail||[])];
+    const social = result.socialPost || {};
+    const faq = result.faq || [];
+    const wordCount = (result.description || '').split(/\s+/).filter(Boolean).length;
+
+    return `
+      <div class="output-section" id="genImgSection">
+        <div class="output-label" style="display:flex;align-items:center;gap:.4rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>صورة المنتج بالذكاء الاصطناعي</span></div>
+        <div id="genImgBox" style="display:flex;align-items:center;justify-content:center;gap:.6rem;padding:1.2rem;background:var(--bg-card);border:1px dashed var(--line-strong);border-radius:var(--radius-md);color:var(--ink-dim);font-size:.85rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite;flex-shrink:0;"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
+          جاري توليد صورة احترافية للمنتج...
+        </div>
+      </div>
+
+      <!-- ① السطر الافتتاحي -->
+      ${result.openingHook ? `
+      <div class="output-section">
+        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>السطر الافتتاحي للإعلانات</span>${cpBtn('hookContent')}</div>
+        <div id="hookContent" style="background:linear-gradient(135deg,var(--accent-soft),transparent);border:1px solid var(--line-accent);border-radius:12px;padding:1.2rem 1.5rem;font-size:1.15rem;font-weight:600;line-height:1.8;color:var(--ink);">"${esc(result.openingHook)}"</div>
+      </div>` : ''}
+
+      <!-- ② الوصف المختصر للبطاقة -->
+      ${result.shortDescription ? `
+      <div class="output-section">
+        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>وصف بطاقة المنتج</span>${cpBtn('shortDesc')}</div>
+        <div id="shortDesc" class="output-content" style="background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;line-height:1.9;">${esc(result.shortDescription)}</div>
+      </div>` : ''}
+
+      <!-- ③ العناوين -->
+      <div class="output-section">
+        <div class="output-label"><span>العناوين المقترحة للمنتج</span></div>
+        ${allTitles.map((t,i) => `
+          <div style="background:var(--bg-card);border:1px solid var(${i===0?'--accent':'--line'});border-radius:10px;padding:0.85rem 1rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;">
+            ${i===0?'<span style="font-size:.7rem;background:var(--accent);color:#fff;padding:.15rem .5rem;border-radius:6px;flex-shrink:0;">الأساسي</span>':'<span style="font-size:.75rem;color:var(--ink-dim);flex-shrink:0;">بديل '+(i)+'</span>'}
+            <span id="title_${i}" style="flex:1;font-size:.95rem;font-weight:${i===0?'700':'400'}">${esc(t)}</span>
+            <button class="copy-icon-btn" onclick="navigator.clipboard.writeText(document.getElementById('title_${i}').textContent.trim());this.textContent='تم ✓';this.classList.add('copied');setTimeout(()=>{this.textContent='انسخ';this.classList.remove('copied')},1800)">انسخ</button>
+          </div>`).join('')}
+      </div>
+
+      <!-- ④ الوصف الكامل -->
+      <div class="output-section">
+        <div class="output-label">
+          <span>وصف المنتج الكامل (SEO) — ${wordCount} كلمة</span>
+          ${cpBtn('descContent')}
+        </div>
+        <div class="output-content" id="descContent" style="white-space:pre-line;line-height:2.1;font-size:1rem;">${esc(result.description || '')}</div>
+      </div>
+
+      <!-- ⑤ نقاط البيع -->
+      <div class="output-section">
+        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>نقاط البيع الرئيسية (Feature → Benefit)</span></div>
+        ${(result.bulletPoints || []).map((b,i) => `
+          <div style="display:flex;gap:0.8rem;align-items:start;padding:0.7rem 0;border-bottom:1px solid var(--line);">
+            <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:1px;">${i+1}</span>
+            <span style="line-height:1.8;">${esc(b)}</span>
+          </div>`).join('')}
+      </div>
+
+      <!-- ⑥ الكلمات المفتاحية -->
+      <div class="output-section">
+        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>الكلمات المفتاحية المستهدفة</span></div>
+        ${typeof kw === 'object' && !Array.isArray(kw) && kw.primary ? `
+          <div style="margin-bottom:1rem;">
+            <div style="font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.1em;">رئيسية</div>
+            <div class="keywords-list">${(kw.primary||[]).map(k=>`<span class="keyword" style="background:var(--accent-soft);color:var(--accent);border-color:var(--accent)">${esc(k)}</span>`).join('')}</div>
+          </div>
+          <div style="margin-bottom:1rem;">
+            <div style="font-size:.75rem;font-weight:600;color:var(--ink-dim);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.1em;">ثانوية</div>
+            <div class="keywords-list">${(kw.secondary||[]).map(k=>`<span class="keyword">${esc(k)}</span>`).join('')}</div>
+          </div>
+          <div>
+            <div style="font-size:.75rem;font-weight:600;color:#22c55e;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.1em;">Long-tail — جمل بحث طويلة</div>
+            <div class="keywords-list">${(kw.longTail||[]).map(k=>`<span class="keyword" style="background:rgba(34,197,94,.1);color:#22c55e;border-color:rgba(34,197,94,.3)">${esc(k)}</span>`).join('')}</div>
+          </div>` : `<div class="keywords-list">${kwFlat.map(k=>`<span class="keyword">${esc(k)}</span>`).join('')}</div>`}
+      </div>
+
+      <!-- ⑦ Meta Description -->
+      <div class="output-section">
+        <div class="output-label">
+          <span>وصف Meta للـ SEO</span>
+          ${cpBtn('metaContent')}
+        </div>
+        <div class="output-content" id="metaContent" style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.9rem 1rem;">${esc(result.metaDescription || '')}</div>
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.4rem;">
+          <div style="flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:${Math.min(100,(result.metaDescription||'').length/160*100)}%;background:${(result.metaDescription||'').length>=150&&(result.metaDescription||'').length<=160?'#22c55e':'var(--accent-warm)'};transition:width .3s;"></div>
+          </div>
+          <span style="font-size:.75rem;color:var(--ink-dim);">${(result.metaDescription||'').length} / 160</span>
+        </div>
+      </div>
+
+      <!-- ⑧ نص الإعلان -->
+      ${result.adCopy ? `
+      <div class="output-section">
+        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>نص الإعلان (Meta / Google)</span>${cpBtn('adCopyContent')}</div>
+        <div id="adCopyContent" style="background:rgba(168,85,247,.07);border:1px solid var(--line-accent);border-radius:10px;padding:1rem 1.2rem;line-height:1.9;">${esc(result.adCopy)}</div>
+      </div>` : ''}
+
+      <!-- ⑨ السوشيال ميديا -->
+      <div class="output-section">
+        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>محتوى السوشيال ميديا</span></div>
+        ${[
+          {platform:'انستقرام', key:'instagram', icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>`, color:'#e1306c', id:'ig'},
+          {platform:'تويتر / X', key:'twitter', icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`, color:'var(--ink)', id:'tw'},
+          {platform:'واتساب', key:'whatsapp', icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`, color:'#25d366', id:'wa'},
+        ].map(p => {
+          const text = typeof social === 'string' ? social : (social[p.key] || '');
+          if (!text) return '';
+          return `<div style="border:1px solid var(--line);border-radius:12px;padding:1.1rem;margin-bottom:.8rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;">
+              <span style="font-weight:700;font-size:.9rem;color:${p.color};">${p.icon} ${p.platform}</span>
+              <button class="copy-icon-btn" onclick="navigator.clipboard.writeText(document.getElementById('social_${p.id}').innerText);this.textContent='تم ✓';this.classList.add('copied');setTimeout(()=>{this.textContent='انسخ';this.classList.remove('copied')},1800)">انسخ</button>
+            </div>
+            <div id="social_${p.id}" style="white-space:pre-line;font-size:.9rem;line-height:1.85;color:var(--ink-dim);">${esc(text)}</div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <!-- ⑩ FAQ -->
+      ${faq.length ? `
+      <div class="output-section">
+        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>الأسئلة الشائعة</span></div>
+        ${faq.map((f,i) => `
+          <div style="border:1px solid var(--line);border-radius:10px;padding:1.1rem;margin-bottom:.7rem;">
+            <div style="font-weight:700;margin-bottom:.5rem;color:var(--accent);">س: ${esc(f.q)}</div>
+            <div style="color:var(--ink-dim);font-size:.92rem;line-height:1.8;">ج: ${esc(f.a)}</div>
+          </div>`).join('')}
+      </div>` : ''}
+
+      <!-- ⑪ عنوان الإيميل -->
+      ${result.emailSubject ? `
+      <div class="output-section">
+        <div class="output-label">
+          <span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>عنوان الإيميل التسويقي</span>
+          ${cpBtn('emailSubj')}
+        </div>
+        <div id="emailSubj" style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.9rem 1rem;font-weight:600;">${esc(result.emailSubject)}</div>
+        <div style="font-size:.75rem;color:var(--ink-dim);margin-top:.3rem;">${(result.emailSubject||'').length} / 55 حرف</div>
+      </div>` : ''}
+    `;
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', async () => {
+    if (!auth.isLoggedIn()) {
+      showModal({ type: 'warning', title: 'يجب تسجيل الدخول', message: 'سجّل دخولك لاستخدام هذه الأداة.', actions: [
+        { label: 'إلغاء', style: 'secondary', close: true },
+        { label: 'تسجيل الدخول', style: 'primary', onClick: () => window.location.href = 'login.html' },
+      ]});
+      return;
+    }
+
+    const name = document.getElementById('productName').value.trim();
+    const features = document.getElementById('productFeatures').value.trim();
+
+    if (!name || !features) { showError('حقل مطلوب', 'من فضلك أدخل اسم المنتج والمميزات'); return; }
+
+    const btn = document.getElementById('generateBtn');
+    const output = document.getElementById('output');
+    const loading = document.getElementById('genLoading');
+    btn.disabled = true;
+    output.style.display = 'none';
+    loading.classList.add('visible');
+
+    try {
+      const result = await api.generate({
+        productName: name,
+        features,
+        category: document.getElementById('productCategory').value,
+        targetAudience: document.getElementById('targetAudience').value.trim(),
+        tone: selectedTone,
+      });
+
+      output.style.display = 'block';
+      output.innerHTML = renderOutput(result);
+      showToast('تم التوليد بنجاح!', 'success');
+
+      // توليد صورة المنتج بالتوازي
+      _genImgData = null;
+      api.generateImage({
+        productName: name,
+        description: features.slice(0, 180),
+        style: 'white',
+      }).then(imgResult => {
+        const box = document.getElementById('genImgBox');
+        if (!box) return;
+        _genImgData = { image: imgResult.image, mimeType: imgResult.mimeType || 'image/png', name };
+        box.innerHTML = `
+          <div>
+            <img src="data:${_genImgData.mimeType};base64,${imgResult.image}"
+                 alt="صورة ${esc(name)}"
+                 style="max-width:380px;width:100%;border-radius:var(--radius-md);display:block;margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,.18);" />
+            <div style="text-align:center;margin-top:.9rem;display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+              <button class="btn-primary" onclick="downloadGenImg()" style="padding:.5rem 1.2rem;font-size:.85rem;gap:.4rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                تحميل الصورة
+              </button>
+              <a href="image-gen.html" class="btn-secondary" style="padding:.5rem 1.2rem;font-size:.85rem;">ولّد بأسلوب مختلف</a>
+            </div>
+          </div>`;
+      }).catch(() => {
+        const box = document.getElementById('genImgBox');
+        if (box) box.innerHTML = '<span style="color:var(--ink-dim);font-size:.82rem;">توليد الصورة يحتاج GEMINI_API_KEY — <a href=\'image-gen.html\' style=\'color:var(--accent)\'>افتح أداة مولّد الصور</a></span>';
+      });
+
+      // Usage counter
+      if (result.used !== undefined && result.limit !== null && result.limit > 0) {
+        let counter = document.getElementById('generatorUsageCounter');
+        if (!counter) {
+          counter = document.createElement('div');
+          counter.id = 'generatorUsageCounter';
+          counter.className = 'usage-counter';
+          btn.insertAdjacentElement('afterend', counter);
+        }
+        const pct = Math.min(100, Math.round((result.used / result.limit) * 100));
+        counter.className = `usage-counter${pct >= 80 ? ' critical' : pct >= 60 ? ' low' : ''}`;
+        counter.innerHTML = `<span>استخدمت ${result.used} من ${result.limit}</span><div class="usage-bar"><div class="usage-fill" style="width:${pct}%"></div></div>`;
+      }
+    } catch (err) {
+      showToolError(err, 'generator');
+    } finally {
+      loading.classList.remove('visible');
+      btn.disabled = false;
+    }
+  });
+
+  function copyText(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'تم النسخ ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'انسخ'; btn.classList.remove('copied'); }, 1800);
+    });
+  }
+</script>
+
+</body>
+</html>

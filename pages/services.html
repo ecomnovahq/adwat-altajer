@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الخدمات الاحترافية — أدوات التاجر</title>
+<meta name="description" content="خدمات احترافية للتجار السعوديين: تصميم متاجر سلة وزد، إدارة سوشيال ميديا، حملات موسمية، SEO، هوية بصرية. احجز استشارة مجانية الآن.">
+<meta property="og:title" content="خدمات أدوات التاجر الاحترافية">
+<meta property="og:description" content="تصميم متاجر، سوشيال، SEO، وهوية بصرية — خدمات متخصصة للتاجر السعودي.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .services-page { padding: 4rem 2rem 6rem; max-width: 1600px; margin: 0 auto; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  @media (max-width: 1024px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .services-grid { grid-template-columns: 1fr; } }
+  .service-card { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 2rem; position: relative; transition: all var(--transition); display: flex; flex-direction: column; overflow: hidden; }
+  .service-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 0; background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 100%); transition: height var(--transition); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .service-card:hover { border-color: var(--line-accent); transform: translateY(-5px); box-shadow: 0 20px 50px rgba(168,85,247,0.15); }
+  .service-card:hover::after { height: 2px; }
+  .service-card.featured { background: linear-gradient(160deg, var(--bg-elevated) 0%, var(--bg-alt) 100%); border-color: var(--line-accent); box-shadow: 0 8px 40px rgba(168,85,247,0.12); }
+  .service-card.featured::before { content: 'الأكثر طلباً'; position: absolute; top: -10px; right: 1.5rem; background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; padding: 0.3rem 0.9rem; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 700; box-shadow: 0 3px 12px rgba(168,85,247,0.4); }
+  .service-card.featured::after { height: 2px; }
+  .service-icon { width: 56px; height: 56px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; color: var(--accent); transition: all var(--transition); }
+  .service-card:hover .service-icon { background: var(--accent-soft); border-color: var(--line-accent); transform: rotate(-6deg) scale(1.08); }
+  .service-card.featured .service-icon { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border-color: var(--accent); box-shadow: 0 4px 16px rgba(168,85,247,0.35); }
+  .service-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .service-desc { color: var(--ink-dim); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.5rem; flex: 1; }
+  .service-includes { list-style: none; padding: 0; margin-bottom: 1.5rem; }
+  .service-includes li { display: flex; align-items: start; gap: 0.6rem; padding: 0.4rem 0; font-size: 0.9rem; color: var(--ink); }
+  .service-includes li::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+  .service-price { padding-top: 1.5rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: end; margin-bottom: 1rem; }
+  .service-price-label { font-size: 0.8rem; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+  .service-price-value { font-family: var(--font-arabic); font-weight: 800; font-size: 1.8rem; color: var(--accent); line-height: 1; }
+  .service-price-unit { font-size: 0.7em; color: var(--ink-dim); }
+  .service-cta { display: block; text-align: center; padding: 0.85rem; background: var(--bg); border: 1px solid var(--line-strong); border-radius: var(--radius-full); color: var(--ink); text-decoration: none; font-weight: 600; transition: all var(--transition); }
+  .service-cta:hover { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 14px rgba(168,85,247,0.3); transform: translateY(-1px); }
+  .service-card.featured .service-cta { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border-color: var(--accent); box-shadow: 0 4px 14px rgba(168,85,247,0.3); }
+  .service-card.featured .service-cta:hover { background: linear-gradient(135deg, #3730a3 0%, var(--accent-2) 100%); transform: translateY(-1px); }
+  
+  /* Booking form */
+  .booking-form { max-width: 800px; margin: 5rem auto 0; background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 3rem; position: relative; overflow: hidden; }
+  .booking-form::before { content: ''; position: absolute; top: 0; right: 0; width: 400px; height: 400px; background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 60%); transform: translate(30%, -30%); pointer-events: none; }
+  .booking-form::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, transparent 100%); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .booking-content { position: relative; }
+  @media (max-width: 768px) { .booking-form { padding: 2rem 1.5rem; } }
+  .booking-form h2 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .booking-form h2 em { font-family: var(--font-arabic); font-style: normal; font-weight: 800; color: var(--accent); }
+  .booking-form > .booking-content > p { color: var(--ink-dim); margin-bottom: 2rem; }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 640px) { .form-row-2 { grid-template-columns: 1fr; } }
+  .success-msg { display: none; text-align: center; padding: 2rem; background: var(--accent-soft); border: 1px solid var(--line-accent); border-radius: var(--radius-md); color: var(--accent); margin-top: 2rem; }
+  .success-msg.visible { display: block; animation: fadeIn 0.5s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  /* Process steps */
+  .process-section { margin-top: 5rem; padding: 3rem; background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-lg); position: relative; overflow: hidden; }
+  .process-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent 0%, var(--line-accent) 30%, var(--accent) 50%, var(--line-accent) 70%, transparent 100%); }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2rem; }
+  @media (max-width: 768px) { .process-steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .process-steps { grid-template-columns: 1fr; } }
+  .process-step { text-align: center; padding: 1.5rem; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-md); transition: all var(--transition); }
+  .process-step:hover { border-color: var(--line-accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(168,85,247,0.1); }
+  .process-step-num { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); font-family: var(--font-arabic); font-weight: 800; font-size: 1rem; color: #fff; margin-bottom: 0.8rem; box-shadow: 0 4px 14px rgba(168,85,247,0.3); }
+  .process-step h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .process-step p { color: var(--ink-dim); font-size: 0.85rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html" class="active">الخدمات</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="#booking" class="nav-cta">احجز الآن</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge badge-warm" style="margin-bottom: 1.5rem;">خدمات احترافية</span>
+      <h1>خدمات <em>متاجر</em> ينفّذها الفريق</h1>
+      <p>لما تحتاج عيناً محترفة، فريقنا من المصممين والمسوّقين والمطورين جاهز. ننفّذ متجرك من الصفر، نحسّن متجرك القائم، أو ندير سوشيالك بالكامل.</p>
+    </div>
+  </div>
+</section>
+
+<section class="services-page">
+  <div class="services-grid">
+    
+    <div class="service-card featured" data-reveal data-delay="1">
+      <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+      <h3 class="service-title">إنشاء متجر سلة/زد كامل</h3>
+      <p class="service-desc">متجرك الجديد من الصفر، جاهز للبيع خلال 7-14 يوم. تصميم، تكامل، محتوى، وكل شي.</p>
+      <ul class="service-includes">
+        <li>تصميم هوية كاملة للمتجر</li>
+        <li>تنسيق وإدارة المنتجات</li>
+        <li>إعداد بوابات الدفع والشحن</li>
+        <li>تكامل سوشيال ميديا</li>
+        <li>SEO أساسي وGoogle Analytics</li>
+        <li>تدريب لمدة شهر بعد التسليم</li>
+      </ul>
+      <div class="service-price"><div><div class="service-price-label">يبدأ من</div></div><div class="service-price-value">3,500 <span class="service-price-unit">ر.س</span></div></div>
+      <a href="#booking" class="service-cta" data-service="إنشاء متجر سلة/زد">احجز هذه الخدمة</a>
+    </div>
+    
+    <div class="service-card" data-reveal data-delay="2">
+      <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <h3 class="service-title">تحسين متجر قائم</h3>
+      <p class="service-desc">عندك متجر شغّال لكن مبيعاته ضعيفة؟ نحلله ونعيد تصميمه وتحسينه ليبيع أكثر.</p>
+      <ul class="service-includes">
+        <li>تحليل شامل للوضع الحالي</li>
+        <li>إعادة تصميم الواجهات</li>
+        <li>تحسين صفحات المنتجات</li>
+        <li>تحسين رحلة المستخدم</li>
+        <li>تحسين SEO ومحركات البحث</li>
+        <li>تقرير ما قبل/بعد</li>
+      </ul>
+      <div class="service-price"><div><div class="service-price-label">يبدأ من</div></div><div class="service-price-value">1,500 <span class="service-price-unit">ر.س</span></div></div>
+      <a href="#booking" class="service-cta" data-service="تحسين متجر قائم">احجز هذه الخدمة</a>
+    </div>
+    
+    <div class="service-card featured" data-reveal data-delay="3">
+      <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+      <h3 class="service-title">إدارة سوشيال ميديا</h3>
+      <p class="service-desc">إدارة كاملة لحساباتك على إنستقرام، تيك توك، X، سناب شات شهرياً. محتوى أصلي وتفاعل حقيقي.</p>
+      <ul class="service-includes">
+        <li>20+ منشور شهرياً مصمم باحترافية</li>
+        <li>إدارة 4 منصات مختلفة</li>
+        <li>تصوير محتوى ريلز وستوريز</li>
+        <li>الرد على التعليقات والرسائل</li>
+        <li>تقرير شهري مفصل بالأداء</li>
+        <li>استراتيجية محتوى مخصصة</li>
+      </ul>
+      <div class="service-price"><div><div class="service-price-label">شهرياً يبدأ من</div></div><div class="service-price-value">2,000 <span class="service-price-unit">ر.س</span></div></div>
+      <a href="#booking" class="service-cta" data-service="إدارة سوشيال ميديا">احجز هذه الخدمة</a>
+    </div>
+    
+    <div class="service-card" data-reveal data-delay="1">
+      <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h6l2-3 4 6 2-3h6"/></svg></div>
+      <h3 class="service-title">حملات إعلانية للمواسم</h3>
+      <p class="service-desc">حملات إعلانية مدروسة على ميتا وتيك توك وسناب شات لمواسم المتاجر السعودية.</p>
+      <ul class="service-includes">
+        <li>استراتيجية حملة مخصصة للموسم</li>
+        <li>تصميم إعلانات بصرية وفيديو</li>
+        <li>إعداد الحملات وإدارتها</li>
+        <li>تحسين يومي للأداء</li>
+        <li>تقرير نهاية الحملة</li>
+        <li>التكلفة الإعلانية على حسابك</li>
+      </ul>
+      <div class="service-price"><div><div class="service-price-label">للحملة يبدأ من</div></div><div class="service-price-value">2,500 <span class="service-price-unit">ر.س</span></div></div>
+      <a href="#booking" class="service-cta" data-service="حملات إعلانية">احجز هذه الخدمة</a>
+    </div>
+    
+    <div class="service-card" data-reveal data-delay="2">
+      <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <h3 class="service-title">تصوير منتجات احترافي</h3>
+      <p class="service-desc">صور احترافية لمنتجاتك ترفع معدل التحويل. استوديو، إضاءة، تحرير، خلفيات متنوعة.</p>
+      <ul class="service-includes">
+        <li>جلسة تصوير في الاستوديو</li>
+        <li>3-5 لقطات لكل منتج</li>
+        <li>خلفيات بيضاء + لايف ستايل</li>
+        <li>تحرير وريتاتش احترافي</li>
+        <li>تسليم بصيغ متعددة</li>
+        <li>الرياض، جدة، الدمام</li>
+      </ul>
+      <div class="service-price"><div><div class="service-price-label">للجلسة يبدأ من</div></div><div class="service-price-value">1,000 <span class="service-price-unit">ر.س</span></div></div>
+      <a href="#booking" class="service-cta" data-service="تصوير منتجات">احجز هذه الخدمة</a>
+    </div>
+    
+    <div class="service-card" data-reveal data-delay="3">
+      <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg></div>
+      <h3 class="service-title">كتابة محتوى المتجر</h3>
+      <p class="service-desc">كتابة احترافية لأوصاف المنتجات، صفحات المتجر، والمدونة. عربي سعودي محسّن لـ SEO.</p>
+      <ul class="service-includes">
+        <li>كتابة أوصاف للمنتجات (حتى 50 منتج)</li>
+        <li>صفحات: عن المتجر، الأسئلة، السياسات</li>
+        <li>مقالات مدونة بالـ SEO (4 مقالات)</li>
+        <li>كلمات مفتاحية مخصصة</li>
+        <li>عناوين Meta وأوصاف</li>
+        <li>تسليم خلال 7-14 يوم</li>
+      </ul>
+      <div class="service-price"><div><div class="service-price-label">يبدأ من</div></div><div class="service-price-value">800 <span class="service-price-unit">ر.س</span></div></div>
+      <a href="#booking" class="service-cta" data-service="كتابة محتوى">احجز هذه الخدمة</a>
+    </div>
+    
+  </div>
+  
+  <!-- Process -->
+  <div class="process-section" data-reveal>
+    <div class="section-label">طريقة العمل</div>
+    <h2 class="section-title" style="margin-bottom: 0;">من الطلب إلى <em>التسليم</em></h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-step-num">01</div>
+        <h4>تواصل</h4>
+        <p>أرسل طلبك، نتواصل معك خلال ساعات</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">02</div>
+        <h4>استشارة</h4>
+        <p>مكالمة مجانية لفهم احتياجك</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">03</div>
+        <h4>تنفيذ</h4>
+        <p>فريقنا ينفّذ مع متابعة منك</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">04</div>
+        <h4>تسليم</h4>
+        <p>تسليم نهائي مع تدريب ودعم</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Booking Form -->
+  <div class="booking-form" id="booking" data-reveal>
+    <div class="booking-content">
+      <span class="badge" style="margin-bottom: 1rem;">احجز استشارة مجانية</span>
+      <h2>جاهز <em>نبدأ معك؟</em></h2>
+      <p>املأ الفورم وراح نتواصل معك خلال 24 ساعة، ومكالمة الاستشارة الأولى مجانية تماماً.</p>
+      
+      <form id="bookingForm">
+        <div class="form-row-2">
+          <div class="field">
+            <label class="label">الاسم الكامل <span style="color: var(--danger);">*</span></label>
+            <input type="text" name="name" class="input" required />
+          </div>
+          <div class="field">
+            <label class="label">رقم الجوال <span style="color: var(--danger);">*</span></label>
+            <input type="tel" name="phone" class="input" placeholder="05xxxxxxxx" required />
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="field">
+            <label class="label">البريد الإلكتروني</label>
+            <input type="email" name="email" class="input" />
+          </div>
+          <div class="field">
+            <label class="label">الخدمة المطلوبة <span style="color: var(--danger);">*</span></label>
+            <select name="service" id="serviceSelect" class="select" required>
+              <option value="">اختر الخدمة</option>
+              <option>إنشاء متجر سلة/زد</option>
+              <option>تحسين متجر قائم</option>
+              <option>إدارة سوشيال ميديا</option>
+              <option>حملات إعلانية</option>
+              <option>تصوير منتجات</option>
+              <option>كتابة محتوى</option>
+              <option>استشارة عامة</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">رابط متجرك (إن وجد)</label>
+          <input type="url" name="storeUrl" class="input" placeholder="https://my-store.salla.sa" />
+        </div>
+        <div class="field">
+          <label class="label">احكِ لنا عن مشروعك</label>
+          <textarea name="message" class="textarea" placeholder="نوع منتجاتك، أهدافك، أي تحديات تواجهك..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 1.1rem;">
+          إرسال الطلب
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+      </form>
+      
+      <div class="success-msg" id="successMsg">
+        <strong>تم استلام طلبك بنجاح! ✓</strong>
+        <p style="margin-top: 0.5rem; color: var(--ink);">راح نتواصل معك خلال 24 ساعة على رقم الجوال اللي أدخلته.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية، وفريق متخصص جاهز عند الطلب.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="../index.html">الرئيسية</a>
+      <a href="tools.html">الأدوات المجانية</a>
+      <a href="coupons.html">الكوبونات</a>
+      <a href="calendar.html">تقويم المواسم</a>
+      <a href="services.html">الخدمات</a>
+    </div>
+    <div class="footer-col">
+      <h4>الفريق</h4>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">احجز معنا</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="#">تواصل معنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">إخلاء المسؤولية</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">adwat-altajer.com</div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+
+<script>
+  // Pre-fill service select from cards
+  document.querySelectorAll('.service-cta').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const serviceName = btn.dataset.service;
+      const select = document.getElementById('serviceSelect');
+      Array.from(select.options).forEach(opt => {
+        if (opt.text.includes(serviceName) || serviceName.includes(opt.text)) {
+          select.value = opt.value || opt.text;
+        }
+      });
+    });
+  });
+
+  document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const origHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'جاري الإرسال...';
+    const form = e.target;
+    const storeUrl = form.storeUrl.value.trim();
+    const messageText = form.message.value.trim();
+    const fullMessage = storeUrl ? `${messageText}\nرابط المتجر: ${storeUrl}` : messageText;
+    try {
+      await api.submitBooking({
+        name: form.name.value.trim(),
+        email: form.email.value.trim() || undefined,
+        phone: form.phone.value.trim(),
+        service_type: form.service.value,
+        message: fullMessage || undefined,
+      });
+      form.style.display = 'none';
+      document.getElementById('successMsg').classList.add('visible');
+      setTimeout(() => document.getElementById('successMsg').scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = origHTML;
+      showError('حدث خطأ', err.message || 'حاول مرة أخرى');
+    }
+  });
+</script>
+</body>
+</html>

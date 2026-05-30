@@ -1,0 +1,326 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خطة محتوى السوشيال ميديا — أدوات التاجر</title>
+<meta name="description" content="خطة محتوى سوشيال ميديا شهرية لمتجرك — مولّد ذكي يخلق لك تقويم محتوى أسبوعي جاهز للنشر على إنستقرام وتويتر وتيك توك.">
+<meta property="og:title" content="خطة محتوى السوشيال ميديا — أدوات التاجر">
+<meta property="og:description" content="مولّد تقويم محتوى ذكي للتاجر السعودي — محتوى شهري جاهز للنشر.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .sp-section { padding: 6rem 2rem; max-width: 1400px; margin: 0 auto; }
+  .sp-grid { display: grid; grid-template-columns: 380px 1fr; gap: 3rem; align-items: start; }
+  @media (max-width: 1100px) { .sp-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .sp-section { padding: 5rem 1.25rem; } }
+  .days-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-top: 0.5rem; }
+  .day-option { padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-sm); cursor: pointer; text-align: center; font-size: 0.9rem; transition: all var(--transition); color: var(--ink-dim); }
+  .day-option:hover { border-color: var(--line-strong); color: var(--ink); }
+  .day-option.active { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border-color: var(--accent); font-weight: 700; box-shadow: 0 4px 14px rgba(168,85,247,0.3); }
+  .season-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
+  .season-opt { padding: 0.6rem 0.8rem; background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-sm); cursor: pointer; text-align: center; font-size: 0.82rem; transition: all var(--transition); color: var(--ink-dim); }
+  .season-opt:hover { border-color: var(--line-strong); color: var(--ink); }
+  .season-opt.active { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border-color: var(--accent); font-weight: 700; }
+  .sp-loading { display: none; text-align: center; padding: 4rem 2rem; }
+  .sp-loading.visible { display: block; }
+  .sp-loading .loading-spinner { width: 56px; height: 56px; }
+  .sp-summary { background: var(--bg-elevated); border: 1px solid var(--line-accent); border-radius: var(--radius-lg); padding: 1.5rem 2rem; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
+  .sp-summary::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, transparent 100%); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .sp-summary-text { color: var(--ink-dim); line-height: 1.8; }
+  .sp-times { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  @media (max-width: 768px) { .sp-times { grid-template-columns: 1fr; } }
+  .sp-time-card { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1rem; text-align: center; transition: all var(--transition); }
+  .sp-time-card:hover { border-color: var(--line-accent); transform: translateY(-2px); }
+  .sp-time-platform { font-size: 1.2rem; margin-bottom: 0.25rem; }
+  .sp-time-name { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; }
+  .sp-time-val { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+  .sp-day-card { background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); margin-bottom: 1rem; overflow: hidden; transition: border-color var(--transition); }
+  .sp-day-card:hover { border-color: var(--line-accent); }
+  .sp-day-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; cursor: pointer; background: var(--bg-card); transition: background var(--transition); user-select: none; }
+  .sp-day-header:hover { background: var(--bg-elevated); }
+  .sp-day-num { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; box-shadow: 0 3px 10px rgba(168,85,247,0.3); }
+  .sp-day-theme { font-weight: 700; flex: 1; }
+  .sp-day-arrow { color: var(--ink-dim); font-size: 0.75rem; transition: transform 0.2s; }
+  .sp-day-card.open .sp-day-arrow { transform: rotate(180deg); }
+  .sp-day-body { display: none; }
+  .sp-day-card.open .sp-day-body { display: block; }
+  .sp-platform { border-top: 1px solid var(--line); padding: 1.2rem 1.5rem; }
+  .sp-platform-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.8rem; }
+  .sp-platform-icon { font-size: 1.2rem; }
+  .sp-platform-name { font-weight: 700; font-size: 0.9rem; }
+  .sp-platform-type { font-size: 0.75rem; color: var(--ink-dim); background: var(--bg-card); padding: 0.15rem 0.6rem; border-radius: var(--radius-full); }
+  .sp-platform-time { font-size: 0.75rem; color: var(--accent); margin-right: auto; font-weight: 600; }
+  .sp-content-text { font-size: 0.88rem; line-height: 1.85; color: var(--ink); white-space: pre-line; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 0.9rem; margin-bottom: 0.5rem; }
+  .sp-tip { font-size: 0.78rem; color: var(--ink-dim); background: var(--bg-card); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; display: flex; gap: 0.4rem; align-items: start; border: 1px solid var(--line); }
+  .sp-tip-icon { flex-shrink: 0; display: flex; align-items: center; color: var(--accent); }
+  .sp-hashtags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem; }
+  .sp-hashtag { background: var(--accent-soft); border: 1px solid var(--line-accent); padding: 0.2rem 0.6rem; border-radius: var(--radius-full); font-size: 0.75rem; color: var(--accent); font-weight: 600; }
+  .sp-row-footer { display: flex; justify-content: flex-end; margin-top: 0.4rem; }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html" class="active">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 06</span>
+      <h1>خطة محتوى <em>السوشيال ميديا</em></h1>
+      <p>ولّد خطة محتوى 7 أو 14 أو 30 يوماً لمتجرك — منشورات إنستقرام وتيك توك وتويتر جاهزة بالنصوص والهاشتاقات وأفضل أوقات النشر.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sp-section">
+  <div class="sp-grid">
+    <div class="panel">
+      <h2>بيانات المتجر</h2>
+      <p class="panel-sub">أدخل المعلومات لتوليد خطة مخصصة لك</p>
+
+      <div class="field">
+        <label class="label">اسم المتجر <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="storeName" class="input" placeholder="مثل: متجر نور للأزياء" />
+      </div>
+      <div class="field">
+        <label class="label">نوع المنتجات <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="productType" class="input" placeholder="مثل: ملابس نسائية / إكسسوارات / أحذية" />
+      </div>
+      <div class="field">
+        <label class="label">الجمهور المستهدف</label>
+        <input type="text" id="targetAudience" class="input" placeholder="مثل: نساء سعوديات 25-45 سنة" />
+      </div>
+      <div class="field">
+        <label class="label">عدد أيام الخطة</label>
+        <div class="days-options">
+          <div class="day-option active" data-days="7">7 أيام</div>
+          <div class="day-option" data-days="14">14 يوم</div>
+          <div class="day-option" data-days="30">30 يوم</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">الموسم / المناسبة</label>
+        <div class="season-options">
+          <div class="season-opt active" data-season="normal"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> عادي</div>
+          <div class="season-opt" data-season="ramadan"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg> رمضان</div>
+          <div class="season-opt" data-season="eid"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg> العيد</div>
+          <div class="season-opt" data-season="national"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> اليوم الوطني</div>
+          <div class="season-opt" data-season="sale"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 01-7 7 7 7 0 01-3.5-.9L6 19"/></svg> تخفيضات</div>
+          <div class="season-opt" data-season="back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> العودة للمدارس</div>
+        </div>
+      </div>
+
+      <button id="generateBtn" class="btn-primary" style="width:100%;margin-top:1rem;justify-content:center;">
+        ولّد الخطة الآن
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+    </div>
+
+    <div>
+      <div id="spOutput">
+        <div class="output-empty">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <p>أدخل بيانات متجرك واضغط "ولّد الخطة الآن"</p>
+        </div>
+      </div>
+      <div class="sp-loading" id="spLoading">
+        <div class="loading-spinner"></div>
+        <div style="color:var(--ink-dim);margin-top:0.5rem;">جاري بناء خطة المحتوى...</div>
+        <div id="spStep" style="color:var(--accent);font-weight:600;margin-top:0.5rem;">يحلل متجرك وجمهورك...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي.</p>
+    </div>
+    <div class="footer-col"><h4>المنصة</h4><a href="../index.html">الرئيسية</a><a href="tools.html">الأدوات</a><a href="coupons.html">الكوبونات</a><a href="services.html">الخدمات</a></div>
+    <div class="footer-col"><h4>الفريق</h4><a href="about.html">من نحن</a><a href="services.html">احجز معنا</a><a href="works.html">أعمالنا</a></div>
+    <div class="footer-col"><h4>قانوني</h4><a href="#">سياسة الخصوصية</a><a href="#">شروط الاستخدام</a></div>
+  </div>
+  <div class="footer-bottom"><div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div><div class="footer-accent-line">adwat-altajer.com</div></div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+let selectedDays = '7';
+let selectedSeason = 'normal';
+
+document.querySelectorAll('.day-option').forEach(o => {
+  o.addEventListener('click', () => {
+    document.querySelectorAll('.day-option').forEach(x => x.classList.remove('active'));
+    o.classList.add('active');
+    selectedDays = o.dataset.days;
+  });
+});
+document.querySelectorAll('.season-opt').forEach(o => {
+  o.addEventListener('click', () => {
+    document.querySelectorAll('.season-opt').forEach(x => x.classList.remove('active'));
+    o.classList.add('active');
+    selectedSeason = o.dataset.season;
+  });
+});
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function cpBtn(id) {
+  return `<button class="copy-icon-btn" onclick="(function(b){var el=document.getElementById('${id}');if(!el)return;navigator.clipboard.writeText(el.innerText.trim());b.textContent='تم ✓';b.classList.add('copied');setTimeout(()=>{b.textContent='انسخ';b.classList.remove('copied')},1800)})(this)">انسخ</button>`;
+}
+
+const SVG = {
+  instagram: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>`,
+  tiktok:    `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34v-7.3a8.16 8.16 0 004.78 1.52V6.08a4.85 4.85 0 01-1.01-.39z"/></svg>`,
+  twitter:   `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+  clock:     `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  bulb:      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/></svg>`,
+};
+const platMap = {
+  instagram: { icon: SVG.instagram, name: 'إنستقرام', color: '#E1306C' },
+  tiktok:    { icon: SVG.tiktok,    name: 'تيك توك',  color: '#69C9D0' },
+  twitter:   { icon: SVG.twitter,   name: 'تويتر X',  color: '#1da1f2' },
+};
+
+function renderPlan(data) {
+  const plan = data.plan || [];
+  if (!plan.length) return '<p style="color:var(--ink-dim);text-align:center;padding:2rem">لم تُولَّد أي أيام. حاول مرة أخرى.</p>';
+
+  let html = '';
+
+  if (data.summary) {
+    html += `<div class="sp-summary"><div class="sp-summary-text">${esc(data.summary)}</div></div>`;
+  }
+
+  if (data.bestTimes) {
+    html += `<div class="sp-times">
+      <div class="sp-time-card"><div class="sp-time-platform">${SVG.instagram}</div><div class="sp-time-name">إنستقرام</div><div class="sp-time-val">${esc(data.bestTimes.instagram||'')}</div></div>
+      <div class="sp-time-card"><div class="sp-time-platform">${SVG.tiktok}</div><div class="sp-time-name">تيك توك</div><div class="sp-time-val">${esc(data.bestTimes.tiktok||'')}</div></div>
+      <div class="sp-time-card"><div class="sp-time-platform">${SVG.twitter}</div><div class="sp-time-name">تويتر X</div><div class="sp-time-val">${esc(data.bestTimes.twitter||'')}</div></div>
+    </div>`;
+  }
+
+  plan.forEach((day, i) => {
+    const platforms = ['instagram','tiktok','twitter'];
+    let platformsHtml = '';
+    platforms.forEach(p => {
+      const pd = day[p]; if (!pd) return;
+      const pm = platMap[p];
+      const content = pd.caption || pd.script || pd.text || '';
+      const elId = `sp_${i}_${p}`;
+      const hashtags = (pd.hashtags||[]).map(h => `<span class="sp-hashtag">${esc(h)}</span>`).join('');
+      platformsHtml += `<div class="sp-platform">
+        <div class="sp-platform-header">
+          <span class="sp-platform-icon">${pm.icon}</span>
+          <span class="sp-platform-name" style="color:${pm.color}">${pm.name}</span>
+          ${pd.type ? `<span class="sp-platform-type">${esc(pd.type)}</span>` : ''}
+          ${pd.time ? `<span class="sp-platform-time">${SVG.clock} ${esc(pd.time)}</span>` : ''}
+        </div>
+        <div class="sp-content-text" id="${elId}">${esc(content)}</div>
+        ${hashtags ? `<div class="sp-hashtags">${hashtags}</div>` : ''}
+        ${pd.tip ? `<div class="sp-tip"><span class="sp-tip-icon">${SVG.bulb}</span><span>${esc(pd.tip)}</span></div>` : ''}
+        <div class="sp-row-footer">${cpBtn(elId)}</div>
+      </div>`;
+    });
+    html += `<div class="sp-day-card" id="spDay_${i}">
+      <div class="sp-day-header" onclick="toggleDay('spDay_${i}')">
+        <div class="sp-day-num">${day.day||i+1}</div>
+        <div class="sp-day-theme">${esc(day.theme||'يوم '+(i+1))}</div>
+        <span class="sp-day-arrow">▼</span>
+      </div>
+      <div class="sp-day-body">${platformsHtml}</div>
+    </div>`;
+  });
+  return html;
+}
+
+function toggleDay(id) { document.getElementById(id)?.classList.toggle('open'); }
+
+const steps = ['يحلل متجرك وجمهورك...','يبني استراتيجية المحتوى...','يكتب منشورات إنستقرام...','يكتب سكريبتات تيك توك...','يكتب تغريدات تويتر...','يضيف الهاشتاقات والأوقات...'];
+
+const generateBtn = document.getElementById('generateBtn');
+generateBtn.addEventListener('click', async () => {
+  if (!auth.isLoggedIn()) {
+    showModal({type:'warning',title:'يجب تسجيل الدخول',message:'سجّل دخولك لاستخدام هذه الأداة.',actions:[{label:'إلغاء',style:'secondary',close:true},{label:'تسجيل الدخول',style:'primary',onClick:()=>window.location.href='login.html'}]});
+    return;
+  }
+  const storeName = document.getElementById('storeName').value.trim();
+  const productType = document.getElementById('productType').value.trim();
+  if (!storeName) { showError('حقل مطلوب','أدخل اسم المتجر'); return; }
+  if (!productType) { showError('حقل مطلوب','أدخل نوع المنتجات'); return; }
+
+  const output = document.getElementById('spOutput');
+  const loading = document.getElementById('spLoading');
+  const stepEl = document.getElementById('spStep');
+  generateBtn.disabled = true;
+  output.style.display = 'none';
+  loading.classList.add('visible');
+
+  let si = 0;
+  const stepInt = setInterval(() => { stepEl.textContent = steps[si % steps.length]; si++; }, 2000);
+
+  try {
+    const result = await api.socialPlan({
+      storeName, productType,
+      targetAudience: document.getElementById('targetAudience').value.trim(),
+      days: selectedDays,
+      season: selectedSeason,
+    });
+
+    output.style.display = 'block';
+    output.innerHTML = renderPlan(result);
+    showToast('تم توليد الخطة بنجاح!', 'success');
+    const first = document.getElementById('spDay_0');
+    if (first) first.classList.add('open');
+
+    if (result.used !== undefined && result.limit !== null && result.limit > 0) {
+      let counter = document.getElementById('spUsageCounter');
+      if (!counter) { counter = document.createElement('div'); counter.id = 'spUsageCounter'; counter.className = 'usage-counter'; generateBtn.insertAdjacentElement('afterend', counter); }
+      const pct = Math.min(100, Math.round((result.used / result.limit) * 100));
+      counter.className = 'usage-counter' + (pct >= 80 ? ' critical' : pct >= 60 ? ' low' : '');
+      counter.innerHTML = '<span>استخدمت ' + result.used + ' من ' + result.limit + '</span><div class="usage-bar"><div class="usage-fill" style="width:' + pct + '%"></div></div>';
+    }
+  } catch (err) {
+    output.style.display = 'block';
+    showToolError(err, 'social-plan');
+  } finally {
+    clearInterval(stepInt);
+    loading.classList.remove('visible');
+    generateBtn.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>

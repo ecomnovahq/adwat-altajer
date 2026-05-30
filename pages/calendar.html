@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقويم المواسم التسويقية — أدوات التاجر</title>
+<meta name="description" content="تقويم المواسم التسويقية للسوق السعودي — رمضان، اليوم الوطني، الجمعة البيضاء، وأكثر من 20 مناسبة. خطّط حملاتك مسبقاً.">
+<meta property="og:title" content="تقويم المواسم التسويقية السعودية">
+<meta property="og:description" content="خطّط حملاتك مسبقاً مع تقويم المواسم التسويقية الكامل للسوق السعودي.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .calendar-section { padding: 6rem 2rem; max-width: 1400px; margin: 0 auto; }
+  .seasons-timeline { position: relative; padding: 2rem 0; }
+  .seasons-timeline::before { content: ''; position: absolute; top: 0; bottom: 0; right: 30px; width: 2px; background: linear-gradient(180deg, transparent 0%, var(--line-strong) 10%, var(--line-strong) 90%, transparent 100%); }
+  .season { position: relative; padding-right: 80px; margin-bottom: 3rem; cursor: pointer; }
+  .season-marker { position: absolute; right: 16px; top: 1.5rem; width: 30px; height: 30px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line-strong); display: flex; align-items: center; justify-content: center; transition: all var(--transition); z-index: 2; }
+  .season:hover .season-marker, .season.upcoming .season-marker { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); border-color: var(--accent); box-shadow: 0 0 0 4px rgba(168,85,247,0.15), 0 4px 12px rgba(168,85,247,0.3); }
+  .season-marker::after { content: ''; width: 8px; height: 8px; background: var(--ink-mid); border-radius: 50%; transition: background var(--transition); }
+  .season:hover .season-marker::after, .season.upcoming .season-marker::after { background: #fff; }
+  .season-card { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 2rem; transition: all var(--transition); }
+  .season:hover .season-card { border-color: var(--line-accent); transform: translateX(-8px); box-shadow: 0 12px 40px rgba(168,85,247,0.1); }
+  .season.upcoming .season-card { border-color: var(--line-accent); background: linear-gradient(160deg, var(--bg-elevated) 0%, var(--bg-alt) 100%); box-shadow: 0 8px 30px rgba(168,85,247,0.1); }
+  .season-header { display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .season-date { font-family: var(--font-arabic); font-weight: 700; font-size: 0.88rem; color: var(--accent); letter-spacing: 0.04em; }
+  .season-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; line-height: 1.2; }
+  .season-importance { display: inline-flex; gap: 3px; }
+  .season-importance .star { color: var(--gold); font-size: 1rem; }
+  .season-desc { color: var(--ink-dim); line-height: 1.7; margin-bottom: 1.5rem; }
+  .season-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; padding: 1.2rem; background: var(--bg); border-radius: var(--radius-md); border: 1px solid var(--line); }
+  @media (max-width: 640px) { .season-stats { grid-template-columns: 1fr; } }
+  .season-stat { text-align: center; }
+  .season-stat-label { font-size: 0.75rem; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .season-stat-value { font-family: var(--font-arabic); font-weight: 800; font-size: 1.2rem; color: var(--accent); }
+  .season-tips { display: none; padding-top: 1.5rem; border-top: 1px dashed var(--line-strong); }
+  .season.expanded .season-tips { display: block; animation: fadeIn 0.4s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  .tips-title { font-family: var(--font-arabic); font-weight: 700; color: var(--accent); margin-bottom: 1rem; font-size: 0.95rem; }
+  .tips-list { display: grid; gap: 0.8rem; }
+  .tip-item { display: flex; gap: 0.8rem; align-items: start; color: var(--ink); font-size: 0.95rem; line-height: 1.6; }
+  .tip-item::before { content: '→'; color: var(--accent); flex-shrink: 0; font-weight: 700; }
+  .toggle-btn { background: none; border: none; color: var(--accent); cursor: pointer; padding: 0.5rem 0; font-family: var(--font-arabic); font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; transition: gap 0.3s; font-size: 0.9rem; }
+  .toggle-btn:hover { gap: 0.7rem; }
+  .toggle-btn svg { transition: transform 0.3s; }
+  .season.expanded .toggle-btn svg { transform: rotate(180deg); }
+  .season.upcoming::after { content: 'قادم قريباً'; position: absolute; top: 1.5rem; left: 0; background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; padding: 0.3rem 0.8rem; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 700; box-shadow: 0 3px 10px rgba(168,85,247,0.3); }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/>
+      <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
+      <polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/>
+    </svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html" class="active">المواسم</a></li>
+    <li><a href="works.html">أعمالنا</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
+    <span class="icon-moon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></span>
+    <span class="icon-sun"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+  </button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 04</span>
+      <h1>تقويم <em>المواسم التسويقية</em></h1>
+      <p>كل مواسم السوق السعودي في خريطة واحدة. متى تبدأ، متى تنتهي، ماذا يبيع فيها، وكيف تستعد. خطط لسنتك كاملة من هنا.</p>
+    </div>
+  </div>
+</section>
+
+<section class="calendar-section">
+  <div class="seasons-timeline" id="seasonsTimeline"></div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/>
+          <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
+          <polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/>
+        </svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="تويتر"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="انستغرام"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="tools.html">الأدوات</a>
+      <a href="coupons.html">الكوبونات</a>
+      <a href="calendar.html">المواسم</a>
+      <a href="works.html">أعمالنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>الفريق</h4>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">احجز معنا</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="#">تواصل معنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">سياسة الكوبونات</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر. جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line"></div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+  const seasons = [
+    { date: '22 فبراير', title: 'يوم التأسيس السعودي', importance: 4, desc: 'احتفال بتأسيس الدولة السعودية الأولى عام 1727م. موسم تسويقي قوي مع ارتباط عاطفي بالهوية الوطنية والتراث.', stats: [['نمو المبيعات', '+45%'], ['مدة الحملة', '7-10 أيام'], ['أفضل القطاعات', 'أزياء وهدايا']], tips: ['ابدأ الحملة قبل 10 أيام من 22 فبراير', 'استخدم الألوان والرموز التراثية (البني، الذهبي، الرمز التأسيسي)', 'ركز على المنتجات اللي فيها لمسة سعودية أصيلة', 'فعّل عروض خصم 22% أو 1727 ريال مكافأة', 'تعاون مع مؤثرين سعوديين يتحدثون عن التراث'] },
+    { date: 'مارس - أبريل (متغير هجري)', title: 'رمضان وعيد الفطر', importance: 5, desc: 'الموسم الأقوى في السعودية بلا منازع. الإنفاق يرتفع 55%+ وتحتد المنافسة. التحضير المبكر هو سر النجاح.', stats: [['نمو المبيعات', '+80%'], ['مدة الحملة', '40+ يوم'], ['أفضل القطاعات', 'كل القطاعات']], tips: ['ابدأ التحضير قبل شهرين على الأقل', 'جهز محتوى رمضاني (هوية بصرية، فيديوهات، بنرات)', 'فعّل التوصيل السريع، الناس يطلبون بعد الإفطار', 'العروض ليلاً بين 9 مساءً و1 صباحاً تحقق أعلى تحويل', 'باقات الهدايا للعيد تبدأ من منتصف رمضان', 'لا تنسَ عيد الفطر، فيه فرصة بيع كبيرة للهدايا والملابس'] },
+    { date: 'مايو - يونيو (هجري)', title: 'الحج وعيد الأضحى', importance: 4, desc: 'موسم خاص بالحجاج والمعتمرين، مع طلب قوي على مستلزمات السفر والملابس البيضاء. عيد الأضحى يركز على الهدايا والملابس.', stats: [['نمو المبيعات', '+35%'], ['مدة الحملة', '15-20 يوم'], ['أفضل القطاعات', 'سفر ومأكولات']], tips: ['ركز على مستلزمات الحج: حقائب، ملابس بيضاء، إكسسوارات', 'استهدف مكة والمدينة وجدة في الإعلانات', 'للأضحى: عروض الهدايا والملابس الجديدة للأطفال', 'وسّع الحملات لتشمل دول الخليج'] },
+    { date: 'يوليو - أغسطس', title: 'موسم الصيف وسفر العائلات', importance: 3, desc: 'الحرارة تخلي الناس داخل البيت يتسوقون أونلاين. السفر للخارج يقلل من بعض الفئات ويزيد من أخرى.', stats: [['نمو المبيعات', '+25%'], ['مدة الحملة', '8 أسابيع'], ['أفضل القطاعات', 'بيت وعناية']], tips: ['ركز على منتجات التبريد والاستخدام المنزلي', 'العناية بالبشرة من الشمس وزّعها بكثرة', 'مستلزمات السفر: حقائب، إكسسوارات، عبايات سفر', 'فعّل التوصيل السريع لأن الناس داخل البيت'] },
+    { date: 'أغسطس - سبتمبر', title: 'العودة للمدارس', importance: 4, desc: 'موسم قوي للأسر السعودية، الإنفاق يرتفع على الملابس، الحقائب، الأدوات المكتبية، والإلكترونيات.', stats: [['نمو المبيعات', '+50%'], ['مدة الحملة', '6 أسابيع'], ['أفضل القطاعات', 'مدارس وأطفال']], tips: ['ابدأ في 15 أغسطس، الذروة آخر أسبوع منه', 'باقات شاملة (ملابس + حقيبة + قرطاسية) تبيع أكثر', 'استهدف الأمهات في إعلانات ميتا وتيك توك', 'فعّل تابي وتمارا، الناس يحبون التقسيط في هذا الموسم'] },
+    { date: '23 سبتمبر', title: 'اليوم الوطني السعودي', importance: 5, desc: 'احتفال بتوحيد المملكة 1932م. موسم تسويقي ضخم تشارك فيه كل العلامات التجارية الكبرى تقريباً.', stats: [['نمو المبيعات', '+60%'], ['مدة الحملة', '10-14 يوم'], ['أفضل القطاعات', 'كل القطاعات']], tips: ['ابدأ قبل 14 سبتمبر بحملة "العد التنازلي"', 'استخدم الأخضر بكثافة، شعار المملكة، صورة الملك', 'خصومات 23% أو 1932 ريال نسبة لتاريخ التوحيد', 'تعاون مع مؤثرين، التغريدات الوطنية تنتشر بسرعة', 'باقات خاصة للهدايا الوطنية والرمزية'] },
+    { date: 'أكتوبر - نوفمبر', title: 'موسم الزفاف والمناسبات', importance: 3, desc: 'الجو يصير لطيف، المواسم الاجتماعية تنشط، الأعراس والمناسبات تكثر، يزداد الطلب على المنتجات الفاخرة.', stats: [['نمو المبيعات', '+30%'], ['مدة الحملة', '8 أسابيع'], ['أفضل القطاعات', 'أزياء وعطور']], tips: ['ركز على المنتجات الفاخرة والهدايا الراقية', 'العطور والإكسسوارات تبيع كثيراً', 'العبايات الفاخرة للمناسبات', 'استهدف الفئة العمرية 25-45 من النساء'] },
+    { date: '28 نوفمبر (آخر جمعة)', title: 'الجمعة البيضاء (وايت فرايدي)', importance: 5, desc: 'أكبر موسم تخفيضات عالمي. نافذة العروض من 22 نوفمبر حتى 1 ديسمبر، الذروة 28 نوفمبر. تخفيضات تصل لـ 90%.', stats: [['نمو المبيعات', '+150%'], ['مدة الحملة', '10 أيام'], ['أفضل القطاعات', 'إلكترونيات وأزياء']], tips: ['التحضير يبدأ من سبتمبر، المخزون لازم يكون جاهز', 'استخدم ساعات العد التنازلي وعروض كل ساعة', 'فعّل إعلانات مكثفة في ميتا وتيك توك وسناب', 'لا ترفع السعر قبل، العملاء يتتبعون', 'خصومات حقيقية مو وهمية، الموسم تنافسي جداً', 'احتفظ بمخزون احتياطي، الطلب يضاعف 3-5 أضعاف'] },
+    { date: 'ديسمبر', title: 'موسم الشتاء وعروض نهاية السنة', importance: 3, desc: 'الشتاء يجيب طلب على الملابس الدافئة والديكورات. كثير من التجار يصفّون المخزون.', stats: [['نمو المبيعات', '+20%'], ['مدة الحملة', '4 أسابيع'], ['أفضل القطاعات', 'أزياء شتوية']], tips: ['الملابس الشتوية، البطاطين، السجاد، الديكور المنزلي', 'عروض "نهاية السنة" تعمل جيداً نفسياً', 'باقات هدايا للعطل والإجازات'] },
+    { date: 'يناير', title: 'تصفيات نهاية الموسم', importance: 3, desc: 'موسم التصفيات الكبير. تخفيضات لتفريغ المخزون، فرصة لجلب عملاء جدد بأسعار جذابة.', stats: [['نمو المبيعات', '+25%'], ['مدة الحملة', '4 أسابيع'], ['أفضل القطاعات', 'أزياء وديكور']], tips: ['خصومات 50-80% على المخزون الراكد', 'كل فلوس السنة الجديدة (قرارات السنة) فرصة', 'اللياقة والصحة تكون رائجة (قرارات السنة)'] }
+  ];
+  
+  const today = new Date();
+  const month = today.getMonth(); // 0-11
+  
+  // Determine upcoming season based on month
+  function isUpcoming(idx) {
+    // Simple logic: highlight if within next 60 days
+    const upcomingMap = {
+      0: [1, 2],   // Jan -> Feb (Founding)
+      1: [1, 2],   // Feb 
+      2: [2, 3],   // Mar -> Ramadan
+      3: [3, 4],   // Apr
+      4: [4],      // May -> Hajj
+      5: [4, 5],   // Jun
+      6: [5, 6],   // Jul
+      7: [6, 7],   // Aug -> Back to school
+      8: [7, 8],   // Sep -> National Day
+      9: [8, 9],   // Oct
+      10: [9, 10], // Nov -> White Friday
+      11: [10, 11] // Dec
+    };
+    return (upcomingMap[month] || []).includes(idx);
+  }
+  
+  const timeline = document.getElementById('seasonsTimeline');
+  seasons.forEach((s, i) => {
+    const upcomingClass = isUpcoming(i) ? 'upcoming' : '';
+    const stars = '★'.repeat(s.importance) + '☆'.repeat(5 - s.importance);
+    const seasonEl = document.createElement('div');
+    seasonEl.className = `season ${upcomingClass}`;
+    seasonEl.innerHTML = `
+      <div class="season-marker"></div>
+      <div class="season-card">
+        <div class="season-header">
+          <div>
+            <div class="season-date">${s.date}</div>
+            <div class="season-title">${s.title}</div>
+          </div>
+          <div class="season-importance" title="مستوى الأهمية">
+            ${[...stars].map(c => `<span class="star">${c}</span>`).join('')}
+          </div>
+        </div>
+        <p class="season-desc">${s.desc}</p>
+        <div class="season-stats">
+          ${s.stats.map(([l, v]) => `
+            <div class="season-stat">
+              <div class="season-stat-label">${l}</div>
+              <div class="season-stat-value">${v}</div>
+            </div>
+          `).join('')}
+        </div>
+        <button class="toggle-btn" onclick="toggleSeason(this)">
+          استراتيجيات الموسم
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="season-tips">
+          <div class="tips-title">نصائح للتحضير والتنفيذ:</div>
+          <div class="tips-list">
+            ${s.tips.map(t => `<div class="tip-item">${t}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    timeline.appendChild(seasonEl);
+  });
+  
+  function toggleSeason(btn) {
+    btn.closest('.season').classList.toggle('expanded');
+  }
+</script>
+</body>
+</html>

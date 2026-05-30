@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أعمالنا — أدوات التاجر</title>
+<meta name="description" content="معرض أعمال أدوات التاجر — مشاريع حقيقية لتجار سعوديين: تصميم متاجر سلة وزد، إدارة سوشيال ميديا، حملات موسمية، هويات بصرية، وتحسين SEO.">
+<meta property="og:title" content="أعمالنا — أدوات التاجر">
+<meta property="og:description" content="أكثر من 40 مشروع منجز لتجار سعوديين — تصميم متاجر، إدارة سوشيال، حملات موسمية، وهويات بصرية.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  /* Page-specific styles */
+  .works-page { padding: 4rem 2rem 6rem; max-width: 1600px; margin: 0 auto; }
+
+  /* Filter tabs */
+  .filter-tabs { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 2.5rem; margin-bottom: 3rem; }
+  .filter-tab { padding: 0.5rem 1.25rem; border-radius: var(--radius-full); border: 1px solid var(--line-strong); background: transparent; color: var(--ink-dim); font-family: var(--font-arabic); font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all var(--transition); }
+  .filter-tab:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .filter-tab.active { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; border-color: transparent; box-shadow: 0 2px 12px rgba(168,85,247,0.3); }
+
+  /* Works grid */
+  .works-full-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  @media (max-width: 1024px) { .works-full-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .works-full-grid { grid-template-columns: 1fr; } }
+
+  /* Work card */
+  .work-card { overflow: hidden; cursor: pointer; padding: 0; position: relative; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+  .work-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--accent-3)); z-index: 2; opacity: 0; transition: opacity var(--transition); pointer-events: none; }
+  .work-card:hover { border-color: var(--line-accent); transform: translateY(-6px); box-shadow: 0 24px 50px -12px rgba(168,85,247,0.2); }
+  .work-card:hover::before { opacity: 1; }
+  .work-visual { height: 220px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--wv-from, #0b0e17) 0%, var(--wv-via, #1e2050) 50%, var(--wv-to, #6366f1) 100%); }
+  .work-visual::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 20px 20px; pointer-events: none; }
+  .work-visual-mockup { width: 130px; height: 85px; background: rgba(255,255,255,0.12); border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); display: flex; flex-direction: column; gap: 7px; padding: 12px; position: relative; z-index: 1; }
+  .mock-bar { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.3); }
+  .mock-bar.accent { background: rgba(168,85,247,0.9); width: 60%; }
+  .mock-bar.short { width: 45%; }
+  .work-info { padding: 1.5rem; }
+  .work-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--ink); }
+  .work-desc { font-size: 0.88rem; color: var(--ink-dim); line-height: 1.6; }
+
+  /* Stats bar */
+  .works-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--line); border: 1px solid var(--line); margin-bottom: 5rem; border-radius: var(--radius-md); overflow: hidden; }
+  @media (max-width: 640px) { .works-stats { grid-template-columns: repeat(2, 1fr); } }
+  .works-stat { background: var(--bg); padding: 2rem 1.5rem; transition: background var(--transition); }
+  .works-stat:hover { background: var(--bg-alt); }
+  .works-stat-num { font-family: var(--font-arabic); font-size: 2.8rem; font-weight: 800; line-height: 1; margin-bottom: 0.4rem; background: linear-gradient(135deg, var(--accent-3) 0%, var(--accent) 60%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .works-stat-label { font-size: 0.9rem; color: var(--ink-dim); }
+
+  /* CTA strip */
+  .works-cta { margin-top: 5rem; padding: 4rem 3rem; background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); text-align: center; position: relative; overflow: hidden; }
+  .works-cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--accent-3)); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .works-cta::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 100%, rgba(168,85,247,0.1) 0%, transparent 60%); pointer-events: none; }
+  .works-cta h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; margin-bottom: 1rem; position: relative; z-index: 1; }
+  .works-cta h2 em { font-family: var(--font-arabic); font-style: normal; font-weight: 800; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .works-cta p { color: var(--ink-dim); max-width: 500px; margin: 0 auto 2rem; line-height: 1.7; position: relative; z-index: 1; }
+  .works-cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="services.html">الخدمات</a></li>
+    <li><a href="works.html" class="active">أعمالنا</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <a href="services.html" class="nav-cta">احجز استشارة</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">معرض الأعمال</span>
+      <h1>أعمال <em>تتكلم</em> عن نفسها</h1>
+      <p>مشاريع حقيقية نفّذها الفريق لتجار سعوديين — تصميم متاجر، إدارة سوشيال، حملات موسمية، هويات بصرية، وأكثر.</p>
+    </div>
+  </div>
+</section>
+
+<section class="works-page">
+
+  <!-- Stats bar -->
+  <div class="works-stats" data-reveal>
+    <div class="works-stat"><div class="works-stat-num">+40</div><div class="works-stat-label">مشروع منجز</div></div>
+    <div class="works-stat"><div class="works-stat-num">+30</div><div class="works-stat-label">عميل راضٍ</div></div>
+    <div class="works-stat"><div class="works-stat-num">6</div><div class="works-stat-label">تخصصات</div></div>
+    <div class="works-stat"><div class="works-stat-num">48h</div><div class="works-stat-label">وقت البدء</div></div>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="section-label">تصفية حسب النوع</div>
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">الكل</button>
+    <button class="filter-tab" data-filter="store">تصميم متجر</button>
+    <button class="filter-tab" data-filter="social">إدارة سوشيال</button>
+    <button class="filter-tab" data-filter="seo">SEO وتحسين</button>
+    <button class="filter-tab" data-filter="campaign">حملات موسمية</button>
+    <button class="filter-tab" data-filter="brand">هوية بصرية</button>
+    <button class="filter-tab" data-filter="dev">تطوير وتحليل</button>
+  </div>
+
+  <!-- Works grid -->
+  <div class="works-full-grid" id="worksFullGrid"></div>
+
+  <!-- Load more -->
+  <div id="worksLoadMore" style="text-align:center;margin-top:2.5rem;display:none;">
+    <button class="btn-secondary" id="worksLoadMoreBtn" onclick="loadMoreWorks()" style="padding:0.75rem 2.5rem;">
+      تحميل المزيد
+    </button>
+  </div>
+
+  <!-- CTA -->
+  <div class="works-cta" data-reveal>
+    <h2>مشروعك القادم <em>يبدأ هنا.</em></h2>
+    <p>تواصل معنا وخلّنا نحدد معك الخطوة الأولى — تصميم، سوشيال، حملة، أو هوية. الفريق جاهز.</p>
+    <div class="works-cta-btns">
+      <a href="services.html" class="btn-primary">احجز استشارة مجانية<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+      <a href="services.html" class="btn-secondary">شاهد الخدمات والأسعار</a>
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية، وفريق متخصص جاهز عند الطلب.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
+        <a href="#" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="../index.html">الرئيسية</a>
+      <a href="tools.html">الأدوات المجانية</a>
+      <a href="coupons.html">الكوبونات</a>
+      <a href="calendar.html">تقويم المواسم</a>
+      <a href="services.html">الخدمات</a>
+    </div>
+    <div class="footer-col">
+      <h4>الفريق</h4>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">احجز معنا</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="#">تواصل معنا</a>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">إخلاء المسؤولية</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">adwat-altajer.com</div>
+  </div>
+</footer>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/main.js"></script>
+<script>
+
+  const FALLBACK_WORKS = [
+    { category:'store', badge_label:'تصميم متجر', title:'متجر عطورات فاخرة — سلة', description:'تصميم كامل على سلة مع هوية بصرية متكاملة وصفحات منتجات محسّنة لرفع معدل التحويل.', gradient_from:'#0b0e17', gradient_via:'#1e2050', gradient_to:'#6366f1' },
+    { category:'social', badge_label:'إدارة سوشيال', title:'براند أزياء نسائية — X & Instagram', description:'إدارة كاملة للحسابات: محتوى يومي، ريلز، وإعلانات ممولة أعطت 3x عائد على الإنفاق.', gradient_from:'#1e0a12', gradient_via:'#4a1840', gradient_to:'#c840a0' },
+    { category:'seo', badge_label:'SEO وتحسين', title:'متجر إلكترونيات — زد', description:'تحسين محركات البحث لـ 200+ منتج أدى إلى زيادة الزيارات العضوية 180% في 3 أشهر.', gradient_from:'#0e1a10', gradient_via:'#1a4a20', gradient_to:'#4ade80' },
+    { category:'campaign', badge_label:'حملة موسمية', title:'حملة رمضان — متجر مستلزمات منزلية', description:'استراتيجية وتنفيذ حملة رمضانية شاملة حققت 5x نمو في المبيعات مقارنةً بالعام السابق.', gradient_from:'#100e1e', gradient_via:'#3d1270', gradient_to:'#a855f7' },
+    { category:'brand', badge_label:'هوية بصرية', title:'براند مكملات غذائية سعودية', description:'هوية بصرية كاملة من الشعار للتغليف والموشن جرافيك، جاهزة للإطلاق الرسمي.', gradient_from:'#1a0e0a', gradient_via:'#5a2a10', gradient_to:'#ff6b35' },
+    { category:'dev', badge_label:'تحليل وتطوير', title:'متجر عباءات — تقرير + تحسين', description:'تحليل شامل للمتجر وتطبيق توصيات رفعت سرعة التحميل 60% وتحسّن SEO بشكل ملحوظ.', gradient_from:'#0e1220', gradient_via:'#162050', gradient_to:'#3b82f6' },
+    { category:'store', badge_label:'تصميم متجر', title:'متجر حلويات شرقية — سلة', description:'تصميم متجر ملفت مع صفحة هبوط لرمضان وصفحات منتجات بالصور الاحترافية وأوصاف SEO.', gradient_from:'#12100e', gradient_via:'#3d2810', gradient_to:'#f59e0b' },
+    { category:'social', badge_label:'إدارة سوشيال', title:'متجر أدوات رياضية — تيك توك', description:'محتوى يومي وريلز تعليمية للمنتجات أدت إلى 50K+ مشاهدة خلال الشهر الأول.', gradient_from:'#100e18', gradient_via:'#2a1860', gradient_to:'#818cf8' },
+    { category:'campaign', badge_label:'حملة موسمية', title:'يوم التأسيس — متجر عطور رجالية', description:'حملة مبيعات متكاملة ليوم التأسيس مع بنرات، كوبونات، وإعلانات ممولة. ROAS 4.2x.', gradient_from:'#0a120e', gradient_via:'#104030', gradient_to:'#10b981' },
+  ];
+
+  const PAGE_SIZE = 6;
+  let worksOffset = 0;
+  let allWorks = null;
+  let activeFilter = 'all';
+
+  function workCardHTML(w) {
+    return `<div class="card work-card reveal" data-category="${w.category}">
+      <div class="work-visual" style="--wv-from:${w.gradient_from};--wv-via:${w.gradient_via};--wv-to:${w.gradient_to}">
+        <div class="work-visual-mockup"><div class="mock-bar accent"></div><div class="mock-bar"></div><div class="mock-bar short"></div></div>
+      </div>
+      <div class="work-info">
+        <span class="badge badge-label" style="margin-bottom:0.8rem">${w.badge_label}</span>
+        <h3 class="work-title">${w.title}</h3>
+        <p class="work-desc">${w.description || ''}</p>
+      </div>
+    </div>`;
+  }
+
+  function filteredWorks() {
+    if (activeFilter === 'all') return allWorks;
+    return allWorks.filter(w => w.category === activeFilter);
+  }
+
+  function renderPage(reset = false) {
+    const grid = document.getElementById('worksFullGrid');
+    const filtered = filteredWorks();
+    if (reset) { grid.innerHTML = ''; worksOffset = 0; }
+    const slice = filtered.slice(worksOffset, worksOffset + PAGE_SIZE);
+    grid.insertAdjacentHTML('beforeend', slice.map(workCardHTML).join(''));
+    worksOffset += slice.length;
+    const loadMoreWrap = document.getElementById('worksLoadMore');
+    loadMoreWrap.style.display = worksOffset < filtered.length ? 'block' : 'none';
+  }
+
+  function applyFilter(filter) {
+    activeFilter = filter;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === filter));
+    renderPage(true);
+  }
+
+  function loadMoreWorks() {
+    renderPage(false);
+  }
+
+  function initFilterTabs() {
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => applyFilter(tab.dataset.filter));
+    });
+  }
+
+  async function loadWorks() {
+    let works;
+    try { works = await api.getWorks(); } catch { works = null; }
+    allWorks = (works && works.length ? works : FALLBACK_WORKS);
+    initFilterTabs();
+    renderPage(true);
+  }
+
+  loadWorks();
+</script>
+</body>
+</html>
