@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مسار التاجر — أدوات التاجر</title>
+<meta name="description" content="مسار التاجر: تقييم ذكي لمتجرك أو خطة تأسيس للمبتدئين، مع ترشيح الخدمات المناسبة لحل نقاط الضعف.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css?v=8">
+<style>
+  .mp-section { padding: 5rem 1.5rem; max-width: 920px; margin: 0 auto; }
+  .mp-modes { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:2rem; }
+  @media(max-width:640px){ .mp-modes{ grid-template-columns:1fr; } }
+  .mp-mode { background:var(--bg-card); border:2px solid var(--line); border-radius:var(--radius-lg);
+    padding:1.6rem; cursor:pointer; transition:all .25s; text-align:center; }
+  .mp-mode:hover { border-color:var(--line-accent); transform:translateY(-3px); }
+  .mp-mode.active { border-color:var(--accent); background:var(--accent-soft); }
+  .mp-mode-ic { margin-bottom:.7rem; display:flex; justify-content:center; }
+  .mp-mode-ic svg { width:42px; height:42px; color:var(--accent); }
+  .mp-block h3 svg { width:20px; height:20px; flex-shrink:0; }
+  .mp-list li svg { width:16px; height:16px; flex-shrink:0; margin-top:3px; }
+  .mp-q-title svg { width:20px; height:20px; flex-shrink:0; color:var(--accent); }
+  .mp-q-title { align-items:flex-start; }
+  .mp-mode h3 { margin:0 0 .35rem; font-size:1.1rem; }
+  .mp-mode p { margin:0; font-size:.85rem; color:var(--ink-dim); line-height:1.7; }
+  .mp-q { background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-md);
+    padding:1.1rem 1.25rem; margin-bottom:.9rem; }
+  .mp-q-title { font-weight:700; font-size:.95rem; margin-bottom:.7rem; display:flex; gap:.5rem; }
+  .mp-q-num { color:var(--accent); font-weight:800; }
+  .mp-opts { display:flex; flex-direction:column; gap:.5rem; }
+  .mp-opt { display:flex; align-items:center; gap:.6rem; padding:.6rem .8rem; border:1px solid var(--line);
+    border-radius:10px; cursor:pointer; transition:all .18s; font-size:.88rem; }
+  .mp-opt:hover { border-color:var(--line-accent); }
+  .mp-opt input { accent-color:var(--accent); width:16px; height:16px; flex-shrink:0; }
+  .mp-opt.sel { border-color:var(--accent); background:var(--accent-soft); }
+  .mp-grp-title { font-size:1rem; font-weight:800; color:var(--accent); margin:1.8rem 0 .9rem;
+    padding-bottom:.5rem; border-bottom:1px solid var(--line); }
+  .mp-sub { margin:.6rem 0 0; padding:.8rem; border-right:3px solid var(--accent); background:var(--bg);
+    border-radius:8px; display:none; }
+  .mp-sub.show { display:block; }
+  .mp-sub .input { margin-top:.5rem; }
+  .mp-actions { text-align:center; margin-top:2rem; }
+  /* Results */
+  .mp-result { display:none; }
+  .mp-result.show { display:block; }
+  .mp-scores { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; }
+  @media(max-width:640px){ .mp-scores{ grid-template-columns:1fr; } }
+  .mp-score-card { background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-md);
+    padding:1.5rem; text-align:center; }
+  .mp-score-num { font-size:2.6rem; font-weight:800; line-height:1; }
+  .mp-score-lbl { font-size:.85rem; color:var(--ink-dim); margin-top:.4rem; }
+  .mp-bar { height:8px; background:var(--bg); border-radius:99px; overflow:hidden; margin-top:.8rem; }
+  .mp-bar-fill { height:100%; border-radius:99px; transition:width .8s ease; }
+  .mp-block { background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-md);
+    padding:1.25rem 1.4rem; margin-bottom:1.1rem; }
+  .mp-block h3 { margin:0 0 .9rem; font-size:1rem; display:flex; align-items:center; gap:.5rem; }
+  .mp-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.55rem; }
+  .mp-list li { display:flex; gap:.55rem; font-size:.9rem; line-height:1.6; }
+  .mp-step { display:flex; gap:.8rem; padding:.7rem 0; border-bottom:1px dashed var(--line); }
+  .mp-step:last-child { border-bottom:none; }
+  .mp-step-n { width:26px; height:26px; flex-shrink:0; border-radius:50%; background:var(--accent-soft);
+    color:var(--accent); font-weight:800; font-size:.85rem; display:flex; align-items:center; justify-content:center; }
+  .mp-step-t { font-weight:700; font-size:.92rem; margin-bottom:.15rem; }
+  .mp-step-d { font-size:.83rem; color:var(--ink-dim); line-height:1.6; }
+  .mp-svc-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  @media(max-width:640px){ .mp-svc-grid{ grid-template-columns:1fr; } }
+  .mp-svc { background:var(--bg); border:1px solid var(--line); border-radius:var(--radius-md);
+    padding:1.1rem; display:flex; flex-direction:column; gap:.5rem; transition:all .2s; }
+  .mp-svc:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .mp-svc-head { display:flex; justify-content:space-between; gap:.5rem; align-items:flex-start; }
+  .mp-svc-name { font-weight:700; font-size:.93rem; line-height:1.4; }
+  .mp-svc-price { font-weight:800; font-size:.85rem; color:var(--accent); white-space:nowrap; }
+  .mp-svc-why { font-size:.75rem; color:var(--ink-dim); }
+  .mp-svc-link { margin-top:auto; text-align:center; background:var(--accent); color:#fff; font-weight:700;
+    font-size:.82rem; border-radius:9px; padding:.5rem; text-decoration:none; }
+  .mp-svc-link:hover { opacity:.9; }
+  .mp-hidden { display:none; }
+  .mp-ai { border:1px solid var(--accent); background:linear-gradient(135deg, var(--accent-soft), transparent); }
+  .mp-ai h3 { color:var(--accent); }
+  /* Success / review hero */
+  .mp-done { text-align:center; padding:2.6rem 1.6rem; margin-bottom:1.4rem; border-radius:var(--radius-lg);
+    border:1px solid var(--accent); background:linear-gradient(160deg, var(--accent-soft), transparent 70%); animation:mpFade .4s ease; }
+  .mp-done-ic { width:78px; height:78px; margin:0 auto 1.2rem; border-radius:50%;
+    background:linear-gradient(135deg, var(--accent-2,#a855f7), var(--accent)); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 30px rgba(168,85,247,.35); animation:mpPop .5s cubic-bezier(.2,1.3,.4,1); }
+  .mp-done-ic svg { width:40px; height:40px; color:#fff; }
+  @keyframes mpPop { from{transform:scale(.5);opacity:0;} to{transform:scale(1);opacity:1;} }
+  .mp-done h2 { font-size:1.55rem; margin:0 0 .7rem; }
+  .mp-done-msg { font-size:1rem; line-height:1.95; color:var(--ink); max-width:560px; margin:0 auto .9rem; }
+  .mp-done-quote { font-size:.95rem; color:var(--accent); font-weight:600; font-style:italic; margin:0; }
+  .mp-section-label { text-align:center; font-size:.82rem; color:var(--ink-dim); margin:2rem 0 1rem; position:relative; }
+  .mp-section-label::before, .mp-section-label::after { content:''; position:absolute; top:50%; width:25%; height:1px; background:var(--line); }
+  .mp-section-label::before { right:0; } .mp-section-label::after { left:0; }
+  /* Wizard */
+  .mp-progress { height:6px; background:var(--bg-card); border-radius:99px; overflow:hidden; margin-bottom:.6rem; }
+  .mp-progress-bar { height:100%; background:linear-gradient(90deg,var(--accent-2,#a855f7),var(--accent)); border-radius:99px; transition:width .4s ease; }
+  .mp-progress-txt { text-align:center; font-size:.82rem; color:var(--ink-dim); margin-bottom:1.4rem; }
+  .mp-step-card { animation:mpFade .35s ease; min-height:120px; }
+  @keyframes mpFade { from{opacity:0;transform:translateX(14px);} to{opacity:1;transform:translateX(0);} }
+  .mp-step-card .mp-q-title { font-size:1.15rem; margin-bottom:1.1rem; }
+  .mp-radio { width:18px; height:18px; border:2px solid var(--line); border-radius:50%; flex-shrink:0; position:relative; transition:all .15s; }
+  .mp-opt.sel .mp-radio { border-color:var(--accent); }
+  .mp-opt.sel .mp-radio::after { content:''; position:absolute; inset:3px; border-radius:50%; background:var(--accent); }
+  .mp-opt { font-size:.95rem; padding:.75rem .9rem; }
+  .mp-nav { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-top:1.5rem; }
+  .mp-nav .btn { min-width:120px; }
+  .mp-phase { font-size:.82rem; font-weight:800; color:var(--accent); background:var(--accent-soft); border-radius:8px; padding:.4rem .7rem; margin:1rem 0 .6rem; display:inline-block; }
+  .mp-step-impact { margin-top:.4rem; display:flex; align-items:center; gap:.4rem; font-size:.8rem; color:var(--accent); font-weight:600; }
+  .mp-step-impact svg { width:14px; height:14px; flex-shrink:0; }
+  /* بوب استلام الطلب */
+  .mp-pop-bd { position:fixed; inset:0; background:rgba(10,6,20,.55); backdrop-filter:blur(3px);
+    display:flex; align-items:center; justify-content:center; z-index:9999; opacity:0; transition:opacity .3s; padding:1.5rem; }
+  .mp-pop-bd.show { opacity:1; }
+  .mp-pop { background:var(--bg-card); border:1px solid var(--line); border-radius:20px; max-width:420px; width:100%;
+    text-align:center; padding:2.4rem 1.8rem; box-shadow:0 30px 80px rgba(0,0,0,.4);
+    transform:scale(.85) translateY(10px); opacity:0; transition:transform .35s cubic-bezier(.2,1.3,.4,1), opacity .35s; }
+  .mp-pop-bd.show .mp-pop { transform:scale(1) translateY(0); opacity:1; }
+  .mp-pop-ic { width:72px; height:72px; margin:0 auto 1.2rem; border-radius:50%;
+    background:linear-gradient(135deg,#22c55e,#16a34a); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 12px 30px rgba(34,197,94,.4); }
+  .mp-pop-ic svg { width:38px; height:38px; color:#fff; }
+  .mp-pop h3 { font-size:1.35rem; margin:0 0 .6rem; }
+  .mp-pop p { font-size:.92rem; color:var(--ink-dim); line-height:1.85; margin:0; }
+  .mp-pop-bar { height:3px; background:var(--line); border-radius:99px; margin-top:1.4rem; overflow:hidden; }
+  .mp-pop-bar i { display:block; height:100%; background:var(--accent); width:100%; transform-origin:right;
+    animation:mpPopBar 4.2s linear forwards; }
+  @keyframes mpPopBar { from{transform:scaleX(1);} to{transform:scaleX(0);} }
+</style>
+<style id="_mp_dummy">
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="../index.html" class="logo">
+    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="tools.html" class="active">الأدوات</a></li>
+    <li><a href="coupons.html">الكوبونات</a></li>
+    <li><a href="calendar.html">المواسم</a></li>
+    <li><a href="blog.html">المدونة</a></li>
+    <li><a href="about.html">عن المنصة</a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom: 1.5rem;">أداة 11</span>
+      <h1>مسار <em>التاجر</em></h1>
+      <p>اختر مسارك: لو لسه مبتدئ نبني لك خطة تأسيس واضحة، ولو عندك متجر نقيّم جاهزيته وأداءه ونرشّح لك الخدمات المناسبة لكل نقطة نقص.</p>
+    </div>
+  </div>
+</section>
+
+<section class="mp-section">
+  <!-- Mode selector -->
+  <div class="mp-modes" id="mpModes">
+    <div class="mp-mode" data-mode="beginner">
+      <div class="mp-mode-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12C12 8 9 5 4 5c0 5 3 7 8 7z"/><path d="M12 14c0-3.5 3-6 8-6 0 4.5-3.5 6-8 6z"/></svg></div>
+      <h3>مسار المبتدئ</h3>
+      <p>لسه بتبدأ؟ أسئلة ذكية متفرّعة تبني لك خطة تأسيس مرتّبة من الصفر.</p>
+    </div>
+    <div class="mp-mode" data-mode="current">
+      <div class="mp-mode-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v10a1 1 0 001 1h14a1 1 0 001-1V9"/><path d="M3 9h18"/><path d="M9 20v-6h6v6"/></svg></div>
+      <h3>مسار التاجر الحالي</h3>
+      <p>عندك متجر؟ تقييم جاهزية /100 + مؤشر صحة الأداء، مع توصيات دقيقة.</p>
+    </div>
+  </div>
+
+  <!-- Questionnaire -->
+  <div id="mpForm" class="mp-hidden">
+    <div id="mpQuestions"></div>
+  </div>
+
+  <!-- Loading (Skeleton) -->
+  <div id="mpLoading" class="mp-hidden">
+    <div style="text-align:center;margin-bottom:1.6rem;">
+      <div class="loading-spinner" style="margin:0 auto;"></div>
+      <div style="color:var(--ink-dim);margin-top:.9rem;font-weight:600;">نحلّل إجاباتك ونبني خطتك المخصّصة...</div>
+    </div>
+    <div class="skel-wrap" aria-hidden="true">
+      <div class="skel-card">
+        <div class="skel-row" style="margin-bottom:1.2rem;">
+          <div class="skel skel-circle" style="width:54px;height:54px;flex:none;"></div>
+          <div style="flex:1;">
+            <div class="skel skel-line md"></div>
+            <div class="skel skel-line sm" style="margin-bottom:0;"></div>
+          </div>
+        </div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line md" style="margin-bottom:0;"></div>
+      </div>
+      <div class="skel-card">
+        <div class="skel skel-line sm" style="margin-bottom:1.2rem;"></div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line md" style="margin-bottom:0;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="mp-result" id="mpResult"></div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
+      </a>
+      <p>أدوات التاجر — منتج من <strong>خبراء المنصات</strong>، فريق سعودي متخصص في تأسيس المتاجر الإلكترونية على سلة وربطها بالأدوات التقنية والتسويقية.</p>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="../index.html">الرئيسية</a>
+      <a href="tools.html">الأدوات</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
+    <div class="footer-accent-line">salatips.com</div>
+  </div>
+</footer>
+
+<script src="../assets/api.js?v=30"></script>
+<script src="../assets/main.js?v=mp6"></script>
+<script>
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const _svg = (p, c='currentColor') => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ICON = {
+  sub:    _svg('<path d="M9 10l-5 5 5 5"/><path d="M20 4v7a4 4 0 01-4 4H4"/>'),
+  info:   _svg('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', '#3b82f6'),
+  phone:  _svg('<path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/>'),
+  check:  _svg('<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/>', '#22c55e'),
+  warn:   _svg('<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/>', '#ef4444'),
+  route:  _svg('<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 000-7h-11a3.5 3.5 0 010-7H15"/><circle cx="18" cy="5" r="3"/>'),
+  target: _svg('<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>'),
+  chat:   _svg('<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>'),
+  spark:  _svg('<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"/>', '#a855f7'),
+  bulb:   _svg('<path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0012 2z"/>', '#f59e0b'),
+  rocket: _svg('<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>'),
+};
+
+/* بوب «تم استلام طلبك» — يظهر ويختفي تلقائياً */
+function showReceivedPopup(contact) {
+  const old = document.getElementById('mpPop'); if (old) old.remove();
+  const bd = document.createElement('div');
+  bd.className = 'mp-pop-bd'; bd.id = 'mpPop';
+  bd.innerHTML = `<div class="mp-pop">
+    <div class="mp-pop-ic">${ICON.check}</div>
+    <h3>تم استلام طلبك بنجاح</h3>
+    <p>فريق خبراء المنصات يراجع تفاصيل متجرك الآن، وبيتواصل معك قريباً${contact ? ` على ${esc(contact)}` : ''}.<br>خطتك المخصّصة ظاهرة بالأسفل.</p>
+    <div class="mp-pop-bar"><i></i></div>
+  </div>`;
+  document.body.appendChild(bd);
+  requestAnimationFrame(() => bd.classList.add('show'));
+  const close = () => { bd.classList.remove('show'); setTimeout(() => bd.remove(), 350); };
+  bd.addEventListener('click', e => { if (e.target === bd) close(); });
+  setTimeout(close, 4200);
+}
+
+/* ── مسار التاجر الحالي: 25 سؤال (100 نقطة) + 5 أداء (مؤشر منفصل) ── */
+const CURRENT_Q = [
+  { g:'النشاط والمنتجات', lbl:'تخصص النشاط', t:'نشاط المتجر', max:20, o:[['نشاط واحد متخصص',20],['عدة أنشطة مقاربة',10],['أنشطة عامة',0,'audit']] },
+  { g:'النشاط والمنتجات', lbl:'عرض المنتجات', t:'منتجات المتجر معروضة', max:10, o:[['ظاهرة بالكامل',10],['جزء معروض',5,'products_content'],['غير موجودة',0,'products_content']] },
+
+  { g:'واجهة المتجر والثقة', lbl:'الهوية', t:'الهوية البصرية', max:5, o:[['مناسبة',5],['تحتاج تحسين',2,'design_ux'],['لا توجد',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'الشعار', t:'الشعار', max:2, o:[['يوجد',2],['يحتاج تحسين',1,'design_ux'],['لا يوجد',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'الشريط الإعلاني', t:'الشريط الإعلاني', max:2, o:[['ممتاز',2],['يحتاج تحسين',1,'design_ux'],['لا يوجد',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'التصنيفات', t:'التصنيفات', max:2, o:[['جيدة',2],['تحتاج تحسين',1,'design_ux'],['لا توجد',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'البنرات', t:'البنرات', max:3, o:[['ممتازة',3],['تحتاج تحسين',1,'design_ux'],['لا توجد',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'الأكثر مبيعًا', t:'المنتجات الأكثر مبيعًا', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'design_ux'],['غير موجودة',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'منتجات جديدة', t:'قسم المنتجات الجديدة', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'products_content'],['غير موجودة',0,'products_content']] },
+  { g:'واجهة المتجر والثقة', lbl:'الأقسام', t:'الأقسام', max:2, o:[['جيدة',2],['تحتاج تحسين',1,'design_ux'],['غير موجودة',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'مميزات المتجر', t:'مميزات المتجر', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'design_ux'],['غير موجودة',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'آراء العملاء', t:'آراء العملاء', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'customer_service'],['غير موجودة',0,'customer_service']] },
+  { g:'واجهة المتجر والثقة', lbl:'قصة المتجر', t:'قصة المتجر', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'design_ux'],['غير موجودة',0,'design_ux']] },
+  { g:'واجهة المتجر والثقة', lbl:'الصفحات القانونية', t:'الصفحات القانونية', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'legal'],['غير موجودة',0,'legal']] },
+  { g:'واجهة المتجر والثقة', lbl:'التواصل الاجتماعي', t:'حسابات التواصل الاجتماعي', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'marketing_social'],['غير موجودة',0,'marketing_social']] },
+  { g:'واجهة المتجر والثقة', lbl:'المدفوعات', t:'تفعيل وسائل الدفع', max:5, o:[['مفعّل بالكامل',5],['جزئي',2,'payment'],['غير مفعّل',0,'payment']] },
+  { g:'واجهة المتجر والثقة', lbl:'الشحن', t:'تفعيل الشحن', max:5, o:[['مفعّل بالكامل',5],['جزئي',2,'shipping'],['غير مفعّل',0,'shipping']] },
+  { g:'واجهة المتجر والثقة', lbl:'التواصل السريع', t:'التواصل السريع (واتساب)', max:2, o:[['موجود',2],['يحتاج تحسين',1,'customer_service'],['غير موجود',0,'customer_service']] },
+  { g:'واجهة المتجر والثقة', lbl:'التوثيق', t:'شهادة التوثيق', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'legal'],['غير موجودة',0,'legal']] },
+  { g:'واجهة المتجر والثقة', lbl:'نبذة المتجر', t:'نبذة عن المتجر', max:2, o:[['موجودة',2],['تحتاج تحسين',1,'design_ux'],['غير موجودة',0,'design_ux']] },
+
+  { g:'صفحة المنتج', lbl:'صور المنتج', t:'صور المنتج', max:8, o:[['احترافية',8],['متوسطة',4,'products_content'],['ضعيفة',0,'products_content']] },
+  { g:'صفحة المنتج', lbl:'وصف المنتج', t:'وصف المنتج', max:8, o:[['شامل',8],['يحتاج تحسين',4,'products_content'],['غير كافٍ',0,'products_content']] },
+  { g:'صفحة المنتج', lbl:'القيمة المتصورة', t:'القيمة المتصوّرة', max:2, o:[['واضحة',2],['تحتاج تحسين',1,'products_content'],['غير واضحة',0,'products_content']] },
+  { g:'صفحة المنتج', lbl:'التسعير', t:'استراتيجية التسعير', max:3, o:[['فعّالة',3],['تحتاج تحسين',1,'audit'],['غير فعّالة',0,'audit']] },
+  { g:'صفحة المنتج', lbl:'خصائص إضافية', t:'الخصائص الإضافية', max:3, o:[['كاملة',3],['جزئية',1,'products_content'],['غير موجودة',0,'products_content']] },
+];
+
+/* مجموعة الأداء (مؤشر صحة منفصل) — كل خيار 0/50/100 */
+const PERF_Q = [
+  { lbl:'المبيعات الشهرية', t:'مستوى المبيعات الشهرية', o:[['منتظمة ونامية',100],['متذبذبة',50,'marketing_social'],['ضعيفة أو متوقفة',0,'marketing_social']] },
+  { lbl:'السلات المتروكة', t:'السلات المتروكة', o:[['طبيعية وأتعامل معها',100],['ما أعرف نسبتها',50,'analytics'],['مرتفعة',0,'customer_service']] },
+  { lbl:'العملاء المتكررون', t:'العملاء المتكررون', o:[['نسبة جيدة ترجع',100],['أحيانًا',50,'customer_service'],['نادر جدًا',0,'customer_service']] },
+  { lbl:'سرعة التجهيز', t:'سرعة تجهيز الطلبات والشحن', o:[['سريعة ومنتظمة',100],['متوسطة',50,'shipping'],['بطيئة أو شكاوى',0,'shipping']] },
+  { lbl:'التسويق', t:'التسويق والإعلانات', o:[['حملات فعّالة ومستمرة',100],['محاولات بسيطة',50,'marketing_social'],['لا يوجد تسويق',0,'marketing_social']] },
+];
+
+/* ── مسار المبتدئ: أسئلة متفرّعة ── */
+const BEGINNER_Q = [
+  { id:'goal', t:'إيش هدفك من المتجر؟', o:[['دخل إضافي جنب وظيفتي'],['مشروعي الأساسي'],['توسعة نشاط قائم']] },
+  { id:'legal', t:'وضعك النظامي؟', o:[['عندي وثيقة عمل حر / سجل تجاري'],['ما عندي',null,'legal']],
+    sub:{ id:'sub_legal', when:'ما عندي', t:'بتبيع كفرد من البيت ولا نشاط بحجم أكبر؟', o:[['فرد من البيت (عمل حر)','legal'],['نشاط أكبر (سجل تجاري)','legal']] } },
+  { id:'bank', t:'الحساب البنكي؟', o:[['حساب تجاري'],['شخصي فقط'],['لا يوجد',null,'legal']],
+    tip:{ id:'tip_bank', when:'شخصي فقط', text:'مناسب للبداية، لكن تحتاج حساب تجاري عند التوسّع لفصل أموالك وزيادة المصداقية.' } },
+  { id:'maroof', t:'معروف (منصة الأعمال)؟', o:[['مسجّل'],['لا',null,'legal'],['ما أعرف وش هي',null,'legal']] },
+  { id:'activity', t:'نشاطك التجاري؟', o:[['عندي نشاط محدد'],['فكرة عامة',null,'audit'],['لسه أبحث',null,'audit']],
+    subInput:{ id:'sub_activity_in', when:'عندي نشاط محدد', label:'وش نشاطك ومنتجاتك؟', placeholder:'اكتب نشاطك ومنتجاتك...' },
+    sub:{ id:'sub_activity_field', when:'لسه أبحث', t:'أي مجال يميل له ميولك؟', o:[['أزياء'],['تجميل'],['أجهزة'],['أطعمة'],['هدايا']] } },
+  { id:'supply', t:'مصدر المنتجات؟', o:[['عندي مورّد'],['محتاج موردين',null,'products_content'],['صناعة يدوية / خاصة'],['دروب شيبنق',null,'new_store']],
+    subInputs:[{ id:'sub_supply_type', when:'محتاج موردين', label:'نوع المنتجات اللي تبي موردين لها', placeholder:'مثال: مستحضرات تجميل، إلكترونيات...' }],
+    subs:[
+      { id:'sub_supply_origin', when:'دروب شيبنق', t:'محلي ولا خارجي؟', o:[['محلي'],['خارجي (الصين مثلًا)','new_store']] },
+      { id:'sub_handmade', when:'صناعة يدوية / خاصة', t:'منتجاتك تحتاج تصوير احترافي؟', o:[['عندي صور احترافية'],['أحتاج تصوير','products_content']] },
+    ] },
+  { id:'ready', t:'جاهزية المنتجات (صور/أسعار/كميات)؟', o:[['جاهزة بالكامل'],['جزئيًا',null,'products_content'],['لا شيء بعد',null,'products_content']] },
+  { id:'capital', t:'رأس المال؟', o:[['أقل من 5 آلاف'],['5–20 ألف'],['20–50 ألف'],['أكثر من 50']] },
+  { id:'exp', t:'خبرتك بالبيع؟', o:[['أول مرة',null,'audit'],['بيع بسيط (سناب/انستقرام)'],['خبرة فعلية']] },
+  { id:'platform', t:'المنصة؟', o:[['عندي متجر سلة'],['منصة ثانية'],['لا يوجد',null,'new_store']],
+    sub:{ id:'sub_platform_move', when:'منصة ثانية', t:'تفكّر تنقل متجرك لسلة؟', o:[['نعم أبي أنقل','new_store'],['لا، أبي أطوّر الحالي']] } },
+  { id:'market', t:'الجمهور والتسويق؟', o:[['عارف جمهوري وعندي قناة تسويق'],['فكرة مبدئية',null,'marketing_social'],['لا أبدًا',null,'marketing_social']],
+    sub:{ id:'sub_ads', when:'عارف جمهوري وعندي قناة تسويق', t:'عندك خبرة بالإعلانات المموّلة؟', o:[['نعم أدير إعلاناتي'],['أحتاج مساعدة','marketing_social']] } },
+];
+
+let mode = null, steps = [], idx = 0;
+const answers = { c:{}, p:{}, b:{}, sub:{}, inp:{} };
+
+/* ── Wizard ── */
+function selectMode(m) {
+  mode = m;
+  answers.c = {}; answers.p = {}; answers.b = {}; answers.sub = {}; answers.inp = {}; answers.other = {};
+  document.querySelectorAll('.mp-mode').forEach(el => el.classList.toggle('active', el.dataset.mode === m));
+  document.getElementById('mpResult').classList.remove('show');
+  document.getElementById('mpModes').classList.add('mp-hidden');
+  document.getElementById('mpForm').classList.remove('mp-hidden');
+  buildSteps(); idx = 0; renderStep();
+  document.getElementById('mpForm').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// يبني قائمة الخطوات؛ للمبتدئ تتفرّع حسب الإجابات
+function buildSteps() {
+  steps = [];
+  if (mode === 'current') {
+    CURRENT_Q.forEach((q, i) => steps.push({ k:'c', i, q }));
+    PERF_Q.forEach((q, i) => steps.push({ k:'p', i, q }));
+  } else {
+    BEGINNER_Q.forEach((q, i) => {
+      steps.push({ k:'b', i, q });
+      const a = answers.b[i];
+      if (a != null && a !== 'other') {
+        const sel = q.o[a][0];
+        const inputs = [...(q.subInput?[q.subInput]:[]), ...(q.subInputs||[])];
+        const tips   = [...(q.tip?[q.tip]:[]),           ...(q.tips||[])];
+        const subs   = [...(q.sub?[q.sub]:[]),           ...(q.subs||[])];
+        inputs.filter(x => x.when === sel).forEach(inp => steps.push({ k:'binput', i, q, inp }));
+        tips.filter(x => x.when === sel).forEach(tip => steps.push({ k:'btip', i, q, tip }));
+        subs.filter(x => x.when === sel).forEach(sub => steps.push({ k:'bsub', i, q, sub }));
+      }
+    });
+  }
+  steps.push({ k:'contact' }); // خطوة أخيرة: رقم تواصل (اختياري) ليصل الطلب للفريق
+}
+
+// مفتاح تخزين نص "أخرى" لكل خطوة
+function otherKey(s) {
+  return s.k === 'c' ? 'c' + s.i : s.k === 'p' ? 'p' + s.i : s.k === 'b' ? 'b' + s.i
+    : s.k === 'bsub' ? 'sub_' + s.sub.id : null;
+}
+const _otherOk = (s) => ((answers.other[otherKey(s)] || '').trim().length > 0);
+
+function isAnswered(s) {
+  if (s.k === 'c') return answers.c[s.i] != null && (answers.c[s.i] !== 'other' || _otherOk(s));
+  if (s.k === 'p') return answers.p[s.i] != null && (answers.p[s.i] !== 'other' || _otherOk(s));
+  if (s.k === 'b') return answers.b[s.i] != null && (answers.b[s.i] !== 'other' || _otherOk(s));
+  if (s.k === 'bsub') return answers.sub[s.sub.id] != null && (answers.sub[s.sub.id] !== 'other' || _otherOk(s));
+  return true; // input / tip اختياري
+}
+
+function wopt(oi, label, selected) {
+  return `<label class="mp-opt${selected?' sel':''}" data-oi="${oi}"><span class="mp-radio"></span><span>${esc(label)}</span></label>`;
+}
+// خيار "أخرى" + حقل كتابة عند اختياره
+function otherBlock(s, isSel) {
+  const k = otherKey(s);
+  return wopt('other', 'أخرى — اكتب إجابتك', isSel) +
+    (isSel ? `<input type="text" class="input" id="mpOther" placeholder="اكتب إجابتك هنا..." value="${esc(answers.other[k]||'')}" style="margin-top:.5rem;">` : '');
+}
+
+function renderStep() {
+  const s = steps[idx];
+  const total = steps.length;
+  const pct = Math.round(((idx+1)/total)*100);
+  const last = idx === total - 1;
+  const grp = s.k === 'c' ? s.q.g : s.k === 'p' ? 'الأداء والتشغيل' : 'مسار التأسيس';
+  let num = '';
+  if (s.k === 'c') num = s.i + 1;
+  else if (s.k === 'p') num = CURRENT_Q.length + s.i + 1;
+  else if (s.k === 'b') num = s.i + 1;
+
+  let body = '';
+  if (s.k === 'c' || s.k === 'p') {
+    const pts = s.k === 'c';
+    const cur = (pts ? answers.c : answers.p)[s.i];
+    body = `<div class="mp-q-title"><span class="mp-q-num">${num}.</span> ${esc(s.q.t)} ${pts?`<span style="color:var(--ink-dim);font-weight:400;font-size:.85rem;">(${s.q.max} نقطة)</span>`:''}</div>
+      <div class="mp-opts">${s.q.o.map((o,oi)=>wopt(oi, pts? `${o[0]} — ${o[1]}` : o[0], cur===oi)).join('')}${otherBlock(s, cur==='other')}</div>`;
+  } else if (s.k === 'b') {
+    body = `<div class="mp-q-title"><span class="mp-q-num">${num}.</span> ${esc(s.q.t)}</div>
+      <div class="mp-opts">${s.q.o.map((o,oi)=>wopt(oi, o[0], answers.b[s.i]===oi)).join('')}${otherBlock(s, answers.b[s.i]==='other')}</div>`;
+  } else if (s.k === 'bsub') {
+    body = `<div class="mp-q-title">${ICON.sub} ${esc(s.sub.t)}</div>
+      <div class="mp-opts">${s.sub.o.map((o,oi)=>wopt(oi, o[0], answers.sub[s.sub.id]===oi)).join('')}${otherBlock(s, answers.sub[s.sub.id]==='other')}</div>`;
+  } else if (s.k === 'binput') {
+    body = `<div class="mp-q-title">${ICON.sub} ${esc(s.inp.label || s.q.t)}</div>
+      <input type="text" class="input" id="mpInput" placeholder="${esc(s.inp.placeholder)}" value="${esc(answers.inp[s.inp.id]||'')}">`;
+  } else if (s.k === 'btip') {
+    body = `<div class="mp-q-title">${ICON.info} معلومة مهمة</div><div style="font-size:1rem;line-height:1.9;color:var(--ink);">${esc(s.tip.text)}</div>`;
+  } else if (s.k === 'contact') {
+    body = `<div class="mp-q-title">${ICON.phone} رقم تواصل (اختياري)</div>
+      <p style="color:var(--ink-dim);font-size:.88rem;margin:0 0 .8rem;line-height:1.7;">اترك رقم جوالك ليتواصل معك فريقنا بخطة مخصّصة — أو تجاوز هذه الخطوة.</p>
+      <input type="tel" class="input" id="mpInput" placeholder="05xxxxxxxx" value="${esc(answers.contact||'')}">`;
+  }
+
+  document.getElementById('mpQuestions').innerHTML = `
+    <div class="mp-progress"><div class="mp-progress-bar" style="width:${pct}%"></div></div>
+    <div class="mp-progress-txt">${esc(grp)} · خطوة ${idx+1} من ${total}</div>
+    <div class="mp-q mp-step-card">${body}</div>
+    <div class="mp-nav">
+      ${idx>0?`<button class="btn btn-secondary" id="mpBack">→ السابق</button>`:'<span></span>'}
+      <button class="btn btn-primary" id="mpNext">${last?'احسب النتيجة والتوصيات':'التالي ←'}</button>
+    </div>`;
+
+  document.querySelectorAll('#mpQuestions .mp-opt').forEach(opt =>
+    opt.addEventListener('click', () => pickOption(s, opt)));
+  const inp = document.getElementById('mpInput');
+  if (inp) inp.addEventListener('input', () => {
+    if (s.k === 'contact') answers.contact = inp.value;
+    else answers.inp[s.inp.id] = inp.value;
+  });
+  const other = document.getElementById('mpOther');
+  if (other) {
+    other.addEventListener('input', () => { answers.other[otherKey(s)] = other.value; });
+    other.focus();
+  }
+  document.getElementById('mpNext').addEventListener('click', () => goNext(s));
+  const back = document.getElementById('mpBack');
+  if (back) back.addEventListener('click', () => { if (idx>0){ idx--; renderStep(); } });
+}
+
+function pickOption(s, optEl) {
+  const raw = optEl.dataset.oi;
+  const oi = raw === 'other' ? 'other' : +raw;
+  if (s.k === 'c') answers.c[s.i] = oi;
+  else if (s.k === 'p') answers.p[s.i] = oi;
+  else if (s.k === 'b') { answers.b[s.i] = oi; buildSteps(); }
+  else if (s.k === 'bsub') answers.sub[s.sub.id] = oi;
+  optEl.parentElement.querySelectorAll('.mp-opt').forEach(o => o.classList.remove('sel'));
+  optEl.classList.add('sel');
+  // خيار "أخرى": أظهر حقل الكتابة ولا تتقدّم تلقائياً
+  if (oi === 'other') { renderStep(); return; }
+  // تقدّم تلقائي: يخلص الاختيار يظهر اللي بعده
+  setTimeout(() => goNext(s), 280);
+}
+
+function goNext(s) {
+  if (!isAnswered(s)) { showError('اختر إجابة', 'من فضلك اختر إجابة للمتابعة'); return; }
+  if (idx >= steps.length - 1) { submit(); return; }
+  idx++; renderStep();
+}
+
+/* ── Submit ── */
+async function submit() {
+  if (!auth.isLoggedIn()) {
+    showModal({ type:'warning', title:'يجب تسجيل الدخول', message:'سجّل دخولك لاستخدام هذه الأداة.', actions:[
+      { label:'إلغاء', style:'secondary', close:true },
+      { label:'تسجيل الدخول', style:'primary', onClick:()=>window.location.href='login.html' },
+    ]});
+    return;
+  }
+  let payload;
+  try { payload = mode === 'current' ? collectCurrent() : collectBeginner(); }
+  catch (e) { showError('أكمل الأسئلة', e.message); return; }
+
+  document.getElementById('mpForm').classList.add('mp-hidden');
+  document.getElementById('mpLoading').classList.remove('mp-hidden');
+  try {
+    const res = await api.merchantPath(payload);
+    renderResult(res);
+  } catch (err) {
+    document.getElementById('mpForm').classList.remove('mp-hidden');
+    showToolError ? showToolError(err, 'merchant-path') : showError('خطأ', err.message);
+  } finally {
+    document.getElementById('mpLoading').classList.add('mp-hidden');
+  }
+}
+
+function collectCurrent() {
+  const gaps = new Set(), weaknesses = [], strengths = [], details = [];
+  let score = 0;
+  CURRENT_Q.forEach((q, i) => {
+    const oi = answers.c[i];
+    if (oi == null) throw new Error('في أسئلة لسه ما جاوبتها');
+    if (oi === 'other') {
+      const t = (answers.other['c' + i] || '').trim();
+      details.push({ q: q.t, a: `أخرى: ${t}` });
+      weaknesses.push(q.lbl); // إجابة مخصّصة — تحتاج مراجعة الفريق (0 نقطة)
+      return;
+    }
+    const o = q.o[oi];
+    details.push({ q: q.t, a: `${o[0]} (${o[1]}/${q.max})` });
+    score += o[1];
+    if (o[1] < q.max) { weaknesses.push(q.lbl); if (o[2]) gaps.add(o[2]); }
+    else strengths.push(q.lbl);
+  });
+  let perfSum = 0, perfCount = 0;
+  PERF_Q.forEach((q, i) => {
+    const oi = answers.p[i];
+    if (oi == null) throw new Error('أكمل أسئلة الأداء');
+    if (oi === 'other') {
+      const t = (answers.other['p' + i] || '').trim();
+      details.push({ q: q.t, a: `أخرى: ${t}` });
+      weaknesses.push(q.lbl); perfCount++;
+      return;
+    }
+    const o = q.o[oi];
+    details.push({ q: q.t, a: o[0] });
+    perfSum += o[1]; perfCount++;
+    if (o[1] < 100) { weaknesses.push(q.lbl); if (o[2]) gaps.add(o[2]); }
+  });
+  return {
+    mode:'current', readinessScore: score,
+    performanceHealth: perfCount ? Math.round(perfSum/perfCount) : null,
+    gapKeys:[...gaps], strengths: strengths.slice(0,8), weaknesses: weaknesses.slice(0,10),
+    details, contact: (answers.contact||'').trim(),
+  };
+}
+
+function collectBeginner() {
+  const gaps = new Set(), weaknesses = [], details = [];
+  BEGINNER_Q.forEach((q, i) => {
+    const oi = answers.b[i];
+    if (oi == null) throw new Error('في أسئلة لسه ما جاوبتها');
+    if (oi === 'other') {
+      const t = (answers.other['b' + i] || '').trim();
+      details.push({ q: q.t, a: `أخرى: ${t}` });
+      return;
+    }
+    const o = q.o[oi];
+    details.push({ q: q.t, a: o[0] });
+    if (o[2]) { gaps.add(o[2]); weaknesses.push(o[0]); }
+    const inputs = [...(q.subInput?[q.subInput]:[]), ...(q.subInputs||[])];
+    const subs   = [...(q.sub?[q.sub]:[]),           ...(q.subs||[])];
+    inputs.filter(x => x.when === o[0]).forEach(inp => {
+      const txt = (answers.inp[inp.id]||'').trim();
+      if (txt) details.push({ q: (inp.label || q.t) + ' — تفاصيل', a: txt });
+    });
+    subs.filter(x => x.when === o[0]).forEach(sub => {
+      const si = answers.sub[sub.id];
+      if (si === 'other') { details.push({ q: sub.t, a: `أخرى: ${(answers.other['sub_'+sub.id]||'').trim()}` }); }
+      else if (si != null) { const so = sub.o[si]; details.push({ q: sub.t, a: so[0] }); if (so[1]) gaps.add(so[1]); }
+    });
+  });
+  return { mode:'beginner', gapKeys:[...gaps], weaknesses: weaknesses.slice(0,10), strengths:[], details, contact: (answers.contact||'').trim() };
+}
+
+/* ── Result rendering ── */
+function renderResult(r) {
+  const barColor = v => v >= 80 ? '#22c55e' : v >= 55 ? '#f59e0b' : '#ef4444';
+  const contact = (answers.contact || '').trim();
+  let html = '';
+
+  // ── بوب «تم استلام طلبك» يظهر ويختفي تلقائياً ──
+  showReceivedPopup(contact);
+
+  // ── ملخص سريع لنتيجتك (قيمة فورية للتاجر) ──
+  html += `<div class="mp-section-label">نتيجة تحليلك</div>`;
+
+  if (r.mode === 'current' && r.readinessScore != null) {
+    html += `<div class="mp-scores">
+      <div class="mp-score-card">
+        <div class="mp-score-num" style="color:${barColor(r.readinessScore)}">${r.readinessScore}<span style="font-size:1rem;color:var(--ink-dim)">/100</span></div>
+        <div class="mp-score-lbl">جاهزية المتجر — ${esc(r.readinessLabel||'')}</div>
+        <div class="mp-bar"><div class="mp-bar-fill" style="width:${r.readinessScore}%;background:${barColor(r.readinessScore)}"></div></div>
+      </div>
+      ${r.performanceHealth!=null?`<div class="mp-score-card">
+        <div class="mp-score-num" style="color:${barColor(r.performanceHealth)}">${r.performanceHealth}<span style="font-size:1rem;color:var(--ink-dim)">%</span></div>
+        <div class="mp-score-lbl">صحة الأداء (مبيعات وتشغيل)</div>
+        <div class="mp-bar"><div class="mp-bar-fill" style="width:${r.performanceHealth}%;background:${barColor(r.performanceHealth)}"></div></div>
+      </div>`:''}
+    </div>`;
+  }
+
+  // تحليل ذكي مخصّص بالـ AI
+  if (r.aiPlan && r.aiPlan.summary) {
+    html += `<div class="mp-block mp-ai"><h3>${ICON.spark} تحليل مخصّص لك</h3>
+      <p style="margin:0;line-height:1.95;font-size:.95rem;">${esc(r.aiPlan.summary)}</p></div>`;
+  }
+
+  if (r.strengths && r.strengths.length) {
+    html += `<div class="mp-block"><h3 style="color:#22c55e;">${ICON.check} نقاط القوة</h3>
+      <ul class="mp-list">${r.strengths.map(s=>`<li>${ICON.check} ${esc(s)}</li>`).join('')}</ul></div>`;
+  }
+  if (r.weaknesses && r.weaknesses.length) {
+    html += `<div class="mp-block"><h3 style="color:#ef4444;">${ICON.warn} نقاط تحتاج عمل</h3>
+      <ul class="mp-list">${r.weaknesses.map(s=>`<li>${ICON.warn} ${esc(s)}</li>`).join('')}</ul></div>`;
+  }
+  // الخطة الذكية (AI)
+  const planSteps = (r.aiPlan && Array.isArray(r.aiPlan.steps) && r.aiPlan.steps.length)
+    ? r.aiPlan.steps.map((s, i) => ({ step: i+1, title: s.title, desc: s.desc, impact: s.impact, phase: s.phase }))
+    : (r.plan || []).map((p,i)=>({ step:i+1, title:p.title, desc:p.desc }));
+  if (planSteps.length) {
+    html += `<div class="mp-block"><h3>${ICON.route} خطتك الشاملة${r.aiPlan && r.aiPlan.steps && r.aiPlan.steps.length ? ' <span style="font-size:.72rem;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:.15rem .5rem;border-radius:99px;">ذكية · من الألف للياء</span>' : ''}</h3>
+      ${planSteps.map(p=>`${p.phase?`<div class="mp-phase">${esc(p.phase)}</div>`:''}<div class="mp-step"><div class="mp-step-n">${p.step}</div>
+        <div><div class="mp-step-t">${esc(p.title)}</div><div class="mp-step-d">${esc(p.desc)}</div>
+        ${p.impact?`<div class="mp-step-impact">${ICON.spark} ${esc(p.impact)}</div>`:''}</div></div>`).join('')}</div>`;
+  }
+  if (r.aiPlan && Array.isArray(r.aiPlan.tips) && r.aiPlan.tips.length) {
+    html += `<div class="mp-block"><h3 style="color:#f59e0b;">${ICON.bulb} نصائح سريعة</h3>
+      <ul class="mp-list">${r.aiPlan.tips.map(t=>`<li>${ICON.bulb} ${esc(t)}</li>`).join('')}</ul></div>`;
+  }
+
+  html += `<div class="mp-actions"><button class="btn btn-secondary" onclick="location.reload()">ابدأ من جديد</button></div>`;
+
+  const el = document.getElementById('mpResult');
+  el.innerHTML = html;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior:'smooth', block:'start' });
+
+  // تغذية المساعد الذكي بالنتيجة (للأدمن والشات — مخفي عن واجهة الأداة)
+  window._tjStoreContext = {
+    storeName: r.mode === 'current' ? 'متجري (من مسار التاجر)' : 'مشروع جديد (مسار المبتدئ)',
+    score: r.readinessScore ?? null,
+    problems: [...(r.weaknesses||[]), ...((r.gaps||[]).map(g=>g.label))].slice(0,8),
+    services: (r.recommendedServices||[]).map(s=>({ name:s.name, price:s.salePrice>0?s.salePrice:s.price, currency:s.currency, url:s.url, reasons:s.reasons })),
+  };
+}
+
+document.querySelectorAll('.mp-mode').forEach(el => el.addEventListener('click', () => selectMode(el.dataset.mode)));
+</script>
+
+<script src="../assets/header.js?v=16"></script>
+</body>
+</html>

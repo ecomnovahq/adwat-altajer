@@ -1,0 +1,13 @@
+<svg width="300" height="80" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(8,18)" fill="none" stroke-width="0">
+    <rect x="14" y="2" width="9" height="40" rx="2" fill="#2D2A4A"/>
+    <rect x="30" y="2" width="9" height="40" rx="2" fill="#2D2A4A"/>
+    <rect x="2" y="12" width="49" height="9" rx="2" fill="#2D2A4A"/>
+    <rect x="2" y="26" width="49" height="9" rx="2" fill="#2D2A4A"/>
+    <rect x="22" y="12" width="9" height="9" fill="#E0A93B"/>
+    <rect x="30" y="12" width="9" height="9" fill="#7A4FE0"/>
+    <rect x="22" y="26" width="9" height="9" fill="#2CC6A0"/>
+  </g>
+  <text x="290" y="46" text-anchor="end" direction="rtl"
+    font-family="Tahoma, 'Segoe UI', Arial, sans-serif" font-size="38" font-weight="800" fill="#2D2A4A">هاشتاق <tspan fill="#28C0E0">سيو</tspan></text>
+</svg>

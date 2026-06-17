@@ -1,988 +1,2009 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>محلل المتجر الذكي — أدوات التاجر</title>
-<meta name="description" content="أداة ذكية مجانية لتحليل متجرك الإلكتروني على سلة وزد — احصل على تقرير شامل بنقاط القوة والضعف والتوصيات.">
-<meta property="og:title" content="محلل المتجر الذكي — أدوات التاجر">
-<meta property="og:description" content="حلّل متجرك مجاناً بالذكاء الاصطناعي واحصل على توصيات عملية لرفع المبيعات.">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="ar_SA">
+<meta name="description" content="تقرير تحليل شامل لمتجرك الإلكتروني على سلة وزد — 15 معياراً، سرعة، SEO، تصميم، منافسين، توصيات مالية.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css?v=8">
 
 <style>
-  .analyzer-section {
-    padding: 8rem 2rem 6rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .analyzer-form {
-    background: var(--bg-alt);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-lg);
-    padding: 3rem;
-    margin-bottom: 3rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .analyzer-form::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-3) 100%);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  }
-  .analyzer-form::after {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
-    transform: translate(30%, -30%);
-    pointer-events: none;
-  }
-  @media (max-width: 768px) {
-    .analyzer-form { padding: 2rem 1.5rem; }
-  }
-  .form-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr auto;
-    gap: 1rem;
-    position: relative;
-  }
-  @media (max-width: 768px) {
-    .form-row { grid-template-columns: 1fr; }
+/* ══════════════════════════════════════════════════════════
+   ANALYZER — Design System v2
+══════════════════════════════════════════════════════════ */
+.az-page { padding: 3rem 1.5rem 6rem; max-width: 1100px; margin: 0 auto; }
+
+/* ── Form ── */
+.az-form {
+  background: var(--bg-alt);
+  border: 1px solid var(--line-strong);
+  border-radius: 20px;
+  padding: 2.75rem 2.75rem 2.25rem;
+  position: relative; overflow: hidden; margin-bottom: 1.5rem;
+  box-shadow: 0 8px 40px rgba(168,85,247,.07);
+}
+.az-form::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--gold));
+}
+.az-form-title {
+  font-size:1.5rem; font-weight:900; margin-bottom:.4rem;
+}
+.az-form-sub {
+  color:var(--ink-dim); font-size:.9rem; margin-bottom:2rem; line-height:1.6;
+}
+.az-input-wrap {
+  display:flex; align-items:center;
+  background:var(--bg-card); border:1.5px solid var(--line);
+  border-radius:var(--radius-md); padding:0 1rem;
+  transition:border-color .2s, box-shadow .2s;
+}
+.az-input-wrap:focus-within {
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(168,85,247,.12);
+}
+.az-input-wrap svg { color:var(--ink-dim); flex-shrink:0; }
+.az-input-wrap input {
+  flex:1; background:transparent; border:none; outline:none;
+  padding:.85rem .75rem; font-family:var(--font-arabic); font-size:.95rem;
+  color:var(--ink); min-width:0;
+}
+.az-input-wrap input::placeholder { color:var(--ink-dim); }
+.az-form-row { display:grid; grid-template-columns:2fr 1fr; gap:.75rem; margin-bottom:.75rem; }
+@media(max-width:720px){ .az-form-row { grid-template-columns:1fr; } }
+.az-btn-analyze {
+  width:100%; padding:1rem 2rem; border-radius:var(--radius-md);
+  background:linear-gradient(135deg,var(--accent-2),var(--accent));
+  color:#fff; border:none; cursor:pointer;
+  font-family:var(--font-arabic); font-size:1.05rem; font-weight:800;
+  display:flex; align-items:center; justify-content:center; gap:.6rem;
+  transition:opacity .2s, transform .15s, box-shadow .2s;
+  box-shadow:0 4px 20px rgba(168,85,247,.35);
+}
+.az-btn-analyze:hover { opacity:.92; transform:translateY(-1px); box-shadow:0 6px 28px rgba(168,85,247,.45); }
+.az-btn-analyze:active { transform:translateY(0); }
+.az-btn-analyze:disabled { opacity:.6; transform:none; cursor:not-allowed; }
+
+/* ── Form feature chips ── */
+.az-form-chips { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:1.25rem; }
+.az-form-chip {
+  display:inline-flex; align-items:center; gap:.3rem;
+  background:var(--bg-card); border:1px solid var(--line);
+  border-radius:99px; padding:.25rem .75rem;
+  font-size:.74rem; color:var(--ink-dim);
+}
+.az-form-chip span { color:var(--accent); font-weight:700; }
+
+/* ── Progress Bar ── */
+.az-progress {
+  display:none; background:var(--bg-alt);
+  border:1px solid var(--line-strong); border-radius:20px;
+  padding:2.5rem; margin-bottom:1.5rem;
+  box-shadow:0 8px 40px rgba(168,85,247,.06);
+  position:relative; overflow:hidden;
+}
+.az-progress::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,var(--accent-2),var(--accent),var(--gold));
+}
+.az-progress.visible { display:block; }
+.az-progress-header {
+  display:flex; align-items:center; gap:.75rem;
+  font-size:1rem; font-weight:700; margin-bottom:1.5rem;
+}
+.az-progress-dot {
+  width:10px; height:10px; border-radius:50%;
+  background:var(--accent); animation:pulse .8s infinite; flex-shrink:0;
+}
+.az-pct-badge {
+  margin-right:auto; background:var(--accent-soft); color:var(--accent);
+  border:1px solid var(--line-accent); border-radius:99px;
+  padding:.15rem .75rem; font-size:.82rem; font-weight:800;
+}
+.az-bar-wrap {
+  background:var(--bg-card); border-radius:99px;
+  height:8px; overflow:hidden; margin-bottom:1.5rem;
+}
+.az-bar {
+  height:100%; border-radius:99px; width:0%;
+  background:linear-gradient(90deg,var(--accent-2),var(--accent),var(--gold));
+  transition:width .5s cubic-bezier(.16,1,.3,1);
+}
+.az-steps { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; }
+@media(max-width:600px){ .az-steps { grid-template-columns:1fr; } }
+.az-step-row {
+  display:flex; align-items:center; gap:.6rem;
+  font-size:.82rem; color:var(--ink-dim);
+  background:var(--bg-card); border:1px solid var(--line);
+  border-radius:var(--radius-sm); padding:.5rem .75rem;
+  opacity:.5; transition:all .3s;
+}
+.az-step-row.done  { opacity:1; color:var(--success); border-color:rgba(34,197,94,.2); background:rgba(34,197,94,.04); }
+.az-step-row.active{ opacity:1; color:var(--accent); font-weight:700; border-color:var(--line-accent); background:var(--accent-soft); }
+.az-step-num {
+  width:20px; height:20px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.7rem; font-weight:800;
+  background:var(--bg); border:1.5px solid currentColor;
+}
+.az-step-row.done  .az-step-num { background:var(--success); border-color:var(--success); color:#fff; }
+.az-step-row.active .az-step-num { background:var(--accent); border-color:var(--accent); color:#fff; }
+.az-pct { font-size:.8rem; color:var(--ink-dim); }
+
+/* ── Report ── */
+.az-report { display:none; }
+.az-report.visible { display:block; }
+
+/* ── ملخّص لزِج ── */
+.az-sticky { position: sticky; top: 70px; z-index: 30; display: flex; align-items: center; gap: .8rem;
+  background: var(--bg-card); border: 1px solid var(--line-strong); border-radius: 14px;
+  padding: .6rem .9rem; margin-bottom: 1.2rem; box-shadow: var(--shadow-md); flex-wrap: wrap; }
+.az-sticky-score { font-size: 1.5rem; font-weight: 800; min-width: 56px; text-align: center; line-height: 1; }
+.az-sticky-name { font-weight: 700; font-size: .9rem; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.az-sticky-jumps { display: flex; gap: .35rem; flex-wrap: wrap; }
+.az-sticky-jumps button { background: var(--bg); border: 1px solid var(--line); color: var(--ink-dim); border-radius: 99px; padding: .35rem .75rem; font-size: .78rem; font-weight: 600; cursor: pointer; font-family: var(--font-arabic); transition: all .15s; }
+.az-sticky-jumps button:hover { color: var(--accent); border-color: var(--line-accent); background: var(--accent-soft); }
+.az-sticky-pdf { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border: none; border-radius: 99px; padding: .4rem .9rem; font-size: .78rem; font-weight: 700; cursor: pointer; font-family: var(--font-arabic); display: inline-flex; align-items: center; gap: .3rem; }
+@media (max-width: 600px) { .az-sticky-name { display: none; } .az-sticky { top: 62px; } }
+
+/* ── Section ── */
+.az-section {
+  background: var(--bg-alt); border:1px solid var(--line-strong);
+  border-radius: var(--radius-lg); padding:2rem 2.5rem;
+  margin-bottom:1.5rem; position:relative; overflow:hidden;
+}
+.az-section-accent::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg,var(--accent-2),var(--accent),var(--accent-3));
+}
+.az-section-title {
+  font-size:1.15rem; font-weight:800; margin-bottom:1.5rem;
+  display:flex; align-items:center; gap:.6rem;
+}
+.az-section-title svg { flex-shrink:0; }
+
+/* ── Hero Score ── */
+.az-hero {
+  display:grid; grid-template-columns:auto 1fr; gap:2.5rem; align-items:start;
+}
+@media(max-width:700px){ .az-hero { grid-template-columns:1fr; } }
+.az-score-wrap { position:relative; width:160px; height:160px; flex-shrink:0; }
+@media(max-width:700px){ .az-score-wrap { margin:0 auto; } }
+.az-score-svg { width:100%; height:100%; transform:rotate(-90deg); }
+.az-score-bg { fill:none; stroke:var(--line-strong); stroke-width:9; }
+.az-score-fg { fill:none; stroke-width:9; stroke-linecap:round; transition:stroke-dashoffset 1.6s cubic-bezier(.16,1,.3,1); }
+.az-score-inner {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:.1rem;
+}
+.az-score-num { font-weight:900; font-size:3rem; line-height:1; }
+.az-score-of { font-size:.75rem; color:var(--ink-dim); }
+
+.az-hero-info { display:flex; flex-direction:column; gap:.75rem; }
+.az-store-name { font-size:1.6rem; font-weight:800; line-height:1.2; }
+.az-store-meta { display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; font-size:.85rem; color:var(--ink-dim); }
+.az-store-meta .dot { color:var(--line-strong); }
+.az-grade {
+  display:inline-block; padding:.3rem .9rem;
+  border-radius:99px; font-weight:700; font-size:.85rem;
+}
+.grade-excellent { background:rgba(34,197,94,.15); color:#22c55e; }
+.grade-good      { background:var(--accent-soft); color:var(--accent); }
+.grade-medium    { background:rgba(255,107,53,.15); color:var(--accent-warm); }
+.grade-poor      { background:rgba(239,68,68,.15); color:#ef4444; }
+
+.az-summary { color:var(--ink-dim); font-size:.95rem; line-height:1.8; }
+
+/* Mini score chips */
+.az-mini-row { display:flex; flex-wrap:wrap; gap:.6rem; }
+.az-mini {
+  display:flex; flex-direction:column; align-items:center; gap:.15rem;
+  background:var(--bg-card); border:1px solid var(--line);
+  border-radius:var(--radius-md); padding:.55rem .9rem; min-width:76px;
+}
+.az-mini-val { font-weight:800; font-size:1.3rem; line-height:1; }
+.az-mini-lbl { font-size:.68rem; color:var(--ink-dim); white-space:nowrap; }
+
+/* ── Revenue Banner ── */
+.az-rev-banner {
+  background:rgba(239,68,68,.05); border:1px solid rgba(239,68,68,.2);
+  border-radius:var(--radius-lg); padding:1.5rem 2rem; margin-bottom:1.5rem;
+  display:none; position:relative; overflow:hidden;
+}
+.az-rev-banner::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,#ef4444,#f97316);
+}
+.az-rev-title {
+  display:flex; align-items:center; gap:.5rem;
+  font-weight:700; color:#ef4444; font-size:.95rem; margin-bottom:1rem;
+}
+.az-rev-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+@media(max-width:580px){ .az-rev-grid { grid-template-columns:1fr 1fr; } }
+.az-rev-stat { background:var(--bg-alt); border-radius:var(--radius-md); padding:.9rem 1rem; text-align:center; border:1px solid rgba(239,68,68,.12); }
+.az-rev-val  { font-size:1.4rem; font-weight:800; line-height:1.1; }
+.az-rev-lbl  { font-size:.74rem; color:var(--ink-dim); margin-top:.2rem; }
+
+/* ── Store Identity ── */
+.az-id-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+@media(max-width:600px){ .az-id-grid { grid-template-columns:1fr; } }
+.az-id-card {
+  background:var(--bg-card); border:1px solid var(--line);
+  border-radius:var(--radius-md); padding:1.1rem 1.25rem;
+}
+.az-id-card-title {
+  font-size:.76rem; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--ink-dim); margin-bottom:.6rem; font-weight:600;
+}
+.az-id-val { font-size:.95rem; font-weight:700; }
+.az-id-val-sub { font-size:.82rem; color:var(--ink-dim); margin-top:.15rem; }
+
+/* Payment pills */
+.az-pay-row { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.5rem; }
+.az-pay-pill {
+  display:inline-flex; align-items:center; gap:.3rem;
+  padding:.3rem .75rem; border-radius:99px; font-size:.8rem; font-weight:600;
+}
+.pay-ok  { background:rgba(34,197,94,.1);  color:#22c55e; border:1px solid rgba(34,197,94,.25); }
+.pay-no  { background:rgba(239,68,68,.08); color:#ef4444; border:1px solid rgba(239,68,68,.2); opacity:.8; }
+.pay-miss-note { font-size:.75rem; color:var(--ink-dim); margin-top:.4rem; display:block; }
+
+/* Tech pills */
+.az-tech-row { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.4rem; }
+.az-tech-pill {
+  background:var(--accent-soft); color:var(--accent); border:1px solid var(--line-accent);
+  border-radius:99px; font-size:.75rem; padding:.2rem .65rem; font-weight:600;
+}
+
+/* Social row */
+.az-social-row { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.4rem; }
+.az-social-chip {
+  display:inline-flex; align-items:center; gap:.35rem;
+  background:var(--bg-alt); border:1px solid var(--line);
+  border-radius:var(--radius-sm); padding:.25rem .6rem; font-size:.8rem;
+}
+
+/* ── Criteria Bars ── */
+.az-criteria-list { display:flex; flex-direction:column; gap:.85rem; }
+.az-crit-row { display:grid; grid-template-columns:180px 1fr 44px; gap:1rem; align-items:center; }
+@media(max-width:640px){ .az-crit-row { grid-template-columns:1fr 44px; } }
+.az-crit-name { font-size:.88rem; font-weight:600; }
+@media(max-width:640px){ .az-crit-name { display:none; } }
+.az-crit-bar-wrap { background:var(--bg-card); border-radius:99px; height:8px; overflow:hidden; position:relative; }
+.az-crit-bar { height:100%; border-radius:99px; transition:width 1.4s cubic-bezier(.16,1,.3,1); }
+.az-crit-score { font-weight:800; font-size:.95rem; text-align:start; }
+.az-crit-detail {
+  grid-column: 1 / -1; font-size:.82rem; color:var(--ink-dim);
+  line-height:1.6; padding:.25rem 0 .5rem 0;
+  border-bottom:1px solid var(--line);
+}
+
+/* ── Category Analysis (SEO, UX, Payment, Trust) ── */
+.az-cat-header {
+  display:flex; align-items:start; justify-content:space-between;
+  gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;
+}
+.az-cat-score { font-size:2rem; font-weight:900; line-height:1; }
+.az-cat-score-sub { font-size:.78rem; color:var(--ink-dim); font-weight:400; margin-right:.15rem; }
+.az-cat-grid { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; }
+@media(max-width:580px){ .az-cat-grid { grid-template-columns:1fr; } }
+.az-cat-item {
+  background:var(--bg-card); border-radius:var(--radius-sm);
+  padding:.7rem 1rem; display:flex; align-items:start; gap:.6rem;
+  border:1px solid var(--line);
+}
+.az-cat-item.fail { background:rgba(239,68,68,.04); border-color:rgba(239,68,68,.18); }
+.az-cat-item.pass { background:rgba(34,197,94,.03); border-color:rgba(34,197,94,.14); }
+.az-cat-item.warn { background:rgba(251,146,60,.03); border-color:rgba(251,146,60,.18); }
+.az-cat-item-ic { font-size:.85rem; flex-shrink:0; margin-top:.05rem; display:inline-flex; }
+.az-cat-item-ic svg { width:16px; height:16px; }
+.az-social-chip svg, .az-id-val-sub svg, .az-tag svg { width:13px; height:13px; vertical-align:-2px; }
+.az-cat-item-body { flex:1; min-width:0; }
+.az-cat-item-name { font-size:.84rem; font-weight:700; }
+.az-cat-item-val { font-size:.77rem; color:var(--ink-dim); margin-top:.1rem; }
+.az-cat-item-issue { font-size:.77rem; color:#ef4444; margin-top:.1rem; }
+.az-cat-item-fix { font-size:.74rem; color:var(--accent); margin-top:.2rem; font-weight:600; }
+
+/* ── Lighthouse-style Speed Section ── */
+.az-lh-scores { display:grid; grid-template-columns:repeat(4,1fr); gap:.75rem; margin-bottom:1.75rem; }
+@media(max-width:600px){ .az-lh-scores { grid-template-columns:repeat(2,1fr); } }
+.az-lh-score { display:flex; flex-direction:column; align-items:center; gap:.4rem; background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-md); padding:1.1rem .75rem; }
+.az-lh-ring { position:relative; width:72px; height:72px; }
+.az-lh-ring-svg { width:100%; height:100%; transform:rotate(-90deg); }
+.az-lh-ring-bg { fill:none; stroke:var(--line); stroke-width:7; }
+.az-lh-ring-fg { fill:none; stroke-width:7; stroke-linecap:round; transition:stroke-dashoffset 1.4s cubic-bezier(.16,1,.3,1); }
+.az-lh-ring-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.15rem; }
+.az-lh-score-lbl { font-size:.73rem; color:var(--ink-dim); text-align:center; line-height:1.3; }
+
+.az-cwv-grid { display:grid; grid-template-columns:1fr 1fr; gap:.55rem; margin-bottom:1.25rem; }
+@media(max-width:560px){ .az-cwv-grid { grid-template-columns:1fr; } }
+.az-cwv-item { background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-sm); padding:.75rem 1rem; }
+.az-cwv-top { display:flex; align-items:start; justify-content:space-between; gap:.5rem; margin-bottom:.35rem; }
+.az-cwv-label { font-size:.8rem; font-weight:700; line-height:1.2; }
+.az-cwv-sub { font-size:.68rem; color:var(--ink-dim); margin-top:.1rem; }
+.az-cwv-value { font-size:1.15rem; font-weight:900; line-height:1; white-space:nowrap; }
+.az-cwv-track { background:var(--bg); border-radius:99px; height:4px; overflow:hidden; margin:.3rem 0; }
+.az-cwv-fill { height:100%; border-radius:99px; transition:width 1.2s ease; }
+.az-cwv-rating { font-size:.72rem; font-weight:700; }
+
+.az-perf-tags { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1.25rem; }
+.az-perf-tag { border-radius:99px; padding:.22rem .65rem; font-size:.74rem; font-weight:600; border:1px solid; }
+
+/* Screenshots */
+.az-screens-grid { display:grid; grid-template-columns:2fr 1fr; gap:1rem; }
+@media(max-width:600px){ .az-screens-grid { grid-template-columns:1fr; } }
+.az-screen-frame { border:1px solid var(--line-strong); border-radius:var(--radius-md); overflow:hidden; }
+.az-screen-label {
+  font-size:.78rem; color:var(--ink-dim); padding:.35rem .65rem;
+  background:var(--bg-card); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:.35rem;
+}
+.az-screen-img { width:100%; display:block; }
+
+/* ── Quick Wins ── */
+.az-qw-list { display:flex; flex-direction:column; gap:.6rem; }
+.az-qw-item {
+  display:flex; align-items:start; gap:.75rem;
+  background:rgba(34,197,94,.04); border:1px solid rgba(34,197,94,.15);
+  border-radius:var(--radius-md); padding:.9rem 1.1rem;
+}
+.az-qw-ic { color:#22c55e; flex-shrink:0; margin-top:1px; }
+.az-qw-text { font-size:.9rem; line-height:1.65; }
+
+/* ── Action Cards ── */
+.az-action {
+  border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:1.25rem 1.5rem; margin-bottom:.9rem;
+  transition:border-color .2s;
+}
+.az-action:hover { border-color:var(--line-accent); }
+.az-action-head { display:flex; align-items:start; justify-content:space-between; gap:1rem; margin-bottom:.6rem; }
+.az-action-title { font-weight:700; font-size:1rem; }
+.az-action-desc { font-size:.88rem; color:var(--ink-dim); line-height:1.7; margin-bottom:.65rem; }
+.az-action-tags { display:flex; flex-wrap:wrap; gap:.45rem; }
+.az-tag {
+  display:inline-flex; align-items:center; gap:.25rem;
+  border-radius:99px; padding:.22rem .65rem; font-size:.74rem; font-weight:600;
+}
+.tag-h  { background:rgba(239,68,68,.1);  color:#ef4444; }
+.tag-m  { background:rgba(255,107,53,.1); color:var(--accent-warm); }
+.tag-l  { background:var(--accent-soft);  color:var(--accent); }
+.tag-money { background:rgba(34,197,94,.1); color:#22c55e; }
+.tag-ef { background:var(--bg-card); color:var(--ink-dim); border:1px solid var(--line); }
+
+/* ── Technical Checks ── */
+.az-tech-checks { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+@media(max-width:600px){ .az-tech-checks { grid-template-columns:1fr; } }
+.az-check-row {
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--bg-card); border-radius:var(--radius-sm);
+  padding:.55rem .85rem; font-size:.85rem;
+}
+.az-check-lbl { color:var(--ink-dim); }
+.chk-ok  { color:#22c55e; font-weight:700; font-size:.8rem; }
+.chk-no  { color:#ef4444; font-weight:700; font-size:.8rem; }
+.chk-w   { color:var(--accent-warm); font-weight:700; font-size:.8rem; }
+
+/* ── Competitors ── */
+.az-comp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+@media(max-width:700px){ .az-comp-grid { grid-template-columns:1fr; } }
+.az-svc-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+@media(max-width:700px){ .az-svc-grid { grid-template-columns:1fr; } }
+.az-svc-card {
+  background:var(--bg-card); border:1px solid var(--line);
+  border-radius:var(--radius-md); padding:1.15rem; display:flex; flex-direction:column; gap:.55rem;
+  transition:border-color .2s, transform .2s;
+}
+.az-svc-card:hover { border-color:var(--gold,#d4af37); transform:translateY(-2px); }
+.az-svc-head { display:flex; justify-content:space-between; align-items:flex-start; gap:.5rem; }
+.az-svc-name { font-weight:700; font-size:.96rem; line-height:1.4; }
+.az-svc-price { font-weight:800; font-size:.9rem; color:var(--gold,#d4af37); white-space:nowrap; }
+.az-svc-price .free { color:#22c55e; }
+.az-svc-why { display:flex; gap:.45rem; align-items:flex-start; font-size:.82rem; line-height:1.65;
+  color:var(--ink); background:var(--accent-soft); border:1px solid var(--line-accent);
+  border-radius:10px; padding:.6rem .7rem; }
+.az-svc-why svg { color:var(--accent); flex-shrink:0; margin-top:3px; }
+.az-svc-reasons { display:flex; flex-wrap:wrap; gap:.35rem; }
+.az-svc-reason {
+  font-size:.72rem; background:rgba(212,175,55,.12); color:var(--gold,#d4af37);
+  border:1px solid rgba(212,175,55,.25); border-radius:999px; padding:.2rem .55rem;
+}
+.az-svc-meta { display:flex; align-items:center; gap:.8rem; font-size:.78rem; color:var(--ink-dim); }
+.az-svc-link {
+  margin-top:auto; display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+  background:var(--gold,#d4af37); color:#1a1300; font-weight:700; font-size:.85rem;
+  border-radius:10px; padding:.55rem; text-decoration:none; transition:opacity .2s;
+}
+.az-svc-link:hover { opacity:.88; }
+.az-comp-card {
+  background:var(--bg-card); border:1px solid var(--line);
+  border-radius:var(--radius-md); padding:1.25rem;
+}
+.az-comp-name { font-weight:700; font-size:1rem; margin-bottom:.3rem; }
+.az-comp-url  { font-size:.78rem; color:var(--accent); margin-bottom:.75rem; word-break:break-all; }
+.az-comp-row  { display:flex; gap:.5rem; font-size:.82rem; margin-bottom:.35rem; }
+.az-comp-key  { color:var(--ink-dim); flex-shrink:0; min-width:70px; }
+.az-comp-val  { font-weight:500; }
+
+/* ── CTA ── */
+.az-cta {
+  background:linear-gradient(135deg,var(--bg-alt),var(--bg-card));
+  border:1px solid var(--line-accent); border-radius:var(--radius-lg);
+  padding:3rem; text-align:center; position:relative; overflow:hidden;
+  margin-top:1.5rem;
+}
+.az-cta::before {
+  content:''; position:absolute; top:0; left:50%;
+  width:500px; height:500px;
+  background:radial-gradient(circle,var(--accent-soft),transparent 60%);
+  transform:translate(-50%,-50%); pointer-events:none;
+}
+.az-cta-inner { position:relative; }
+.az-cta h3 { font-size:1.8rem; font-weight:800; margin-bottom:.75rem; }
+.az-cta p  { color:var(--ink-dim); max-width:480px; margin:0 auto 2rem; line-height:1.7; }
+.az-cta-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+
+/* ── Print / PDF ── */
+.az-pdf-btn {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:var(--accent); color:white; border:none; cursor:pointer;
+  padding:.75rem 1.5rem; border-radius:var(--radius-md);
+  font-family:var(--font-arabic); font-size:.95rem; font-weight:700;
+  transition:opacity .2s;
+}
+.az-pdf-btn:hover { opacity:.85; }
+
+/* Print header — shown only when printing */
+#printHeader { display:none; }
+@media print {
+  #printHeader { display:block!important; }
+}
+
+@media print {
+  /* ── Reset CSS variables to light mode (Dark theme makes text invisible on paper) ── */
+  :root, [data-theme="dark"], [data-theme="light"] {
+    --ink: #111111 !important;
+    --ink-dim: #555555 !important;
+    --ink-faint: #888888 !important;
+    --bg: #ffffff !important;
+    --bg-alt: #f8f8f8 !important;
+    --bg-card: #f3f3f3 !important;
+    --line: #dddddd !important;
+    --line-strong: #cccccc !important;
+    --line-accent: #c4b5fd !important;
+    --accent: #6366f1 !important;
+    --accent-soft: #ede9fe !important;
+    --accent-warm: #f97316 !important;
+    --accent-2: #8b5cf6 !important;
+    --accent-3: #ec4899 !important;
+    --success: #22c55e !important;
+    --danger: #ef4444 !important;
+    --radius-md: 6pt !important;
+    --radius-lg: 8pt !important;
+    --radius-sm: 4pt !important;
+    --radius-full: 99pt !important;
   }
 
-  /* Scraped data section */
-  .scraped-section {
-    background: var(--bg-alt);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-lg);
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-  }
-  .scraped-section h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; }
-  .scraped-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .8rem;
-    margin-bottom: 1.5rem;
-    align-items: center;
-  }
-  .scraped-badge {
-    display: flex;
-    align-items: center;
-    gap: .35rem;
-    padding: .3rem .8rem;
-    border-radius: var(--radius-full);
-    font-size: .82rem;
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-  }
-  .scraped-badge .ok { color: #22c55e; }
-  .scraped-badge .no { color: #ef4444; }
-  .platform-badge {
-    padding: .4rem 1.2rem;
-    border-radius: var(--radius-full);
-    font-weight: 700;
-    font-size: 1rem;
-  }
-  .scraped-cols {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-  @media (max-width: 768px) {
-    .scraped-cols { grid-template-columns: 1fr; }
-  }
-  .scraped-col-title {
-    font-weight: 600;
-    margin-bottom: .8rem;
-    font-size: .95rem;
-  }
-  .scraped-item {
-    display: flex;
-    align-items: center;
-    gap: .4rem;
-    padding: .25rem 0;
-    font-size: .85rem;
-  }
-  .scraped-meta-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .6rem;
-    margin-bottom: 1.5rem;
-  }
-  .meta-chip {
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-sm);
-    padding: .35rem .75rem;
-    font-size: .8rem;
-  }
-  
-  /* Screenshots */
-  .screenshots-section {
-    background: var(--bg-alt);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-lg);
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-  }
-  .screenshots-header {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-  }
-  .screenshots-header h3 { font-size: 1.4rem; font-weight: 700; margin: 0; }
-  .vision-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: .75rem;
-    font-weight: 700;
-    padding: .25rem .7rem;
-    border-radius: 99px;
-    border: 1px solid var(--line-accent);
-  }
-  .screenshots-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 1.25rem;
-  }
-  @media (max-width: 600px) {
-    .screenshots-grid { grid-template-columns: 1fr; }
-  }
-  .screenshot-frame {
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-  }
-  .screenshot-label {
-    display: flex;
-    align-items: center;
-    gap: .4rem;
-    font-size: .8rem;
-    color: var(--ink-dim);
-    padding: .45rem .75rem;
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--line);
-  }
-  .screenshot-img {
-    width: 100%;
-    display: block;
-    background: var(--bg-alt);
-  }
+  /* Hide UI chrome */
+  nav,.main-nav,footer,.az-form,#analyzeBtn,.usage-counter,
+  .az-progress,.theme-toggle,.mobile-menu-btn,.page-header,
+  .az-pdf-btn,.az-cta-btns { display:none!important; }
 
-  /* Results */
-  .results {
-    display: none;
-    margin-top: 3rem;
+  /* Show full report */
+  html,body { background:white!important; color:#111!important; margin:0; padding:0; }
+  .az-page { padding:0!important; max-width:none!important; margin:0!important; }
+  .az-report { display:block!important; }
+
+  /* Force all sections visible — even hidden ones */
+  .az-section,
+  #secHero,#secIdentity,#secCriteria,
+  #secSeo,#secUx,#secPayment,#secTrust,
+  #secSpeed,#secQuickWins,#secActions,#secTech,#secComp,
+  #azRevBanner { display:block!important; }
+
+  /* Section styling */
+  .az-section {
+    break-inside:avoid; page-break-inside:avoid;
+    border:1px solid #ddd!important; background:white!important;
+    margin-bottom:12pt!important; padding:12pt!important;
+    box-shadow:none!important; border-radius:4pt!important;
   }
-  .results.visible {
-    display: block;
-    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  
-  /* Score circle */
-  .score-section {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 3rem;
-    align-items: center;
-    padding: 3rem;
-    background: var(--bg-alt);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-lg);
-    margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .score-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-3) 100%);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  }
-  @media (max-width: 768px) {
-    .score-section { grid-template-columns: 1fr; text-align: center; }
-  }
-  .score-circle {
-    width: 180px;
-    height: 180px;
-    position: relative;
-  }
-  .score-svg {
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-  }
-  .score-bg {
-    fill: none;
-    stroke: var(--line-strong);
-    stroke-width: 8;
-  }
-  .score-fg {
-    fill: none;
-    stroke: var(--accent);
-    stroke-width: 8;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .score-text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .score-num {
-    font-family: var(--font-arabic);
-    font-weight: 800;
-    font-size: 3.5rem;
-    line-height: 1;
-    color: var(--ink);
-  }
-  .score-label {
-    font-size: 0.85rem;
-    color: var(--ink-dim);
-    margin-top: 0.3rem;
-  }
-  .score-info h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  .score-info p {
-    color: var(--ink-dim);
-    margin-bottom: 1.5rem;
-    line-height: 1.7;
-  }
-  .score-grade {
-    display: inline-block;
-    padding: 0.4rem 1rem;
-    border-radius: var(--radius-full);
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-  .grade-excellent { background: rgba(74,222,128,0.15); color: var(--success); }
-  .grade-good { background: var(--accent-soft); color: var(--accent); }
-  .grade-medium { background: rgba(255,107,53,0.15); color: var(--accent-warm); }
-  .grade-poor { background: rgba(255,77,77,0.15); color: var(--danger); }
-  
-  /* Metrics grid */
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  @media (max-width: 768px) {
-    .metrics-grid { grid-template-columns: 1fr; }
-  }
-  .metric {
-    background: var(--bg-alt);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 1.8rem;
-    transition: all var(--transition);
-  }
-  .metric:hover {
-    border-color: var(--line-accent);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(168,85,247,0.08);
-  }
-  .metric-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  .metric-name {
-    font-weight: 600;
-    font-size: 1.05rem;
-  }
-  .metric-score {
-    font-family: var(--font-arabic);
-    font-weight: 800;
-    font-size: 1.4rem;
-  }
-  .metric-bar {
-    width: 100%;
-    height: 6px;
-    background: var(--bg-card);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
-  .metric-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-warm));
-    border-radius: 3px;
-    transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-    transform-origin: right;
-  }
-  .metric-detail {
-    color: var(--ink-dim);
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-  
-  /* Issues list */
-  .issues-section {
-    background: var(--bg-alt);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-lg);
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-  }
-  .issues-section h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  .issues-section > p {
-    color: var(--ink-dim);
-    margin-bottom: 2rem;
-  }
-  .issue {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1.5rem;
-    padding: 1.5rem 0;
-    border-top: 1px solid var(--line);
-    align-items: start;
-  }
-  .issue:first-of-type { border-top: none; padding-top: 0; }
-  .issue-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .issue-icon.high { background: rgba(255,77,77,0.15); color: var(--danger); }
-  .issue-icon.medium { background: rgba(255,107,53,0.15); color: var(--accent-warm); }
-  .issue-icon.low { background: var(--accent-soft); color: var(--accent); }
-  .issue-content h4 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-  }
-  .issue-content p {
-    color: var(--ink-dim);
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-  .issue-priority {
-    padding: 0.3rem 0.7rem;
-    border-radius: var(--radius-full);
-    font-size: 0.7rem;
-    font-weight: 700;
-    white-space: nowrap;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .priority-high { background: rgba(255,77,77,0.15); color: var(--danger); }
-  .priority-medium { background: rgba(255,107,53,0.15); color: var(--accent-warm); }
-  .priority-low { background: var(--accent-soft); color: var(--accent); }
-  
-  /* Loading */
-  .loading {
-    display: none;
-    text-align: center;
-    padding: 4rem 2rem;
-  }
-  .loading.visible { display: block; }
-  .loading-spinner { width: 60px; height: 60px; }
-  .loading-text {
-    color: var(--ink-dim);
-    font-size: 1.1rem;
-  }
-  .loading-step {
-    color: var(--accent);
-    font-weight: 600;
-    margin-top: 0.5rem;
-  }
-  
-  /* CTA */
-  .upgrade-cta {
-    background: linear-gradient(135deg, var(--bg-alt) 0%, var(--bg-card) 100%);
-    border: 1px solid var(--line-accent);
-    border-radius: var(--radius-lg);
-    padding: 3rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .upgrade-cta::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 50%;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 60%);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-  .upgrade-cta-content { position: relative; }
-  .upgrade-cta h3 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-  .upgrade-cta p {
-    color: var(--ink-dim);
-    max-width: 500px;
-    margin: 0 auto 2rem;
-    line-height: 1.7;
-  }
+  .az-section::before { display:none!important; }
+
+  /* Revenue banner */
+  .az-rev-banner { display:block!important; background:#fff5f5!important; }
+
+  /* CTA — show minimized version */
+  .az-cta { border:1px solid #ddd!important; background:white!important;
+    padding:12pt!important; box-shadow:none!important; }
+  .az-cta::before { display:none!important; }
+
+  /* Score circle — keep colors */
+  * { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+
+  /* Screenshots — reasonable size */
+  .az-screen-img { max-height:400px!important; object-fit:contain!important;
+    width:100%!important; height:auto!important; }
+  .az-screens-grid { grid-template-columns:1fr!important; }
+
+  /* Typography */
+  .az-section-title { font-size:11pt!important; }
+  .az-store-name { font-size:14pt!important; }
+  body { font-size:9pt!important; }
+  a[href]:after { content:none!important; }
+
+  /* Criteria bars */
+  .az-crit-bar-wrap { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  /* Mini scores */
+  .az-mini { border:1px solid #ddd!important; background:#f9f9f9!important; }
+
+  /* Page breaks */
+  #secCriteria { page-break-before:auto; }
+  #secActions { page-break-before:auto; }
+  #secComp { page-break-before:auto; }
+}
+
+/* Utils */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+.az-report > * { animation:fadeIn .4s ease both; }
+.az-divider { height:1px; background:var(--line); margin:1.5rem 0; }
+.az-empty { text-align:center; padding:2.5rem; color:var(--ink-dim); font-size:.9rem; }
 </style>
 </head>
 
 <body>
 
-<!-- ============ NAV ============ -->
+<!-- ═══ NAV ═══ -->
 <nav class="main-nav">
   <a href="../index.html" class="logo">
-    <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
-    <div class="logo-text">
-      <span class="logo-text-ar">أدوات التاجر</span>
-      <span class="logo-text-en">Tajer Tools</span>
-    </div>
+    <svg class="logo-svg" viewBox="0 0 100 140"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+    <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
   </a>
   <ul class="nav-links">
     <li><a href="../index.html">الرئيسية</a></li>
     <li><a href="tools.html" class="active">الأدوات</a></li>
     <li><a href="coupons.html">الكوبونات</a></li>
     <li><a href="calendar.html">المواسم</a></li>
-    <li><a href="services.html">الخدمات</a></li>
-    <li><a href="works.html">أعمالنا</a></li>
     <li><a href="blog.html">المدونة</a></li>
     <li><a href="about.html">عن المنصة</a></li>
   </ul>
-  <a href="services.html" class="nav-cta">احجز استشارة</a>
-  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
-  <button class="mobile-menu-btn">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
+    <span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span>
+    <span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
   </button>
+  <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
 </nav>
 
-<!-- ============ HEADER ============ -->
+<!-- ═══ HEADER ═══ -->
 <section class="page-header">
   <div class="container">
     <div class="page-header-content">
-      <span class="badge" style="margin-bottom: 1.5rem;">أداة 01</span>
+      <span class="badge" style="margin-bottom:1.25rem;display:inline-flex;align-items:center;gap:.4rem;">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        أداة 01
+      </span>
       <h1>محلل <em>المتجر</em> الذكي</h1>
-      <p>أدخل رابط متجرك على سلة أو زد، نحلله بناءً على 15 معياراً ونعطيك تقريراً مفصلاً عن نقاط القوة والضعف، مع توصيات قابلة للتنفيذ فوراً.</p>
+      <p>تقرير شامل لمتجرك على سلة أو زد — ثيم، سرعة، دفع، تصميم، منافسين، وتوصيات مالية قابلة للتنفيذ.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-top:1.5rem;">
+        <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:99px;padding:.3rem .85rem;font-size:.78rem;color:var(--accent-3);font-weight:600;">15 معياراً</span>
+        <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:99px;padding:.3rem .85rem;font-size:.78rem;color:var(--accent-3);font-weight:600;">${IC.cam} لقطات حقيقية</span>
+        <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:99px;padding:.3rem .85rem;font-size:.78rem;color:var(--accent-3);font-weight:600;">${IC.search} Core Web Vitals</span>
+        <span style="background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.25);border-radius:99px;padding:.3rem .85rem;font-size:.78rem;color:var(--gold);font-weight:600;">✦ تحليل بالذكاء الاصطناعي</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ ANALYZER ============ -->
-<section class="analyzer-section">
-  <div class="analyzer-form" data-reveal>
-    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; position: relative;">ابدأ التحليل</h2>
-    <p style="color: var(--ink-dim); margin-bottom: 2rem; position: relative;">أدخل رابط متجرك أدناه. التحليل يستغرق من دقيقة إلى دقيقتين بسبب التقاط الصور وتحليل الذكاء الاصطناعي.</p>
-    
-    <div class="form-row">
-      <input type="url" id="storeUrl" class="input" placeholder="https://my-store.salla.sa" />
-      <input type="text" id="category" class="input" placeholder="تخصص المتجر (اختياري) — مثل: أزياء، إلكترونيات، طعام..." style="flex:1" />
-      <button id="analyzeBtn" class="btn-primary">
-        حلل الآن
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+<!-- ═══ ANALYZER ═══ -->
+<main class="az-page">
+
+  <!-- ── Form ── -->
+  <div class="az-form">
+    <div class="az-form-title">ابدأ التحليل الآن</div>
+    <div class="az-form-sub">أدخل رابط متجرك — يستغرق التحليل حوالي دقيقة وينتج تقريراً شاملاً</div>
+
+    <div class="az-form-row">
+      <div class="az-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        <input type="url" id="storeUrl" placeholder="https://my-store.salla.sa" dir="ltr" />
+      </div>
+      <div class="az-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <input type="text" id="category" placeholder="التخصص (اختياري) — أزياء، عطور..." />
+      </div>
+    </div>
+
+    <button id="analyzeBtn" class="az-btn-analyze">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      حلّل المتجر الآن
+    </button>
+
+    <div class="az-form-chips">
+      <span class="az-form-chip"><span>✓</span> سلة وزد</span>
+      <span class="az-form-chip"><span>✓</span> SEO كامل</span>
+      <span class="az-form-chip"><span>✓</span> طرق الدفع</span>
+      <span class="az-form-chip"><span>✓</span> تحليل التصميم</span>
+      <span class="az-form-chip"><span>✓</span> Core Web Vitals</span>
+      <span class="az-form-chip"><span>✓</span> منافسين</span>
+    </div>
+
+    <div id="usageWrap" style="margin-top:.75rem;"></div>
+  </div>
+
+  <!-- ── Progress ── -->
+  <div class="az-progress" id="azProgress">
+    <div class="az-progress-header">
+      <div class="az-progress-dot"></div>
+      <span id="azProgressLabel" style="flex:1;">جاري التحليل...</span>
+      <span id="azEta" style="font-size:.78rem;color:var(--ink-dim);"></span>
+      <span class="az-pct-badge" id="azPct">0%</span>
+      <button id="azCancel" onclick="cancelAnalyze()" title="إلغاء" style="background:none;border:1px solid var(--line-strong);color:var(--ink-dim);border-radius:8px;padding:.25rem .6rem;font-size:.75rem;cursor:pointer;font-family:var(--font-arabic);margin-inline-start:.5rem;">إلغاء</button>
+    </div>
+    <div class="az-bar-wrap">
+      <div class="az-bar" id="azBar"></div>
+    </div>
+    <div class="az-steps" id="azSteps"></div>
+    <div class="skel-wrap" aria-hidden="true" style="margin-top:1.8rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+      <div class="skel-card" style="text-align:center;">
+        <div class="skel skel-circle" style="width:110px;height:110px;margin:.3rem auto 1.2rem;"></div>
+        <div class="skel skel-line md" style="margin:0 auto;"></div>
+      </div>
+      <div class="skel-card">
+        <div class="skel skel-line sm"></div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line md" style="margin-bottom:0;"></div>
+      </div>
+      <div class="skel-card">
+        <div class="skel skel-line sm"></div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line lg"></div>
+        <div class="skel skel-line md" style="margin-bottom:0;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       REPORT
+  ══════════════════════════════════════════════ -->
+  <!-- Print-only header (hidden on screen) -->
+  <div id="printHeader" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8pt 0;border-bottom:2px solid #6366f1;margin-bottom:16pt;">
+      <div>
+        <div style="font-size:14pt;font-weight:800;color:#6366f1;">أدوات التاجر — تقرير تحليل المتجر</div>
+        <div id="printStoreName" style="font-size:10pt;color:#555;margin-top:2pt;"></div>
+      </div>
+      <div style="text-align:left;">
+        <div id="printDate" style="font-size:9pt;color:#888;"></div>
+        <div style="font-size:8pt;color:#aaa;">أدوات التاجر — من خبراء المنصات · salatips.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="az-report" id="azReport">
+
+    <!-- ملخّص لزِج -->
+    <div class="az-sticky" id="azSticky" style="display:none;">
+      <div class="az-sticky-score" id="azStickyScore">—</div>
+      <div class="az-sticky-name" id="azStickyName"></div>
+      <div class="az-sticky-jumps" id="azStickyJumps"></div>
+      <button class="az-sticky-pdf" onclick="printReport()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+        PDF
       </button>
     </div>
-  </div>
 
-  <!-- Loading -->
-  <div class="loading" id="loading">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">يجري تحليل متجرك الآن...</div>
-    <div class="loading-step" id="loadingStep">فحص سرعة الموقع</div>
-  </div>
-
-  <!-- Results -->
-  <div class="results" id="results">
-    <!-- Overall Score -->
-    <div class="score-section">
-      <div class="score-circle">
-        <svg class="score-svg" viewBox="0 0 100 100">
-          <circle class="score-bg" cx="50" cy="50" r="45"/>
-          <circle class="score-fg" cx="50" cy="50" r="45" 
-                  stroke-dasharray="282.74" stroke-dashoffset="282.74" id="scoreFg"/>
-        </svg>
-        <div class="score-text">
-          <div class="score-num" id="scoreNum">0</div>
-          <div class="score-label">من 100</div>
+    <!-- 1. Hero Score + Store Info -->
+    <div class="az-section az-section-accent" id="secHero">
+      <div class="az-hero">
+        <div class="az-score-wrap">
+          <svg class="az-score-svg" viewBox="0 0 100 100">
+            <circle class="az-score-bg" cx="50" cy="50" r="44"/>
+            <circle class="az-score-fg" cx="50" cy="50" r="44"
+                    stroke-dasharray="276.46" stroke-dashoffset="276.46" id="azScoreFg"/>
+          </svg>
+          <div class="az-score-inner">
+            <div class="az-score-num" id="azScoreNum">0</div>
+            <div class="az-score-of">/ 100</div>
+          </div>
         </div>
-      </div>
-      <div class="score-info">
-        <h2>التقييم العام</h2>
-        <p id="scoreDesc">نحلل متجرك على 15 معياراً متنوعاً تشمل السرعة، الـ SEO، تجربة المستخدم، الأمان، وغيرها.</p>
-        <span class="score-grade" id="scoreGrade">يحتاج تحسين</span>
-      </div>
-    </div>
-
-    <!-- Scraped Technical Data -->
-    <div id="scrapedDataSection"></div>
-
-    <!-- Strengths / Weaknesses summary -->
-    <div id="strengthsWrap"></div>
-
-    <!-- Metrics -->
-    <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem;">تفاصيل المعايير (15 محور)</h3>
-    <div class="metrics-grid" id="metricsGrid"></div>
-
-    <!-- Quick Wins -->
-    <div class="issues-section" id="quickWinsSection" style="display:none;margin-bottom:2rem;">
-      <h3 style="color:#22c55e;display:flex;align-items:center;gap:.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>إصلاحات سريعة — طبّقها اليوم</h3>
-      <p>هذه الإصلاحات يمكن تطبيقها خلال 24 ساعة وستحدث فرقاً فورياً</p>
-      <div id="quickWinsList"></div>
-    </div>
-
-    <!-- Issues & Recommendations -->
-    <div class="issues-section">
-      <h3>التوصيات المفصّلة مرتبة حسب الأولوية</h3>
-      <p>كل توصية تحتوي على شرح تفصيلي والأثر المتوقع على مبيعاتك</p>
-      <div id="issuesList"></div>
-    </div>
-
-    <!-- Upgrade CTA -->
-    <div class="upgrade-cta">
-      <div class="upgrade-cta-content">
-        <span class="badge badge-warm" style="margin-bottom: 1rem; display:inline-flex; align-items:center; gap:.4rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>تحتاج مساعدة في التنفيذ؟</span>
-        <h3>فريقنا جاهز يصلح كل المشاكل لك</h3>
-        <p>بدل ما تقضي أسابيع تصلح متجرك بنفسك، فريقنا من المصممين والمسوّقين ينفذ كل التوصيات خلال أسبوع واحد بأسعار مدروسة.</p>
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="services.html" class="btn-primary">
-            احجز استشارة مجانية
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </a>
-          <a href="#" class="btn-secondary" onclick="downloadReport(event)">حمّل التقرير PDF</a>
+        <div class="az-hero-info">
+          <div class="az-store-meta" id="azStoreMeta"></div>
+          <div class="az-store-name" id="azStoreName">التقييم العام</div>
+          <p class="az-summary" id="azSummary"></p>
+          <span class="az-grade" id="azGrade"></span>
+          <div class="az-mini-row" id="azMiniRow"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ============ FOOTER ============ -->
+    <!-- 2. Revenue Banner -->
+    <div class="az-rev-banner" id="azRevBanner">
+      <div class="az-rev-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        خسارة إيرادات تقديرية بسبب المشاكل المكتشفة
+      </div>
+      <div class="az-rev-grid" id="azRevGrid"></div>
+    </div>
+
+    <!-- 3. Store Identity -->
+    <div class="az-section" id="secIdentity">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57l1.65-7.43H6"/></svg>
+        معلومات المتجر
+      </div>
+      <div class="az-id-grid" id="azIdGrid"></div>
+    </div>
+
+    <!-- 4. Performance — 15 Criteria -->
+    <div class="az-section" id="secCriteria">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        تقييم الأداء — 15 معياراً
+      </div>
+      <div class="az-criteria-list" id="azCriteriaList"></div>
+    </div>
+
+    <!-- 5a. SEO & Google -->
+    <div class="az-section" id="secSeo" style="display:none;">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        السيو والظهور في جوجل
+      </div>
+      <div id="azSeoContent"></div>
+    </div>
+
+    <!-- 5b. UX & Design -->
+    <div class="az-section" id="secUx" style="display:none;">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        تجربة المستخدم والتصميم
+      </div>
+      <div id="azUxContent"></div>
+    </div>
+
+    <!-- 5c. Payment & Pricing -->
+    <div class="az-section" id="secPayment" style="display:none;">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+        الدفع والأسعار
+      </div>
+      <div id="azPaymentContent"></div>
+    </div>
+
+    <!-- 5d. Trust & Verification -->
+    <div class="az-section" id="secTrust" style="display:none;">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        الثقة والتوثيق
+      </div>
+      <div id="azTrustContent"></div>
+    </div>
+
+    <!-- 5. Speed + Screenshots -->
+    <div class="az-section" id="secSpeed">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        أداء الموقع — Core Web Vitals
+      </div>
+      <div id="azSpeedContent"></div>
+    </div>
+
+    <!-- 6. Quick Wins -->
+    <div class="az-section" id="secQuickWins" style="display:none;">
+      <div class="az-section-title" style="color:#22c55e;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        إصلاحات سريعة — نفّذها اليوم
+      </div>
+      <p style="font-size:.88rem;color:var(--ink-dim);margin-bottom:1rem;">هذه التحسينات تُنفَّذ خلال 24 ساعة وتحدث فرقاً مباشراً في المبيعات</p>
+      <div class="az-qw-list" id="azQwList"></div>
+    </div>
+
+    <!-- 6b. Recommended Services -->
+    <div class="az-section" id="secServices" style="display:none;">
+      <div class="az-section-title" style="color:var(--gold,#d4af37);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6"/><path d="M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+        خدمات مقترحة لحل مشاكل متجرك
+      </div>
+      <p style="font-size:.88rem;color:var(--ink-dim);margin-bottom:1rem;">اخترناها لك بناءً على المشاكل المكتشفة في الفحص — اضغط للتفاصيل أو اسأل المساعد الذكي</p>
+      <div class="az-svc-grid" id="azServicesList"></div>
+    </div>
+
+    <!-- 7. Full Recommendations -->
+    <div class="az-section" id="secActions">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        التوصيات المفصّلة — مرتّبة حسب الأثر المالي
+      </div>
+      <div id="azActionsList"></div>
+    </div>
+
+    <!-- 8. Technical -->
+    <div class="az-section" id="secTech">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        الفحص التقني الشامل
+      </div>
+      <div id="azTechContent"></div>
+    </div>
+
+    <!-- 9. Competitors -->
+    <div class="az-section" id="secComp" style="display:none;">
+      <div class="az-section-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        تحليل المنافسين في نفس المجال والسوق
+      </div>
+      <div class="az-comp-grid" id="azCompGrid"></div>
+    </div>
+
+    <!-- 10. CTA -->
+    <div class="az-cta">
+      <div class="az-cta-inner">
+        <span class="badge badge-warm" style="margin-bottom:.75rem;display:inline-flex;align-items:center;gap:.35rem;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          تحتاج مساعدة في التنفيذ؟
+        </span>
+        <h3>فريقنا جاهز يُنفّذ كل التوصيات لك</h3>
+        <p>بدل ما تقضي أسابيع، فريقنا ينفّذ كل التوصيات خلال أسبوع واحد بأسعار مدروسة.</p>
+        <div class="az-cta-btns">
+          <button class="az-pdf-btn" onclick="printReport()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            تحميل PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /az-report -->
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="footer-container">
     <div class="footer-brand">
       <a href="../index.html" class="logo">
-        <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
+        <svg class="logo-svg" viewBox="0 0 100 140"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
         <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
       </a>
-      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية، وفريق متخصص جاهز عند الطلب.</p>
-      <div class="footer-social">
-        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-        <a href="#" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
-        <a href="#" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-      </div>
+      <p>أدوات التاجر — منتج من <strong>خبراء المنصات</strong>، فريق سعودي متخصص في تأسيس المتاجر الإلكترونية على سلة وربطها بالأدوات التقنية والتسويقية.</p>
     </div>
-    <div class="footer-col">
-      <h4>المنصة</h4>
-      <a href="../index.html">الرئيسية</a>
-      <a href="tools.html">الأدوات المجانية</a>
-      <a href="coupons.html">الكوبونات</a>
-      <a href="calendar.html">تقويم المواسم</a>
-      <a href="services.html">الخدمات</a>
-    </div>
-    <div class="footer-col">
-      <h4>الفريق</h4>
-      <a href="about.html">من نحن</a>
-      <a href="services.html">احجز معنا</a>
-      <a href="works.html">أعمالنا</a>
-      <a href="#">تواصل معنا</a>
-    </div>
-    <div class="footer-col">
-      <h4>قانوني</h4>
-      <a href="#">سياسة الخصوصية</a>
-      <a href="#">شروط الاستخدام</a>
-      <a href="#">إخلاء المسؤولية</a>
-    </div>
+    <div class="footer-col"><h4>المنصة</h4><a href="../index.html">الرئيسية</a><a href="tools.html">الأدوات</a><a href="coupons.html">الكوبونات</a><a href="calendar.html">المواسم</a></div>
+    <div class="footer-col"><h4>الفريق</h4><a href="about.html">من نحن</a></div>
+    <div class="footer-col"><h4>قانوني</h4><a href="#">سياسة الخصوصية</a><a href="#">شروط الاستخدام</a></div>
   </div>
   <div class="footer-bottom">
     <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
-    <div class="footer-accent-line">adwat-altajer.com</div>
+    <div class="footer-accent-line">salatips.com</div>
   </div>
 </footer>
 
-<script src="../assets/api.js"></script>
+<script src="../assets/api.js?v=30"></script>
 <script src="../assets/main.js"></script>
 <script>
-  // ============ Analyzer Logic ============
-  const loadingSteps = [
-    'جاري فتح رابط المتجر...',
-    'كشف المنصة والتقنيات المستخدمة...',
-    'فحص طرق الدفع المتاحة...',
-    'فحص حسابات التواصل الاجتماعي...',
-    'أخذ لقطات شاشة (ديسكتوب + جوال)...',
-    'تحليل SEO والمحتوى...',
-    'التحليل البصري بـ Gemini Vision...',
-    'إعداد التقرير النهائي...'
+'use strict';
+// ══════════════════════════════════════════════════════════
+//  ANALYZER ENGINE v5
+// ══════════════════════════════════════════════════════════
+
+/* ── Progress Bar ─────────────────────────────────────── */
+const STAGES = [
+  { pct: 8,  dur: 2500,  label: 'فتح رابط المتجر وتحميل الصفحة' },
+  { pct: 18, dur: 4000,  label: 'كشف المنصة، الثيم، والتقنيات' },
+  { pct: 28, dur: 4000,  label: 'فحص طرق الدفع ووسائل التواصل' },
+  { pct: 38, dur: 5000,  label: 'فحص SEO — robots.txt و sitemap' },
+  { pct: 50, dur: 8000,  label: 'قياس السرعة — PageSpeed Insights' },
+  { pct: 62, dur: 9000,  label: 'أخذ لقطات الشاشة بـ Puppeteer' },
+  { pct: 73, dur: 7000,  label: 'التحليل البصري بـ Gemini Vision' },
+  { pct: 88, dur: 22000, label: 'تحليل الذكاء الاصطناعي — 6 محاور' },
+  { pct: 96, dur: 4000,  label: 'إعداد التقرير النهائي' },
+];
+
+let _progTimer = null;
+let _progStage = 0;
+let _progCurrent = 0;
+let _etaTimer = null;
+
+function startEta() {
+  clearInterval(_etaTimer);
+  let remain = 90; // تقدير واقعي (~90 ثانية)
+  const etaEl = document.getElementById('azEta');
+  const fmtT = s => s > 60 ? `~${Math.ceil(s/60)} دقيقة` : `~${s} ثانية`;
+  if (etaEl) etaEl.textContent = 'الوقت المتبقّي: ' + fmtT(remain);
+  _etaTimer = setInterval(() => {
+    remain = Math.max(3, remain - 1);
+    if (etaEl) etaEl.textContent = 'الوقت المتبقّي: ' + fmtT(remain);
+  }, 1000);
+}
+function stopEta() { clearInterval(_etaTimer); const e = document.getElementById('azEta'); if (e) e.textContent = ''; }
+
+function startProgress() {
+  const bar      = document.getElementById('azBar');
+  const pctEl    = document.getElementById('azPct');
+  const labelEl  = document.getElementById('azProgressLabel');
+  const stepsEl  = document.getElementById('azSteps');
+  _progStage = 0; _progCurrent = 0;
+  startEta();
+
+  stepsEl.innerHTML = STAGES.map((s, i) => `
+    <div class="az-step-row" id="azst${i}">
+      <span class="az-step-num" id="azsti${i}">${i+1}</span>
+      <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.label}</span>
+    </div>`).join('');
+
+  function tick() {
+    if (_progStage >= STAGES.length) return;
+    const stage = STAGES[_progStage];
+    const target = stage.pct;
+
+    // Mark prev done
+    if (_progStage > 0) {
+      const prev = document.getElementById('azst' + (_progStage - 1));
+      const prevI = document.getElementById('azsti' + (_progStage - 1));
+      if (prev) prev.className = 'az-step-row done';
+      if (prevI) prevI.innerHTML = '✓';
+    }
+    const cur = document.getElementById('azst' + _progStage);
+    if (cur) cur.className = 'az-step-row active';
+
+    labelEl.textContent = stage.label;
+
+    const steps = 40;
+    const stepDur = stage.dur / steps;
+    const from = _progCurrent;
+    const diff = target - from;
+    let step = 0;
+
+    clearInterval(_progTimer);
+    _progTimer = setInterval(() => {
+      step++;
+      const p = step / steps;
+      const e = 1 - Math.pow(1 - p, 2);
+      _progCurrent = Math.round(from + diff * e);
+      bar.style.width = _progCurrent + '%';
+      pctEl.textContent = _progCurrent + '%';
+      if (step >= steps) {
+        clearInterval(_progTimer);
+        _progStage++;
+        tick();
+      }
+    }, stepDur);
+  }
+  tick();
+}
+
+function finishProgress(cb) {
+  clearInterval(_progTimer); stopEta();
+  const bar   = document.getElementById('azBar');
+  const pctEl = document.getElementById('azPct');
+  const label = document.getElementById('azProgressLabel');
+  label.textContent = 'اكتمل التحليل ✓';
+  // Mark all done
+  STAGES.forEach((_, i) => {
+    const el  = document.getElementById('azst' + i);
+    const ici = document.getElementById('azsti' + i);
+    if (el) el.className = 'az-step-row done';
+    if (ici) ici.innerHTML = '✓';
+  });
+  let p = _progCurrent;
+  const t = setInterval(() => {
+    p = Math.min(100, p + 2);
+    bar.style.width = p + '%';
+    pctEl.textContent = p + '%';
+    if (p >= 100) { clearInterval(t); setTimeout(cb, 400); }
+  }, 20);
+}
+
+function stopProgress() { clearInterval(_progTimer); stopEta(); }
+
+let _analyzeCancelled = false;
+function cancelAnalyze() {
+  _analyzeCancelled = true;
+  stopProgress();
+  const prog = document.getElementById('azProgress');
+  if (prog) prog.classList.remove('visible');
+  const btn = document.getElementById('analyzeBtn');
+  if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> حلّل المتجر الآن`; }
+  window.__tjBusy = false;
+  if (window.showToast) showToast('تم إلغاء التحليل', 'info');
+}
+
+/* ── Helpers ──────────────────────────────────────────── */
+const sar = n => n ? Number(n).toLocaleString('ar-SA') + ' ريال' : null;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+/* أيقونات SVG بدل الإيموجي */
+const _ic = (p, c, sw) => `<svg width="1em" height="1em" style="width:1em;height:1em;vertical-align:-.15em;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="${c||'currentColor'}" stroke-width="${sw||2}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC = {
+  pass:  _ic('<circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/>', '#22c55e'),
+  warn:  _ic('<path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/>', '#f59e0b'),
+  fail:  _ic('<circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>', '#ef4444'),
+  star:  _ic('<polygon points="12 2 15 9 22 9.3 17 14 18.5 21 12 17.3 5.5 21 7 14 2 9.3 9 9 12 2"/>', '#eab308'),
+  cam:   _ic('<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>'),
+  search:_ic('<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/>'),
+  chat:  _ic('<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>'),
+  phone: _ic('<path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012 4.2 2 2 0 014 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.8.7A2 2 0 0122 16.9z"/>'),
+  mail:  _ic('<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/>'),
+  money: _ic('<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 010 3h-3a1.5 1.5 0 000 3h4"/>'),
+  trend: _ic('<path d="M3 17l6-6 4 4 7-7"/><path d="M17 8h4v4"/>'),
+  target:_ic('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>'),
+  box:   _ic('<path d="M21 16V8a2 2 0 00-1-1.7l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.7l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.3 7L12 12l8.7-5M12 22V12"/>'),
+  bolt:  _ic('<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>'),
+};
+const statusIc = (s) => s === 'pass' ? IC.pass : s === 'warn' ? IC.warn : IC.fail;
+const pct = n => n != null ? n + '%' : '—';
+
+function scoreColor(n) {
+  if (n >= 75) return '#22c55e';
+  if (n >= 50) return 'var(--accent-warm)';
+  return '#ef4444';
+}
+function priorityClass(p) {
+  return p === 'high' ? 'tag-h' : p === 'medium' ? 'tag-m' : 'tag-l';
+}
+function priorityLabel(p) {
+  return p === 'high' ? 'أولوية عالية' : p === 'medium' ? 'أولوية متوسطة' : 'تحسين';
+}
+function effortLabel(e) {
+  return e === 'low' ? 'سهل' : e === 'medium' ? 'متوسط' : e === 'high' ? 'يحتاج جهد' : (e || '');
+}
+
+/* ── 1. Score Hero ─────────────────────────────────────── */
+function azJump(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function renderSticky(r) {
+  const score = r.overallScore || 0;
+  const bar = document.getElementById('azSticky');
+  if (!bar) return;
+  bar.style.display = 'flex';
+  const sEl = document.getElementById('azStickyScore');
+  sEl.textContent = score; sEl.style.color = scoreColor(score);
+  document.getElementById('azStickyName').textContent = r.storeName || 'تقرير المتجر';
+  // أزرار قفز للأقسام الظاهرة فقط
+  const jumps = [
+    ['secCriteria', 'المعايير'], ['secPayment', 'الدفع'], ['secTrust', 'الثقة'],
+    ['secSpeed', 'الأداء'], ['secServices', 'الخدمات'], ['secActions', 'التوصيات'], ['secComp', 'المنافسون'],
+  ];
+  document.getElementById('azStickyJumps').innerHTML = jumps.filter(([id]) => {
+    const el = document.getElementById(id); return el && el.style.display !== 'none';
+  }).map(([id, label]) => `<button onclick="azJump('${id}')">${label}</button>`).join('');
+}
+function renderHero(r) {
+  const score = r.overallScore || 0;
+  const circ  = 2 * Math.PI * 44;
+  const fg    = document.getElementById('azScoreFg');
+  const color = scoreColor(score);
+
+  fg.style.stroke = color;
+  fg.style.strokeDasharray  = circ;
+  fg.style.strokeDashoffset = circ - (score / 100) * circ;
+
+  const numEl = document.getElementById('azScoreNum');
+  numEl.style.color = color;
+  let c = 0, t = performance.now();
+  (function tick(now) {
+    const p = Math.min((now - t) / 1500, 1);
+    numEl.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * score);
+    if (p < 1) requestAnimationFrame(tick);
+  })(t);
+
+  const grade = document.getElementById('azGrade');
+  const cls   = score >= 85 ? ['ممتاز','grade-excellent'] : score >= 70 ? ['جيد','grade-good'] : score >= 55 ? ['متوسط','grade-medium'] : ['يحتاج تحسين','grade-poor'];
+  grade.textContent = cls[0]; grade.className = 'az-grade ' + cls[1];
+
+  // Only display summary if it has no icon garbage (word+digit patterns like star2, cancelstar2)
+  const _hasGarbage = t => /[a-zA-Z]+\d+/.test(t || '');
+  if (r.summary && !_hasGarbage(r.summary) && r.summary.length > 20) {
+    document.getElementById('azSummary').textContent = r.summary;
+  }
+
+  // Store meta chips
+  const meta = document.getElementById('azStoreMeta');
+  const chips = [r.platform, r.detectedIndustry, r.themeName].filter(Boolean);
+  meta.innerHTML = chips.map(c => `<span>${c}</span><span class="dot">·</span>`).slice(0,-1).join('');
+
+  if (r.storeName && !_hasGarbage(r.storeName)) {
+    document.getElementById('azStoreName').textContent = r.storeName;
+  }
+
+  // Mini scores — normalize 0-10 → 0-100
+  const normS = v => (v != null && v > 0 && v <= 10) ? Math.round(v * 10) : (v != null ? Math.round(v) : null);
+  const row = document.getElementById('azMiniRow');
+  const miniItems = [
+    [normS(r.trustScore),    'الثقة'],
+    [normS(r.cro?.score),    'CRO'],
+    [normS(r.healthScore),   'الصحة'],
+    [normS(r.maturityScore), 'النضج'],
+  ].filter(([v]) => v != null && v > 0);
+  row.innerHTML = miniItems.map(([v, l]) => `
+    <div class="az-mini">
+      <div class="az-mini-val" style="color:${scoreColor(v)}">${v}</div>
+      <div class="az-mini-lbl">${l}</div>
+    </div>`).join('');
+}
+
+/* ── 2. Revenue Banner ─────────────────────────────────── */
+function renderRevBanner(r) {
+  if (!r.totalMonthlyLoss && !r.totalYearlyLoss) return;
+  const banner = document.getElementById('azRevBanner');
+  banner.style.display = 'block';
+  document.getElementById('azRevGrid').innerHTML = `
+    <div class="az-rev-stat">
+      <div class="az-rev-val" style="color:#ef4444">${sar(r.totalMonthlyLoss) || '—'}</div>
+      <div class="az-rev-lbl">خسارة تقديرية / شهر</div>
+    </div>
+    <div class="az-rev-stat">
+      <div class="az-rev-val" style="color:#ef4444">${sar(r.totalYearlyLoss) || '—'}</div>
+      <div class="az-rev-lbl">خسارة تقديرية / سنة</div>
+    </div>
+    <div class="az-rev-stat">
+      <div class="az-rev-val" style="color:var(--accent)">${(r.estimatedVisitors || 0).toLocaleString('ar-SA')}</div>
+      <div class="az-rev-lbl">زائر تقديري / شهر</div>
+    </div>`;
+}
+
+/* ── 3. Store Identity ─────────────────────────────────── */
+function renderIdentity(r) {
+  const sc = r.scraped || {};
+  const td = r.technicalData || {};
+  const ALL_PAY = ['مدى','Apple Pay','STC Pay','تابي','تمارا','فيزا','ماستركارد','الدفع عند الاستلام'];
+  const have    = sc.paymentMethods || [];
+  const missing = ALL_PAY.filter(p => !have.includes(p));
+  const PAY_IMPACT = { 'تابي':'زيادة التحويل 15-20%', 'تمارا':'زيادة AOV 30-40%', 'Apple Pay':'رفع التحويل من الجوال 25%', 'STC Pay':'ثقة العملاء السعوديين' };
+
+  const payHtml = have.length
+    ? have.map(p => `<span class="az-pay-pill pay-ok">✓ ${p}</span>`).join('')
+    : '<span style="font-size:.85rem;color:var(--ink-dim);">لم تُكتشف طرق دفع</span>';
+
+  const missingHtml = missing.length
+    ? missing.slice(0,5).map(p => `<span class="az-pay-pill pay-no">✗ ${p}</span>`).join('')
+    : '';
+
+  const socialEntries = Object.entries(sc.socialLinks || {});
+  const socialHtml = socialEntries.length
+    ? socialEntries.map(([name]) => `<span class="az-social-chip">${name}</span>`).join('')
+    : '<span style="font-size:.85rem;color:var(--ink-dim);">لم تُكتشف حسابات</span>';
+
+  const techs = sc.technologies || td.tracking || [];
+  const techHtml = techs.length
+    ? techs.slice(0,10).map(t => `<span class="az-tech-pill">${t}</span>`).join('')
+    : '<span style="font-size:.85rem;color:var(--ink-dim);">لم تُكتشف تقنيات</span>';
+
+  const missingImpact = missing.filter(p => PAY_IMPACT[p]).slice(0,2);
+
+  document.getElementById('azIdGrid').innerHTML = `
+    <div class="az-id-card">
+      <div class="az-id-card-title">المنصة والثيم</div>
+      <div class="az-id-val">${r.platform || sc.platform || 'غير محدد'}</div>
+      ${(r.themeName || sc.themeName) ? `<div class="az-id-val-sub">ثيم: ${r.themeName || sc.themeName}</div>` : ''}
+      ${sc.lang ? `<div class="az-id-val-sub">اللغة: ${sc.lang}</div>` : ''}
+    </div>
+
+    <div class="az-id-card">
+      <div class="az-id-card-title">التواصل والسوشيال</div>
+      ${sc.contactEmail ? `<div class="az-id-val-sub" style="margin-bottom:.4rem;">${IC.mail} ${sc.contactEmail}</div>` : ''}
+      ${(sc.phoneNumbers||[]).map(p => `<div class="az-id-val-sub">${IC.phone} ${p}</div>`).join('')}
+      <div class="az-social-row">${socialHtml}</div>
+    </div>
+
+    <div class="az-id-card" style="grid-column:1/-1;">
+      <div class="az-id-card-title">طرق الدفع</div>
+      <div class="az-pay-row">${payHtml}</div>
+      ${missingHtml ? `<div style="margin-top:.6rem;"><div style="font-size:.76rem;color:var(--ink-dim);margin-bottom:.4rem;">غير مفعّل:</div><div class="az-pay-row">${missingHtml}</div></div>` : ''}
+      ${missingImpact.length ? `<span class="pay-miss-note">${IC.bolt} إضافة ${missingImpact.join(' و')} قد ترفع مبيعاتك بشكل ملحوظ — ${missingImpact.map(p=>PAY_IMPACT[p]).join(' | ')}</span>` : ''}
+    </div>
+
+    <div class="az-id-card" style="grid-column:1/-1;">
+      <div class="az-id-card-title">التقنيات المستخدمة (${techs.length})</div>
+      <div class="az-tech-row">${techHtml}</div>
+    </div>`;
+}
+
+/* ── 4. Criteria Bars ──────────────────────────────────── */
+function renderCriteria(r) {
+  const criteria = r.criteria || [];
+  const list = document.getElementById('azCriteriaList');
+  if (!criteria.length) { list.innerHTML = '<div class="az-empty">لا توجد بيانات معايير</div>'; return; }
+
+  // Normalize: AI sometimes returns scores 0-10 instead of 0-100
+  const norm = criteria.map(c => ({
+    ...c,
+    score: (c.score > 0 && c.score <= 10) ? Math.round(c.score * 10) : Math.min(100, Math.round(c.score))
+  }));
+
+  list.innerHTML = norm.map((c, i) => {
+    const color = scoreColor(c.score);
+    const acts  = (c.actions || []).slice(0,2);
+    return `
+    <div class="az-crit-row">
+      <div class="az-crit-name">${c.name}</div>
+      <div class="az-crit-bar-wrap">
+        <div class="az-crit-bar" id="cbar${i}" style="width:0%;background:${color};"></div>
+      </div>
+      <div class="az-crit-score" style="color:${color}">${c.score}</div>
+      ${c.feedback ? `<div class="az-crit-detail">${c.feedback}${acts.length ? '<br><span style="color:var(--accent);">→ ' + acts.join(' | ') + '</span>' : ''}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // Animate bars
+  setTimeout(() => {
+    norm.forEach((c, i) => {
+      const el = document.getElementById('cbar' + i);
+      if (el) el.style.width = c.score + '%';
+    });
+  }, 100);
+}
+
+/* ── 5. Speed + Core Web Vitals (Lighthouse Style) ────── */
+function renderSpeed(r) {
+  const ps    = r.technicalData?.pageSpeed || {};
+  const shots = r.screenshots;
+  let html    = '';
+
+  // Format: "4.4 s" → "4.4 ث" | "680 ms" → "680 مث" (fixes RTL rendering)
+  function fmtVal(str) {
+    if (!str) return str;
+    return String(str)
+      .replace(/(\d[\d,\.]*)\s*ms\b/gi,  '$1 مث')
+      .replace(/(\d[\d,\.]*)\s*s\b/gi,   '$1 ث')
+      .replace(/(\d[\d,\.]*)\s*KiB\b/gi, '$1 كب')
+      .replace(/(\d[\d,\.]*)\s*MiB\b/gi, '$1 مب');
+  }
+  function parseSec(str) {
+    if (!str) return null;
+    const n = parseFloat(String(str).replace(/,/g, ''));
+    if (isNaN(n)) return null;
+    return /ms/i.test(str) ? n / 1000 : n;
+  }
+  function cwvC(key, str) {
+    const s = parseSec(str);
+    if (s === null) return '#94a3b8';
+    const t = {lcp:[2.5,4],fcp:[1.8,3],tbt:[0.2,0.6],ttfb:[0.8,1.8],speedIndex:[3.4,5.8],cls:[0.1,0.25]}[key];
+    if (!t) return 'var(--ink)';
+    return s <= t[0] ? '#22c55e' : s <= t[1] ? '#f97316' : '#ef4444';
+  }
+  function cwvR(key, str) {
+    const s = parseSec(str);
+    if (s === null) return '';
+    const t = {lcp:[2.5,4],fcp:[1.8,3],tbt:[0.2,0.6],ttfb:[0.8,1.8],speedIndex:[3.4,5.8],cls:[0.1,0.25]}[key];
+    if (!t) return '';
+    return s <= t[0] ? '● جيد' : s <= t[1] ? '▲ يحتاج تحسين' : '■ ضعيف';
+  }
+  function cwvP(key, str) {
+    const s = parseSec(str);
+    if (s === null) return 5;
+    const mx = {lcp:6,fcp:4.5,tbt:1,ttfb:3,speedIndex:8,cls:0.4}[key]||10;
+    return Math.min(97, Math.round((s/mx)*100));
+  }
+
+  /* ── 4 Score Rings ── */
+  const hasScores = [ps.performanceScore,ps.accessibilityScore,ps.bestPracticesScore,ps.seoScore].some(v=>v!=null);
+  if (hasScores) {
+    const ring = (score, label, id) => {
+      if (score == null) return `<div class="az-lh-score"><div class="az-lh-ring"><svg class="az-lh-ring-svg" viewBox="0 0 68 68"><circle class="az-lh-ring-bg" cx="34" cy="34" r="30"/></svg><div class="az-lh-ring-num" style="color:var(--ink-dim)">—</div></div><div class="az-lh-score-lbl">${label}</div></div>`;
+      const circ = 2*Math.PI*30;
+      const color= score>=90?'#22c55e':score>=50?'#f97316':'#ef4444';
+      return `<div class="az-lh-score">
+        <div class="az-lh-ring">
+          <svg class="az-lh-ring-svg" viewBox="0 0 68 68">
+            <circle class="az-lh-ring-bg" cx="34" cy="34" r="30"/>
+            <circle class="az-lh-ring-fg" id="${id}" cx="34" cy="34" r="30"
+              stroke="${color}" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${circ.toFixed(1)}"/>
+          </svg>
+          <div class="az-lh-ring-num" style="color:${color}">${score}</div>
+        </div>
+        <div class="az-lh-score-lbl">${label}</div>
+      </div>`;
+    };
+    if (ps.estimated) html += `<div style="display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--accent);background:var(--accent-soft);border:1px solid var(--line-accent);border-radius:10px;padding:.5rem .7rem;margin-bottom:1rem;">${IC.bolt} تقدير ذكي للأداء (تعذّر القياس المباشر من Google لهذا المتجر — قيم تقريبية).</div>`;
+    html += `<div class="az-lh-scores">
+      ${ring(ps.performanceScore,'الأداء','lhP')}
+      ${ring(ps.accessibilityScore,'إمكانية الوصول','lhA')}
+      ${ring(ps.bestPracticesScore,'أفضل الممارسات','lhB')}
+      ${ring(ps.seoScore,'ظهور في جوجل','lhS')}
+    </div>`;
+  }
+
+  /* ── Core Web Vitals Grid ── */
+  const cwv = [
+    {key:'lcp',       label:'تحميل المحتوى الرئيسي', sub:'LCP',        val:ps.lcp},
+    {key:'fcp',       label:'أول رسم للصفحة',         sub:'FCP',        val:ps.fcp},
+    {key:'cls',       label:'ثبات التصميم',            sub:'CLS',        val:ps.cls},
+    {key:'tbt',       label:'وقت الحجب الكلي',        sub:'TBT',        val:ps.tbt},
+    {key:'ttfb',      label:'استجابة الخادم',          sub:'TTFB',       val:ps.ttfb},
+    {key:'speedIndex',label:'سرعة الظهور',             sub:'Speed Index', val:ps.speedIndex},
+  ].filter(m=>m.val);
+
+  if (cwv.length) {
+    html += `<div style="font-size:.84rem;font-weight:700;margin-bottom:.65rem;display:flex;align-items:center;gap:.45rem;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Core Web Vitals
+    </div>
+    <div class="az-cwv-grid">
+      ${cwv.map(m=>{
+        const c=cwvC(m.key,m.val), p=cwvP(m.key,m.val), rt=cwvR(m.key,m.val);
+        return `<div class="az-cwv-item">
+          <div class="az-cwv-top">
+            <div><div class="az-cwv-label">${m.label}</div><div class="az-cwv-sub">${m.sub}</div></div>
+            <div class="az-cwv-value" style="color:${c};direction:ltr;text-align:right;">${fmtVal(m.val)}</div>
+          </div>
+          <div class="az-cwv-track"><div class="az-cwv-fill" style="width:${p}%;background:${c};"></div></div>
+          <div class="az-cwv-rating" style="color:${c}">${rt}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  /* ── Info Chips ── */
+  const chips=[
+    ps.totalSize?              {t:`حجم الصفحة: ${fmtVal(ps.totalSize)}`,             bg:'var(--bg-card)'}:null,
+    ps.unusedJs?               {t:`جافاسكريبت غير مستخدم: ${fmtVal(ps.unusedJs)}`,   bg:'rgba(239,68,68,.1)'}:null,
+    ps.renderBlocking>0?       {t:`ملفات تعيق التصيير: ${ps.renderBlocking}`,         bg:'rgba(251,146,60,.1)'}:null,
+    ps.imageOptimized===false? {t:`الصور تحتاج ضغطاً`,                               bg:'rgba(251,146,60,.1)'}:null,
+    ps.usesCompression===false?{t:`فعّل ضغط النصوص (Gzip)`,                           bg:'rgba(251,146,60,.1)'}:null,
+  ].filter(Boolean);
+  if(chips.length) html+=`<div class="az-perf-tags" style="margin-top:.5rem;">${chips.map(c=>`<span class="az-perf-tag" style="background:${c.bg};border-color:var(--line);color:var(--ink-dim);">${c.t}</span>`).join('')}</div>`;
+
+  /* ── Screenshots ── */
+  if (shots?.pages?.length) {
+    html+=`<div style="margin-top:1.5rem;">
+      <div style="font-size:.84rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.45rem;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        لقطات شاشة حقيقية
+        ${r.visionUsed?'<span style="background:var(--accent-soft);color:var(--accent);font-size:.72rem;font-weight:700;padding:.15rem .55rem;border-radius:99px;border:1px solid var(--line-accent);">✦ تحليل بصري بالذكاء الاصطناعي</span>':''}
+      </div>`;
+    shots.pages.forEach(pg=>{
+      if(!pg.desktop&&!pg.mobile) return;
+      html+=`<div style="margin-bottom:1.1rem;"><div class="az-screens-grid">
+        ${pg.desktop?`<div class="az-screen-frame"><div class="az-screen-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>${pg.label} — سطح المكتب</div><img class="az-screen-img" src="data:image/jpeg;base64,${pg.desktop}" loading="lazy"/></div>`:''}
+        ${pg.mobile?`<div class="az-screen-frame"><div class="az-screen-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>${pg.label} — جوال</div><img class="az-screen-img" src="data:image/jpeg;base64,${pg.mobile}" loading="lazy"/></div>`:''}
+      </div></div>`;
+    });
+    html+=`</div>`;
+  }
+
+  if (!html) html='<div class="az-empty">لا توجد بيانات أداء.</div>';
+  document.getElementById('azSpeedContent').innerHTML=html;
+
+  // Animate score rings
+  requestAnimationFrame(()=>{
+    [['lhP',ps.performanceScore],['lhA',ps.accessibilityScore],['lhB',ps.bestPracticesScore],['lhS',ps.seoScore]].forEach(([id,score])=>{
+      const el=document.getElementById(id);
+      if(el&&score!=null){ const c=2*Math.PI*30; setTimeout(()=>{ el.style.strokeDashoffset=(c-(score/100)*c).toFixed(1); },120); }
+    });
+  });
+}
+
+/* ── 6. Quick Wins ─────────────────────────────────────── */
+function renderQuickWins(r) {
+  const wins = r.quickWins || [];
+  if (!wins.length) return;
+  document.getElementById('secQuickWins').style.display = 'block';
+  document.getElementById('azQwList').innerHTML = wins.map(w => `
+    <div class="az-qw-item">
+      <span class="az-qw-ic">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </span>
+      <span class="az-qw-text">${w}</span>
+    </div>`).join('');
+}
+
+/* ── 6b. Recommended Services ───────────────────────────── */
+function renderRecommendedServices(r) {
+  const svcs = r.recommendedServices || [];
+  if (!svcs.length) return;
+  document.getElementById('secServices').style.display = 'block';
+  document.getElementById('azServicesList').innerHTML = svcs.map(s => {
+    const hasSale = s.salePrice > 0 && s.salePrice < s.price;
+    const priceHtml = s.price > 0
+      ? (hasSale
+          ? `<span style="text-decoration:line-through;opacity:.55;font-weight:500;">${s.price}</span> ${s.salePrice} ${s.currency || 'ر.س'}`
+          : `${s.price} ${s.currency || 'ر.س'}`)
+      : `<span class="free">مجاناً</span>`;
+    const reasons = (s.reasons || []).slice(0, 3)
+      .map(x => `<span class="az-svc-reason">${esc(x)}</span>`).join('');
+    return `
+    <div class="az-svc-card">
+      <div class="az-svc-head">
+        <div class="az-svc-name">${esc(s.name)}</div>
+        <div class="az-svc-price">${priceHtml}</div>
+      </div>
+      ${s.why ? `<div class="az-svc-why"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0012 2z"/></svg> ${esc(s.why)}</div>` : ''}
+      ${reasons ? `<div class="az-svc-reasons">${reasons}</div>` : ''}
+      <div class="az-svc-meta">
+        ${s.rating > 0 ? `<span>${IC.star} ${s.rating}</span>` : ''}
+        ${s.category ? `<span>${esc(s.category)}</span>` : ''}
+      </div>
+      ${s.url ? `<a class="az-svc-link" href="${esc(s.url)}" target="_blank" rel="noopener">عرض الخدمة
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>` : ''}
+    </div>`;
+  }).join('');
+}
+
+/* تهيئة سياق المتجر للمساعد الذكي (يُغذّى به الشات) */
+function setAssistantContext(r) {
+  const problems = (r.recommendedServices || [])
+    .flatMap(s => s.reasons || []);
+  window._tjStoreContext = {
+    storeName: r.storeName || null,
+    score: r.overallScore ?? null,
+    problems: [...new Set(problems)].slice(0, 8),
+    services: (r.recommendedServices || []).map(s => ({
+      name: s.name, price: s.salePrice > 0 ? s.salePrice : s.price,
+      currency: s.currency, url: s.url, reasons: s.reasons,
+    })),
+  };
+}
+
+/* ── 7. Actions ─────────────────────────────────────────── */
+function renderActions(r) {
+  const all = [];
+
+  // Pattern issues (sorted by revenue impact)
+  const patterns = (r.patternIssues || [])
+    .filter(i => i.actionStatus !== 'done' && i.actionStatus !== 'dismissed')
+    .sort((a, b) => (b.estimatedMonthly || 0) - (a.estimatedMonthly || 0));
+
+  patterns.forEach(p => all.push({
+    title:   p.title || '',
+    desc:    p.desc  || p.description || '',
+    priority: p.priority,
+    effort:   p.effort,
+    money:    p.estimatedMonthly ? sar(p.estimatedMonthly) + '/شهر' : null,
+    source:   'pattern',
+  }));
+
+  // AI actions
+  (r.actions || []).forEach(a => all.push({
+    title:   a.title  || a.task  || '',
+    desc:    a.desc   || a.reason || a.description || '',
+    priority: a.priority,
+    effort:   a.effort || a.difficulty,
+    money:    a.estimatedRevenue ? sar(a.estimatedRevenue) : (a.revenueImpact || null),
+    impact:   a.impact || '',
+    source:   'ai',
+  }));
+
+  const el = document.getElementById('azActionsList');
+  if (!all.length) { el.innerHTML = '<div class="az-empty">لم تُكتشف توصيات محددة.</div>'; return; }
+
+  el.innerHTML = all.map(a => `
+    <div class="az-action">
+      <div class="az-action-head">
+        <div class="az-action-title">${a.title}</div>
+        <span class="az-tag ${priorityClass(a.priority)}">${priorityLabel(a.priority)}</span>
+      </div>
+      <div class="az-action-desc">${a.desc}</div>
+      <div class="az-action-tags">
+        ${a.effort ? `<span class="az-tag tag-ef">${effortLabel(a.effort)}</span>` : ''}
+        ${a.money  ? `<span class="az-tag tag-money">${IC.money} ${a.money}</span>` : ''}
+        ${a.impact ? `<span class="az-tag tag-ef">${IC.trend} ${a.impact}</span>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+/* ── 8. Technical ──────────────────────────────────────── */
+function renderTechnical(r) {
+  const td  = r.technicalData || {};
+  const sec = td.security || {};
+  const cs  = td.croSignals || {};
+  const sc  = r.scraped || {};
+
+  const CHECKS = [
+    ['SSL آمن (https)',          sc.hasSSL],
+    ['CDN (Cloudflare/Fastly)',  sc.hasCDN],
+    ['Schema.org / بيانات هيكلية', sc.hasStructuredData],
+    ['Robots.txt',               td.seoFiles?.hasRobots ?? null],
+    ['Sitemap.xml',              td.seoFiles?.hasSitemap ?? null],
+    ['Robots Meta',              sc.hasRobotsMeta],
+    ['OG Image',                 sc.hasOGImage],
+    ['بحث داخلي',               sc.hasSearch],
+    ['سلة التسوق',              sc.hasCart],
+    ['واتساب عائم',             cs.hasWhatsApp],
+    ['تقييمات العملاء',         cs.hasReviews],
+    ['زر الشراء',               cs.hasAddToCart],
+    ['سياسة الإرجاع',           cs.hasReturnPolicy],
+    ['شارة الشحن المجاني',      cs.hasShippingBadge],
+    ['دردشة مباشرة',           cs.hasChatWidget],
+    ['فيديو المنتج',            cs.hasProductVideo],
+    ['شارات الثقة',             cs.hasTrustBadges],
+    ['أيقونات الدفع (footer)',  cs.hasPaymentBadgesInFooter],
+    ['دليل المقاسات',          cs.hasSizeGuide],
+    ['عداد تنازلي',            cs.hasCountdown],
+  ].filter(([, v]) => v !== null && v !== undefined);
+
+  const secHeaders = Object.entries(sec.headers || {}).slice(0, 6);
+
+  let html = '';
+  if (CHECKS.length) {
+    html += `<div style="margin-bottom:1.5rem;">
+      <div style="font-size:.85rem;font-weight:700;margin-bottom:.75rem;">فحص العناصر (${CHECKS.filter(([,v])=>v).length}/${CHECKS.length} ✓)</div>
+      <div class="az-tech-checks">
+        ${CHECKS.map(([lbl, val]) => `
+          <div class="az-check-row">
+            <span class="az-check-lbl">${lbl}</span>
+            <span class="${val ? 'chk-ok' : 'chk-no'}">${val ? '✓ موجود' : '✗ مفقود'}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (secHeaders.length) {
+    html += `<div>
+      <div style="font-size:.85rem;font-weight:700;margin-bottom:.75rem;">
+        رؤوس الأمان — Security Headers
+        <span style="color:${scoreColor(sec.score||0)};margin-right:.5rem;">${sec.score||0}/100</span>
+      </div>
+      <div class="az-tech-checks">
+        ${secHeaders.map(([k,v]) => `
+          <div class="az-check-row">
+            <span class="az-check-lbl" style="font-size:.78rem;">${k}</span>
+            <span class="${v?'chk-ok':'chk-no'}">${v?'✓':'✗'}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (!html) html = '<div class="az-empty">لا توجد بيانات تقنية.</div>';
+  document.getElementById('azTechContent').innerHTML = html;
+}
+
+/* ── 9. Competitors ─────────────────────────────────────── */
+function renderCompetitors(r) {
+  const comps = r.psychology?.competitors || r.competitors || [];
+  if (!comps.length) return;
+  document.getElementById('secComp').style.display = 'block';
+  document.getElementById('azCompGrid').innerHTML = comps.slice(0, 3).map(c => `
+    <div class="az-comp-card">
+      <div class="az-comp-name">${c.arabicName || c.name || 'منافس'}</div>
+      ${c.url ? `<div class="az-comp-url">${c.url}</div>` : ''}
+      ${c.strength ? `<div class="az-comp-row"><span class="az-comp-key">نقطة قوة:</span><span class="az-comp-val">${c.strength}</span></div>` : ''}
+      ${c.differentiator ? `<div class="az-comp-row"><span class="az-comp-key">ما يميزك:</span><span class="az-comp-val">${c.differentiator}</span></div>` : ''}
+    </div>`).join('');
+}
+
+/* ── Arabic name map for AI-returned English labels ───── */
+const AR_NAME = {
+  'Structured Data':'البيانات الهيكلية','OG Image':'صورة المشاركة',
+  'SSL':'الاتصال المشفر HTTPS','SSL/HTTPS':'الاتصال المشفر HTTPS','HTTPS':'الاتصال المشفر HTTPS',
+  'H1':'العنوان الرئيسي H1','Meta Description':'وصف الصفحة',
+  'Robots Meta':'ضبط الفهرسة','robots.txt':'ملف robots.txt','sitemap.xml':'خريطة الموقع',
+  'Hero Section':'القسم الرئيسي','Social Proof':'إثبات اجتماعي',
+  'Trust Signals':'إشارات الثقة المرئية','Mobile UX':'تجربة الجوال',
+  'Brand Consistency':'تناسق الهوية','Color Harmony':'تناسق الألوان',
+  'Font Consistency':'تناسق الخطوط','CTA Visibility':'وضوح زر الشراء',
+  'Visual Hierarchy':'التدرج البصري','Premium Feel':'مستوى الاحترافية',
+  'Layout Organization':'تنظيم الصفحة','Product Images':'جودة صور المنتجات',
+  'Image Quality':'جودة الصور','Loading Speed':'سرعة التحميل',
+  'Accessibility':'إمكانية الوصول','Breadcrumb':'مسار التصفح',
+  'Lazy Loading':'تحميل تدريجي','Quick View':'معاينة سريعة',
+  'Wishlist':'المفضلة','Cart':'سلة التسوق','Filter':'فلترة المنتجات',
+  'Newsletter':'النشرة البريدية','Chat Widget':'دردشة مباشرة',
+  'Return Policy':'سياسة الإرجاع','Shipping Badge':'شارة الشحن',
+  'Trust Badges':'شارات الضمان','Payment Badges':'أيقونات الدفع',
+  'Review Section':'تقييمات العملاء','Search':'البحث الداخلي',
+  'Non-Cluttered':'عدم الازدحام البصري','Visual Attention':'تدفق الانتباه',
+  'Typography':'الخطوط وسهولة القراءة',
+};
+const arName = n => AR_NAME[n] || AR_NAME[(n||'').trim()] || n;
+
+/* ── SEO & Google Section ─────────────────────────────── */
+function renderSeoSection(r) {
+  const sc       = r.scraped || {};
+  const ps       = r.technicalData?.pageSpeed || {};
+  const seoFiles = r.technicalData?.seoFiles  || {};
+  const aiSeo    = r.seo || {};
+
+  // Always calculate from real scraped data — AI score is often wrong
+  let score;
+  if (ps.seoScore > 0) {
+    score = ps.seoScore; // PageSpeed is ground truth
+  } else {
+    let s = 35;
+    if (sc.hasStructuredData)  s += 15;
+    if (seoFiles.hasRobots)    s += 12;
+    if (seoFiles.hasSitemap)   s += 12;
+    if (sc.h1s?.length > 0)    s += 10;
+    if (sc.metaDesc)           s += 8;
+    if (sc.hasOGImage)         s += 5;
+    if (sc.hasRobotsMeta)      s += 3;
+    score = Math.min(100, s);
+  }
+
+  const items = aiSeo.items?.length ? aiSeo.items : [
+    { check:'العنوان الرئيسي H1',   status: sc.h1s?.length    ? 'pass' : 'fail', value: sc.h1s?.[0]?.slice(0,55) || 'مفقود', fix:'أضف عنوان H1 يضم الكلمة المفتاحية الرئيسية' },
+    { check:'وصف الصفحة',           status: sc.metaDesc       ? 'pass' : 'fail', value: sc.metaDesc ? `${sc.metaDesc.length} حرف` : 'مفقود', fix:'اكتب وصف 150-160 حرف مع الكلمة المفتاحية' },
+    { check:'robots.txt',            status: seoFiles.hasRobots  ? 'pass' : 'fail', value: seoFiles.hasRobots  ? 'موجود ✓' : 'مفقود', fix:'أنشئ robots.txt واذكر فيه الـ Sitemap' },
+    { check:'خريطة الموقع sitemap',  status: seoFiles.hasSitemap ? 'pass' : 'fail', value: seoFiles.hasSitemap ? 'موجود ✓' : 'مفقود', fix:'أنشئ sitemap.xml وأضفه لـ Google Search Console' },
+    { check:'البيانات الهيكلية',     status: sc.hasStructuredData ? 'pass' : 'warn', value: sc.hasStructuredData ? 'موجود ✓' : 'مفقود', fix:'أضف بيانات Schema.org لإظهار النجوم في جوجل' },
+    { check:'صورة المشاركة',         status: sc.hasOGImage     ? 'pass' : 'warn', value: sc.hasOGImage     ? 'موجود ✓' : 'مفقود', fix:'أضف صورة مشاركة 1200×630 بكسل' },
+    { check:'صور بدون وصف Alt',      status: (!sc.totalImgs || (sc.imgsMissingAlt/sc.totalImgs) < 0.2) ? 'pass' : 'fail',
+      value: `${sc.imgsMissingAlt||0}/${sc.totalImgs||0} صورة`, fix:'أضف وصف Alt لكل صورة منتج' },
+    { check:'ضبط الفهرسة',           status: sc.hasRobotsMeta  ? 'pass' : 'warn', value: sc.hasRobotsMeta  ? 'موجود ✓' : 'غير محدد', fix:'أضف meta robots للتحكم في الفهرسة' },
   ];
 
-  function renderScreenshots(screenshots, visionUsed) {
-    const sec = document.getElementById('scrapedDataSection');
-    if (!screenshots || !screenshots.pages || !sec) return;
-
-    const pagesHtml = screenshots.pages.map((pg, i) => {
-      const frames = [];
-      if (pg.desktop) {
-        const isFirst = i === 0;
-        frames.push(`
-          <div class="screenshot-frame" style="${isFirst ? 'grid-column:1/3;' : ''}">
-            <div class="screenshot-label">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-              ${pg.label} — ديسكتوب
-            </div>
-            <img class="screenshot-img" src="data:image/jpeg;base64,${pg.desktop}" alt="${pg.label}" loading="lazy" />
-          </div>`);
-      }
-      if (pg.mobile) {
-        frames.push(`
-          <div class="screenshot-frame">
-            <div class="screenshot-label">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg>
-              ${pg.label} — جوال
-            </div>
-            <img class="screenshot-img" src="data:image/jpeg;base64,${pg.mobile}" alt="${pg.label} جوال" loading="lazy" />
-          </div>`);
-      }
-      return frames.join('');
-    }).join('');
-
-    const totalImgs = screenshots.pages.reduce((n, pg) => n + (pg.desktop ? 1 : 0) + (pg.mobile ? 1 : 0), 0);
-
-    const div = document.createElement('div');
-    div.className = 'screenshots-section';
-    div.innerHTML = `
-      <div class="screenshots-header">
-        <h3 style="display:flex;align-items:center;gap:.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>لقطات شاشة المتجر</h3>
-        ${visionUsed
-          ? `<span class="vision-badge" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>حُلِّل بصرياً بـ Gemini Vision — ${totalImgs} صورة من ${screenshots.pages.length} صفحة</span>`
-          : '<span style="font-size:.8rem;color:var(--ink-dim);">التحليل البصري غير مفعّل — أضف GEMINI_API_KEY</span>'}
+  document.getElementById('secSeo').style.display = 'block';
+  document.getElementById('azSeoContent').innerHTML = `
+    <div class="az-cat-header">
+      <div>
+        <div class="az-cat-score" style="color:${scoreColor(score)}">${Math.round(score)}<span class="az-cat-score-sub">/100</span></div>
+        <div style="font-size:.8rem;color:var(--ink-dim);margin-top:.2rem;">${items.filter(i=>i.status==='pass').length} من ${items.length} عنصر مكتمل</div>
       </div>
-      <div class="screenshots-grid">${pagesHtml}</div>
-    `;
-    sec.appendChild(div);
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        ${ps.seoScore != null ? `<div class="az-mini"><div class="az-mini-val" style="color:${scoreColor(ps.seoScore)}">${ps.seoScore}</div><div class="az-mini-lbl">تقييم جوجل</div></div>` : ''}
+        ${ps.accessibilityScore != null ? `<div class="az-mini"><div class="az-mini-val" style="color:${scoreColor(ps.accessibilityScore)}">${ps.accessibilityScore}</div><div class="az-mini-lbl">إمكانية الوصول</div></div>` : ''}
+      </div>
+    </div>
+    <div class="az-cat-grid">
+      ${items.map(item => `
+        <div class="az-cat-item ${item.status}">
+          <span class="az-cat-item-ic">${statusIc(item.status)}</span>
+          <div class="az-cat-item-body">
+            <div class="az-cat-item-name">${arName(item.check||item.name||'')}</div>
+            ${item.value ? `<div class="az-cat-item-val">${item.value}</div>` : ''}
+            ${item.issue ? `<div class="az-cat-item-issue">${item.issue}</div>` : ''}
+            ${item.fix && item.status!=='pass' ? `<div class="az-cat-item-fix">→ ${item.fix}</div>` : ''}
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+/* ── UX & Design Section ──────────────────────────────── */
+function renderUxSection(r) {
+  const sc     = r.scraped      || {};
+  const visual = r.visualAudit  || [];
+  const ux     = r.ux           || {};
+  const hero   = r.heroSection  || {};
+
+  // Build items FIRST — needed for score calculation fallback
+  const items = visual.length
+    ? visual
+    : (ux.items?.length
+        ? ux.items.map(i => ({ ...i, check: i.name, value: i.score != null ? `${i.score}/100` : '' }))
+        : [
+          { check:'البحث الداخلي',       status: sc.hasSearch        ? 'pass' : 'warn', value: sc.hasSearch        ? 'موجود ✓' : 'مفقود', fix:'أضف شريط بحث بارز في الهيدر' },
+          { check:'سلة التسوق',         status: sc.hasCart          ? 'pass' : 'fail', value: sc.hasCart          ? 'موجود ✓' : 'مفقود', fix:'تأكد من إمكانية الوصول للسلة بسهولة' },
+          { check:'قائمة الجوال',      status: sc.hasMobileMenu    ? 'pass' : 'fail', value: sc.hasMobileMenu    ? 'موجود ✓' : 'مفقود', fix:'فعّل قائمة الجوال (Hamburger)' },
+          { check:'قائمة المفضلة',     status: sc.hasWishlist      ? 'pass' : 'warn', value: sc.hasWishlist      ? 'موجود ✓' : 'مفقود', fix:'أضف المفضلة لزيادة معدل العودة' },
+          { check:'مسار التصفح',       status: sc.hasBreadcrumb    ? 'pass' : 'warn', value: sc.hasBreadcrumb    ? 'موجود ✓' : 'مفقود', fix:'أضف مسار التصفح لتسهيل التنقل' },
+          { check:'تحميل تدريجي للصور', status: (sc.lazyLoadedImgs||0) > 0 ? 'pass' : 'warn',
+            value: sc.totalImgs ? `${sc.lazyLoadedImgs||0}/${sc.totalImgs} صورة` : '—', fix:'فعّل التحميل التدريجي للصور' },
+          { check:'معاينة سريعة',       status: sc.hasQuickView     ? 'pass' : 'warn', value: sc.hasQuickView     ? 'موجود ✓' : 'مفقود', fix:'أضف المعاينة السريعة للمنتجات' },
+          { check:'فلترة المنتجات',     status: sc.hasSearchFilter  ? 'pass' : 'warn', value: sc.hasSearchFilter  ? 'موجود ✓' : 'مفقود', fix:'أضف فلترة وترتيب للمنتجات' },
+          { check:'معرض صور المنتج',    status: sc.hasProductGallery? 'pass' : 'warn', value: sc.hasProductGallery? 'موجود ✓' : 'مفقود', fix:'أضف معرض بزوايا متعددة' },
+          { check:'فيديو المنتج',       status: sc.hasProductVideo  ? 'pass' : 'warn', value: sc.hasProductVideo  ? 'موجود ✓' : 'مفقود', fix:'أضف فيديو للمنتج — يرفع التحويل 80%' },
+        ]);
+
+  // Now calculate score (items are available)
+  const rawScore = r.visualScore != null ? r.visualScore : (ux.score != null ? ux.score : null);
+  let score = rawScore != null ? (rawScore > 0 && rawScore <= 10 ? rawScore * 10 : rawScore) : null;
+  if (!score && items.length) {
+    const withScores = items.filter(i => i.score != null && i.score > 0);
+    if (withScores.length) {
+      const avg = withScores.reduce((s, i) => s + i.score, 0) / withScores.length;
+      score = Math.round(avg > 10 ? avg : avg * 10);
+    } else {
+      const passCount = items.filter(i => i.status === 'pass').length;
+      score = Math.round((passCount / items.length) * 100);
+    }
   }
 
-  function renderScrapedData(scraped) {
-    const sec = document.getElementById('scrapedDataSection');
-    if (!scraped || !sec) return;
+  const premiumMap = { premium:'فاخر', professional:'احترافي', mid:'متوسط', budget:'أساسي' };
 
-    const ck = v => v
-      ? '<span class="ok">✓</span>'
-      : '<span class="no">✗</span>';
-
-    const platformColors = {
-      'سلة': '#4f46e5', 'زد': '#0ea5e9', 'Shopify': '#96bf48',
-      'WooCommerce (WordPress)': '#7f54b3', 'Magento': '#ee672d',
-      'BigCommerce': '#34313f', 'OpenCart': '#009ac7', 'ExpandCart': '#ff6b35',
-    };
-    const pc = platformColors[scraped.platform] || 'var(--accent)';
-
-    const metaChips = [
-      scraped.contactEmail ? `<div class="meta-chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${scraped.contactEmail}</div>` : '',
-      scraped.phoneNumbers?.length ? scraped.phoneNumbers.map(p => `<div class="meta-chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.06 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${p}</div>`).join('') : '',
-      `<div class="meta-chip">H1: <strong>${scraped.h1s?.length || 0}</strong></div>`,
-      `<div class="meta-chip">صور بدون Alt: <strong style="color:${(scraped.imgsMissingAlt||0) > 0 ? '#ef4444' : '#22c55e'}">${scraped.imgsMissingAlt||0}/${scraped.totalImgs||0}</strong></div>`,
-      `<div class="meta-chip">سكريبتات: <strong>${scraped.scriptsCount||0}</strong></div>`,
-      scraped.lang && scraped.lang !== 'غير محددة' ? `<div class="meta-chip">اللغة: ${scraped.lang}</div>` : '',
-    ].filter(Boolean).join('');
-
-    const signals = [
-      { label: 'SSL آمن', val: scraped.hasSSL },
-      { label: 'CDN', val: scraped.hasCDN },
-      { label: 'Schema.org', val: scraped.hasStructuredData },
-      { label: 'Robots Meta', val: scraped.hasRobotsMeta },
-      { label: 'بحث داخلي', val: scraped.hasSearch },
-      { label: 'سلة التسوق', val: scraped.hasCart },
-      { label: 'المفضلة', val: scraped.hasWishlist },
-      { label: 'قائمة جوال', val: scraped.hasMobileMenu },
-    ];
-
-    const socialEntries = Object.entries(scraped.socialLinks || {});
-
-    sec.innerHTML = `
-      <div class="scraped-section">
-        <h3 style="display:flex;align-items:center;gap:.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>نتائج الفحص التقني المباشر</h3>
-        <div class="scraped-badges">
-          <div class="platform-badge" style="background:${pc}22;border:1px solid ${pc}55;color:${pc};display:inline-flex;align-items:center;gap:.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57l1.65-7.43H6"/></svg>${scraped.platform}</div>
-          ${(scraped.themeName || scraped.themeCode) ? `<div class="scraped-badge" style="display:inline-flex;align-items:center;gap:.35rem;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>${scraped.themeName || scraped.themeCode}</div>` : ''}
-          ${signals.map(s => `<div class="scraped-badge">${ck(s.val)} ${s.label}</div>`).join('')}
-        </div>
-        <div class="scraped-meta-chips">${metaChips}</div>
-        <div class="scraped-cols">
-          <div>
-            <div class="scraped-col-title" style="display:flex;align-items:center;gap:.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>طرق الدفع (${scraped.paymentMethods?.length || 0})</div>
-            ${scraped.paymentMethods?.length
-              ? scraped.paymentMethods.map(p => `<div class="scraped-item"><span class="ok">✓</span>${p}</div>`).join('')
-              : '<div style="font-size:.85rem;color:var(--ink-dim);">لم يُكتشف شيء — أضف أيقونات واضحة</div>'}
-          </div>
-          <div>
-            <div class="scraped-col-title" style="display:flex;align-items:center;gap:.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>حسابات التواصل (${socialEntries.length})</div>
-            ${socialEntries.length
-              ? socialEntries.map(([name, link]) => `<div class="scraped-item"><span class="ok">✓</span><a href="${link}" target="_blank" rel="noopener" style="color:var(--ink-dim);text-decoration:none;">${name}</a></div>`).join('')
-              : '<div style="font-size:.85rem;color:var(--ink-dim);">لم تُكتشف حسابات — أضف روابط ظاهرة</div>'}
-          </div>
-          <div>
-            <div class="scraped-col-title" style="display:flex;align-items:center;gap:.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>التقنيات (${scraped.technologies?.length || 0})</div>
-            ${scraped.technologies?.length
-              ? scraped.technologies.map(t => `<div class="scraped-item"><span style="color:var(--accent);">◆</span>${t}</div>`).join('')
-              : '<div style="font-size:.85rem;color:var(--ink-dim);">لم يُكتشف شيء</div>'}
-          </div>
-        </div>
+  document.getElementById('secUx').style.display = 'block';
+  document.getElementById('azUxContent').innerHTML = `
+    <div class="az-cat-header">
+      <div>
+        ${score != null ? `<div class="az-cat-score" style="color:${scoreColor(score)}">${Math.round(score)}<span class="az-cat-score-sub">/100</span></div>` : ''}
+        ${r.premiumFeel ? `<div style="font-size:.82rem;color:var(--ink-dim);margin-top:.2rem;">${premiumMap[r.premiumFeel]||r.premiumFeel}</div>` : ''}
       </div>
-    `;
+      ${r.visionUsed ? `<span style="background:var(--accent-soft);color:var(--accent);font-size:.72rem;font-weight:700;padding:.2rem .65rem;border-radius:99px;border:1px solid var(--line-accent);">✦ تحليل بصري بالذكاء الاصطناعي</span>` : ''}
+    </div>
+    ${hero.improvement ? `<div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius-md);padding:1rem 1.25rem;margin-bottom:1rem;font-size:.87rem;line-height:1.7;"><span style="font-weight:700;color:var(--accent);">Hero Section: </span>${hero.improvement}</div>` : ''}
+    <div class="az-cat-grid">
+      ${items.slice(0,12).map(item => `
+        <div class="az-cat-item ${item.status}">
+          <span class="az-cat-item-ic">${statusIc(item.status)}</span>
+          <div class="az-cat-item-body">
+            <div class="az-cat-item-name">${arName(item.name||item.check||'')}</div>
+            ${item.score != null ? `<div class="az-cat-item-val">${item.score}/100</div>` : (item.value ? `<div class="az-cat-item-val">${item.value}</div>` : '')}
+            ${item.issue ? `<div class="az-cat-item-issue">${item.issue}</div>` : ''}
+            ${item.fix && item.status!=='pass' ? `<div class="az-cat-item-fix">→ ${item.fix}</div>` : ''}
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+/* ── Payment & Pricing Section ────────────────────────── */
+function renderPaymentSection(r) {
+  const sc       = r.scraped           || {};
+  const pricing  = r.pricing           || {};
+  const commerce = r.commerce          || {};
+  const friction = r.checkoutFriction  || {};
+
+  const have    = sc.paymentMethods || [];
+  const ALL_PAY = ['مدى','Apple Pay','STC Pay','تابي','تمارا','فيزا','ماستركارد','الدفع عند الاستلام'];
+  const missing = ALL_PAY.filter(p => !have.includes(p));
+
+  if (!have.length && !pricing.score && !commerce.score && !friction.score) return;
+
+  const PAY_IMPACT = {
+    'تابي':    'رفع التحويل 15-25%',
+    'تمارا':   'رفع متوسط الطلب 30-40%',
+    'Apple Pay':'رفع تحويل الجوال 25%',
+    'STC Pay': 'ثقة العميل السعودي',
+    'مدى':     'أساسي — 85% من العملاء السعوديين',
+  };
+  const stratMap = { penetration:'اختراق السوق', premium:'تسعير فاخر', value:'قيمة مقابل السعر', competitive:'تنافسي' };
+  const n01 = v => (v > 0 && v <= 10) ? Math.round(v * 10) : Math.round(v || 0);
+  const payScore     = Math.round((have.length / ALL_PAY.length) * 100);
+  const rawOverall   = pricing.score || commerce.score || 0;
+  const overallScore = rawOverall > 0 ? n01(rawOverall) : payScore;
+
+  document.getElementById('secPayment').style.display = 'block';
+  document.getElementById('azPaymentContent').innerHTML = `
+    <div class="az-cat-header">
+      <div>
+        <div class="az-cat-score" style="color:${scoreColor(overallScore)}">${Math.round(overallScore)}<span class="az-cat-score-sub">/100</span></div>
+        <div style="font-size:.8rem;color:var(--ink-dim);margin-top:.2rem;">${have.length} من ${ALL_PAY.length} طريقة دفع مفعّلة</div>
+      </div>
+      ${friction.estimatedSteps ? `<div class="az-mini"><div class="az-mini-val" style="color:${scoreColor(100 - friction.estimatedSteps*15)}">${friction.estimatedSteps}</div><div class="az-mini-lbl">خطوات الدفع</div></div>` : ''}
+    </div>
+
+    <div style="margin-bottom:1.25rem;">
+      <div style="font-size:.82rem;font-weight:700;margin-bottom:.6rem;">طرق الدفع المكتشفة</div>
+      <div class="az-pay-row">
+        ${have.map(p=>`<span class="az-pay-pill pay-ok">✓ ${p}</span>`).join('')}
+        ${missing.map(p=>`<span class="az-pay-pill pay-no">✗ ${p}</span>`).join('')}
+      </div>
+      ${missing.filter(p=>PAY_IMPACT[p]).slice(0,3).map(p=>`
+        <div style="margin-top:.35rem;font-size:.76rem;"><span style="color:#ef4444;font-weight:600;">✗ ${p}:</span> <span style="color:var(--ink-dim);">${PAY_IMPACT[p]}</span></div>`).join('')}
+    </div>
+
+    ${pricing.strategy || pricing.issues?.length || pricing.hasFakeDiscounts ? `
+    <div style="margin-bottom:1.1rem;">
+      <div style="font-size:.82rem;font-weight:700;margin-bottom:.45rem;">استراتيجية التسعير</div>
+      ${pricing.strategy ? `<div style="font-size:.84rem;color:var(--ink-dim);margin-bottom:.3rem;">النوع: <strong style="color:var(--ink);">${stratMap[pricing.strategy]||pricing.strategy}</strong></div>` : ''}
+      ${pricing.hasFakeDiscounts ? `<div style="font-size:.82rem;color:#ef4444;font-weight:700;margin-bottom:.3rem;">خطر خصومات مبالغ فيها — قد يضر بثقة العميل</div>` : ''}
+      ${(pricing.issues||[]).slice(0,2).map(i=>`<div style="font-size:.81rem;color:var(--ink-dim);">• ${i}</div>`).join('')}
+      ${(pricing.suggestions||[]).slice(0,2).map(s=>`<div style="font-size:.81rem;color:var(--accent);">→ ${s}</div>`).join('')}
+    </div>` : ''}
+
+    ${friction.issues?.length ? `
+    <div style="margin-bottom:1.1rem;">
+      <div style="font-size:.82rem;font-weight:700;margin-bottom:.45rem;">مشاكل عملية الدفع</div>
+      <div class="az-cat-grid">
+        ${friction.issues.slice(0,4).map(issue=>`
+          <div class="az-cat-item fail">
+            <span class="az-cat-item-ic">${IC.fail}</span>
+            <div class="az-cat-item-body"><div class="az-cat-item-name" style="font-size:.82rem;">${issue}</div></div>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
+
+    ${commerce.items?.length ? `
+    <div>
+      <div style="font-size:.82rem;font-weight:700;margin-bottom:.45rem;">توافق السوق الخليجي</div>
+      <div class="az-cat-grid">
+        ${commerce.items.slice(0,6).map(item=>`
+          <div class="az-cat-item ${item.status}">
+            <span class="az-cat-item-ic">${item.status==='pass'?IC.pass:IC.fail}</span>
+            <div class="az-cat-item-body">
+              <div class="az-cat-item-name">${item.name}</div>
+              ${item.detail ? `<div class="az-cat-item-val">${item.detail}</div>` : ''}
+              ${item.fix && item.status!=='pass' ? `<div class="az-cat-item-fix">→ ${item.fix}</div>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}`;
+}
+
+/* ── Trust & Verification Section ─────────────────────── */
+function renderTrustSection(r) {
+  const sc         = r.scraped   || {};
+  const aiTrust    = r.trust     || {};
+  const trustScore = r.trustScore || 0;
+
+  // ── Build trust items — Saudi trust signals first, then general ───
+  const saudiTrustItems = [
+    sc.hasTaxNumber          !== undefined ? { name:'الرقم الضريبي',           status: sc.hasTaxNumber          ? 'pass' : 'warn', detail: sc.hasTaxNumber          ? 'موجود ومُعلن ✓'   : 'غير مُكتشف — يرفع ثقة العميل السعودي كثيراً' } : null,
+    sc.hasBusinessVerification!== undefined ? { name:'التوثيق (منصة الأعمال)', status: sc.hasBusinessVerification? 'pass' : 'warn', detail: sc.hasBusinessVerification? 'موثّق ✓'          : 'غير مُكتشف — شارة التوثيق تزيد التحويل' } : null,
+    sc.hasVATBadge           !== undefined ? { name:'شارة ضريبة القيمة المضافة',status: sc.hasVATBadge          ? 'pass' : 'warn', detail: sc.hasVATBadge          ? 'موجودة ✓'         : 'غير ظاهرة' } : null,
+    sc.hasCommercialReg      !== undefined ? { name:'السجل التجاري',           status: sc.hasCommercialReg      ? 'pass' : 'warn', detail: sc.hasCommercialReg      ? 'موجود ✓'          : 'غير مُكتشف' } : null,
+    sc.hasZATCA              !== undefined ? { name:'ربط هيئة الزكاة (ZATCA)', status: sc.hasZATCA              ? 'pass' : 'warn', detail: sc.hasZATCA              ? 'مرتبط ✓'          : 'غير مُكتشف' } : null,
+  ].filter(Boolean).filter(i => i.status === 'pass' || i.status === 'warn');
+
+  const generalTrustItems = [
+    { name:'الاتصال المشفر (HTTPS)',  status: sc.hasSSL               ? 'pass' : 'fail', detail: sc.hasSSL               ? 'الاتصال مشفر وآمن ✓'            : 'لا تشفير — المتصفح يُحذّر العميل' },
+    { name:'تقييمات العملاء',         status: sc.hasReviewSection      ? 'pass' : 'fail', detail: sc.hasReviewSection      ? 'موجودة ✓'                        : 'مفقودة — 72% يقرؤون التقييمات قبل الشراء' },
+    { name:'سياسة الإرجاع',          status: sc.hasReturnPolicy       ? 'pass' : 'fail', detail: sc.hasReturnPolicy       ? 'موجودة ✓'                        : 'مفقودة — تُقلّل احتمال الشراء 45%' },
+    { name:'واتساب للتواصل',         status: sc.hasWhatsAppFloat      ? 'pass' : 'warn', detail: sc.hasWhatsAppFloat      ? 'زر عائم ومتاح ✓'                : 'مفقود — ضروري للسوق السعودي' },
+    { name:'معلومات التواصل',         status: (sc.contactEmail||sc.phoneNumbers?.length) ? 'pass' : 'fail',
+      detail: [sc.contactEmail,...(sc.phoneNumbers||[])].filter(Boolean).join(' | ') || 'لا يوجد بريد أو هاتف' },
+    { name:'أيقونات الدفع',           status: sc.hasPaymentBadgesInFooter ? 'pass' : 'warn', detail: sc.hasPaymentBadgesInFooter ? 'موجودة في الفوتر ✓'    : 'مفقودة — تعزز ثقة العميل' },
+    { name:'شارات الضمان',            status: sc.hasTrustBadges        ? 'pass' : 'warn', detail: sc.hasTrustBadges        ? 'موجودة ✓'                        : 'مفقودة (ضمان المال، دفع آمن...)' },
+    { name:'حسابات التواصل الاجتماعي',status: Object.keys(sc.socialLinks||{}).length>=2 ? 'pass' : 'warn',
+      detail: Object.keys(sc.socialLinks||{}).join('، ') || 'لا توجد حسابات مرتبطة' },
+    { name:'دردشة مباشرة',           status: sc.hasChatWidget         ? 'pass' : 'warn', detail: sc.hasChatWidget         ? 'موجودة ✓'                        : 'لا توجد' },
+    { name:'شارة الشحن المجاني',     status: sc.hasShippingBadge      ? 'pass' : 'warn', detail: sc.hasShippingBadge      ? 'معلن بوضوح ✓'                    : 'غير ظاهر — إن وجد أعلن عنه' },
+  ];
+
+  // Saudi signals always shown; general uses AI when available, else scraper
+  const saudiItems   = saudiTrustItems;
+  const generalItems = aiTrust.items?.length ? aiTrust.items : generalTrustItems;
+  const items        = [...saudiItems, ...generalItems];
+
+  document.getElementById('secTrust').style.display = 'block';
+  document.getElementById('azTrustContent').innerHTML = `
+    <div class="az-cat-header">
+      <div>
+        <div class="az-cat-score" style="color:${scoreColor(trustScore)}">${Math.round(trustScore)}<span class="az-cat-score-sub">/100</span></div>
+        <div style="font-size:.8rem;color:var(--ink-dim);margin-top:.2rem;">${items.filter(i=>i.status==='pass').length} من ${items.length} عنصر ثقة</div>
+      </div>
+    </div>
+    ${saudiItems.length ? `
+    <div style="margin-bottom:1.1rem;">
+      <div style="font-size:.82rem;font-weight:700;margin-bottom:.5rem;color:var(--gold);">التوثيق والهوية التجارية السعودية</div>
+      <div class="az-cat-grid">
+        ${saudiItems.map(item=>`
+          <div class="az-cat-item ${item.status}">
+            <span class="az-cat-item-ic">${item.status==='pass'?IC.pass:IC.warn}</span>
+            <div class="az-cat-item-body">
+              <div class="az-cat-item-name">${item.name}</div>
+              ${item.detail ? `<div class="az-cat-item-val">${item.detail}</div>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
+    <div style="${saudiItems.length ? 'margin-top:.25rem;' : ''}">
+      ${saudiItems.length ? `<div style="font-size:.82rem;font-weight:700;margin-bottom:.5rem;">عناصر الثقة العامة</div>` : ''}
+      <div class="az-cat-grid">
+        ${generalItems.map(item=>`
+          <div class="az-cat-item ${item.status}">
+            <span class="az-cat-item-ic">${statusIc(item.status)}</span>
+            <div class="az-cat-item-body">
+              <div class="az-cat-item-name">${item.name}</div>
+              ${item.detail ? `<div class="az-cat-item-val">${item.detail}</div>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+/* ── Master Render ──────────────────────────────────────── */
+function renderReport(r) {
+  // كل قسم معزول: فشل قسم لا يُخفي بقية التقرير
+  const safe = (fn, name) => { try { fn(r); } catch (e) { console.error('render ' + name + ' failed:', e); } };
+  safe(renderHero, 'hero');
+  safe(renderRevBanner, 'revBanner');
+  safe(renderIdentity, 'identity');
+  safe(renderCriteria, 'criteria');
+  safe(renderSeoSection, 'seo');
+  safe(renderUxSection, 'ux');
+  safe(renderPaymentSection, 'payment');
+  safe(renderTrustSection, 'trust');
+  safe(renderSpeed, 'speed');
+  safe(renderQuickWins, 'quickWins');
+  safe(renderRecommendedServices, 'recommended');
+  safe(setAssistantContext, 'assistantCtx');
+  safe(renderActions, 'actions');
+  safe(renderTechnical, 'technical');
+  safe(renderCompetitors, 'competitors');
+  safe(renderSticky, 'sticky'); // بعد عرض الأقسام ليعرف المرئي منها
+  try { updateUsage(r.used, r.limit); } catch (e) {}
+}
+
+/* ── Usage Counter ──────────────────────────────────────── */
+function updateUsage(used, limit) {
+  if (used == null || limit == null) return;
+  const wrap = document.getElementById('usageWrap');
+  const p = Math.round((used / limit) * 100);
+  wrap.innerHTML = `
+    <div class="usage-counter${p>=80?' critical':p>=60?' low':''}">
+      <span>استخدمت ${used} من ${limit}</span>
+      <div class="usage-bar"><div class="usage-fill" style="width:${p}%"></div></div>
+    </div>`;
+}
+
+/* ── PDF — Server-side via Puppeteer ────────────────────── */
+async function printReport() {
+  if (!window._lastAnalysis) {
+    showError('تنبيه', 'حلّل متجراً أولاً ثم اطلب PDF');
+    return;
   }
 
-  document.getElementById('analyzeBtn').addEventListener('click', async () => {
-    if (!auth.isLoggedIn()) {
-      showModal({ type: 'warning', title: 'يجب تسجيل الدخول', message: 'سجّل دخولك لاستخدام هذه الأداة.', actions: [
-        { label: 'إلغاء', style: 'secondary', close: true },
-        { label: 'تسجيل الدخول', style: 'primary', onClick: () => window.location.href = 'login.html' },
-      ]});
-      return;
-    }
+  const storeUrl = document.getElementById('storeUrl')?.value?.trim() || '';
+  const btn  = document.querySelector('.az-pdf-btn');
+  const orig = btn.innerHTML;
+  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> جاري التوليد...`;
+  btn.disabled = true;
 
-    const url = document.getElementById('storeUrl').value.trim();
-    const category = document.getElementById('category').value;
+  try {
+    // Strip large base64 screenshots before sending (they can be 2-5MB)
+    const pdfData = { ...window._lastAnalysis };
+    delete pdfData.screenshots;
+    const { blob, filename } = await api.exportPdf(storeUrl, '', pdfData);
+    const url  = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href  = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000); // Wait for browser to finish download
+    showToast('تم تحميل التقرير PDF بنجاح ✓', 'success');
+  } catch (err) {
+    showError('خطأ في توليد PDF', err.message);
+  } finally {
+    btn.innerHTML = orig;
+    btn.disabled  = false;
+  }
+}
 
-    if (!url) { showError('حقل مطلوب', 'من فضلك أدخل رابط متجرك'); return; }
-    if (!url.startsWith('http')) { showError('رابط غير صحيح', 'أدخل رابطاً يبدأ بـ https://'); return; }
+/* ── Analyze ────────────────────────────────────────────── */
+document.getElementById('analyzeBtn').addEventListener('click', async () => {
+  if (!auth.isLoggedIn()) {
+    showModal({ type:'warning', title:'يجب تسجيل الدخول', message:'سجّل دخولك لاستخدام هذه الأداة.', actions:[
+      { label:'إلغاء', style:'secondary', close:true },
+      { label:'تسجيل الدخول', style:'primary', onClick:() => window.location.href='login.html' },
+    ]});
+    return;
+  }
 
-    const btn = document.getElementById('analyzeBtn');
-    btn.disabled = true;
-    const loading = document.getElementById('loading');
-    const results = document.getElementById('results');
-    results.classList.remove('visible');
-    loading.classList.add('visible');
+  const url = document.getElementById('storeUrl').value.trim();
+  const cat = document.getElementById('category').value.trim();
+  if (!url) { showError('حقل مطلوب', 'أدخل رابط المتجر'); return; }
+  if (!url.startsWith('http')) { showError('رابط غير صحيح', 'يجب أن يبدأ بـ https://'); return; }
 
-    // Animate loading steps while API call runs
-    const stepEl = document.getElementById('loadingStep');
-    let stepIndex = 0;
-    const stepInterval = setInterval(() => {
-      stepEl.textContent = loadingSteps[stepIndex % loadingSteps.length];
-      stepIndex++;
-    }, 900);
+  const btn    = document.getElementById('analyzeBtn');
+  const prog   = document.getElementById('azProgress');
+  const report = document.getElementById('azReport');
 
-    let response;
-    try {
-      response = await api.analyze(url, category);
-    } catch (err) {
-      showToolError(err, 'analyzer');
-      return;
-    } finally {
-      clearInterval(stepInterval);
-      loading.classList.remove('visible');
-      btn.disabled = false;
-    }
+  btn.disabled = true;
+  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> جاري التحليل...`;
+  report.classList.remove('visible');
+  prog.classList.add('visible');
+  startProgress();
 
-    // Render real scraped data + screenshots
-    results.classList.add('visible');
-    renderScrapedData(response.scraped);
-    renderScreenshots(response.screenshots, response.visionUsed);
+  let response;
+  _analyzeCancelled = false;
+  window.__tjBusy = true; // امنع التحديث التلقائي من قطع التحليل
+  try {
+    response = await api.analyze(url, cat);
+  } catch (err) {
+    window.__tjBusy = false;
+    if (_analyzeCancelled) return;
+    stopProgress();
+    prog.classList.remove('visible');
+    btn.disabled = false;
+    showToolError(err, 'analyzer');
+    return;
+  }
+  window.__tjBusy = false;
+  if (_analyzeCancelled) return; // أُلغي أثناء الانتظار — تجاهل النتيجة
 
-    // Map API response to UI data structure
-    const analysis = {
-      metrics: (response.criteria || []).map(c => ({
-        name: c.name,
-        score: c.score,
-        actions: c.actions || [],
-        details: { good: c.feedback, medium: c.feedback, poor: c.feedback }
-      })),
-    };
-    const overallScore = response.overallScore || 0;
-
-    if (response.summary) {
-      document.getElementById('scoreDesc').textContent = response.summary;
-    }
-    
-    // Animate score
-    const scoreFg = document.getElementById('scoreFg');
-    const scoreNum = document.getElementById('scoreNum');
-    const grade = document.getElementById('scoreGrade');
-    const desc = document.getElementById('scoreDesc');
-    const circumference = 2 * Math.PI * 45;
-    scoreFg.style.strokeDasharray = circumference;
-    scoreFg.style.strokeDashoffset = circumference - (overallScore / 100) * circumference;
-    
-    // Animate number
-    let current = 0;
-    const target = overallScore;
-    const startTime = performance.now();
-    function animateScore(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / 1500, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      scoreNum.textContent = Math.floor(eased * target);
-      if (progress < 1) requestAnimationFrame(animateScore);
-    }
-    requestAnimationFrame(animateScore);
-    
-    // Set grade
-    if (overallScore >= 85) {
-      grade.textContent = 'ممتاز';
-      grade.className = 'score-grade grade-excellent';
-      desc.textContent = 'متجرك في حالة ممتازة. هناك تحسينات بسيطة يمكنها رفعك للمستوى الأعلى.';
-    } else if (overallScore >= 70) {
-      grade.textContent = 'جيد';
-      grade.className = 'score-grade grade-good';
-      desc.textContent = 'متجرك جيد لكن فيه فرص واضحة للتحسين قد ترفع مبيعاتك 30-50%.';
-    } else if (overallScore >= 55) {
-      grade.textContent = 'متوسط';
-      grade.className = 'score-grade grade-medium';
-      desc.textContent = 'متجرك يحتاج تحسينات مهمة. الفرص ضخمة لو تم تنفيذ التوصيات.';
-    } else {
-      grade.textContent = 'يحتاج تحسين';
-      grade.className = 'score-grade grade-poor';
-      desc.textContent = 'متجرك يخسر عملاء كثيرين بسبب مشاكل تقنية وتجربة مستخدم ضعيفة.';
-    }
-    
-    // Render strengths/weaknesses summary above metrics
-    const strengthsWrap = document.getElementById('strengthsWrap');
-    if (strengthsWrap) {
-      const str = Array.isArray(response.strengths) ? response.strengths : [];
-      const wkn = Array.isArray(response.weaknesses) ? response.weaknesses : [];
-      strengthsWrap.innerHTML = str.length || wkn.length ? `
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
-          <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:var(--radius-md);padding:1.5rem;">
-            <h4 style="color:#22c55e;margin-bottom:1rem;">نقاط القوة</h4>
-            ${str.map(s=>`<div style="display:flex;gap:.5rem;padding:.35rem 0;font-size:.88rem;"><span style="color:#22c55e;">✓</span><span>${s}</span></div>`).join('')}
-          </div>
-          <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);padding:1.5rem;">
-            <h4 style="color:#ef4444;margin-bottom:1rem;">نقاط الضعف</h4>
-            ${wkn.map(w=>`<div style="display:flex;gap:.5rem;padding:.35rem 0;font-size:.88rem;"><span style="color:#ef4444;">✗</span><span>${w}</span></div>`).join('')}
-          </div>
-        </div>` : '';
-    }
-
-    // Render metrics
-    const metricsGrid = document.getElementById('metricsGrid');
-    metricsGrid.innerHTML = '';
-    analysis.metrics.forEach((m, i) => {
-      const detailKey = m.score >= 75 ? 'good' : m.score >= 55 ? 'medium' : 'poor';
-      const color = m.score >= 75 ? 'var(--success)' : m.score >= 55 ? 'var(--accent-warm)' : 'var(--danger)';
-      const card = document.createElement('div');
-      card.className = 'metric';
-      card.style.animationDelay = `${i * 0.1}s`;
-      const actions = m.actions || [];
-      card.innerHTML = `
-        <div class="metric-header">
-          <div class="metric-name">${m.name}</div>
-          <div class="metric-score" style="color: ${color}">${m.score}<span style="font-size: 0.6em; color: var(--ink-dim);">/100</span></div>
-        </div>
-        <div class="metric-bar">
-          <div class="metric-bar-fill" style="width: ${m.score}%; background: ${color};"></div>
-        </div>
-        <div class="metric-detail">${m.details[detailKey]}</div>
-        ${actions.length ? `<div style="margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--line);">
-          ${actions.map(a=>`<div style="display:flex;gap:.4rem;align-items:start;font-size:.8rem;color:var(--ink-dim);margin-bottom:.3rem;"><span style="color:var(--accent);flex-shrink:0;">→</span><span>${a}</span></div>`).join('')}
-        </div>` : ''}
-      `;
-      metricsGrid.appendChild(card);
-    });
-    
-    // Quick Wins
-    const quickWins = response.quickWins || [];
-    const quickWinsEl = document.getElementById('quickWinsList');
-    if (quickWinsEl && quickWins.length) {
-      quickWinsEl.innerHTML = quickWins.map(w => `
-        <div style="display:flex;gap:.7rem;align-items:start;padding:.6rem 0;border-bottom:1px solid var(--line);">
-          <span style="color:#22c55e;flex-shrink:0;display:flex;align-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
-          <span style="line-height:1.7;">${w}</span>
-        </div>`).join('');
-      document.getElementById('quickWinsSection').style.display = 'block';
-    }
-
-    // Render issues / recommendations
-    const issuesList = document.getElementById('issuesList');
-    issuesList.innerHTML = '';
-    const recommendations = response.recommendations || [];
-    const priorityLabels = { high: 'عاجل', medium: 'مهم', low: 'تحسين' };
-
-    if (recommendations.length && typeof recommendations[0] === 'object') {
-      // New structured format
-      recommendations.forEach(r => {
-        const div = document.createElement('div');
-        div.className = 'issue';
-        const icons = {
-          high: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>',
-          medium: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>',
-          low: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>'
-        };
-        div.innerHTML = `
-          <div class="issue-icon ${r.priority}">${icons[r.priority] || icons.medium}</div>
-          <div class="issue-content">
-            <h4>${r.title}</h4>
-            <p>${r.detail || ''}</p>
-            ${r.impact ? `<div style="margin-top:.4rem;font-size:.8rem;color:var(--accent);font-weight:600;">الأثر المتوقع: ${r.impact}</div>` : ''}
-          </div>
-          <span class="issue-priority priority-${r.priority}">${priorityLabels[r.priority] || r.priority}</span>
-        `;
-        issuesList.appendChild(div);
-      });
-    } else {
-      // Fallback: old string format or weaknesses list
-      const items = recommendations.length ? recommendations :
-        [...(response.weaknesses||[]).map(w=>({priority:'high',title:w,detail:''})),
-         ...(response.strengths||[]).map(s=>({priority:'low',title:s,detail:''}))];
-      items.forEach(item => {
-        const r = typeof item === 'string' ? {priority:'medium',title:item,detail:''} : item;
-        const div = document.createElement('div');
-        div.className = 'issue';
-        div.innerHTML = `<div class="issue-content" style="grid-column:1/-1;"><h4>${r.title}</h4><p>${r.detail||''}</p></div>`;
-        issuesList.appendChild(div);
-      });
-    }
-    
-    loading.classList.remove('visible');
-    results.classList.add('visible');
-    showToast('تم التحليل بنجاح!', 'success');
-
-    // Usage counter
-    if (response.used !== undefined && response.limit !== null) {
-      let counter = document.getElementById('analyzerUsageCounter');
-      if (!counter) {
-        counter = document.createElement('div');
-        counter.id = 'analyzerUsageCounter';
-        counter.className = 'usage-counter';
-        document.getElementById('analyzeBtn').insertAdjacentElement('afterend', counter);
-      }
-      const pct = Math.round((response.used / response.limit) * 100);
-      counter.className = `usage-counter${pct >= 80 ? ' critical' : pct >= 60 ? ' low' : ''}`;
-      counter.innerHTML = `<span>استخدمت ${response.used} من ${response.limit}</span><div class="usage-bar"><div class="usage-fill" style="width:${pct}%"></div></div>`;
-    }
-
-    setTimeout(() => results.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  finishProgress(() => {
+    prog.classList.remove('visible');
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> حلّل المتجر الآن`;
+    report.classList.add('visible');
+    window._lastAnalysis = response; // Save for PDF export
+    renderReport(response);
+    showToast('اكتمل التحليل بنجاح ✓', 'success');
+    setTimeout(() => report.scrollIntoView({ behavior:'smooth', block:'start' }), 150);
   });
-
-  function downloadReport(e) {
-    e.preventDefault();
-    window.print();
-  }
+});
 </script>
 
+<script src="../assets/header.js?v=16"></script>
 </body>
 </html>

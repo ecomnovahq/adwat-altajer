@@ -3,5 +3,9 @@ Allow: /
 Disallow: /pages/admin.html
 Disallow: /pages/account.html
 Disallow: /pages/login.html
+Disallow: /pages/history.html
+Disallow: /pages/messages.html
+Disallow: /pages/forgot-password.html
+Disallow: /pages/reset-password.html
 
 Sitemap: https://adwat-altajer.com/sitemap.xml

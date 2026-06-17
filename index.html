@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=8">
 <style>
 /* ═══════════════════════════════════════════════════
    INDEX PAGE — v4 Smooth
@@ -66,8 +66,7 @@
 
 /* ═══════════════════════════════════════ SECTIONS ═══ */
 .section {
-  min-height: 100vh; padding: 7rem 2rem;
-  display: flex; align-items: center; position: relative; overflow: hidden;
+  padding: 6rem 2rem; position: relative; overflow: hidden;
 }
 .section-inner { max-width: 1280px; margin: 0 auto; width: 100%; }
 .section-alt { background: var(--bg-alt); }
@@ -286,18 +285,18 @@
   transition: all 0.3s cubic-bezier(0.16,1,0.3,1); position: relative;
 }
 .how-step:hover { border-color: var(--line-accent); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(168,85,247,0.12); }
-.how-step-num {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-2), var(--accent));
-  color: #fff; font-weight: 800; font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 1.25rem; box-shadow: 0 4px 16px rgba(168,85,247,0.4);
+.how-step-ic {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--accent-soft); border: 1px solid var(--line-accent); color: var(--accent);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+  transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
 }
-.how-step-num.g-num {
-  background: linear-gradient(135deg, #d97706, var(--gold));
-  box-shadow: 0 4px 16px rgba(234,179,8,0.35);
-}
-.how-step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.how-step-ic svg { width: 24px; height: 24px; }
+.how-step-ic.g { background: var(--gold-soft); border-color: rgba(234,179,8,.3); color: var(--gold); }
+.how-step:hover .how-step-ic { transform: rotate(-6deg) scale(1.08); }
+.how-step-tag { font-size: .72rem; font-weight: 700; color: var(--accent); letter-spacing: .05em; }
+.how-step-tag.g { color: var(--gold); }
+.how-step h3 { font-size: 1.05rem; font-weight: 700; margin: .5rem 0; }
 .how-step p  { font-size: 0.83rem; color: var(--ink-dim); line-height: 1.7; }
 
 /* ══════════════════════════════════════ STATS ═══ */
@@ -402,6 +401,35 @@
   .cta-box { padding: 3.5rem 1.5rem; }
 }
 </style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#6366f1">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "أدوات التاجر",
+      "alternateName": "Tajer Tools",
+      "url": "https://adwat-altajer.com/",
+      "logo": "https://adwat-altajer.com/assets/favicon.svg",
+      "description": "منصة أدوات ذكية للتجار: تحليل المتاجر، توليد المحتوى، تقويم المواسم وأكثر.",
+      "parentOrganization": { "@type": "Organization", "name": "خبراء المنصات" }
+    },
+    {
+      "@type": "WebSite",
+      "name": "أدوات التاجر",
+      "url": "https://adwat-altajer.com/",
+      "inLanguage": "ar",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://adwat-altajer.com/pages/tools.html?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -415,7 +443,6 @@
   <div class="side-dot"        data-target="tools-section" data-label="الأدوات"></div>
   <div class="side-dot"        data-target="how-section"   data-label="كيف تعمل"></div>
   <div class="side-dot"        data-target="stats-section" data-label="أرقام"></div>
-  <div class="side-dot"        data-target="works-section" data-label="أعمالنا"></div>
   <div class="side-dot"        data-target="reviews-section" data-label="آراء العملاء"></div>
   <div class="side-dot"        data-target="cta-section"   data-label="ابدأ الآن"></div>
 </nav>
@@ -437,8 +464,6 @@
       <li><a href="pages/tools.html">الأدوات</a></li>
       <li><a href="pages/coupons.html">الكوبونات</a></li>
       <li><a href="pages/calendar.html">المواسم</a></li>
-      <li><a href="pages/works.html">أعمالنا</a></li>
-      <li><a href="pages/services.html">الخدمات</a></li>
       <li><a href="pages/blog.html">المدونة</a></li>
       <li><a href="pages/about.html">عن المنصة</a></li>
     </ul>
@@ -448,7 +473,6 @@
         <span class="icon-moon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span>
         <span class="icon-sun"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
       </button>
-      <a href="pages/services.html" class="nav-cta">احجز استشارة</a>
       <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="القائمة">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
       </button>
@@ -457,6 +481,57 @@
 </nav>
 
 <!-- ══════════════════════════════ SECTION 1 — HERO ═══ -->
+<style>
+  /* ── SaaS Hero ── */
+  #hero { min-height: 92vh; padding-top: 7rem; }
+  .hero-saas { position: relative; z-index: 2; max-width: 1220px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1.08fr .92fr; gap: 3.5rem; align-items: center; }
+  .hero-copy { text-align: right; }
+  .hero-copy .hero-badge, .hero-copy .hero-title, .hero-copy .hero-desc, .hero-copy .hero-actions { margin-left: auto; }
+  .hero-copy .hero-desc { margin: 0 0 2.2rem; }
+  .hero-trust { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2.4rem; padding-top: 1.8rem; border-top: 1px solid var(--line); }
+  .hero-trust .hp { display: flex; flex-direction: column; }
+  .hero-trust .hp-n { font-weight: 800; font-size: 1.4rem; line-height: 1; }
+  .hero-trust .hp-n.p { color: var(--accent); } .hero-trust .hp-n.g { color: var(--gold); }
+  .hero-trust .hp-l { font-size: .78rem; color: var(--ink-dim); margin-top: .3rem; }
+  /* product mockup */
+  .hero-visual { position: relative; }
+  .mock { background: var(--bg-card); border: 1px solid var(--line-strong); border-radius: 22px;
+    box-shadow: 0 40px 90px rgba(0,0,0,.5); padding: 1.4rem 1.5rem; position: relative; z-index: 2;
+    animation: heroFadeUp .9s .4s ease both; }
+  .mock-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.3rem; }
+  .mock-title { font-weight: 800; font-size: 1.02rem; display: flex; align-items: center; gap: .5rem; }
+  .mock-live { font-size: .68rem; color: #22c55e; display: flex; align-items: center; gap: .35rem; }
+  .mock-live::before { content:''; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: heroPulse 2s infinite; }
+  .mock-body { display: flex; gap: 1.3rem; align-items: center; }
+  .ring { --p: 0; width: 104px; height: 104px; border-radius: 50%; flex-shrink: 0;
+    background: conic-gradient(var(--accent) calc(var(--p)*1%), var(--line) 0); display: grid; place-items: center; }
+  .ring::after { content: ''; position: absolute; width: 104px; height: 104px; }
+  .ring i { width: 80px; height: 80px; border-radius: 50%; background: var(--bg-card); display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 1.5rem; }
+  .ring i small { font-size: .6rem; color: var(--ink-dim); font-weight: 600; }
+  .mock-metrics { flex: 1; display: flex; flex-direction: column; gap: .7rem; }
+  .mk { }
+  .mk-row { display: flex; justify-content: space-between; font-size: .76rem; color: var(--ink-dim); margin-bottom: .3rem; }
+  .mk-bar { height: 7px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+  .mk-fill { height: 100%; border-radius: 99px; width: 0; transition: width 1.2s cubic-bezier(.16,1,.3,1); }
+  .mock-foot { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1.3rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+  .mock-chip { font-size: .72rem; font-weight: 700; padding: .3rem .7rem; border-radius: 99px; background: var(--accent-soft); color: var(--accent); }
+  .mock-chip.g { background: rgba(234,179,8,.14); color: var(--gold); }
+  .hero-float-mini { position: absolute; background: var(--float-card-bg); backdrop-filter: blur(14px);
+    border: 1px solid var(--line-strong); border-radius: 14px; padding: .7rem .9rem; display: flex; align-items: center; gap: .55rem;
+    font-size: .8rem; font-weight: 700; box-shadow: 0 18px 40px rgba(0,0,0,.4); z-index: 3; animation: heroFloat 4s ease-in-out infinite; }
+  .hero-float-mini.a { bottom: -18px; left: -14px; } .hero-float-mini.b { top: -16px; right: -10px; animation-delay: 1.6s; }
+  .hero-float-mini .ic { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; }
+  @media (max-width: 980px) {
+    .hero-saas { grid-template-columns: 1fr; gap: 2.8rem; text-align: center; }
+    .hero-copy { text-align: center; }
+    .hero-copy .hero-badge { margin: 0 auto 2.25rem; }
+    .hero-trust { justify-content: center; }
+    .hero-visual { max-width: 440px; margin: 0 auto; width: 100%; }
+  }
+  @media (max-width: 480px) { .hero-float-mini { display: none; } .mock-body { flex-direction: column; text-align: center; } }
+</style>
+
 <section id="hero">
   <div class="hero-bg">
     <div class="hero-bg-orb1"></div>
@@ -464,111 +539,107 @@
     <div class="hero-grid"></div>
   </div>
 
-  <!-- Floating cards -->
-  <div class="hero-float hero-float-left">
-    <div class="hero-float-icon g">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V22H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-    </div>
-    <div>
-      <div>كوبون خصم نشط</div>
-      <div class="hero-float-sub">+500 كوبون على سلة وزد</div>
-    </div>
-  </div>
-
-  <div class="hero-float hero-float-right">
-    <div class="hero-float-icon p">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 3v18h18M7 14l4-4 4 4 6-6"/></svg>
-    </div>
-    <div>
-      <div>محلل ذكي</div>
-      <div class="hero-float-sub">تقرير متجرك في ثوانٍ</div>
-    </div>
-  </div>
-
-  <div class="hero-content">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      منصة مبنية خصيصاً للسوق السعودي
-    </div>
-
-    <h1 class="hero-title">
-      كل ما يحتاجه<br>
-      <span class="g-purple">التاجر السعودي</span><br>
-      في <span class="g-gold">مكان واحد.</span>
-    </h1>
-
-    <p class="hero-desc">
-      أدوات تحليل ذكية، كوبونات حصرية، تقويم المواسم، وفريق متخصص ينفّذ لك. كل شي تحتاجه لمتجرك، بدون تعقيد.
-    </p>
-
-    <div class="hero-actions">
-      <a href="pages/tools.html" class="btn-primary" style="padding:0.9rem 2.2rem;font-size:1rem;">
-        ابدأ بالأدوات مجاناً
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      </a>
-      <a href="pages/coupons.html" class="btn-secondary" style="padding:0.9rem 2rem;">شوف الكوبونات</a>
-    </div>
-
-    <div class="hero-pills">
-      <div class="hero-pill">
-        <span class="hero-pill-num p">+500</span>
-        <span>كوبون نشط</span>
+  <div class="hero-saas">
+    <!-- النص -->
+    <div class="hero-copy">
+      <div class="hero-badge teal"><span class="hero-badge-dot"></span> من خبراء المنصات · شريكك في النجاح</div>
+      <h1 class="hero-title">نمِّ متجرك<br><span class="g-purple">بأدوات ذكية</span><br>و<span class="g-gold">خبرة حقيقية.</span></h1>
+      <p class="hero-desc">حلّل متجرك، ولّد محتواك، وخطّط لمواسمك — مع فريق خبراء المنصات الجاهز ينفّذ لك. كل شي في مكان واحد، بدون تعقيد.</p>
+      <div class="hero-actions">
+        <a href="pages/tools.html" class="btn-primary" style="padding:0.9rem 2.2rem;font-size:1rem;">ابدأ مجاناً الآن
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+        <a href="pages/analyzer.html" class="btn-secondary" style="padding:0.9rem 2rem;">حلّل متجرك</a>
       </div>
-      <div style="width:1px;background:var(--line);"></div>
-      <div class="hero-pill">
-        <span class="hero-pill-num g">8</span>
-        <span>أدوات ذكية</span>
-      </div>
-      <div style="width:1px;background:var(--line);"></div>
-      <div class="hero-pill">
-        <span class="hero-pill-num p">100%</span>
-        <span>مجاني للبدء</span>
-      </div>
-      <div style="width:1px;background:var(--line);"></div>
-      <div class="hero-pill">
-        <span class="hero-pill-num g">+200</span>
-        <span>مشروع منجز</span>
+      <div class="hero-trust">
+        <div class="hp"><span class="hp-n p">11</span><span class="hp-l">أداة ذكية</span></div>
+        <div class="hp"><span class="hp-n g">+500</span><span class="hp-l">كوبون نشط</span></div>
+        <div class="hp"><span class="hp-n p">+200</span><span class="hp-l">مشروع منجز</span></div>
+        <div class="hp"><span class="hp-n g">100%</span><span class="hp-l">مجاني للبدء</span></div>
       </div>
     </div>
-  </div>
 
-  <div class="scroll-cue" onclick="scrollTo('tools-section')">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    اكتشف المزيد
+    <!-- mockup المنتج -->
+    <div class="hero-visual">
+      <div class="mock">
+        <div class="mock-top">
+          <div class="mock-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2"><path d="M3 3v18h18M7 14l4-4 4 4 6-6"/></svg> تقرير متجرك</div>
+          <div class="mock-live">مباشر</div>
+        </div>
+        <div class="mock-body">
+          <div class="ring" data-p="87" style="position:relative;"><i><span class="mock-num" data-to="87">0</span><small>/100</small></i></div>
+          <div class="mock-metrics">
+            <div class="mk"><div class="mk-row"><span>تحسين محركات البحث</span><span class="mk-pct" data-to="78">0%</span></div><div class="mk-bar"><div class="mk-fill" data-w="78" style="background:var(--accent)"></div></div></div>
+            <div class="mk"><div class="mk-row"><span>أداء الموقع</span><span class="mk-pct" data-to="92">0%</span></div><div class="mk-bar"><div class="mk-fill" data-w="92" style="background:#22c55e"></div></div></div>
+            <div class="mk"><div class="mk-row"><span>معدّل التحويل</span><span class="mk-pct" data-to="64">0%</span></div><div class="mk-bar"><div class="mk-fill" data-w="64" style="background:var(--gold)"></div></div></div>
+          </div>
+        </div>
+        <div class="mock-foot">
+          <span class="mock-chip">مدى مفعّل ✓</span>
+          <span class="mock-chip g">تابي مفقود</span>
+          <span class="mock-chip">واتساب ✓</span>
+        </div>
+      </div>
+      <div class="hero-float-mini a"><span class="ic" style="background:var(--accent-soft);color:var(--accent)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span> تحليل فوري</div>
+      <div class="hero-float-mini b"><span class="ic" style="background:rgba(234,179,8,.15);color:var(--gold)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span> +500 كوبون</div>
+    </div>
   </div>
 </section>
 
 <!-- ════════════════════════════ PLATFORMS STRIP ═══ -->
-<div class="platforms-strip">
-  <p class="platforms-label">منصات وخدمات مدعومة</p>
-  <div class="ticker-wrap">
-    <div class="platforms-track">
-      <div class="platform-item"><span class="platform-dot" style="background:#6366f1;"></span>سلة</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#22c55e;"></span>زد</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#f59e0b;"></span>شيبو</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#3b82f6;"></span>بايدو</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#ec4899;"></span>إكسباي</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#a855f7;"></span>هايد باي</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#10b981;"></span>مكان</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#f97316;"></span>ماي فاتورة</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#8b5cf6;"></span>تاب</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#06b6d4;"></span>إكسباندكارت</div>
-      <!-- duplicate for seamless loop -->
-      <div class="platform-item"><span class="platform-dot" style="background:#6366f1;"></span>سلة</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#22c55e;"></span>زد</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#f59e0b;"></span>شيبو</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#3b82f6;"></span>بايدو</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#ec4899;"></span>إكسباي</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#a855f7;"></span>هايد باي</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#10b981;"></span>مكان</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#f97316;"></span>ماي فاتورة</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#8b5cf6;"></span>تاب</div>
-      <div class="platform-item"><span class="platform-dot" style="background:#06b6d4;"></span>إكسباندكارت</div>
+<!-- ══════════════════════════ SECTION 2 — TOOLS ═══ -->
+<!-- ════════════════════ منصات وخدمات مدعومة (شريط متحرك) ═══ -->
+<style>
+  .mq-band { padding: 3rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-alt); overflow: hidden; position: relative; z-index: 2; }
+  .mq-head { text-align: center; color: var(--ink-dim); font-size: .82rem; font-weight: 600; letter-spacing: .08em; margin-bottom: 1.8rem; }
+  .mq-viewport { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+  .mq-track { display: flex; width: max-content; will-change: transform; animation: mqScroll 30s linear infinite; }
+  .mq-group { display: flex; align-items: center; flex-shrink: 0; }
+  /* حلقة لا نهائية: المسار = نسختان متطابقتان، والحركة بمقدار نصف العرض = نسخة كاملة → التفاف غير مرئي */
+  @keyframes mqScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .mq-item { display: flex; align-items: center; justify-content: center; flex-shrink: 0; min-width: 150px; padding-inline-start: 4.5rem; opacity: .8; }
+  .mq-item img { height: 42px; width: auto; display: block; }
+  .mq-text { font-size: 1.5rem; font-weight: 800; white-space: nowrap; line-height: 1; font-family: var(--font-arabic); }
+  .mq-text b { font-weight: 800; }
+  @media (max-width: 768px) { .mq-item { padding-inline-start: 3rem; } .mq-item img { height: 34px; } .mq-band { padding: 2.2rem 0; } }
+  @media (max-width: 480px) { .mq-item { padding-inline-start: 2.2rem; } .mq-item img { height: 28px; } }
+  @media (prefers-reduced-motion: reduce) { .mq-track { animation: none; flex-wrap: wrap; justify-content: center; } .mq-item { padding: .6rem 1rem; } }
+</style>
+<div class="mq-band" data-reveal>
+  <div class="mq-head">منصات وخدمات مدعومة</div>
+  <div class="mq-viewport">
+    <div class="mq-track" id="mqTrack">
+      <div class="mq-item"><img src="assets/logos/salla.svg" alt="سلة" loading="eager"></div>
+      <div class="mq-item"><img src="assets/logos/zid.svg" alt="زد" loading="eager"></div>
+      <div class="mq-item"><img src="assets/logos/shopify.svg" alt="Shopify" loading="eager"></div>
+      <div class="mq-item"><img src="assets/logos/opencart.svg" alt="OpenCart" loading="eager"></div>
+      <div class="mq-item mq-text"><b style="color:#3E97C9;">خبراء</b>&nbsp;<b style="color:#2CC6C9;">المنصات</b></div>
+      <div class="mq-item mq-text"><b style="color:#2D2A4A;">هاشتاق</b>&nbsp;<b style="color:#28C0E0;">سيو</b></div>
     </div>
   </div>
 </div>
+<script>
+  /* حلقة CSS لا نهائية: نُكرّر الشعارات حتى تتجاوز المجموعة عرض الشاشة، ثم ننسخها مرة واحدة.
+     الحركة translateX(0 → -50%) تنقل المسار بمقدار مجموعة كاملة → التفاف سلس بلا بداية أو نهاية. */
+  (function () {
+    var track = document.getElementById('mqTrack');
+    if (!track) return;
+    var base = track.innerHTML;                 // مجموعة الشعارات الأصلية
+    function build() {
+      track.innerHTML = base;
+      // ضاعِف المحتوى حتى يتجاوز عرض الشريط 3× عرض الشاشة → لا فراغ مهما كان المقاس
+      var guard = 0;
+      while (track.scrollWidth < window.innerWidth * 3 && guard < 10) { track.innerHTML += track.innerHTML; guard++; }
+      // المضاعفة تجعل النصفين متطابقين دائماً → translateX(-50%) التفاف غير مرئي
+      // السرعة ثابتة (~70px/ث): المسافة المقطوعة = نصف العرض
+      track.style.animationDuration = Math.max(20, Math.round(track.scrollWidth / 2 / 70)) + 's';
+    }
+    build();
+    window.addEventListener('load', build);
+    var rt;
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(build, 300); });
+  })();
+</script>
 
-<!-- ══════════════════════════ SECTION 2 — TOOLS ═══ -->
 <section class="section section-alt" id="tools-section">
   <div class="section-inner">
     <div data-reveal>
@@ -666,20 +737,23 @@
 
     <div class="how-grid">
       <div class="how-step" data-reveal data-delay="1">
-        <div class="how-step-num">١</div>
-        <h3>سجّل أو ابدأ بدون تسجيل</h3>
-        <p>بعض الأدوات مفتوحة للجميع بدون حساب. سجّل مجاناً للحصول على ميزات إضافية وتاريخ الاستخدام.</p>
+        <div class="how-step-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <span class="how-step-tag">الخطوة 1</span>
+        <h3>ابدأ بدون تعقيد</h3>
+        <p>بعض الأدوات مفتوحة للجميع بدون حساب. سجّل مجاناً لميزات إضافية وحفظ تاريخ استخدامك.</p>
       </div>
 
       <div class="how-step" data-reveal data-delay="2">
-        <div class="how-step-num g-num">٢</div>
-        <h3>اختر الأداة اللي تحتاجها</h3>
-        <p>من محلل المتجر إلى مولّد الأوصاف إلى خطة سوشيال ميديا — كل شي في مكان واحد.</p>
+        <div class="how-step-ic g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <span class="how-step-tag g">الخطوة 2</span>
+        <h3>اختر أداتك</h3>
+        <p>من محلل المتجر لمولّد الأوصاف لمسار التاجر — 11 أداة ذكية في مكان واحد.</p>
       </div>
 
       <div class="how-step" data-reveal data-delay="3">
-        <div class="how-step-num">٣</div>
-        <h3>احصل على النتائج فوراً</h3>
+        <div class="how-step-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <span class="how-step-tag">الخطوة 3</span>
+        <h3>نتائج فورية</h3>
         <p>تقارير وتوصيات احترافية خلال ثوانٍ. انسخها، طبّقها، وشوف الفرق في متجرك.</p>
       </div>
     </div>
@@ -742,7 +816,7 @@
 </section>
 
 <!-- ══════════════════════════ SECTION 5 — WORKS ═══ -->
-<section class="section" id="works-section">
+<section class="section" id="works-section" style="display:none;">
   <div class="section-inner">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;" data-reveal>
       <div>
@@ -787,7 +861,6 @@
         <p class="cta-sub">انضم لمئات التجار اللي يستخدمون أدوات التاجر يومياً. مجاني للبدء، بدون بيانات بنك.</p>
         <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
           <a href="pages/tools.html" class="btn-primary" style="padding:1rem 2.5rem;font-size:1.05rem;">ابدأ مجاناً الآن</a>
-          <a href="pages/services.html" class="btn-secondary" style="padding:1rem 2rem;">احجز استشارة</a>
         </div>
       </div>
     </div>
@@ -806,11 +879,11 @@
         </svg>
         أدوات التاجر
       </a>
-      <p>منصة شاملة للتاجر السعودي — أدوات ذكية، كوبونات حصرية، وخدمات احترافية.</p>
+      <p>منصة شاملة لكل تاجر طموح — أدوات ذكية، كوبونات حصرية، وخدمات احترافية.</p>
       <div class="footer-social">
-        <a href="#" class="footer-social-link" aria-label="X"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        <a href="#" class="footer-social-link" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-        <a href="#" class="footer-social-link" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="https://x.com/sallatips" target="_blank" rel="noopener" class="footer-social-link" aria-label="X"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://instagram.com/sallatips" target="_blank" rel="noopener" class="footer-social-link" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://salatips.com/ar" target="_blank" rel="noopener" class="footer-social-link" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
       </div>
     </div>
 
@@ -828,8 +901,6 @@
       <h4>المنصة</h4>
       <a href="pages/coupons.html">الكوبونات</a>
       <a href="pages/calendar.html">تقويم المواسم</a>
-      <a href="pages/works.html">أعمالنا</a>
-      <a href="pages/services.html">الخدمات</a>
       <a href="pages/blog.html">المدونة</a>
       <a href="pages/about.html">عن المنصة</a>
     </div>
@@ -844,18 +915,52 @@
 
   <div class="footer-bottom">
     <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
-    <div class="footer-accent-line">adwat-altajer.com</div>
+    <div class="footer-accent-line">salatips.com</div>
   </div>
 </footer>
 
-<script src="assets/api.js"></script>
+<script src="assets/api.js?v=30"></script>
+<script src="assets/tool-display.js?v=1"></script>
+<script>
+  /* عدّ تصاعدي لأرقام تقرير الـmockup + تعبئة الحلقة والأشرطة عند الظهور */
+  (function () {
+    var mock = document.querySelector('.hero-visual .mock');
+    if (!mock) return;
+    function ease(t) { return 1 - Math.pow(1 - t, 3); }
+    function run() {
+      var dur = 1400, start = null;
+      var nums = mock.querySelectorAll('.mock-num, .mk-pct');
+      var ring = mock.querySelector('.ring');
+      var ringTo = ring ? +ring.dataset.p : 0;
+      // الأشرطة (CSS transition تتكفّل بالنعومة)
+      mock.querySelectorAll('.mk-fill').forEach(function (b) { b.style.width = b.dataset.w + '%'; });
+      function frame(ts) {
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1), e = ease(p);
+        nums.forEach(function (n) {
+          var to = +n.dataset.to, suf = n.classList.contains('mk-pct') ? '%' : '';
+          n.textContent = Math.round(to * e) + suf;
+        });
+        if (ring) ring.style.setProperty('--p', (ringTo * e).toFixed(1));
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (en) {
+        en.forEach(function (x) { if (x.isIntersecting) { run(); io.disconnect(); } });
+      }, { threshold: .4 });
+      io.observe(mock);
+    } else { run(); }
+  })();
+</script>
 <script>
 /* ══════════════════════════════════ SMOOTH NAV & SCROLL ═══ */
 
 const mainNav  = document.getElementById('mainNav');
 const progBar  = document.getElementById('progress-bar');
 const cursorGl = document.getElementById('cursorGlow');
-const sections = ['hero','tools-section','how-section','stats-section','works-section','reviews-section','cta-section'];
+const sections = ['hero','tools-section','how-section','stats-section','reviews-section','cta-section'];
 
 // Cursor glow
 document.addEventListener('mousemove', e => {
@@ -871,11 +976,25 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   localStorage.setItem('tajer-theme', next);
 });
 
-// Mobile menu
-document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-  const links = document.querySelector('.nav .nav-links');
-  links.classList.toggle('mobile-open');
-});
+// Mobile menu — درج جانبي من اليمين + خلفية تُغلق بالضغط
+(function () {
+  const btn = document.getElementById('mobileMenuBtn');
+  const links = document.querySelector('#mainNav .nav-links');
+  if (!btn || !links) return;
+  let backdrop;
+  function close() { links.classList.remove('mobile-open'); if (backdrop) backdrop.classList.remove('show'); }
+  btn.addEventListener('click', () => {
+    const open = links.classList.toggle('mobile-open');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'nav-backdrop';
+      backdrop.addEventListener('click', close);
+      document.body.appendChild(backdrop);
+    }
+    backdrop.classList.toggle('show', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+})();
 
 // Smooth scroll to section
 function scrollTo(id) {
@@ -968,16 +1087,26 @@ if (statsEl) counterObs.observe(statsEl);
   }
 
   function reviewCard(r) {
-    const stars = '★'.repeat(r.rating)+'☆'.repeat(5-r.rating);
+    const rating = r.rating || 5;
+    const stars = '★'.repeat(rating)+'☆'.repeat(5-rating);
+    const verified = '<svg class="review-verified" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>';
     return `<div class="review-card" data-reveal>
       <div class="review-stars">${stars}</div>
       <p class="review-text">"${r.review_text}"</p>
       <div class="review-author">
-        <div class="review-avatar">${r.avatar_letter||r.name.charAt(0)}</div>
-        <div><div class="review-name">${r.name}</div><div class="review-store">${r.store||''}</div></div>
+        <div class="review-avatar">${r.avatar_letter||(r.name||'؟').charAt(0)}</div>
+        <div><div class="review-name">${r.name||''} ${verified}</div><div class="review-store">${r.store||''}</div></div>
       </div>
     </div>`;
   }
+  const SAMPLE_REVIEWS = [
+    { name:'أحمد الزهراني', store:'متجر أزياء — سلة', rating:5, review_text:'المحلل كشفلي إن مدى مش مفعّل وكنت خاسر مبيعات بسببه. صلّحته في يوم والفرق واضح.' },
+    { name:'نورة القحطاني', store:'متجر عطور — زد', rating:5, review_text:'مولّد الأوصاف وفّر عليّ ساعات. أوصاف احترافية ومحسّنة للسيو بضغطة زر.' },
+    { name:'خالد العتيبي', store:'إلكترونيات — سلة', rating:5, review_text:'مسار التاجر رتّبلي أولوياتي كمبتدئ وفريق خبراء المنصات تواصل معي بخطة واضحة.' },
+    { name:'سارة الدوسري', store:'منتجات أطفال', rating:5, review_text:'خطة السوشيال والكوبونات الحصرية فرق كبير في وصولي للعملاء. منصة متكاملة فعلاً.' },
+    { name:'فهد الشهري', store:'هدايا ومناسبات', rating:5, review_text:'تقويم المواسم خلّاني أجهّز عروضي قبل كل مناسبة. تنظيم وراحة بال.' },
+    { name:'ريم المالكي', store:'مستحضرات تجميل', rating:5, review_text:'قوالب واتساب رفعت ردودي على العملاء لمستوى احترافي. أنصح بيها بشدة.' },
+  ];
 
   const worksGrid   = document.getElementById('homeWorksGrid');
   const reviewsGrid = document.getElementById('homeReviewsGrid');
@@ -992,12 +1121,12 @@ if (statsEl) counterObs.observe(statsEl);
 
   try {
     const reviews = await api.getReviews();
-    reviewsGrid.innerHTML = reviews?.length
-      ? reviews.slice(0,6).map(reviewCard).join('')
-      : '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ink-dim);">لا توجد مراجعات بعد</div>';
+    const list = (reviews && reviews.length) ? reviews : SAMPLE_REVIEWS;
+    reviewsGrid.innerHTML = list.slice(0,6).map(reviewCard).join('');
     reviewsGrid.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
-  } catch { reviewsGrid.innerHTML = ''; }
+  } catch { reviewsGrid.innerHTML = SAMPLE_REVIEWS.slice(0,6).map(reviewCard).join(''); }
 })();
 </script>
+<script src="assets/header.js?v=16"></script>
 </body>
 </html>

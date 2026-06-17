@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التوليد الجماعي — أدوات التاجر</title>
+<meta name="description" content="ولّد أوصاف منتجات متعددة دفعة واحدة عبر رفع CSV أو إدخال قائمة منتجات — يوفّر وقت التاجر.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css?v=8">
+<style>
+  .bk-page { max-width: 1200px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
+  .bk-card { background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.4rem; }
+  .bk-card h2 { font-size: 1.1rem; margin: 0 0 .3rem; }
+  .bk-sub { color: var(--ink-dim); font-size: .85rem; margin: 0 0 1rem; }
+  .bk-ta { width: 100%; min-height: 150px; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 10px; padding: .8rem; color: var(--ink); font-family: var(--font-arabic); line-height: 1.9; }
+  .bk-ta:focus { outline: none; border-color: var(--accent); }
+  .bk-row { display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; margin-top: 1rem; }
+  .bk-seg { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .bk-seg-btn { background: var(--bg-card); border: 1px solid var(--line); color: var(--ink-dim); border-radius: 99px; padding: .4rem .9rem; font-size: .82rem; font-weight: 600; cursor: pointer; font-family: var(--font-arabic); }
+  .bk-seg-btn.active { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border-color: var(--accent); }
+  .bk-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  .bk-table th, .bk-table td { border: 1px solid var(--line); padding: .6rem .7rem; text-align: right; vertical-align: top; }
+  .bk-table th { background: var(--bg-card); font-size: .8rem; position: sticky; top: 0; }
+  .bk-table td { line-height: 1.8; max-width: 320px; }
+  .bk-tags span { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 99px; padding: .1rem .5rem; font-size: .7rem; margin: .1rem; }
+  .bk-empty-state { text-align: center; padding: 3rem 1rem; color: var(--ink-dim); }
+  .bk-prog { display: none; text-align: center; padding: 2rem; color: var(--ink-dim); }
+  .bk-prog.on { display: block; }
+  .bk-spin { width: 44px; height: 44px; border: 4px solid var(--line-strong); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .bk-fail { color: #ef4444; font-size: .8rem; }
+  .bk-tablewrap { overflow-x: auto; max-height: 70vh; overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom:1.2rem;">توفير وقت</span>
+      <h1>التوليد <em>الجماعي</em></h1>
+      <p>ولّد أوصاف عدة منتجات دفعة واحدة — أدخل قائمتك أو ارفع ملف CSV، ونزّل النتائج جاهزة.</p>
+    </div>
+  </div>
+</section>
+
+<div class="bk-page">
+  <div class="bk-card">
+    <h2>أدخل منتجاتك</h2>
+    <p class="bk-sub">كل سطر منتج بالصيغة: <b>الاسم | التصنيف | المميزات</b> (التصنيف والمميزات اختيارية). حتى 12 منتجاً في الدفعة.</p>
+    <textarea id="bkInput" class="bk-ta" placeholder="عطر عود ملكي | عطور شرقية | عود كمبودي، ثبات 12 ساعة&#10;سماعة بلوتوث رياضية | سماعات | عزل ضوضاء، بطارية 30 ساعة&#10;حقيبة ظهر جلدية | حقائب | جلد طبيعي، جيب لابتوب"></textarea>
+    <div class="bk-row">
+      <label class="bk-seg-btn" style="cursor:pointer;">
+        <input type="file" id="bkCsv" accept=".csv,text/csv" style="display:none;"> ⬆ رفع CSV
+      </label>
+      <div class="bk-seg" id="bkTone">
+        <button class="bk-seg-btn active" data-tone="professional">احترافية</button>
+        <button class="bk-seg-btn" data-tone="luxury">فاخرة</button>
+        <button class="bk-seg-btn" data-tone="friendly">ودودة</button>
+        <button class="bk-seg-btn" data-tone="youthful">شبابية</button>
+      </div>
+      <button class="btn-primary" id="bkGen" style="margin-inline-start:auto;">ولّد الكل</button>
+    </div>
+  </div>
+
+  <div class="bk-prog" id="bkProg"><div class="bk-spin"></div><div id="bkProgTxt">جارٍ التوليد... قد يستغرق دقيقة حسب العدد</div></div>
+
+  <div class="bk-card" id="bkResultsCard" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem;">
+      <h2 style="margin:0;">النتائج (<span id="bkCount">0</span>)</h2>
+      <button class="btn-secondary" id="bkDownload" style="padding:.5rem 1rem;font-size:.85rem;">⬇ تنزيل CSV</button>
+    </div>
+    <div class="bk-tablewrap">
+      <table class="bk-table">
+        <thead><tr><th>المنتج</th><th>الوصف</th><th>عنوان الصفحة</th><th>وصف الصفحة</th><th>الوسوم</th></tr></thead>
+        <tbody id="bkRows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bk-card bk-empty-state" id="bkEmpty">
+    <p>أدخل منتجاتك بالأعلى واضغط «ولّد الكل» — ستظهر النتائج هنا جاهزة للتنزيل.</p>
+  </div>
+</div>
+
+<script src="../assets/api.js?v=30"></script>
+<script>
+let bkTone = 'professional', _bkResults = [];
+const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+document.querySelectorAll('#bkTone .bk-seg-btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#bkTone .bk-seg-btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active'); bkTone = b.dataset.tone;
+}));
+
+document.getElementById('bkCsv').addEventListener('change', ev => {
+  const f = ev.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    // حوّل CSV إلى صيغة "الاسم | التصنيف | المميزات"
+    const lines = String(r.result).split(/\r?\n/).filter(Boolean);
+    const out = lines.map(l => {
+      const cells = l.split(',').map(c => c.replace(/^"|"$/g, '').trim());
+      return [cells[0] || '', cells[1] || '', cells[2] || ''].filter(Boolean).join(' | ');
+    }).filter(Boolean);
+    // تجاهل صف العناوين لو واضح
+    if (out[0] && /اسم|name|المنتج/i.test(out[0])) out.shift();
+    document.getElementById('bkInput').value = out.join('\n');
+    showToast && showToast('تم تحميل ' + out.length + ' صف من CSV', 'success');
+  };
+  r.readAsText(f, 'utf-8');
+});
+
+function parseProducts() {
+  return document.getElementById('bkInput').value.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => {
+    const [name, category, features] = l.split('|').map(s => (s || '').trim());
+    return { name, category, features };
+  }).filter(p => p.name);
+}
+
+document.getElementById('bkGen').addEventListener('click', async () => {
+  if (!auth.isLoggedIn || !auth.isLoggedIn()) { showError('تسجيل الدخول', 'سجّل دخولك أولاً'); return; }
+  const products = parseProducts();
+  if (!products.length) { showError('لا منتجات', 'أدخل منتجاً واحداً على الأقل'); return; }
+  if (products.length > 12) { showError('حد الدفعة', 'الحد الأقصى 12 منتجاً في الدفعة الواحدة'); return; }
+
+  const btn = document.getElementById('bkGen');
+  btn.disabled = true;
+  document.getElementById('bkEmpty').style.display = 'none';
+  document.getElementById('bkResultsCard').style.display = 'none';
+  document.getElementById('bkProg').classList.add('on');
+  document.getElementById('bkProgTxt').textContent = `جارٍ توليد ${products.length} منتج... قد يستغرق دقيقة`;
+  try {
+    const res = await api.generateBulk(products, bkTone);
+    _bkResults = res.results || [];
+    renderResults();
+    showToast && showToast('اكتمل التوليد الجماعي', 'success');
+  } catch (err) {
+    showToolError ? showToolError(err, 'generator') : showError('خطأ', err.message);
+  } finally {
+    btn.disabled = false;
+    document.getElementById('bkProg').classList.remove('on');
+  }
+});
+
+function renderResults() {
+  document.getElementById('bkCount').textContent = _bkResults.length;
+  document.getElementById('bkResultsCard').style.display = _bkResults.length ? 'block' : 'none';
+  document.getElementById('bkRows').innerHTML = _bkResults.map(r => r.ok
+    ? `<tr><td><b>${e(r.name)}</b></td><td>${e(r.description)}</td><td>${e(r.pageTitle)}</td><td>${e(r.pageDescription)}</td><td class="bk-tags">${(r.tags||[]).map(t=>`<span>${e(t)}</span>`).join('')}</td></tr>`
+    : `<tr><td><b>${e(r.name)}</b></td><td colspan="4" class="bk-fail">${e(r.error||'فشل')}</td></tr>`
+  ).join('');
+}
+
+document.getElementById('bkDownload').addEventListener('click', () => {
+  const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+  const rows = [['المنتج', 'الوصف', 'عنوان الصفحة', 'وصف الصفحة', 'الوسوم']];
+  _bkResults.filter(r => r.ok).forEach(r => rows.push([r.name, r.description, r.pageTitle, r.pageDescription, (r.tags||[]).join('، ')]));
+  const csv = '﻿' + rows.map(row => row.map(q).join(',')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'products-bulk.csv'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+});
+</script>
+<script src="../assets/header.js?v=16"></script>
+</body>
+</html>

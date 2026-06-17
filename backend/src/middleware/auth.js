@@ -13,6 +13,11 @@ const auth = async (req, res, next) => {
     );
     if (!rows[0]) return res.status(401).json({ error: 'المستخدم غير موجود' });
     req.user = rows[0];
+    // تحديث آخر ظهور (مرّة كل دقيقة كحد أقصى) — لمعرفة المتصلين حالياً
+    db.query(
+      "UPDATE users SET last_seen = NOW() WHERE id = $1 AND (last_seen IS NULL OR last_seen < NOW() - INTERVAL '1 minute')",
+      [rows[0].id]
+    ).catch(() => {});
     next();
   } catch {
     res.status(401).json({ error: 'رمز التحقق غير صالح أو منتهي الصلاحية' });

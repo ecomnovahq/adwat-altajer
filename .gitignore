@@ -17,6 +17,11 @@ backend/.env
 *.err
 logs/
 
+# Database backups (never commit data dumps)
+backups/
+backend/backups/
+*.dump
+
 # Build artifacts
 tsconfig.tsbuildinfo
 dist/

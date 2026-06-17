@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نتائجي — أدوات التاجر</title>
+<meta name="description" content="سجلّ نتائجك السابقة من أدوات التاجر: التحليلات، الأوصاف، والمحتوى المولّد.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css?v=8">
+<style>
+  .hs-page { max-width: 1000px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
+  .hs-head { margin-bottom: 1.4rem; }
+  .hs-head h1 { font-size: 1.6rem; margin: 0 0 .3rem; }
+  .hs-head p { color: var(--ink-dim); font-size: .9rem; margin: 0; }
+  .hs-filters { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .hs-chip { background: var(--bg-alt); border: 1px solid var(--line); color: var(--ink-dim); border-radius: 99px; padding: .4rem .9rem; font-size: .82rem; font-weight: 600; cursor: pointer; font-family: var(--font-arabic); }
+  .hs-chip.active { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border-color: var(--accent); }
+  .hs-list { display: flex; flex-direction: column; gap: .8rem; }
+  .hs-item { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; cursor: pointer; transition: border-color .15s, transform .15s; }
+  .hs-item:hover { border-color: var(--line-accent); transform: translateY(-2px); }
+  .hs-ic { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .hs-ic svg { width: 20px; height: 20px; }
+  .hs-body { flex: 1; min-width: 0; }
+  .hs-tool { font-weight: 700; font-size: .95rem; }
+  .hs-sub { font-size: .82rem; color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: .15rem; }
+  .hs-time { font-size: .75rem; color: var(--ink-mid); flex-shrink: 0; }
+  .hs-empty { text-align: center; padding: 4rem 1.5rem; color: var(--ink-dim); }
+  .hs-empty svg { opacity: .3; margin-bottom: 1rem; }
+  /* modal */
+  .hs-modal { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 200; padding: 1.2rem; }
+  .hs-modal.open { display: flex; }
+  .hs-modal-box { background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); max-width: 760px; width: 100%; max-height: 86vh; overflow-y: auto; padding: 1.5rem; }
+  .hs-modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .hs-modal-head h3 { margin: 0; font-size: 1.15rem; }
+  .hs-x { background: none; border: none; color: var(--ink-dim); font-size: 1.3rem; cursor: pointer; }
+  .hs-field { margin-bottom: 1rem; }
+  .hs-field-label { font-size: .78rem; font-weight: 700; color: var(--accent); margin-bottom: .35rem; display: flex; justify-content: space-between; }
+  .hs-field-val { background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; padding: .7rem .9rem; line-height: 1.9; white-space: pre-wrap; font-size: .9rem; }
+  .hs-copy { background: var(--accent-soft); color: var(--accent); border: none; border-radius: 6px; padding: .15rem .6rem; font-size: .72rem; font-weight: 700; cursor: pointer; font-family: var(--font-arabic); }
+  .hs-stat { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1rem 1.2rem; text-align: center; }
+  .hs-stat-n { font-size: 1.7rem; font-weight: 800; color: var(--accent); line-height: 1; }
+  .hs-stat-l { font-size: .78rem; color: var(--ink-dim); margin-top: .4rem; }
+</style>
+</head>
+<body>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom:1.2rem;">سجلّك</span>
+      <h1>نتائجي <em>وأعمالي السابقة</em></h1>
+      <p>ارجع لأي تحليل أو وصف أو محتوى ولّدته سابقاً — انسخه أو راجعه في أي وقت.</p>
+    </div>
+  </div>
+</section>
+
+<div class="hs-page">
+  <div id="hsStats" style="display:none;margin-bottom:1.4rem;"></div>
+  <div class="hs-filters" id="hsFilters"></div>
+  <div class="hs-list" id="hsList"><div class="hs-empty">جارٍ التحميل...</div></div>
+</div>
+
+<div class="hs-modal" id="hsModal" onclick="if(event.target===this)closeHsModal()">
+  <div class="hs-modal-box">
+    <div class="hs-modal-head"><h3 id="hsModalTitle">النتيجة</h3><button class="hs-x" onclick="closeHsModal()">✕</button></div>
+    <div id="hsModalBody"></div>
+  </div>
+</div>
+
+<script src="../assets/api.js?v=30"></script>
+<script>
+const TOOL_NAMES = {
+  analyzer: 'محلل المتاجر', generator: 'مولّد المحتوى', 'image-gen': 'مولّد صور المنتجات',
+  whatsapp: 'قوالب واتساب', competitor: 'محلل المنافسين', 'social-plan': 'خطة السوشيال ميديا',
+  'store-policies': 'سياسات المتجر', 'launch-campaign': 'حملة الإطلاق', calculator: 'حاسبة الأرباح',
+  calendar: 'تقويم المواسم', 'merchant-path': 'مسار التاجر', assistant: 'مساعد التاجر',
+};
+const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+let _logs = [], _filter = 'all';
+const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+function fmt(d){ try { return new Date(d).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}); } catch(_){ return d; } }
+
+function subOf(log) {
+  const i = log.input_data || {};
+  return i.productName || i.storeUrl || i.url || i.topic || i.businessType || i.category || '';
+}
+
+async function loadHistory() {
+  if (!auth || !auth.isLoggedIn || !auth.isLoggedIn()) {
+    document.getElementById('hsList').innerHTML = '<div class="hs-empty">سجّل دخولك لعرض نتائجك السابقة. <a href="login.html" style="color:var(--accent)">تسجيل الدخول</a></div>';
+    return;
+  }
+  try { _logs = await api.toolHistory(); } catch (err) {
+    document.getElementById('hsList').innerHTML = `<div class="hs-empty">${e(err.message||'تعذّر التحميل')}</div>`; return;
+  }
+  renderFilters();
+  renderList();
+  loadStats();
+}
+
+async function loadStats() {
+  let s; try { s = await api.myStats(); } catch (_) { return; }
+  if (!s || !s.totalRuns) return;
+  const trend = s.scoreTrend || [];
+  let trendHtml = '';
+  if (trend.length >= 1) {
+    const first = trend[0].score, last = trend[trend.length - 1].score;
+    const diff = last - first;
+    const arrow = trend.length >= 2 ? (diff > 0 ? `<span style="color:#22c55e;">▲ +${diff}</span>` : diff < 0 ? `<span style="color:#ef4444;">▼ ${diff}</span>` : '— ثابت') : '';
+    trendHtml = `<div class="hs-stat"><div class="hs-stat-n" style="color:${last>=80?'#22c55e':last>=55?'#f59e0b':'#ef4444'};">${last}</div><div class="hs-stat-l">آخر تقييم متجر ${arrow}</div></div>`;
+  }
+  const card = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;">
+      <div class="hs-stat"><div class="hs-stat-n">${s.totalRuns}</div><div class="hs-stat-l">إجمالي الاستخدام</div></div>
+      <div class="hs-stat"><div class="hs-stat-n">${s.last7Days}</div><div class="hs-stat-l">آخر 7 أيام</div></div>
+      <div class="hs-stat"><div class="hs-stat-n">${(s.perTool||[]).length}</div><div class="hs-stat-l">أدوات استخدمتها</div></div>
+      ${trendHtml}
+    </div>`;
+  const el = document.getElementById('hsStats');
+  el.innerHTML = card; el.style.display = 'block';
+}
+
+function renderFilters() {
+  const tools = [...new Set(_logs.map(l => l.tool_name))];
+  const chips = [['all', `الكل (${_logs.length})`], ...tools.map(t => [t, TOOL_NAMES[t] || t])];
+  document.getElementById('hsFilters').innerHTML = chips.map(([k, label]) =>
+    `<button class="hs-chip ${_filter===k?'active':''}" onclick="setFilter('${k}')">${e(label)}</button>`).join('');
+}
+function setFilter(k){ _filter = k; renderFilters(); renderList(); }
+
+function renderList() {
+  const list = _filter === 'all' ? _logs : _logs.filter(l => l.tool_name === _filter);
+  const el = document.getElementById('hsList');
+  if (!list.length) { el.innerHTML = '<div class="hs-empty"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div>لا توجد نتائج بعد — جرّب إحدى الأدوات وستظهر هنا.</div></div>'; return; }
+  el.innerHTML = list.map(l => {
+    const sub = subOf(l);
+    return `<div class="hs-item" onclick="openItem(${l.id})">
+      <div class="hs-ic">${ICON}</div>
+      <div class="hs-body"><div class="hs-tool">${e(TOOL_NAMES[l.tool_name] || l.tool_name)}</div>${sub?`<div class="hs-sub">${e(sub)}</div>`:''}</div>
+      <div class="hs-time">${fmt(l.created_at)}</div>
+    </div>`;
+  }).join('');
+}
+
+async function openItem(id) {
+  const modal = document.getElementById('hsModal');
+  const body = document.getElementById('hsModalBody');
+  document.getElementById('hsModalTitle').textContent = 'جارٍ التحميل...';
+  body.innerHTML = '<div class="hs-empty">جارٍ التحميل...</div>';
+  modal.classList.add('open');
+  let item;
+  try { item = await api.historyItem(id); } catch (err) { body.innerHTML = `<div class="hs-empty">${e(err.message)}</div>`; return; }
+  document.getElementById('hsModalTitle').textContent = TOOL_NAMES[item.tool_name] || item.tool_name;
+  body.innerHTML = renderResult(item);
+}
+function field(label, valHtml, copyId) {
+  return `<div class="hs-field"><div class="hs-field-label"><span>${label}</span>${copyId?`<button class="hs-copy" onclick="navigator.clipboard.writeText(document.getElementById('${copyId}').innerText.trim());this.textContent='تم ✓';setTimeout(()=>this.textContent='نسخ',1500)">نسخ</button>`:''}</div><div class="hs-field-val" ${copyId?`id="${copyId}"`:''}>${valHtml}</div></div>`;
+}
+function renderResult(item) {
+  const r = item.result_data || {};
+  const parts = [`<div style="font-size:.78rem;color:var(--ink-dim);margin-bottom:1rem;">${fmt(item.created_at)}</div>`];
+  // مولّد المحتوى
+  if (item.tool_name === 'generator') {
+    let desc = '';
+    if (r.intro) desc += e(r.intro) + '\n\n';
+    if (Array.isArray(r.sections)) desc += r.sections.map(s => (s.heading?s.heading+':\n':'') + (Array.isArray(s.points)?s.points.map(p=>'• '+p).join('\n'):'')).join('\n\n');
+    if (!desc) desc = e(r.description || '');
+    if (desc) parts.push(field('وصف المنتج', e(desc).replace(/\n/g,'<br>'), 'f_desc'));
+    if (r.pageTitle) parts.push(field('عنوان الصفحة', e(r.pageTitle), 'f_title'));
+    if (r.pageDescription) parts.push(field('وصف الصفحة', e(r.pageDescription), 'f_meta'));
+    if (Array.isArray(r.tags) && r.tags.length) parts.push(field('الوسوم', r.tags.map(e).join('، '), 'f_tags'));
+    return parts.join('');
+  }
+  // المحلل
+  if (item.tool_name === 'analyzer') {
+    if (r.overallScore != null) parts.push(field('التقييم العام', e(r.overallScore) + ' / 100'));
+    if (r.storeName) parts.push(field('المتجر', e(r.storeName)));
+    if (Array.isArray(r.weaknesses) && r.weaknesses.length) parts.push(field('أبرز نقاط الضعف', r.weaknesses.slice(0,8).map(w=>'• '+e(w)).join('<br>')));
+    return parts.join('');
+  }
+  // عام: اعرض النص أو JSON منسّق
+  const generic = typeof r === 'string' ? r : (r.content || r.text || r.result || JSON.stringify(r, null, 2));
+  parts.push(field('النتيجة', e(String(generic)).replace(/\n/g,'<br>'), 'f_gen'));
+  return parts.join('');
+}
+function closeHsModal(){ document.getElementById('hsModal').classList.remove('open'); }
+
+loadHistory();
+</script>
+<script src="../assets/header.js?v=16"></script>
+</body>
+</html>

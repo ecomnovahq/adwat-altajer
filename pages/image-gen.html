@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/styles.css?v=8">
 
 <style>
   .imggen-section {
@@ -171,6 +171,28 @@
   .tip-card .tip-icon { font-size: 1.5rem; margin-bottom: .4rem; }
   .tip-card strong { display: block; margin-bottom: .25rem; }
   .tip-card p { color: var(--ink-dim); margin: 0; line-height: 1.5; }
+  /* بانر الوضع (توليد/تحسين) */
+  .ig-mode { display: flex; align-items: center; gap: .55rem; font-size: .82rem; line-height: 1.6;
+    border-radius: 12px; padding: .7rem .85rem; margin-bottom: 1.25rem; border: 1px solid; }
+  .ig-mode-ic { width: 20px; height: 20px; flex-shrink: 0; }
+  .ig-mode-ic svg { width: 20px; height: 20px; }
+  .ig-mode-gen { background: var(--accent-soft); border-color: var(--line-accent); color: var(--ink); }
+  .ig-mode-gen .ig-mode-ic { color: var(--accent); }
+  .ig-mode-enh { background: rgba(22,184,196,.12); border-color: rgba(22,184,196,.35); color: var(--ink); }
+  .ig-mode-enh .ig-mode-ic { color: var(--teal, #16b8c4); }
+  /* رفع صورة المنتج */
+  .ig-drop { border: 2px dashed var(--line-strong); border-radius: 14px; padding: 1.2rem; cursor: pointer;
+    transition: border-color .2s, background .2s; text-align: center; }
+  .ig-drop:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .ig-drop-empty { display: flex; flex-direction: column; align-items: center; gap: .45rem; color: var(--ink-dim); }
+  .ig-drop-empty svg { color: var(--accent); }
+  .ig-drop-empty span { font-weight: 700; color: var(--ink); font-size: .9rem; }
+  .ig-drop-empty small { font-size: .75rem; line-height: 1.5; max-width: 260px; }
+  .ig-drop-preview { position: relative; display: inline-block; }
+  .ig-drop-preview img { max-height: 180px; max-width: 100%; border-radius: 10px; display: block; }
+  .ig-drop-remove { position: absolute; top: -10px; left: -10px; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--danger, #f43f5e); color: #fff; border: 2px solid var(--bg-card); cursor: pointer;
+    font-size: .8rem; line-height: 1; display: flex; align-items: center; justify-content: center; }
 </style>
 </head>
 
@@ -189,12 +211,9 @@
     <li><a href="tools.html" class="active">الأدوات</a></li>
     <li><a href="coupons.html">الكوبونات</a></li>
     <li><a href="calendar.html">المواسم</a></li>
-    <li><a href="services.html">الخدمات</a></li>
-    <li><a href="works.html">أعمالنا</a></li>
     <li><a href="blog.html">المدونة</a></li>
     <li><a href="about.html">عن المنصة</a></li>
   </ul>
-  <a href="services.html" class="nav-cta">احجز استشارة</a>
   <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
     <span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span>
     <span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
@@ -219,16 +238,47 @@
 
     <!-- Form -->
     <div class="imggen-form-card">
-      <h2 style="font-size:1.3rem;margin-bottom:1.5rem;position:relative;">إعدادات الصورة</h2>
+      <h2 style="font-size:1.3rem;margin-bottom:1rem;position:relative;">مولّد الصور الذكي</h2>
+
+      <div id="igMode" class="ig-mode ig-mode-gen">
+        <span class="ig-mode-ic" id="igModeIc"></span>
+        <span id="igModeTxt">وضع التوليد — اوصف الصورة اللي تبيها وسننشئها لك.</span>
+      </div>
 
       <div class="form-field">
-        <label>اسم المنتج *</label>
+        <label>صورة المنتج (ارفعها لتحسين/إعادة تصميم صورتك الحالية)</label>
+        <div id="dropZone" class="ig-drop" onclick="document.getElementById('imgFile').click()">
+          <input type="file" id="imgFile" accept="image/*" hidden onchange="onImgPick(event)" />
+          <div id="dropEmpty" class="ig-drop-empty">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+            <span>اضغط لرفع صورة منتجك</span>
+            <small>يحسّنها ويعيد تصويرها باحترافية مع الحفاظ على شكل منتجك</small>
+          </div>
+          <div id="dropPreview" class="ig-drop-preview" style="display:none;">
+            <img loading="lazy" id="dropImg" alt="معاينة" />
+            <button type="button" class="ig-drop-remove" onclick="clearImg(event)" aria-label="إزالة">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label id="promptLabel">صف ما تريده بالضبط (البرومبت) *</label>
+        <textarea id="prompt" class="input" rows="3" placeholder="مثال: خلفية بيضاء نظيفة وإضاءة ناعمة وظل خفيف، تركيز حاد على المنتج / أو: حسّن إضاءة صورتي واجعل الخلفية أنظف وأفخم" style="resize:vertical;" maxlength="600"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label>اسم المنتج (اختياري)</label>
         <input type="text" id="productName" class="input" placeholder="مثال: حقيبة جلد بني كلاسيكية" maxlength="120" />
       </div>
 
       <div class="form-field">
-        <label>وصف إضافي (اختياري)</label>
-        <textarea id="description" class="input" rows="3" placeholder="لون، مادة، حجم، خصائص مميزة..." style="resize:vertical;" maxlength="300"></textarea>
+        <label>الغرض من الصورة (اختياري)</label>
+        <textarea id="purpose" class="input" rows="2" placeholder="مثال: صورة رئيسية للمنتج في المتجر / إعلان انستقرام لعرض رمضان / بانر للمتجر..." style="resize:vertical;" maxlength="300"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label>تفاصيل المنتج (اختياري)</label>
+        <textarea id="description" class="input" rows="2" placeholder="لون، مادة، حجم، خصائص مميزة..." style="resize:vertical;" maxlength="300"></textarea>
       </div>
 
       <div class="form-field">
@@ -264,7 +314,7 @@
 
       <button id="generateBtn" class="btn-primary" style="width:100%;justify-content:center;gap:.6rem;" onclick="generateImage()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        ولّد الصورة الآن
+        <span id="genBtnLabel">ولّد الصورة الآن</span>
       </button>
 
       <div id="usageCounter" style="display:none;margin-top:1rem;"></div>
@@ -286,7 +336,7 @@
         </div>
 
         <div class="imggen-output" id="output" style="display:none;">
-          <img id="generatedImg" class="imggen-img" alt="صورة المنتج المولّدة" />
+          <img loading="lazy" id="generatedImg" class="imggen-img" alt="صورة المنتج المولّدة" />
           <div class="imggen-actions">
             <button class="btn-primary" onclick="downloadImage()" style="gap:.5rem;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
@@ -349,7 +399,7 @@
         <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
         <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
       </a>
-      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي.</p>
+      <p>أدوات التاجر — منتج من <strong>خبراء المنصات</strong>، فريق سعودي متخصص في تأسيس المتاجر الإلكترونية على سلة وربطها بالأدوات التقنية والتسويقية.</p>
     </div>
     <div class="footer-col">
       <h4>الأدوات</h4>
@@ -359,24 +409,82 @@
       <a href="coupons.html">الكوبونات</a>
     </div>
     <div class="footer-col">
-      <h4>الخدمات</h4>
-      <a href="services.html">احجز استشارة</a>
-      <a href="works.html">أعمالنا</a>
+      <h4>المزيد</h4>
       <a href="blog.html">المدونة</a>
     </div>
   </div>
   <div class="footer-bottom">
     <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
-    <div class="footer-accent-line">adwat-altajer.com</div>
+    <div class="footer-accent-line">salatips.com</div>
   </div>
 </footer>
 
-<script src="../assets/api.js"></script>
+<script src="../assets/api.js?v=30"></script>
 <script src="../assets/main.js"></script>
 <script>
   let selectedStyle = 'white';
   let currentMimeType = 'image/png';
   let currentProductName = '';
+  let uploadedImage = '';      // base64 (بدون بادئة data:)
+  let uploadedImageMime = '';
+
+  /* تحديث بانر الوضع وزر التنفيذ حسب وجود صورة */
+  function updateMode() {
+    const enh = !!uploadedImage;
+    const mode = document.getElementById('igMode');
+    const txt = document.getElementById('igModeTxt');
+    const ic = document.getElementById('igModeIc');
+    const btn = document.getElementById('genBtnLabel');
+    const pl = document.getElementById('promptLabel');
+    if (enh) {
+      mode.className = 'ig-mode ig-mode-enh';
+      txt.textContent = 'وضع التحسين — سنعيد تصميم صورتك مع الحفاظ على منتجك حسب طلبك.';
+      ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.6 1.8L21 17l-1.4.6L19 19l-.6-1.4L17 17l1.4-.2z"/></svg>';
+      if (btn) btn.textContent = 'حسّن صورتي';
+      if (pl) pl.innerHTML = 'صف التحسين المطلوب (البرومبت) *';
+    } else {
+      mode.className = 'ig-mode ig-mode-gen';
+      txt.textContent = 'وضع التوليد — اوصف الصورة اللي تبيها وسننشئها لك.';
+      ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+      if (btn) btn.textContent = 'ولّد الصورة الآن';
+      if (pl) pl.innerHTML = 'صف ما تريده بالضبط (البرومبت) *';
+    }
+  }
+
+  /* رفع صورة المنتج + ضغطها لتقليل الحجم قبل الإرسال */
+  function onImgPick(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (!/^image\//.test(file.type)) { showError('ملف غير صالح', 'اختر ملف صورة'); return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 1280;
+        let { width: w, height: h } = img;
+        if (w > max || h > max) { const r = Math.min(max / w, max / h); w = Math.round(w * r); h = Math.round(h * r); }
+        const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = cv.toDataURL('image/jpeg', 0.9);
+        uploadedImageMime = 'image/jpeg';
+        uploadedImage = dataUrl.split(',')[1];
+        document.getElementById('dropImg').src = dataUrl;
+        document.getElementById('dropEmpty').style.display = 'none';
+        document.getElementById('dropPreview').style.display = 'block';
+        updateMode();
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  function clearImg(e) {
+    if (e) e.stopPropagation();
+    uploadedImage = ''; uploadedImageMime = '';
+    document.getElementById('imgFile').value = '';
+    document.getElementById('dropEmpty').style.display = '';
+    document.getElementById('dropPreview').style.display = 'none';
+    updateMode();
+  }
 
   const loadingSteps = [
     'يفهم وصف منتجك...',
@@ -403,8 +511,13 @@
     const productName = document.getElementById('productName').value.trim();
     const description = document.getElementById('description').value.trim();
     const colors = document.getElementById('colors').value.trim();
+    const purpose = document.getElementById('purpose').value.trim();
+    const prompt = document.getElementById('prompt').value.trim();
 
-    if (!productName) { showError('حقل مطلوب', 'أدخل اسم المنتج أولاً'); return; }
+    if (!prompt && !productName && !uploadedImage) {
+      showError('حقل مطلوب', 'اكتب وصفاً (البرومبت) أو اسم المنتج، أو ارفع صورة لتحسينها.');
+      return;
+    }
 
     currentProductName = productName;
 
@@ -424,7 +537,7 @@
     }, 1800);
 
     try {
-      const result = await api.generateImage({ productName, description, style: selectedStyle, colors });
+      const result = await api.generateImage({ productName, description, style: selectedStyle, colors, purpose, prompt, image: uploadedImage || undefined, imageMimeType: uploadedImageMime || undefined });
 
       clearInterval(stepTimer);
       overlay.classList.remove('visible');
@@ -471,5 +584,6 @@
   });
 </script>
 
+<script src="../assets/header.js?v=16"></script>
 </body>
 </html>

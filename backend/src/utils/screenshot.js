@@ -45,10 +45,12 @@ async function snapPage(page, url, opts = {}) {
 async function takeStoreScreenshots(baseUrl) {
   let browser;
   try {
+    try { await require('../analyzer/store-scraper').assertPublicUrl(baseUrl); } // حماية SSRF
+    catch (e) { return { success: false, error: e.message }; }
     browser = await puppeteer.launch({
       executablePath: CHROME_PATH,
       headless: true,
-      args: LAUNCH_ARGS,
+      args: [...LAUNCH_ARGS, '--disable-blink-features=AutomationControlled'],
       timeout: 30000,
     });
 
@@ -57,13 +59,45 @@ async function takeStoreScreenshots(baseUrl) {
 
     // ── صفحة 1: الرئيسية — ديسكتوب + جوال + استخراج روابط داخلية ──────────
     const p1 = await browser.newPage();
+    // Bypass headless browser detection
+    await p1.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+      window.chrome = { runtime: {} };
+    });
     await setupPage(p1);
 
-    const homeDesktop = await snapPage(p1, baseUrl, {
-      width: 1440, height: 900, ua: DESKTOP_UA, wait: 1500,
-    });
+    // Step 1: Load page — use networkidle2 so we wait for dynamic API calls (Vue/React)
+    await p1.setViewport({ width: 1440, height: 900 });
+    await p1.setUserAgent(DESKTOP_UA);
+    try {
+      // networkidle2: wait until ≤2 concurrent requests for 500ms — catches dynamic content
+      await p1.goto(baseUrl, { waitUntil: 'networkidle2', timeout: 25000 });
+    } catch (_) {
+      // Fallback if networkidle2 times out (infinite background requests)
+      await p1.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
+      await delay(4000);
+    }
 
-    // استخراج الروابط الداخلية من الصفحة
+    // Step 2: Viewport screenshot — captures above-the-fold design
+    const homeDesktop = await p1.screenshot({
+      type: 'jpeg', quality: 82,
+      fullPage: false,
+      encoding: 'base64',
+    }).catch(() => null);
+
+    // Step 3: Scroll to bottom to trigger footer lazy-loading, then wait for it
+    await p1.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    }).catch(() => {});
+    await delay(2000); // Wait for footer payment icons / social links to render
+
+    // Step 4: Capture fully-rendered HTML including footer (payment methods, social, technologies)
+    let renderedHtml = '';
+    try { renderedHtml = await p1.content(); } catch (e) { /* non-fatal */ }
+
+    await p1.evaluate(() => window.scrollTo(0, 0)).catch(() => {});
+
+    // Extract internal links for product page detection
     const internalLinks = await p1.evaluate((origin) => {
       return [...document.querySelectorAll('a[href]')]
         .map(a => { try { return new URL(a.href, location.href).href; } catch { return ''; } })
@@ -75,19 +109,29 @@ async function takeStoreScreenshots(baseUrl) {
           h.length > origin.length + 1
         )
         .slice(0, 20);
-    }, origin);
+    }, origin).catch(() => []);
 
-    const homeMobile = await snapPage(p1, baseUrl, {
-      width: 390, height: 844, isMobile: true, ua: MOBILE_UA, wait: 1000,
-    });
+    // Mobile screenshot
+    await p1.setViewport({ width: 390, height: 844, isMobile: true, deviceScaleFactor: 2 });
+    await p1.setUserAgent(MOBILE_UA);
+    await p1.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await delay(1500);
+    // Viewport mobile screenshot
+    const homeMobile = await p1.screenshot({
+      type: 'jpeg', quality: 78,
+      fullPage: false,
+      encoding: 'base64',
+    }).catch(() => null);
     await p1.close();
 
-    pages.push({
-      label: 'الصفحة الرئيسية',
-      url: baseUrl,
-      desktop: homeDesktop,
-      mobile: homeMobile,
-    });
+    if (homeDesktop || homeMobile) {
+      pages.push({
+        label: 'الصفحة الرئيسية',
+        url: baseUrl,
+        desktop: homeDesktop || null,
+        mobile:  homeMobile  || null,
+      });
+    }
 
     // ── صفحة 2: منتج أو تصنيف ─────────────────────────────────────────────
     const extraUrl = internalLinks.find(l =>
@@ -100,9 +144,20 @@ async function takeStoreScreenshots(baseUrl) {
         await setupPage(p2);
         const isProduct = /product|item|منتج/i.test(extraUrl);
         const label = isProduct ? 'صفحة منتج' : 'صفحة تصنيف / متجر';
-        const extraDesktop = await snapPage(p2, extraUrl, {
-          width: 1440, height: 900, ua: DESKTOP_UA, wait: 1000,
+        await p2.evaluateOnNewDocument(() => {
+          Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
         });
+        await p2.setViewport({ width: 1440, height: 900 });
+        await p2.setUserAgent(DESKTOP_UA);
+        await p2.goto(extraUrl, { waitUntil: 'networkidle2', timeout: 20000 }).catch(async () => {
+          await p2.goto(extraUrl, { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
+          await delay(2500);
+        });
+        const extraDesktop = await p2.screenshot({
+          type: 'jpeg', quality: 80,
+          fullPage: false,
+          encoding: 'base64',
+        }).catch(() => null);
         await p2.close();
         pages.push({ label, url: extraUrl, desktop: extraDesktop, mobile: null });
       } catch (e) {
@@ -114,10 +169,11 @@ async function takeStoreScreenshots(baseUrl) {
     logger.info(`Screenshots: ${pages.length} pages for ${baseUrl}`);
 
     return {
-      success: true,
+      success: pages.length > 0,
       pages,
-      desktop: pages[0].desktop,
-      mobile:  pages[0].mobile,
+      desktop: pages[0]?.desktop || null,
+      mobile:  pages[0]?.mobile  || null,
+      renderedHtml,
     };
 
   } catch (err) {

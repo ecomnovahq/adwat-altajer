@@ -1,0 +1,40 @@
+# إعداد nginx لمنصة أدوات التاجر — انسخه إلى /etc/nginx/sites-available/adwat
+# يخدم الموقع الثابت + يوجّه /api للباك إند، ويمنع كشف ملفات الخادم الحسّاسة.
+# بعد النسخ: ln -s /etc/nginx/sites-available/adwat /etc/nginx/sites-enabled/ && nginx -t && systemctl reload nginx
+# ثم: certbot --nginx -d yourdomain.com -d www.yourdomain.com   (لإضافة HTTPS تلقائياً)
+
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    root /var/www/adwat;          # جذر المشروع (index.html + pages/ + assets/)
+    index index.html;
+
+    # ── واجهة برمجة التطبيقات → الباك إند (PM2 على المنفذ 3001) ──
+    location /api/ {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 300s;     # السحب/الذكاء قد يطول
+        client_max_body_size 12M;    # رفع صور المنتجات
+    }
+
+    # ── حماية: منع كشف ملفات/مجلدات الخادم الحسّاسة ──
+    location ^~ /backend/        { deny all; return 404; }   # فيه .env و backups والشيفرة
+    location ^~ /_legacy_nextjs/ { deny all; return 404; }
+    location ^~ /logs/           { deny all; return 404; }
+    location ^~ /deploy/         { deny all; return 404; }
+    location = /ecosystem.config.js { deny all; return 404; }
+    location = /deploy.sh        { deny all; return 404; }
+    location ~ /\.              { deny all; return 404; }    # ملفات مخفية: .env .git ...
+    location ~* \.(dump|sql|log|md|sh)$ { deny all; return 404; }
+
+    # ── كاش الأصول (مُبمَّبة بـ ?v=) وتحديث HTML دائماً ──
+    location ~* \.(?:css|js|png|jpe?g|svg|webp|ico|woff2?)$ { expires 7d; add_header Cache-Control "public"; }
+    location ~* \.html$ { add_header Cache-Control "no-cache"; }
+
+    # ── الملفات الثابتة ──
+    location / { try_files $uri $uri/ =404; }
+}

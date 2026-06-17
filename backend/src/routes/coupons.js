@@ -3,6 +3,56 @@ const { body, validationResult } = require('express-validator');
 const db = require('../config/db');
 const { adminAuth } = require('../middleware/auth');
 
+// ─── أقسام الكوبونات ──────────────────────────────────────────────────────────
+const slugify = (s) => String(s || '').trim().toLowerCase()
+  .replace(/[^\w؀-ۿ]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+
+// GET الأقسام (عام)
+router.get('/categories', async (req, res) => {
+  const { rows } = await db.query('SELECT id, slug, name, icon, sort_order FROM coupon_categories ORDER BY sort_order, id');
+  res.json(rows);
+});
+
+// POST إضافة قسم (أدمن)
+router.post('/categories', adminAuth,
+  [body('name').trim().isLength({ min: 2 }).withMessage('اسم القسم مطلوب')],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array()[0].msg });
+    const name = req.body.name.trim();
+    const slug = slugify(req.body.slug || name) || ('cat-' + Date.now());
+    const icon = (req.body.icon || 'tag').trim().slice(0, 40);
+    const sort = parseInt(req.body.sort_order) || 100;
+    try {
+      const { rows } = await db.query(
+        'INSERT INTO coupon_categories (slug, name, icon, sort_order) VALUES ($1,$2,$3,$4) RETURNING *',
+        [slug, name, icon, sort]
+      );
+      res.status(201).json(rows[0]);
+    } catch (e) {
+      if (e.code === '23505') return res.status(409).json({ error: 'يوجد قسم بنفس المعرّف (slug)' });
+      throw e;
+    }
+  }
+);
+
+// PUT تعديل قسم (أدمن)
+router.put('/categories/:id', adminAuth, async (req, res) => {
+  const { name, icon, sort_order } = req.body;
+  const { rows } = await db.query(
+    'UPDATE coupon_categories SET name=COALESCE($1,name), icon=COALESCE($2,icon), sort_order=COALESCE($3,sort_order) WHERE id=$4 RETURNING *',
+    [name?.trim() || null, icon?.trim() || null, sort_order != null ? parseInt(sort_order) : null, req.params.id]
+  );
+  if (!rows[0]) return res.status(404).json({ error: 'القسم غير موجود' });
+  res.json(rows[0]);
+});
+
+// DELETE حذف قسم (أدمن) — الكوبونات في هذا القسم تبقى لكن بدون قسم مطابق
+router.delete('/categories/:id', adminAuth, async (req, res) => {
+  await db.query('DELETE FROM coupon_categories WHERE id = $1', [req.params.id]);
+  res.json({ message: 'تم حذف القسم' });
+});
+
 // GET all active coupons (public)
 router.get('/', async (req, res) => {
   const { platform, search } = req.query;

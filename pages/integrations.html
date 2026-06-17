@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ربط متجر سلة — أدوات التاجر</title>
+<meta name="description" content="اربط متجرك على سلة، استورد منتجاتك، ولّد أوصافها، وأرجِعها للمتجر بضغطة.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css?v=8">
+<style>
+  .ig-page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
+  .ig-card { background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.4rem; }
+  .ig-card h2 { font-size: 1.1rem; margin: 0 0 .3rem; }
+  .ig-sub { color: var(--ink-dim); font-size: .85rem; margin: 0 0 1rem; line-height: 1.8; }
+  .ig-connect-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+  .ig-input { flex: 1; min-width: 220px; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 10px; padding: .7rem .9rem; color: var(--ink); font-family: var(--font-arabic); }
+  .ig-input:focus { outline: none; border-color: var(--accent); }
+  .ig-status { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; font-weight: 700; }
+  .ig-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .ig-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+  .ig-prod { background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .ig-prod-img { width: 100%; height: 140px; object-fit: cover; background: var(--bg); }
+  .ig-prod-b { padding: .8rem; flex: 1; display: flex; flex-direction: column; gap: .5rem; }
+  .ig-prod-name { font-weight: 700; font-size: .9rem; }
+  .ig-badge { font-size: .68rem; padding: .12rem .5rem; border-radius: 99px; align-self: flex-start; }
+  .ig-actions { margin-top: auto; display: flex; gap: .4rem; }
+  .ig-btn-sm { flex: 1; border: none; border-radius: 8px; padding: .45rem; font-size: .78rem; font-weight: 700; cursor: pointer; font-family: var(--font-arabic); }
+  .ig-gen { background: var(--accent-soft); color: var(--accent); }
+  .ig-push { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; }
+  .ig-push:disabled { opacity: .5; cursor: not-allowed; }
+  .ig-prog { font-size: .75rem; color: var(--ink-dim); }
+  .ig-steps { font-size: .82rem; line-height: 2; color: var(--ink-dim); }
+  .ig-steps b { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom:1.2rem;">تكامل</span>
+      <h1>ربط متجر <em>سلة</em></h1>
+      <p>استورد منتجاتك من سلة، ولّد أوصافها الاحترافية، وأرجِعها للمتجر مباشرة — بدون نسخ ولصق.</p>
+    </div>
+  </div>
+</section>
+
+<div class="ig-page">
+  <!-- الربط -->
+  <div class="ig-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;">
+      <h2>حالة الربط</h2>
+      <span class="ig-status" id="igStatus"><span class="ig-dot" style="background:var(--ink-mid)"></span> جارٍ التحقق...</span>
+    </div>
+    <div id="igConnectBox">
+      <p class="ig-sub">الصق <b>رمز وصول سلة (Access Token)</b> من لوحة مطوّري سلة (Salla Partners → تطبيق خاص → رمز الوصول). نحفظه بأمان ونستخدمه لجلب منتجاتك وتحديثها فقط.</p>
+      <div class="ig-connect-row">
+        <input type="password" id="igToken" class="ig-input" placeholder="الصق Access Token هنا" autocomplete="off">
+        <button class="btn-primary" id="igConnectBtn" style="padding:.7rem 1.3rem;">ربط المتجر</button>
+      </div>
+    </div>
+    <div id="igConnectedBox" style="display:none;">
+      <p class="ig-sub" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> متجرك مربوط. يمكنك الآن استيراد المنتجات وتوليد أوصافها.</p>
+      <button class="btn-secondary" id="igDisconnectBtn" style="padding:.5rem 1rem;font-size:.85rem;">فصل الربط</button>
+    </div>
+  </div>
+
+  <!-- المنتجات -->
+  <div class="ig-card" id="igProductsCard" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem;">
+      <h2 style="margin:0;">منتجات متجرك</h2>
+      <button class="btn-secondary" id="igRefresh" style="padding:.45rem 1rem;font-size:.83rem;">↻ تحديث</button>
+    </div>
+    <div id="igProducts" class="ig-grid"></div>
+    <div id="igPager" style="text-align:center;margin-top:1.2rem;"></div>
+  </div>
+
+  <!-- دليل -->
+  <div class="ig-card" id="igGuide">
+    <h2>كيف أحصل على رمز سلة؟</h2>
+    <div class="ig-steps">
+      <div>1. ادخل <b>Salla Partners</b> → أنشئ تطبيقاً خاصاً (Private App).</div>
+      <div>2. فعّل صلاحيات <b>قراءة المنتجات</b> و<b>تعديل المنتجات</b>.</div>
+      <div>3. انسخ <b>Access Token</b> والصقه بالأعلى.</div>
+    </div>
+  </div>
+</div>
+
+<!-- modal: معاينة وتوليد -->
+<div id="igModal" style="position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:200;padding:1.2rem;" onclick="if(event.target===this)igClose()">
+  <div style="background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:var(--radius-lg);max-width:680px;width:100%;max-height:86vh;overflow-y:auto;padding:1.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <h3 id="igModalTitle" style="margin:0;font-size:1.1rem;">المنتج</h3>
+      <button onclick="igClose()" style="background:none;border:none;color:var(--ink-dim);font-size:1.3rem;cursor:pointer;">✕</button>
+    </div>
+    <div id="igModalBody"></div>
+  </div>
+</div>
+
+<script src="../assets/api.js?v=30"></script>
+<script>
+const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+let _page = 1, _cur = null, _curGen = null;
+
+async function init() {
+  if (!auth.isLoggedIn || !auth.isLoggedIn()) {
+    document.getElementById('igStatus').innerHTML = '<span class="ig-dot" style="background:#ef4444"></span> سجّل دخولك أولاً';
+    document.getElementById('igConnectBox').innerHTML = '<a href="login.html" class="btn-primary" style="padding:.6rem 1.2rem;">تسجيل الدخول</a>';
+    return;
+  }
+  try {
+    const st = await api.sallaStatus();
+    setConnected(st.connected);
+    if (st.connected) loadProducts(1);
+  } catch (_) { setConnected(false); }
+}
+function setConnected(on) {
+  document.getElementById('igStatus').innerHTML = on
+    ? '<span class="ig-dot" style="background:#22c55e"></span> مربوط'
+    : '<span class="ig-dot" style="background:var(--ink-mid)"></span> غير مربوط';
+  document.getElementById('igConnectBox').style.display = on ? 'none' : 'block';
+  document.getElementById('igConnectedBox').style.display = on ? 'block' : 'none';
+  document.getElementById('igProductsCard').style.display = on ? 'block' : 'none';
+  document.getElementById('igGuide').style.display = on ? 'none' : 'block';
+}
+
+document.getElementById('igConnectBtn').addEventListener('click', async () => {
+  const token = document.getElementById('igToken').value.trim();
+  if (!token) { showError('مطلوب', 'الصق رمز الوصول'); return; }
+  const btn = document.getElementById('igConnectBtn'); btn.disabled = true; btn.textContent = 'جارٍ الربط...';
+  try {
+    const r = await api.sallaConnect(token);
+    showToast('تم ربط ' + (r.store || 'متجرك'), 'success');
+    setConnected(true); loadProducts(1);
+  } catch (err) { showError('تعذّر الربط', err.message); }
+  finally { btn.disabled = false; btn.textContent = 'ربط المتجر'; }
+});
+document.getElementById('igDisconnectBtn').addEventListener('click', async () => {
+  await api.sallaDisconnect().catch(()=>{});
+  setConnected(false); showToast('تم فصل الربط', 'info');
+});
+document.getElementById('igRefresh').addEventListener('click', () => loadProducts(_page));
+
+async function loadProducts(page) {
+  _page = page;
+  const wrap = document.getElementById('igProducts');
+  wrap.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--ink-dim);padding:2rem;">جارٍ التحميل...</div>';
+  try {
+    const r = await api.sallaProducts(page);
+    if (!r.products.length) { wrap.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--ink-dim);padding:2rem;">لا منتجات.</div>'; return; }
+    wrap.innerHTML = r.products.map(p => `
+      <div class="ig-prod">
+        ${p.image ? `<img class="ig-prod-img" src="${e(p.image)}" alt="${e(p.name)}" loading="lazy">` : '<div class="ig-prod-img"></div>'}
+        <div class="ig-prod-b">
+          <div class="ig-prod-name">${e(p.name)}</div>
+          <span class="ig-badge" style="background:${p.hasDescription?'rgba(34,197,94,.14)':'rgba(245,158,11,.15)'};color:${p.hasDescription?'#16a34a':'#d97706'};">${p.hasDescription?'له وصف':'بدون وصف'}</span>
+          <div class="ig-actions">
+            <button class="ig-btn-sm ig-gen" onclick='igOpen(${JSON.stringify(p).replace(/'/g,"&#39;")})'>ولّد الوصف</button>
+          </div>
+        </div>
+      </div>`).join('');
+    const pg = r.pagination;
+    document.getElementById('igPager').innerHTML = pg && pg.totalPages > 1
+      ? `<button class="btn-secondary" style="padding:.4rem 1rem;font-size:.82rem;" ${page<=1?'disabled':''} onclick="loadProducts(${page-1})">السابق</button>
+         <span style="margin:0 1rem;color:var(--ink-dim);">${page} / ${pg.totalPages}</span>
+         <button class="btn-secondary" style="padding:.4rem 1rem;font-size:.82rem;" ${page>=pg.totalPages?'disabled':''} onclick="loadProducts(${page+1})">التالي</button>`
+      : '';
+  } catch (err) {
+    if (/صلاحية|انتهت/.test(err.message)) setConnected(false);
+    wrap.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#ef4444;padding:2rem;">${e(err.message)}</div>`;
+  }
+}
+
+function igOpen(p) {
+  _cur = p; _curGen = null;
+  document.getElementById('igModalTitle').textContent = p.name;
+  document.getElementById('igModalBody').innerHTML = `
+    <p class="ig-sub">سنحلّل المنتج ونولّد وصفاً احترافياً + عنوان ووصف صفحة، ثم تُرجعها لسلة بضغطة.</p>
+    <button class="btn-primary" id="igGenBtn" style="width:100%;justify-content:center;">ولّد المحتوى الآن</button>
+    <div id="igGenOut" style="margin-top:1rem;"></div>`;
+  document.getElementById('igGenBtn').onclick = igGenerate;
+  document.getElementById('igModal').style.display = 'flex';
+}
+function igClose(){ document.getElementById('igModal').style.display = 'none'; }
+
+async function igGenerate() {
+  const btn = document.getElementById('igGenBtn'); btn.disabled = true; btn.textContent = '⏳ جارٍ التوليد...';
+  try {
+    const r = await api.generate({ productName: _cur.name, features: '', length: 'medium', tone: 'professional' });
+    _curGen = r;
+    const descText = (r.intro ? r.intro + '\n\n' : '') + (Array.isArray(r.sections) ? r.sections.map(s => (s.heading?s.heading+':\n':'') + (s.points||[]).map(p=>'• '+p).join('\n')).join('\n\n') : (r.description||''));
+    document.getElementById('igGenOut').innerHTML = `
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.8rem;line-height:1.9;font-size:.88rem;max-height:240px;overflow:auto;white-space:pre-wrap;">${e(descText)}</div>
+      <div style="font-size:.8rem;color:var(--ink-dim);margin-top:.5rem;">العنوان: ${e(r.pageTitle||'')}</div>
+      <button class="btn-primary" id="igPushBtn" style="width:100%;justify-content:center;margin-top:1rem;">⬆ احفظ في سلة</button>`;
+    document.getElementById('igPushBtn').onclick = () => igPush(descText);
+  } catch (err) { showToolError ? showToolError(err,'generator') : showError('خطأ', err.message); }
+  finally { btn.disabled = false; btn.textContent = 'ولّد المحتوى الآن'; }
+}
+
+async function igPush(descText) {
+  if (!_curGen) return;
+  const btn = document.getElementById('igPushBtn'); btn.disabled = true; btn.textContent = '⏳ جارٍ الحفظ...';
+  // حوّل الوصف لـHTML بسيط لسلة
+  const html = '<p>' + e(descText).replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>') + '</p>';
+  try {
+    await api.sallaUpdateProduct(_cur.id, {
+      description: html,
+      metadata_title: _curGen.pageTitle || '',
+      metadata_description: _curGen.pageDescription || '',
+    });
+    showToast('تم حفظ الوصف في سلة ✓', 'success');
+    igClose(); loadProducts(_page);
+  } catch (err) {
+    if (/صلاحية|انتهت/.test(err.message)) setConnected(false);
+    showError('تعذّر الحفظ', err.message);
+  } finally { btn.disabled = false; btn.textContent = '⬆ احفظ في سلة'; }
+}
+
+init();
+</script>
+<script src="../assets/header.js?v=16"></script>
+</body>
+</html>

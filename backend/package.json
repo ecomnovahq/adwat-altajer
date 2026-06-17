@@ -6,9 +6,12 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "migrate": "node migrations/run.js"
+    "migrate": "node migrations/run.js",
+    "backup": "node scripts/backup.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.100.1",
+    "@google-analytics/data": "^6.1.0",
     "@google/generative-ai": "^0.24.1",
     "axios": "^1.16.1",
     "bcryptjs": "^2.4.3",
@@ -19,12 +22,15 @@
     "express-rate-limit": "^7.3.1",
     "express-validator": "^7.1.0",
     "groq-sdk": "^1.2.0",
+    "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
+    "node-cron": "^4.2.1",
     "nodemailer": "^8.0.7",
     "pg": "^8.12.0",
     "playwright": "^1.60.0",
     "puppeteer-core": "^25.0.2",
+    "sharp": "^0.35.0",
     "winston": "^3.19.0"
   },
   "devDependencies": {

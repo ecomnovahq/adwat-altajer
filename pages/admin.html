@@ -10,18 +10,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/styles.css?v=9">
 <style>
   * { box-sizing: border-box; }
+  html, body { overflow-x: hidden; max-width: 100%; }
   body { min-height: 100vh; display: flex; background: var(--bg); }
+  .main { min-width: 0; max-width: 100%; }
+  .admin-table { width: 100%; }
 
   /* ── Sidebar ── */
   .sidebar {
-    width: 260px; min-height: 100vh; background: var(--bg-alt);
+    width: 260px; height: 100vh; height: 100dvh; background: var(--bg-alt);
     border-left: 1px solid var(--line); display: flex; flex-direction: column;
     position: fixed; right: 0; top: 0; z-index: 100;
-    transition: transform 0.3s;
+    transition: transform 0.3s; overflow: hidden;
   }
+  .sidebar-footer { flex-shrink: 0; }
   .sidebar-logo { padding: 1.5rem; display: flex; align-items: center; gap: 0.7rem; border-bottom: 1px solid var(--line); }
   .sidebar-logo svg { width: 30px; height: 42px; }
   .sidebar-logo-name { font-weight: 700; font-size: 0.95rem; }
@@ -108,13 +112,97 @@
   .search-input { flex: 1; min-width: 200px; }
 
   /* ── Responsive ── */
-  @media (max-width: 768px) {
-    .sidebar { transform: translateX(100%); }
+  /* زر قائمة الجوال + خلفية معتمة */
+  .admin-burger { display: none; background: none; border: none; color: var(--ink); cursor: pointer; padding: 0.4rem; border-radius: 8px; }
+  .admin-burger:hover { background: var(--bg-card); }
+  .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+  .sidebar-backdrop.show { opacity: 1; pointer-events: auto; }
+
+  @media (max-width: 980px) {
+    .sidebar { transform: translateX(100%); box-shadow: -8px 0 30px rgba(0,0,0,0.25); }
     .sidebar.open { transform: translateX(0); }
     .main { margin-right: 0; }
+    .admin-burger { display: inline-flex; }
+  }
+  @media (max-width: 768px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .form-row { grid-template-columns: 1fr; }
+    .top-bar { padding: 0.8rem 1rem; }
+    .content { padding: 1.2rem 1rem; }
+    .top-bar-title { font-size: 1rem; }
+    .notif-panel { width: calc(100vw - 2rem); max-width: 340px; }
+    .modal { width: calc(100vw - 1.5rem); max-width: 100%; }
+    .panel-header { flex-wrap: wrap; gap: 0.6rem; }
   }
+  @media (max-width: 460px) {
+    .stats-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── الدعم والتذاكر ── */
+  .tk-layout { display: grid; grid-template-columns: 340px 1fr; gap: 1rem; align-items: stretch; }
+  @media (max-width: 860px) { .tk-layout { grid-template-columns: 1fr; } }
+  .tk-list-panel { max-height: 70vh; display: flex; flex-direction: column; }
+  .tk-list { overflow-y: auto; display: flex; flex-direction: column; gap: .5rem; }
+  .tk-item { text-align: right; background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .8rem; cursor: pointer; transition: all .15s; }
+  .tk-item:hover { border-color: var(--line-accent); }
+  .tk-item.active { border-color: var(--accent); background: var(--accent-soft); }
+  .tk-item-top { display: flex; justify-content: space-between; gap: .5rem; align-items: center; margin-bottom: .25rem; }
+  .tk-item-num { font-size: .72rem; color: var(--accent); font-weight: 700; }
+  .tk-item-name { font-weight: 700; font-size: .85rem; }
+  .tk-item-last { font-size: .76rem; color: var(--ink-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tk-badge { font-size: .65rem; font-weight: 700; padding: .12rem .5rem; border-radius: 99px; }
+  .tk-chat-panel { min-height: 60vh; padding: 0; }
+  .tk-chat-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: 1rem 1.2rem; border-bottom: 1px solid var(--line); }
+  .tk-chat-msgs { flex: 1; overflow-y: auto; padding: 1.2rem; display: flex; flex-direction: column; gap: .6rem; min-height: 300px; max-height: 55vh; }
+  .tk-bubble { max-width: 78%; padding: .6rem .85rem; border-radius: 14px; font-size: .88rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  .tk-bubble.user { align-self: flex-start; background: var(--bg-card); border: 1px solid var(--line); border-bottom-right-radius: 4px; }
+  .tk-bubble.admin { align-self: flex-end; background: linear-gradient(135deg, var(--accent-2,#9333ea), var(--accent)); color: #fff; border-bottom-left-radius: 4px; }
+  .tk-bubble-time { font-size: .64rem; opacity: .65; margin-top: .25rem; }
+  .tk-chat-input { display: flex; gap: .5rem; padding: .9rem 1.1rem; border-top: 1px solid var(--line); }
+  .tk-chat-input input { flex: 1; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 10px; padding: .6rem .8rem; color: var(--ink); font-family: var(--font-arabic); }
+  .tk-chat-input input:focus { outline: none; border-color: var(--accent); }
+
+  /* ── عناصر الفلترة (بحث + نطاق زمني) ── */
+  .flt-row { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+  .flt-date { font-size: .73rem; color: var(--ink-dim); display: flex; align-items: center; gap: .3rem; }
+  .flt-date input { padding: .35rem .5rem; font-size: .78rem; width: auto; background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); font-family: var(--font-arabic); }
+
+  /* ── لوحة التحليلات ── */
+  .an-range { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+  .an-quick { display: flex; gap: .3rem; flex-wrap: wrap; }
+  .an-q { background: var(--bg-card); border: 1px solid var(--line); color: var(--ink-dim); border-radius: 99px; padding: .35rem .8rem; font-size: .78rem; cursor: pointer; font-family: var(--font-arabic); }
+  .an-q.active { background: var(--accent-soft); border-color: var(--line-accent); color: var(--accent); font-weight: 700; }
+  .an-dates { display: flex; gap: .6rem; flex-wrap: wrap; }
+  .an-dates label { font-size: .75rem; color: var(--ink-dim); display: flex; align-items: center; gap: .3rem; }
+  .an-dates input { padding: .35rem .5rem; font-size: .8rem; width: auto; }
+  .an-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: .8rem; padding: 1rem 0 .5rem; }
+  @media (max-width: 900px) { .an-cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 460px) { .an-cards { grid-template-columns: 1fr; } }
+  .an-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: 1rem; display: flex; align-items: center; gap: .6rem; }
+  .an-c-val { font-size: 1.7rem; font-weight: 800; color: var(--accent); line-height: 1; }
+  .an-c-lbl { font-size: .72rem; color: var(--ink-dim); margin-top: .3rem; line-height: 1.4; }
+  .an-live { border-color: rgba(34,197,94,.4); background: rgba(34,197,94,.06); }
+  .an-live .an-c-val { color: #22c55e; }
+  .an-live-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; flex-shrink: 0; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: anPulse 1.8s infinite; }
+  @keyframes anPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,.5); } 70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+  .an-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: .5rem; }
+  @media (max-width: 760px) { .an-grid2 { grid-template-columns: 1fr; } }
+  .an-box { background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem; }
+  .an-box-title { font-size: .85rem; font-weight: 700; margin-bottom: .8rem; }
+  .an-bars { display: flex; flex-direction: column; gap: .8rem; }
+  .an-bar-row { display: grid; grid-template-columns: 140px 1fr auto; align-items: center; gap: .7rem; }
+  .an-bar-name { font-size: .83rem; font-weight: 600; display: flex; align-items: center; gap: .45rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .an-bar-rank { width: 22px; height: 22px; flex-shrink: 0; border-radius: 7px; background: var(--accent-soft); color: var(--accent); font-size: .72rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+  .an-bar-track { background: var(--bg-elevated); border-radius: 99px; height: 14px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,.06); }
+  .an-bar-fill { height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, var(--accent-2,#9333ea), var(--accent)); min-width: 8px; transition: width .9s cubic-bezier(.16,1,.3,1); box-shadow: 0 1px 8px rgba(168,85,247,.35); }
+  .an-bar-fill.top { background: linear-gradient(90deg, #d97706, var(--gold,#eab308)); box-shadow: 0 1px 8px rgba(234,179,8,.4); }
+  .an-bar-row:nth-child(1) .an-bar-rank { background: var(--gold-soft,rgba(234,179,8,.14)); color: var(--gold,#eab308); }
+  .an-bar-val { font-weight: 800; color: var(--ink); text-align: left; font-size: .9rem; min-width: 30px; }
+  .an-list { display: flex; flex-direction: column; gap: .5rem; }
+  .an-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; font-size: .82rem; padding: .4rem .2rem; border-bottom: 1px dashed var(--line); }
+  .an-row:last-child { border-bottom: none; }
+  .an-row .an-sub { font-size: .72rem; color: var(--ink-dim); }
+  .an-on { color: #22c55e; font-weight: 700; font-size: .72rem; }
 
   /* ── Section visibility ── */
   .admin-section { display: none; }
@@ -196,6 +284,24 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
       المراجعات
     </button>
+    <button class="sidebar-link" onclick="showSection('tickets')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      الدعم والتذاكر
+      <span class="sidebar-badge" id="ticketsBadge" style="display:none;">0</span>
+    </button>
+    <button class="sidebar-link" onclick="showSection('analyses')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
+      طلبات التحليلات
+      <span class="sidebar-badge" id="analysesBadge" style="display:none;">0</span>
+    </button>
+    <button class="sidebar-link" onclick="showSection('assistant-clients')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      عملاء مساعد التاجر
+    </button>
+    <button class="sidebar-link" onclick="showSection('assistant-stores')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      مساعد التاجر (المتاجر)
+    </button>
 
     <button class="sidebar-link" onclick="showSection('blog')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -215,9 +321,17 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 19.07l-1.41 1.41M12 2v2M12 20v2M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M2 12h2M20 12h2"/></svg>
       إعدادات الأدوات
     </button>
+    <button class="sidebar-link" onclick="showSection('plans')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      الباقات والأسعار
+    </button>
     <button class="sidebar-link" onclick="showSection('tool-requests')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
       طلبات الوصول
+    </button>
+    <button class="sidebar-link" onclick="showSection('merchant-path')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/><circle cx="5" cy="6" r="1.4" fill="currentColor"/><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="5" cy="18" r="1.4" fill="currentColor"/></svg>
+      طلبات مسار التاجر
     </button>
     <a class="sidebar-link" href="../index.html" target="_blank">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -231,16 +345,26 @@
       <div class="sidebar-user-name" id="sidebarName">المدير</div>
       <div class="sidebar-user-role">أدمن</div>
     </div>
+    <button class="logout-btn" id="adminTheme" onclick="toggleAdminTheme()" title="تبديل الوضع الداكن/الفاتح" style="margin-inline-start:auto;">
+      <svg class="ic-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+      <svg class="ic-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
     <button class="logout-btn" onclick="doLogout()" title="تسجيل خروج">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
     </button>
   </div>
 </aside>
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar(false)"></div>
 
 <!-- ──────────────────── MAIN ──────────────────────────── -->
 <div class="main">
   <div class="top-bar">
-    <div class="top-bar-title" id="topBarTitle">الإحصائيات</div>
+    <div style="display:flex;align-items:center;gap:.6rem;">
+      <button class="admin-burger" onclick="toggleSidebar()" aria-label="القائمة">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div class="top-bar-title" id="topBarTitle">الإحصائيات</div>
+    </div>
     <div class="top-bar-actions">
       <div class="notif-wrapper">
         <button class="notif-btn" id="notifBtn" onclick="toggleNotifPanel()" title="الإشعارات">
@@ -259,6 +383,10 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
         تحديث
       </button>
+      <button class="btn-secondary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="window.tjRefreshNow && tjRefreshNow()" title="مسح كاش المتصفح وإعادة التحميل">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+        مسح الكاش
+      </button>
     </div>
   </div>
 
@@ -273,6 +401,49 @@
         <div class="stat-card"><div class="stat-label">الكوبونات النشطة</div><div class="stat-value" id="stat-coupons">—</div></div>
         <div class="stat-card"><div class="stat-label">الأعمال المعروضة</div><div class="stat-value" id="stat-works">—</div></div>
         <div class="stat-card"><div class="stat-label">استخدام الأدوات (30 يوم)</div><div class="stat-value" id="stat-tools">—</div></div>
+      </div>
+
+      <!-- لوحة التحليلات بنطاق زمني -->
+      <div class="panel" style="margin-bottom:1.5rem;">
+        <div class="panel-header" style="flex-wrap:wrap;gap:.6rem;">
+          <div class="panel-title">لوحة التحليلات</div>
+          <div class="an-range">
+            <div class="an-quick">
+              <button class="an-q active" data-days="7" onclick="setRangeQuick(this,7)">7 أيام</button>
+              <button class="an-q" data-days="30" onclick="setRangeQuick(this,30)">30 يوم</button>
+              <button class="an-q" data-days="90" onclick="setRangeQuick(this,90)">3 أشهر</button>
+              <button class="an-q" data-days="365" onclick="setRangeQuick(this,365)">سنة</button>
+            </div>
+            <div class="an-dates">
+              <label>من <input type="date" id="anFrom" class="input" onchange="loadAnalytics(true)"></label>
+              <label>إلى <input type="date" id="anTo" class="input" onchange="loadAnalytics(true)"></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="an-cards">
+          <div class="an-card an-live"><div class="an-live-dot"></div><div><div class="an-c-val" id="an-online">—</div><div class="an-c-lbl">متصل الآن</div></div></div>
+          <div class="an-card"><div class="an-c-val" id="an-active">—</div><div class="an-c-lbl">مستخدمون نشطون (بالفترة)</div></div>
+          <div class="an-card"><div class="an-c-val" id="an-new">—</div><div class="an-c-lbl">مستخدمون جدد</div></div>
+          <div class="an-card"><div class="an-c-val" id="an-runs">—</div><div class="an-c-lbl">عمليات الأدوات</div></div>
+          <div class="an-card"><div class="an-c-val" id="an-total">—</div><div class="an-c-lbl">إجمالي المستخدمين</div></div>
+        </div>
+
+        <div class="an-grid2">
+          <div class="an-box">
+            <div class="an-box-title">الأدوات الأكثر استخداماً</div>
+            <div id="an-tools" class="an-bars"></div>
+          </div>
+          <div class="an-box">
+            <div class="an-box-title">المتصلون مؤخراً</div>
+            <div id="an-recent" class="an-list"></div>
+          </div>
+        </div>
+
+        <div class="an-box" style="margin-top:1rem;">
+          <div class="an-box-title">أكثر المستخدمين نشاطاً (بالفترة)</div>
+          <div id="an-topusers" class="an-list"></div>
+        </div>
       </div>
 
       <div class="panel">
@@ -295,6 +466,9 @@
         <div class="panel-header">
           <div class="panel-title">الطلبات والحجوزات</div>
           <div class="search-row">
+            <input type="text" class="admin-search" id="bookingsTable_q" placeholder="بحث..." oninput="runFilter('bookingsTable')" style="max-width:150px;">
+            <label class="flt-date">من <input type="date" id="bookingsTable_from" onchange="runFilter('bookingsTable')"></label>
+            <label class="flt-date">إلى <input type="date" id="bookingsTable_to" onchange="runFilter('bookingsTable')"></label>
             <select class="select" id="bookingStatusFilter" onchange="loadBookings()" style="width:auto;">
               <option value="">كل الحالات</option>
               <option value="pending">معلق</option>
@@ -316,10 +490,22 @@
 
     <!-- ── Coupons ── -->
     <div class="admin-section" id="section-coupons">
+      <div class="panel" style="margin-bottom:1.5rem;">
+        <div class="panel-header">
+          <div class="panel-title">أقسام الكوبونات</div>
+        </div>
+        <div style="padding:0 0 .5rem;color:var(--ink-dim);font-size:.82rem;">تظهر هذه الأقسام كفلاتر في صفحة الكوبونات. أضف أو احذف قسماً.</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+          <input type="text" id="newCatName" class="input" placeholder="اسم القسم (مثال: تطبيقات)" style="max-width:220px;" />
+          <button class="btn-primary" style="padding:.5rem 1rem;font-size:.85rem;" onclick="addCouponCategory()">+ إضافة قسم</button>
+        </div>
+        <div id="catChips" style="display:flex;gap:.5rem;flex-wrap:wrap;"></div>
+      </div>
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title">الكوبونات</div>
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" placeholder="بحث في الكوبونات..." oninput="adminFilter('couponsTable', this.value)" style="max-width:200px;">
             <button class="btn-secondary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="exportCSV('coupons')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:0.3rem;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               تصدير CSV
@@ -342,6 +528,7 @@
         <div class="panel-header">
           <div class="panel-title">الأعمال والمشاريع</div>
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" placeholder="بحث في الأعمال..." oninput="adminFilter('worksTable', this.value)" style="max-width:200px;">
             <button class="btn-secondary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="exportCSV('works')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:0.3rem;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               تصدير CSV
@@ -363,7 +550,10 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title">آراء العملاء</div>
-          <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openReviewModal()">+ إضافة مراجعة</button>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" placeholder="بحث في المراجعات..." oninput="adminFilter('reviewsTable', this.value)" style="max-width:200px;">
+            <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openReviewModal()">+ إضافة مراجعة</button>
+          </div>
         </div>
         <div style="overflow-x:auto;">
           <table class="admin-table">
@@ -380,7 +570,9 @@
         <div class="panel-header">
           <div class="panel-title">المستخدمون المسجلون</div>
           <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
-            <input type="text" class="admin-search" id="usersSearch" placeholder="ابحث بالاسم أو البريد..." oninput="filterUsers(this.value)" style="max-width:200px;">
+            <input type="text" class="admin-search" id="usersTable_q" placeholder="بحث بالاسم/البريد..." oninput="runFilter('usersTable')" style="max-width:160px;">
+            <label class="flt-date">من <input type="date" id="usersTable_from" onchange="runFilter('usersTable')"></label>
+            <label class="flt-date">إلى <input type="date" id="usersTable_to" onchange="runFilter('usersTable')"></label>
             <button class="btn-secondary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="exportCSV('users')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:0.3rem;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               تصدير CSV
@@ -389,7 +581,7 @@
         </div>
         <div style="overflow-x:auto;">
           <table class="admin-table">
-            <thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الدور</th><th>الأدوات</th><th>التاريخ</th><th>إجراء</th></tr></thead>
+            <thead><tr><th>الاسم</th><th>الدور</th><th>التاريخ</th><th>إجراء</th></tr></thead>
             <tbody id="usersTable"></tbody>
           </table>
         </div>
@@ -401,11 +593,16 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title">سجل استخدام الأدوات</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <input type="text" class="admin-search" id="logsTable_q" placeholder="بحث..." oninput="runFilter('logsTable')" style="max-width:140px;">
+          <label class="flt-date">من <input type="date" id="logsTable_from" onchange="runFilter('logsTable')"></label>
+          <label class="flt-date">إلى <input type="date" id="logsTable_to" onchange="runFilter('logsTable')"></label>
           <select class="select" id="logToolFilter" onchange="loadLogs()" style="width:auto;">
             <option value="">كل الأدوات</option>
             <option value="analyzer">محلل المتجر</option>
             <option value="generator">مولّد الأوصاف</option>
           </select>
+          </div>
         </div>
         <div style="overflow-x:auto;">
           <table class="admin-table">
@@ -419,8 +616,48 @@
     <!-- ── Tool Settings ── -->
     <div class="admin-section" id="section-tool-settings">
       <div class="panel">
-        <div class="panel-header"><div class="panel-title">إعدادات الأدوات — مجاني / مدفوع</div></div>
+        <div class="panel-header"><div class="panel-title">إعدادات الأدوات — حالة / تسعير / وسوم / مميزات</div></div>
         <div id="toolSettingsPanel" style="padding:1rem 0;"></div>
+      </div>
+    </div>
+
+    <!-- ── Plans / Packages ── -->
+    <div class="admin-section" id="section-plans">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">الباقات والأسعار</div>
+          <button class="btn-primary" style="padding:.5rem 1rem;font-size:.85rem;" onclick="openPlanModal()">+ باقة جديدة</button>
+        </div>
+        <div id="plansList" style="display:flex;flex-direction:column;gap:1rem;padding:.5rem 0;"></div>
+      </div>
+    </div>
+    <!-- Plan modal -->
+    <div id="planModal" style="position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:300;padding:1.2rem;" onclick="if(event.target===this)this.style.display='none'">
+      <div style="background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:1.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <h3 id="planModalT" style="margin:0;">باقة جديدة</h3>
+          <button onclick="document.getElementById('planModal').style.display='none'" style="background:none;border:none;color:var(--ink-dim);font-size:1.3rem;cursor:pointer;">✕</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.7rem;">
+          <input type="hidden" id="planId">
+          <label style="font-size:.82rem;">اسم الباقة<input id="planName" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="مثال: احترافي"></label>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+            <label style="font-size:.82rem;flex:1;">السعر (ر.س)<input id="planPrice" type="number" min="0" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="299"></label>
+            <label style="font-size:.82rem;flex:1;">المدة<input id="planPeriod" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="شهرياً" value="شهرياً"></label>
+            <label style="font-size:.82rem;flex:1;">وسم<input id="planBadge" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="الأكثر طلباً"></label>
+          </div>
+          <label style="font-size:.82rem;">المميزات (سطر لكل ميزة)<textarea id="planFeatures" class="admin-search" rows="5" style="width:100%;margin-top:.2rem;resize:vertical;" placeholder="ميزة&#10;ميزة&#10;ميزة"></textarea></label>
+          <label style="font-size:.82rem;">الأدوات المشمولة</label>
+          <div id="planTools" style="display:flex;flex-wrap:wrap;gap:.5rem;"></div>
+          <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;">
+            <label style="font-size:.82rem;display:flex;align-items:center;gap:.4rem;"><input type="checkbox" id="planActive" checked> مفعّلة</label>
+            <label style="font-size:.82rem;">الترتيب<input id="planSort" type="number" class="admin-search" style="width:70px;margin-inline-start:.3rem;" value="100"></label>
+          </div>
+          <div style="display:flex;gap:.6rem;margin-top:.5rem;">
+            <button class="btn-primary" style="flex:1;justify-content:center;" onclick="savePlan()">حفظ</button>
+            <button class="btn-secondary" style="flex:1;justify-content:center;" onclick="document.getElementById('planModal').style.display='none'">إلغاء</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -429,7 +666,10 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title">مقالات المدونة</div>
-          <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openBlogModal()">+ إضافة مقال</button>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" placeholder="بحث في المقالات..." oninput="adminFilter('blogTable', this.value)" style="max-width:200px;">
+            <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openBlogModal()">+ إضافة مقال</button>
+          </div>
         </div>
         <div style="overflow-x:auto;">
           <table class="admin-table">
@@ -445,7 +685,12 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title">طلبات الوصول للأدوات</div>
-          <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadToolRequests()">تحديث</button>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" id="toolRequestsTable_q" placeholder="بحث..." oninput="runFilter('toolRequestsTable')" style="max-width:140px;">
+            <label class="flt-date">من <input type="date" id="toolRequestsTable_from" onchange="runFilter('toolRequestsTable')"></label>
+            <label class="flt-date">إلى <input type="date" id="toolRequestsTable_to" onchange="runFilter('toolRequestsTable')"></label>
+            <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadToolRequests()">تحديث</button>
+          </div>
         </div>
         <div style="overflow-x:auto;">
           <table class="admin-table">
@@ -453,6 +698,105 @@
             <tbody id="toolRequestsTable"></tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    <!-- ── Support Tickets ── -->
+    <div class="admin-section" id="section-tickets">
+      <div class="tk-layout">
+        <div class="panel tk-list-panel">
+          <div class="panel-header">
+            <div class="panel-title">التذاكر</div>
+            <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadTickets()">تحديث</button>
+          </div>
+          <div style="padding:.5rem 0;"><input type="text" class="admin-search" placeholder="بحث في التذاكر..." oninput="filterTickets(this.value)" style="max-width:100%;width:100%;"></div>
+          <div id="ticketsList" class="tk-list"></div>
+        </div>
+        <div class="panel tk-chat-panel">
+          <div id="tkChatEmpty" style="text-align:center;color:var(--ink-dim);padding:3rem 1rem;">اختر تذكرة لعرض المحادثة والرد على العميل</div>
+          <div id="tkChat" style="display:none;flex-direction:column;height:100%;">
+            <div class="tk-chat-head">
+              <div>
+                <div id="tkChatTitle" style="font-weight:700;"></div>
+                <div id="tkChatSub" style="font-size:.78rem;color:var(--ink-dim);"></div>
+              </div>
+              <div style="display:flex;gap:.4rem;align-items:center;">
+                <select id="tkStatus" class="select" style="width:auto;font-size:.8rem;padding:.3rem .5rem;" onchange="setTicketStatus()">
+                  <option value="open">مفتوحة</option>
+                  <option value="answered">تم الرد</option>
+                  <option value="closed">مغلقة</option>
+                </select>
+              </div>
+            </div>
+            <div id="tkChatMsgs" class="tk-chat-msgs"></div>
+            <div id="tkAttachBar" style="display:none;gap:.4rem;flex-wrap:wrap;padding:.4rem .6rem 0;"></div>
+            <div class="tk-chat-input">
+              <button class="btn-secondary" style="padding:.5rem .7rem;" title="إرفاق" onclick="document.getElementById('tkFile').click()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
+              <input type="file" id="tkFile" accept="image/*,.pdf,.txt,.doc,.docx,.xls,.xlsx,.csv" multiple style="display:none;">
+              <input type="text" id="tkReplyInput" placeholder="اكتب ردك للعميل..." onkeydown="if(event.key==='Enter')sendTicketReply()">
+              <button class="btn-primary" style="padding:.5rem 1rem;" onclick="sendTicketReply()">إرسال</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Analyses ── -->
+    <div class="admin-section" id="section-analyses">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">طلبات التحليلات</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" id="anaList_q" placeholder="بحث..." oninput="runFilter('anaList')" style="max-width:150px;">
+            <label class="flt-date">من <input type="date" id="anaList_from" onchange="runFilter('anaList')"></label>
+            <label class="flt-date">إلى <input type="date" id="anaList_to" onchange="runFilter('anaList')"></label>
+            <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadAnalyses()">تحديث</button>
+          </div>
+        </div>
+        <div id="anaList" style="display:flex;flex-direction:column;gap:1rem;"></div>
+      </div>
+    </div>
+
+    <!-- ── Assistant Clients (قسم مستقل) ── -->
+    <div class="admin-section" id="section-assistant-clients">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">عملاء مساعد التاجر</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" id="asClientsList_q" placeholder="بحث بالاسم/البريد..." oninput="runFilter('asClientsList')" style="max-width:200px;">
+            <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadAssistantClients()">تحديث</button>
+          </div>
+        </div>
+        <div id="asClientsList" style="display:flex;flex-direction:column;gap:1rem;"></div>
+      </div>
+    </div>
+
+    <!-- ── Assistant Stores ── -->
+    <div class="admin-section" id="section-assistant-stores">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">مساعد التاجر — متاجر العملاء</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" id="asStoresList_q" placeholder="بحث..." oninput="runFilter('asStoresList')" style="max-width:150px;">
+            <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadAssistantStores()">تحديث</button>
+          </div>
+        </div>
+        <div id="asStoresList" style="display:flex;flex-direction:column;gap:1rem;"></div>
+      </div>
+    </div>
+
+    <div class="admin-section" id="section-merchant-path">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">طلبات مسار التاجر</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" class="admin-search" id="mpSubsList_q" placeholder="بحث..." oninput="runFilter('mpSubsList')" style="max-width:140px;">
+            <label class="flt-date">من <input type="date" id="mpSubsList_from" onchange="runFilter('mpSubsList')"></label>
+            <label class="flt-date">إلى <input type="date" id="mpSubsList_to" onchange="runFilter('mpSubsList')"></label>
+            <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadMerchantPath()">تحديث</button>
+          </div>
+        </div>
+        <div id="mpSubsList" style="display:flex;flex-direction:column;gap:1rem;"></div>
       </div>
     </div>
 
@@ -497,7 +841,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>التصنيف</label>
-          <input type="text" id="couponCategory" class="input" placeholder="منصات، إضافات، أدوات..." />
+          <select id="couponCategory" class="select"><option value="">— اختر القسم —</option></select>
         </div>
         <div class="form-group">
           <label>تاريخ الانتهاء</label>
@@ -686,6 +1030,30 @@
   </div>
 </div>
 
+<!-- User Detail Modal -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal" style="max-width:760px;">
+    <div class="modal-header">
+      <div class="modal-title">تفاصيل العميل</div>
+      <button class="modal-close" onclick="closeModal('userModal')">✕</button>
+    </div>
+    <div class="modal-body" id="userModalBody" style="max-height:75vh;overflow-y:auto;">
+      <div style="text-align:center;padding:2rem;color:var(--ink-dim);">جارٍ التحميل...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Assistant Store Detail Modal -->
+<div class="modal-overlay" id="asStoreModal">
+  <div class="modal" style="max-width:780px;">
+    <div class="modal-header">
+      <div class="modal-title">تفاصيل متجر العميل</div>
+      <button class="modal-close" onclick="closeModal('asStoreModal')">✕</button>
+    </div>
+    <div class="modal-body" id="asStoreModalBody" style="max-height:78vh;overflow-y:auto;">جارٍ التحميل...</div>
+  </div>
+</div>
+
 <!-- Blog Modal -->
 <div class="modal-overlay" id="blogModal">
   <div class="modal" style="max-width:720px;">
@@ -751,7 +1119,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js"></script>
+<script src="../assets/api.js?v=41"></script>
 <script>
 // ─── Notifications ────────────────────────────────────────────────────────────
 let notifications = JSON.parse(localStorage.getItem('admin_notifs') || '[]');
@@ -849,6 +1217,30 @@ function doLogout() {
   window.location.href = 'login.html';
 }
 
+// ─── قائمة الجوال (السايدبار) ───────────────────────────────────────────────────
+function toggleSidebar(force) {
+  const sb = document.getElementById('sidebar');
+  const bd = document.getElementById('sidebarBackdrop');
+  const open = force === undefined ? !sb.classList.contains('open') : force;
+  sb.classList.toggle('open', open);
+  bd.classList.toggle('show', open);
+}
+
+// ─── تبديل الوضع الداكن/الفاتح ──────────────────────────────────────────────────
+function _syncAdminThemeIcon() {
+  const dark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const m = document.querySelector('#adminTheme .ic-moon');
+  const s = document.querySelector('#adminTheme .ic-sun');
+  if (m && s) { m.style.display = dark ? 'block' : 'none'; s.style.display = dark ? 'none' : 'block'; }
+}
+function toggleAdminTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('tajer-theme', next); } catch (e) {}
+  _syncAdminThemeIcon();
+}
+_syncAdminThemeIcon();
+
 // ─── Section Navigation ───────────────────────────────────────────────────────
 function showSection(name) {
   currentSection = name;
@@ -861,12 +1253,17 @@ function showSection(name) {
     coupons: 'الكوبونات', works: 'الأعمال', reviews: 'آراء العملاء',
     blog: 'مقالات المدونة',
     users: 'المستخدمون', logs: 'سجل الأدوات',
-    'tool-settings': 'إعدادات الأدوات', 'tool-requests': 'طلبات الوصول'
+    'tool-settings': 'إعدادات الأدوات', 'plans': 'الباقات والأسعار', 'tool-requests': 'طلبات الوصول',
+    'merchant-path': 'طلبات مسار التاجر', tickets: 'الدعم والتذاكر', analyses: 'طلبات التحليلات',
+    'assistant-clients': 'عملاء مساعد التاجر',
+    'assistant-stores': 'مساعد التاجر — المتاجر'
   };
   document.getElementById('topBarTitle').textContent = sectionTitles[name] || name;
   document.querySelectorAll('.sidebar-link').forEach(l => {
     if (l.getAttribute('onclick') === `showSection('${name}')`) l.classList.add('active');
   });
+  if (window.innerWidth <= 980) toggleSidebar(false);
+  if (name !== 'tickets' && typeof _stopTkPoll === 'function') _stopTkPoll();
   refreshSection();
 }
 
@@ -876,9 +1273,505 @@ function refreshSection() {
     coupons: loadCoupons, works: loadWorks,
     reviews: loadReviews, blog: loadBlogPosts,
     users: loadUsers, logs: loadLogs,
-    'tool-settings': loadToolSettings, 'tool-requests': loadToolRequests
+    'tool-settings': loadToolSettings, 'plans': loadPlans, 'tool-requests': loadToolRequests,
+    'merchant-path': loadMerchantPath, tickets: loadTickets, analyses: loadAnalyses,
+    'assistant-clients': loadAssistantClients,
+    'assistant-stores': loadAssistantStores
   };
   loaders[currentSection]?.();
+}
+
+// ─── طلبات التحليلات ───────────────────────────────────────────────────────────
+async function loadAnalyses() {
+  const rows = await api.admin.analyses().catch(() => []);
+  const newCount = rows.filter(a => a.status === 'new').length;
+  const badge = document.getElementById('analysesBadge');
+  if (badge) { badge.textContent = newCount; badge.style.display = newCount ? '' : 'none'; }
+  window._anaRows = rows;
+  const el = document.getElementById('anaList');
+  if (!rows.length) { el.innerHTML = '<div class="az-empty" style="padding:2rem;text-align:center;color:var(--ink-dim);">لا توجد طلبات تحليل بعد</div>'; return; }
+  const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const sc = v => v >= 80 ? '#22c55e' : v >= 55 ? '#f59e0b' : '#ef4444';
+  el.innerHTML = rows.map(a => {
+    const rep = a.report || {};
+    const isNew = a.status === 'new';
+    const recs = Array.isArray(rep.recommendedServices) ? rep.recommendedServices : [];
+    const weak = Array.isArray(rep.weaknesses) ? rep.weaknesses : [];
+    return `<div class="panel" data-date="${a.created_at || ''}" style="border:1px solid ${isNew?'var(--accent)':'var(--line)'};padding:1.1rem 1.3rem;">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:.6rem;">
+        <div>
+          <strong>${e(a.user_name||'مستخدم')}</strong>
+          <span style="color:var(--ink-dim);font-size:.82rem;"> · ${e(a.user_email||'')}</span>
+          ${a.user_phone?`<span style="color:var(--ink-dim);font-size:.82rem;"> · الجوال: ${e(a.user_phone)}</span>`:''}
+        </div>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+          <span class="badge" style="background:${sc(a.score)}22;color:${sc(a.score)};">التقييم ${a.score ?? '-'}/100</span>
+          ${rep.platform?`<span class="badge" style="background:var(--bg-card);color:var(--ink-dim);">${e(rep.platform)}</span>`:''}
+          <span class="badge" style="background:${isNew?'rgba(245,158,11,.15)':'var(--bg-card)'};color:${isNew?'#f59e0b':'var(--ink-dim)'};">${isNew?'جديد':'تمت المراجعة'}</span>
+          <span style="color:var(--ink-dim);font-size:.78rem;">${fmt(a.created_at)}</span>
+        </div>
+      </div>
+      <div style="font-size:.85rem;margin-bottom:.5rem;">
+        <strong>${e(rep.storeName || a.store_name || 'متجر')}</strong>
+        ${rep.detectedIndustry?` · <span style="color:var(--ink-dim);">${e(rep.detectedIndustry)}</span>`:''}
+        · <a href="${e(a.store_url)}" target="_blank" rel="noopener" style="color:var(--accent);">فتح المتجر ↗</a>
+      </div>
+      ${weak.length?`<div style="margin-bottom:.5rem;display:flex;gap:.3rem;flex-wrap:wrap;">${weak.slice(0,6).map(w=>`<span class="badge" style="background:rgba(239,68,68,.12);color:#ef4444;font-size:.72rem;">${e(w)}</span>`).join('')}</div>`:''}
+      ${recs.length?`<div style="font-size:.83rem;color:var(--ink-dim);margin-bottom:.6rem;">خدمات مُرشّحة: ${recs.map(r=>e(r.name)).join(' · ')}</div>`:''}
+      <details style="margin-bottom:.6rem;"><summary style="cursor:pointer;font-weight:700;font-size:.85rem;color:var(--accent);">عرض ملخّص التقرير</summary>
+        <div style="margin-top:.5rem;font-size:.82rem;line-height:1.8;">
+          ${(rep.criteria||[]).length?`<div style="display:flex;gap:.3rem;flex-wrap:wrap;">${rep.criteria.map(c=>`<span class="badge" style="background:${c.status==='pass'?'rgba(34,197,94,.12)':c.status==='warn'?'rgba(245,158,11,.12)':'rgba(239,68,68,.12)'};color:${c.status==='pass'?'#22c55e':c.status==='warn'?'#f59e0b':'#ef4444'};font-size:.7rem;">${e(c.name)}</span>`).join('')}</div>`:'لا تفاصيل'}
+        </div>
+      </details>
+      <div style="display:flex;gap:.5rem;">
+        <button class="action-btn" style="background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#fff;" onclick="downloadAnalysisPdf(${a.id})">تحميل PDF</button>
+        ${isNew?`<button class="action-btn action-toggle" onclick="markAnalysisHandled(${a.id})">تمت المراجعة ✓</button>`:''}
+        <button class="action-btn action-delete" onclick="deleteAnalysis(${a.id})">حذف</button>
+      </div>
+    </div>`;
+  }).join('');
+  runFilter('anaList');
+}
+async function markAnalysisHandled(id) {
+  await api.admin.updateAnalysis(id, { status: 'handled' }).catch(err => showError('خطأ', err.message));
+  loadAnalyses();
+}
+async function deleteAnalysis(id) {
+  showConfirm('حذف الطلب', 'حذف طلب التحليل نهائياً؟', async () => {
+    await api.admin.deleteAnalysis(id).catch(err => showError('خطأ', err.message));
+    loadAnalyses();
+  }, 'حذف');
+}
+function downloadAnalysisPdf(id) {
+  const a = (window._anaRows || []).find(x => x.id === id);
+  if (!a) return;
+  const rep = a.report || {};
+  const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const sc = v => v >= 80 ? '#16a34a' : v >= 55 ? '#d97706' : '#dc2626';
+  const stLbl = { pass: 'ناجح', warn: 'تحذير', fail: 'ضعيف' };
+  const stCol = { pass: '#16a34a', warn: '#d97706', fail: '#dc2626' };
+  const crit = (rep.criteria || []).map(c => `<tr><td>${e(c.name)}</td><td style="color:${stCol[c.status]||'#555'};font-weight:700;">${stLbl[c.status] || e(c.status || '-')}</td></tr>`).join('');
+  const list = (arr, col) => (arr && arr.length) ? `<ul style="margin:.3rem 0;padding-inline-start:1.2rem;">${arr.map(x => `<li style="color:${col};margin:.2rem 0;">${e(x)}</li>`).join('')}</ul>` : '<p style="color:#999;">—</p>';
+  const recs = (rep.recommendedServices || []).map(r => `<li style="margin:.3rem 0;"><b>${e(r.name)}</b>${r.price ? ` — ${e(r.price)} ${e(r.currency || '')}` : ''}${r.why ? `<br><span style="color:#666;font-size:12px;">${e(r.why)}</span>` : ''}</li>`).join('');
+  const tags = ['<','!','D','O','C','T','Y','P','E',' ','h','t','m','l','>'].join('');
+  const head = tags + '<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقرير ' + e(rep.storeName || a.store_name || 'متجر') + '<\/title>';
+  const styleBlock = '<style>'
+    + '*{box-sizing:border-box;} body{font-family:Tajawal,Arial,sans-serif;color:#1a1a2e;margin:0;padding:32px;line-height:1.7;}'
+    + '.hd{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #6d28d9;padding-bottom:14px;margin-bottom:20px;}'
+    + '.hd h1{margin:0;font-size:22px;color:#6d28d9;} .hd .sc{font-size:40px;font-weight:800;color:' + sc(a.score) + ';}'
+    + '.meta{background:#f7f5ff;border:1px solid #e6e0fa;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:14px;}'
+    + '.meta b{color:#6d28d9;} h2{font-size:16px;color:#6d28d9;border-bottom:1px solid #eee;padding-bottom:5px;margin:22px 0 8px;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:13px;} td{border-bottom:1px solid #eee;padding:6px 8px;}'
+    + '.grid{display:flex;gap:20px;} .grid>div{flex:1;}'
+    + '.foot{margin-top:28px;border-top:1px solid #eee;padding-top:10px;font-size:11px;color:#999;text-align:center;}'
+    + '@media print{body{padding:0;}}'
+    + '<\/style><\/head><body>';
+  const body = ''
+    + `<div class="hd"><div><h1>تقرير تحليل المتجر</h1><div style="font-size:13px;color:#666;">خبراء المنصات — أدوات التاجر</div></div>`
+    + `<div style="text-align:center;"><div class="sc">${a.score ?? '-'}</div><div style="font-size:12px;color:#999;">من 100</div></div></div>`
+    + `<div class="meta">`
+    + `<b>المتجر:</b> ${e(rep.storeName || a.store_name || '—')} &nbsp;|&nbsp; <b>المنصة:</b> ${e(rep.platform || '—')} &nbsp;|&nbsp; <b>النشاط:</b> ${e(rep.detectedIndustry || a.category || '—')}<br>`
+    + `<b>الرابط:</b> ${e(a.store_url)}<br>`
+    + `<b>العميل:</b> ${e(a.user_name || '—')} &nbsp;|&nbsp; <b>البريد:</b> ${e(a.user_email || '—')} &nbsp;|&nbsp; <b>الجوال:</b> ${e(a.user_phone || '—')}<br>`
+    + `<b>التاريخ:</b> ${e(fmt(a.created_at))} &nbsp;|&nbsp; <b>الثقة:</b> ${rep.trustScore ?? '—'} &nbsp;|&nbsp; <b>الأداء:</b> ${rep.performanceScore ?? '—'}`
+    + `</div>`
+    + `<div class="grid"><div><h2>نقاط القوة</h2>${list(rep.strengths, '#16a34a')}</div><div><h2>نقاط الضعف</h2>${list(rep.weaknesses, '#dc2626')}</div></div>`
+    + (crit ? `<h2>المعايير (${(rep.criteria || []).length})</h2><table>${crit}</table>` : '')
+    + (recs ? `<h2>الخدمات المُرشّحة</h2><ul style="padding-inline-start:1.2rem;">${recs}</ul>` : '')
+    + `<div class="foot">تم الإنشاء من لوحة تحكم أدوات التاجر — ${e(new Date().toLocaleString('ar'))}</div>`
+    + '<\/body><\/html>';
+  const w = window.open('', '_blank');
+  if (!w) { showError('تنبيه', 'فعّل النوافذ المنبثقة لتحميل الـPDF'); return; }
+  w.document.write(head + styleBlock + body);
+  w.document.close();
+  w.onload = () => { w.focus(); w.print(); };
+  setTimeout(() => { try { w.focus(); w.print(); } catch (err) {} }, 600);
+}
+
+// ─── عملاء مساعد التاجر (قسم مستقل، مجمّع حسب العميل) ────────────────────────────
+async function loadAssistantClients() {
+  const rows = await api.admin.assistantClients().catch(() => []);
+  const el = document.getElementById('asClientsList');
+  if (!rows.length) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--ink-dim);">لا يوجد عملاء لمساعد التاجر بعد</div>'; return; }
+  const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const sc = v => v >= 80 ? '#22c55e' : v >= 55 ? '#f59e0b' : '#ef4444';
+  const health = c => {
+    if (c.avg_score >= 75 && c.open_alerts === 0) return { t: 'ممتاز', c: '#22c55e' };
+    if (c.avg_score >= 55) return { t: 'جيد', c: '#f59e0b' };
+    return { t: 'يحتاج متابعة', c: '#ef4444' };
+  };
+  el.innerHTML = rows.map(c => {
+    const h = health(c);
+    const aiPct = c.ai_quota > 0 ? Math.min(100, Math.round((c.ai_used||0) / c.ai_quota * 100)) : 0;
+    const aiCol = aiPct >= 90 ? '#ef4444' : aiPct >= 70 ? '#f59e0b' : '#22c55e';
+    return `
+    <div class="panel" data-date="${c.last_synced_at || ''}" data-q="${e((c.user_name||'')+' '+(c.user_email||''))}" style="padding:1.1rem 1.3rem;border-inline-start:4px solid ${h.c};">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:.5rem;">
+        <div><strong>${e(c.user_name || 'عميل')}</strong>
+          <span style="color:var(--ink-dim);font-size:.82rem;"> · ${e(c.user_email || '')}${c.user_phone ? ' · ' + e(c.user_phone) : ''}</span></div>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+          <span class="badge" style="background:${h.c}22;color:${h.c};font-weight:700;">${h.t}</span>
+          <span class="badge" style="background:var(--accent-soft);color:var(--accent);">${c.stores_count} / ${c.max_stores} متجر</span>
+          <span class="badge" style="background:${sc(c.avg_score)}22;color:${sc(c.avg_score)};">متوسط ${c.avg_score || '—'}</span>
+          <span class="badge" style="background:var(--bg-card);color:var(--ink-dim);">${c.products_total} منتج</span>
+          ${c.open_alerts ? `<span class="badge" style="background:rgba(239,68,68,.15);color:#ef4444;">${c.open_alerts} تنبيه</span>` : ''}
+        </div>
+      </div>
+      <div style="font-size:.84rem;color:var(--ink-dim);margin-bottom:.5rem;">آخر مزامنة: ${c.last_synced_at ? fmt(c.last_synced_at) : '—'}</div>
+      <div style="font-size:.8rem;color:var(--ink-dim);margin-bottom:.7rem;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg> استخدام الذكاء هذا الشهر: <b style="color:${aiCol}">${c.ai_used||0}</b> / ${c.ai_quota>0?c.ai_quota:'∞'}
+        <div style="height:5px;background:var(--line);border-radius:99px;margin-top:.25rem;max-width:240px;overflow:hidden;"><div style="height:100%;width:${aiPct}%;background:${aiCol};"></div></div></div>
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+        <label style="font-size:.8rem;color:var(--ink-dim);">باقة جاهزة:</label>
+        <select onchange="if(this.value)setClientPlan(${c.user_id}, this.value)" style="background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.3rem .6rem;color:var(--ink);font-family:var(--font-arabic);">
+          <option value="">— اختر —</option>
+          <option value="basic">تاجر (1 متجر · 200 منتج · 150 ذكاء)</option>
+          <option value="pro">احترافي (3 متاجر · 500 · 600 ذكاء)</option>
+          <option value="premium">متجر كبير (10 · 1000 · 2000 ذكاء)</option>
+        </select>
+        <label style="font-size:.8rem;color:var(--ink-dim);">المتاجر:</label>
+        <select onchange="setMaxStores(${c.user_id}, this.value)" style="background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.3rem .6rem;color:var(--ink);font-family:var(--font-arabic);">
+          ${[1,2,3,5,10,20].map(n=>`<option value="${n}" ${(c.max_stores||1)===n?'selected':''}>${n}</option>`).join('')}
+        </select>
+        <label style="font-size:.8rem;color:var(--ink-dim);">حد الذكاء:</label>
+        <select onchange="setAiQuota(${c.user_id}, this.value)" style="background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.3rem .6rem;color:var(--ink);font-family:var(--font-arabic);">
+          ${[0,150,300,600,1000,2000,5000].map(n=>`<option value="${n}" ${(c.ai_quota||300)===n?'selected':''}>${n===0?'∞':n}</option>`).join('')}
+        </select>
+        <button class="action-btn" style="background:var(--accent-soft);color:var(--accent);" onclick="openAssistantClient(${c.user_id})">عرض متاجره <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M3 9h18"/></svg></button>
+      </div>
+    </div>`;}).join('');
+  runFilter('asClientsList');
+}
+async function setMaxStores(uid, max) {
+  try { await api.admin.setMaxStores(uid, max); showToast && showToast('تم تحديث عدد المتاجر المسموح إلى ' + max, 'success'); }
+  catch (err) { showError('خطأ', err.message); }
+}
+async function setClientPlan(uid, plan) {
+  try { const r = await api.admin.setClientPlan(uid, plan); showToast && showToast(`تم تطبيق باقة «${r.label}» (${r.maxStores} متجر · ${r.productLimit} منتج · ${r.aiQuota} ذكاء)`, 'success'); loadAssistantClients(); }
+  catch (err) { showError('خطأ', err.message); }
+}
+async function setAiQuota(uid, q) {
+  try { await api.admin.setAiQuota(uid, q); showToast && showToast('تم تحديث حدّ الذكاء الشهري', 'success'); }
+  catch (err) { showError('خطأ', err.message); }
+}
+async function openAssistantClient(uid) {
+  openModal('asStoreModal');
+  const body = document.getElementById('asStoreModalBody');
+  body.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--ink-dim);">جارٍ التحميل...</div>';
+  let d; try { d = await api.admin.assistantClient(uid); } catch (err) { body.innerHTML = `<div style="padding:2rem;text-align:center;color:#ef4444;">${err.message}</div>`; return; }
+  const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const sc = v => v >= 80 ? '#22c55e' : v >= 55 ? '#f59e0b' : '#ef4444';
+  const u = d.user;
+  body.innerHTML = `
+    <h3 style="margin:0 0 .3rem;">${e(u.name || 'عميل')}</h3>
+    <div style="color:var(--ink-dim);font-size:.85rem;margin-bottom:1rem;">${e(u.email||'')}${u.phone?' · '+e(u.phone):''} · المسموح: ${u.max_stores} متجر</div>
+    <div style="display:flex;flex-direction:column;gap:.7rem;">
+      ${(d.stores||[]).map(s=>`
+        <div class="panel" style="padding:.9rem 1.1rem;">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;align-items:center;">
+            <div><strong>${e(s.store_name||'متجر')}</strong>
+              <a href="${e(s.store_url)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:.8rem;margin-inline-start:.5rem;">↗</a></div>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+              <span class="badge" style="background:${sc(s.latest_score)}22;color:${sc(s.latest_score)};">${s.latest_score ?? '—'}/100</span>
+              <span class="badge" style="background:var(--bg-card);color:var(--ink-dim);">${s.products_saved} / ${s.product_limit} منتج</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:.6rem;">
+            <label style="font-size:.78rem;color:var(--ink-dim);">باقة المنتجات:</label>
+            <select onchange="setStoreLimit(${s.id}, this.value)" style="background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.25rem .5rem;color:var(--ink);font-family:var(--font-arabic);font-size:.8rem;">
+              ${[100,200,300,500,1000].map(n=>`<option value="${n}" ${(s.product_limit||100)===n?'selected':''}>${n}</option>`).join('')}
+            </select>
+            <button class="action-btn" style="background:var(--accent-soft);color:var(--accent);" onclick="openAssistantStore(${s.id})">تفاصيل والشات <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg></button>
+          </div>
+        </div>`).join('') || '<div style="color:var(--ink-dim);">لا متاجر.</div>'}
+    </div>`;
+}
+
+// ─── مساعد التاجر — متاجر العملاء ───────────────────────────────────────────────
+async function loadAssistantStores() {
+  const rows = await api.admin.assistantStores().catch(() => []);
+  const el = document.getElementById('asStoresList');
+  if (!rows.length) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--ink-dim);">لا توجد متاجر مربوطة بعد</div>'; return; }
+  const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const sc = v => v >= 80 ? '#22c55e' : v >= 55 ? '#f59e0b' : '#ef4444';
+  el.innerHTML = rows.map(s => {
+    const rep = s.latest_report || {};
+    return `<div class="panel" data-date="${s.last_synced_at || s.created_at || ''}" style="padding:1.1rem 1.3rem;">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:.5rem;">
+        <div><strong>${e(s.store_name || 'متجر')}</strong>
+          <span style="color:var(--ink-dim);font-size:.82rem;"> · ${e(s.user_name || '')} · ${e(s.user_email || '')}${s.user_phone ? ' · ' + e(s.user_phone) : ''}</span></div>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+          <span class="badge" style="background:${sc(s.latest_score)}22;color:${sc(s.latest_score)};">التقييم ${s.latest_score ?? '—'}/100</span>
+          ${s.platform ? `<span class="badge" style="background:var(--bg-card);color:var(--ink-dim);">${e(s.platform)}</span>` : ''}
+          ${s.open_alerts ? `<span class="badge" style="background:rgba(239,68,68,.15);color:#ef4444;">${s.open_alerts} تنبيه</span>` : ''}
+        </div>
+      </div>
+      <div style="font-size:.84rem;color:var(--ink-dim);margin-bottom:.5rem;">
+        <a href="${e(s.store_url)}" target="_blank" rel="noopener" style="color:var(--accent);">${e(s.store_url)} ↗</a>
+        · منتجات: <b>${rep.productsCount ?? s.products_saved ?? '—'}</b> (محفوظ ${s.products_saved})
+        · صفحات: <b>${rep.pagesCount ?? '—'}</b>
+        · آخر مزامنة: ${s.last_synced_at ? fmt(s.last_synced_at) : '—'}
+      </div>
+      ${rep.summary ? `<div style="font-size:.85rem;line-height:1.7;margin-bottom:.5rem;">${e(rep.summary)}</div>` : ''}
+      ${(rep.weaknesses || []).length ? `<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.6rem;">${rep.weaknesses.slice(0,6).map(w=>`<span class="badge" style="background:rgba(239,68,68,.12);color:#ef4444;font-size:.72rem;">${e(w)}</span>`).join('')}</div>` : ''}
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+        <label style="font-size:.8rem;color:var(--ink-dim);">باقة المنتجات:</label>
+        <select onchange="setStoreLimit(${s.id}, this.value)" style="background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.3rem .6rem;color:var(--ink);font-family:var(--font-arabic);">
+          ${[100,200,300,500,1000].map(n=>`<option value="${n}" ${(s.product_limit||100)===n?'selected':''}>${n} منتج</option>`).join('')}
+        </select>
+        <button class="action-btn" style="background:var(--accent-soft);color:var(--accent);" onclick="openAssistantStore(${s.id})">عرض التفاصيل والشات <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg></button>
+      </div>
+    </div>`;
+  }).join('');
+  runFilter('asStoresList');
+}
+async function setStoreLimit(id, limit) {
+  try { await api.admin.setStoreLimit(id, limit); showToast && showToast('تم تحديث الباقة إلى ' + limit + ' منتج — ستُطبَّق عند المزامنة القادمة', 'success'); }
+  catch (err) { showError('خطأ', err.message); }
+}
+let _asAdminStoreId = null;
+async function openAssistantStore(id) {
+  _asAdminStoreId = id;
+  openModal('asStoreModal');
+  const body = document.getElementById('asStoreModalBody');
+  body.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--ink-dim);">جارٍ التحميل...</div>';
+  let d; try { d = await api.admin.assistantStore(id); } catch (err) { body.innerHTML = `<div style="padding:2rem;text-align:center;color:#ef4444;">${err.message}</div>`; return; }
+  const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const s = d.store, rep = s.latest_report || {};
+  const row = (l, v) => `<div style="display:flex;justify-content:space-between;gap:1rem;padding:.45rem 0;border-bottom:1px solid var(--line);font-size:.86rem;"><span style="color:var(--ink-dim)">${l}</span><span style="font-weight:600;text-align:left;word-break:break-word;">${v}</span></div>`;
+  const chatHtml = (d.chats || []).length
+    ? d.chats.map(c => `<div style="display:flex;${c.role==='user'?'justify-content:flex-end':''};margin:.3rem 0;"><div style="max-width:80%;padding:.5rem .8rem;border-radius:12px;font-size:.83rem;line-height:1.7;white-space:pre-wrap;background:${c.role==='user'?'var(--accent)':'var(--bg-card)'};color:${c.role==='user'?'#fff':'var(--ink)'};border:1px solid var(--line);">${e(c.content)}</div></div>`).join('')
+    : '<div style="color:var(--ink-dim);font-size:.85rem;">لا توجد محادثة بعد.</div>';
+  const prodRows = (d.products || []).length
+    ? `<table class="admin-table" style="width:100%;font-size:.8rem;"><thead><tr><th>المنتج</th><th>السعر</th><th>وصف</th></tr></thead><tbody>${d.products.map(p=>`<tr><td>${e(p.name)}</td><td>${e(p.price||'—')} ${e(p.currency||'')}</td><td>${p.has_description?'✓':'✗'}</td></tr>`).join('')}</tbody></table>`
+    : '<div style="color:var(--ink-dim);font-size:.85rem;">لا منتجات.</div>';
+  const kindMeta = { insight:['ملاحظة','var(--accent)'], recommendation:['توصية','#22c55e'], warning:['تحذير','#ef4444'], opportunity:['فرصة','#f59e0b'] };
+  const insHtml = (d.insights||[]).map(x=>{ const [t,c]=kindMeta[x.kind]||kindMeta.insight;
+    return `<div style="background:var(--bg-card);border:1px solid var(--line);border-inline-start:3px solid ${c};border-radius:8px;padding:.5rem .7rem;margin-bottom:.4rem;">
+      <div style="display:flex;justify-content:space-between;gap:.5rem;align-items:center;"><span style="font-size:.7rem;font-weight:700;color:${c};">${t}${x.pinned?' · مثبّت':''} · ${fmt(x.created_at)}</span>
+        <button onclick="asDelInsight(${x.id})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:.72rem;">حذف</button></div>
+      ${x.title?`<div style="font-weight:700;font-size:.85rem;margin-top:.2rem;">${e(x.title)}</div>`:''}
+      <div style="font-size:.82rem;line-height:1.6;white-space:pre-wrap;margin-top:.15rem;">${e(x.body)}</div>
+    </div>`; }).join('') || '<div style="color:var(--ink-dim);font-size:.83rem;">لا تحليلات بعد — أضف أول تحليل بشري لهذا المتجر.</div>';
+  const insPanel = `<div style="background:var(--bg);border:1px solid var(--accent);border-radius:10px;padding:.9rem;margin-bottom:1.1rem;">
+    <h3 style="font-size:.95rem;margin:0 0 .2rem;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z"/></svg> تحليل الخبير البشري</h3>
+    <p style="font-size:.78rem;color:var(--ink-dim);margin:.1rem 0 .6rem;">يظهر في لوحة العميل ويعتمد عليه المساعد الذكي في ردوده.</p>
+    <div id="asInsList">${insHtml}</div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.7rem;align-items:center;">
+      <select id="asInsKind" style="background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-family:var(--font-arabic);"><option value="insight">ملاحظة</option><option value="recommendation">توصية</option><option value="warning">تحذير</option><option value="opportunity">فرصة</option></select>
+      <input id="asInsTitle" placeholder="عنوان (اختياري)" style="flex:1;min-width:160px;background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.4rem .6rem;color:var(--ink);font-family:var(--font-arabic);">
+      <label style="font-size:.8rem;color:var(--ink-dim);display:flex;align-items:center;gap:.3rem;cursor:pointer;"><input type="checkbox" id="asInsPinned"> تثبيت</label>
+    </div>
+    <textarea id="asInsBody" rows="3" placeholder="اكتب تحليلك أو توصيتك للعميل بناءً على بيانات متجره..." style="width:100%;margin-top:.4rem;background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.5rem .6rem;color:var(--ink);font-family:var(--font-arabic);resize:vertical;"></textarea>
+    <button class="action-btn" style="background:var(--accent);color:#fff;margin-top:.4rem;" onclick="asAddInsight()">حفظ التحليل</button>
+  </div>`;
+  body.innerHTML = `
+    <div style="margin-bottom:1rem;">
+      ${row('المتجر', e(s.store_name||'—'))}
+      ${row('الرابط', `<a href="${e(s.store_url)}" target="_blank" style="color:var(--accent)">${e(s.store_url)} ↗</a>`)}
+      ${row('العميل', e(s.user_name||'—'))}
+      ${row('البريد', e(s.user_email||'—'))}
+      ${row('الجوال', s.user_phone?`<a href="tel:${e(s.user_phone)}" style="color:var(--accent)">${e(s.user_phone)}</a>`:'—')}
+      ${row('المنصة', e(s.platform||'—'))}
+      ${row('التقييم', (s.latest_score ?? '—') + '/100')}
+      ${row('المنتجات', (rep.productsCount ?? d.products.length) + ' (محفوظ ' + d.products.length + ')')}
+      ${row('الصفحات', rep.pagesCount ?? '—')}
+      ${row('آخر مزامنة', s.last_synced_at?fmt(s.last_synced_at):'—')}
+    </div>
+    ${rep.summary?`<div style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.7rem;font-size:.85rem;line-height:1.7;margin-bottom:1rem;">${e(rep.summary)}</div>`:''}
+    ${insPanel}
+    <h3 style="font-size:.95rem;margin:.6rem 0;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> التنبيهات (${(d.alerts||[]).length})</h3>
+    ${(d.alerts||[]).map(a=>`<div style="font-size:.82rem;color:var(--ink-dim);padding:.25rem 0;">• ${e(a.message)}</div>`).join('') || '<div style="color:var(--ink-dim);font-size:.85rem;">لا تنبيهات.</div>'}
+    <h3 style="font-size:.95rem;margin:1rem 0 .5rem;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> المنتجات (${d.products.length})</h3>
+    <div style="max-height:220px;overflow:auto;">${prodRows}</div>
+    <h3 style="font-size:.95rem;margin:1rem 0 .5rem;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg> محادثة المساعد مع العميل</h3>
+    <div style="max-height:300px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.7rem;">${chatHtml}</div>
+  `;
+}
+
+async function asAddInsight() {
+  if (!_asAdminStoreId) return;
+  const body = (document.getElementById('asInsBody').value || '').trim();
+  if (!body) { showError('تنبيه', 'اكتب نص التحليل'); return; }
+  const data = {
+    kind: document.getElementById('asInsKind').value,
+    title: (document.getElementById('asInsTitle').value || '').trim(),
+    body,
+    pinned: document.getElementById('asInsPinned').checked,
+  };
+  try { await api.admin.addInsight(_asAdminStoreId, data); showToast && showToast('تم حفظ التحليل — سيظهر للعميل', 'success'); openAssistantStore(_asAdminStoreId); }
+  catch (err) { showError('خطأ', err.message); }
+}
+async function asDelInsight(id) {
+  if (!confirm('حذف هذا التحليل؟')) return;
+  try { await api.admin.delInsight(id); openAssistantStore(_asAdminStoreId); }
+  catch (err) { showError('خطأ', err.message); }
+}
+
+// ─── الدعم والتذاكر ────────────────────────────────────────────────────────────
+let _tickets = [], _curTicket = null, _tkLastId = 0, _tkPoll = null;
+const TK_ST = { open:{l:'مفتوحة',c:'#f59e0b'}, answered:{l:'تم الرد',c:'#22c55e'}, closed:{l:'مغلقة',c:'var(--ink-dim)'} };
+
+async function loadTickets() {
+  _tickets = await api.admin.tickets().catch(() => []);
+  renderTicketsList();
+  // شارة عدد التذاكر المفتوحة
+  const openCount = _tickets.filter(t => t.status === 'open').length;
+  const badge = document.getElementById('ticketsBadge');
+  if (badge) { badge.textContent = openCount; badge.style.display = openCount ? '' : 'none'; }
+}
+
+function renderTicketsList(filter) {
+  const q = (filter || '').trim().toLowerCase();
+  const list = q ? _tickets.filter(t => (`${t.number} ${t.user_name} ${t.user_email} ${t.topic} ${t.last_message||''}`).toLowerCase().includes(q)) : _tickets;
+  const el = document.getElementById('ticketsList');
+  el.innerHTML = list.map(t => {
+    const st = TK_ST[t.status] || TK_ST.open;
+    return `<button class="tk-item ${_curTicket && _curTicket.id===t.id ? 'active':''}" onclick="openTicketChat(${t.id})">
+      <div class="tk-item-top"><span class="tk-item-num">${t.number}${t.is_vip?' <span style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border-radius:4px;padding:0 .35rem;font-size:.62rem;">VIP</span>':''}</span>
+        <span class="tk-badge" style="color:${st.c};background:${st.c}22;">${st.l}</span></div>
+      <div class="tk-item-name">${_esc(t.user_name||'مستخدم')} · <span style="font-weight:400;color:var(--ink-dim);font-size:.78rem;">${_esc(t.topic)}</span></div>
+      <div class="tk-item-last">${_esc(t.last_message || 'لا رسائل بعد')}</div>
+    </button>`;
+  }).join('') || '<div style="color:var(--ink-dim);font-size:.83rem;padding:1rem;text-align:center;">لا توجد تذاكر</div>';
+}
+function filterTickets(q) { renderTicketsList(q); }
+
+async function openTicketChat(id) {
+  _curTicket = _tickets.find(t => t.id === id) || { id };
+  _tkLastId = 0;
+  renderTicketsList(document.querySelector('#section-tickets .admin-search')?.value);
+  document.getElementById('tkChatEmpty').style.display = 'none';
+  document.getElementById('tkChat').style.display = 'flex';
+  document.getElementById('tkChatTitle').textContent = `${_curTicket.number||''} · ${_curTicket.topic||''}`;
+  document.getElementById('tkChatSub').textContent = `${_curTicket.user_name||''} · ${_curTicket.user_email||''}`;
+  document.getElementById('tkStatus').value = _curTicket.status || 'open';
+  document.getElementById('tkChatMsgs').innerHTML = '';
+  _tkAtt = []; renderTkAttBar(); bindTkFile();
+  await pullTicketMessages(true);
+  _startTkPoll();
+}
+
+function _startTkPoll() { _stopTkPoll(); _tkPoll = setInterval(() => pullTicketMessages(false), 6000); }
+function _stopTkPoll() { if (_tkPoll) { clearInterval(_tkPoll); _tkPoll = null; } }
+
+async function pullTicketMessages(scroll) {
+  if (!_curTicket) return;
+  let d; try { d = await api.admin.ticketMessages(_curTicket.id, _tkLastId); } catch { return; }
+  const box = document.getElementById('tkChatMsgs');
+  (d.messages || []).forEach(m => {
+    _tkLastId = Math.max(_tkLastId, m.id);
+    const b = document.createElement('div');
+    b.className = 'tk-bubble ' + (m.sender === 'admin' ? 'admin' : 'user');
+    b.innerHTML = `${_esc(m.body)}${tkAttHtml(m.attachments)}<div class="tk-bubble-time">${fmt(m.created_at)}</div>`;
+    box.appendChild(b);
+  });
+  if (scroll || (d.messages && d.messages.length)) box.scrollTop = box.scrollHeight;
+}
+
+// مرفقات الأدمن
+function tkAttHtml(att) {
+  if (!att || !att.length) return '';
+  return '<div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem;">' + att.map(a => {
+    if ((a.type || '').startsWith('image/') || /^data:image\//.test(a.url))
+      return `<a href="${a.url}" download="${_esc(a.name)}" target="_blank"><img src="${a.url}" style="max-width:150px;max-height:150px;border-radius:8px;border:1px solid var(--line);"></a>`;
+    return `<a href="${a.url}" download="${_esc(a.name)}" style="display:inline-flex;align-items:center;gap:.3rem;background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;font-size:.78rem;color:var(--accent);text-decoration:none;">⬇ ${_esc(a.name)}</a>`;
+  }).join('') + '</div>';
+}
+let _tkAtt = [];
+function renderTkAttBar() {
+  const bar = document.getElementById('tkAttachBar'); if (!bar) return;
+  bar.style.display = _tkAtt.length ? 'flex' : 'none';
+  bar.innerHTML = _tkAtt.map((a, i) => `<span style="display:inline-flex;align-items:center;gap:.3rem;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:.25rem .6rem;font-size:.75rem;">${_esc(a.name)} <span style="cursor:pointer;font-weight:700;" onclick="_tkAtt.splice(${i},1);renderTkAttBar()">×</span></span>`).join('');
+}
+function bindTkFile() {
+  const f = document.getElementById('tkFile'); if (!f || f._bound) return; f._bound = true;
+  f.addEventListener('change', ev => {
+    [...ev.target.files].slice(0, 5).forEach(file => {
+      if (file.size > 5 * 1024 * 1024) { showError('حجم كبير', file.name + ' أكبر من 5MB'); return; }
+      const r = new FileReader();
+      r.onload = e2 => { _tkAtt.push({ name: file.name, type: file.type, url: e2.target.result }); renderTkAttBar(); };
+      r.readAsDataURL(file);
+    });
+    ev.target.value = '';
+  });
+}
+async function sendTicketReply() {
+  const inp = document.getElementById('tkReplyInput');
+  const body = inp.value.trim();
+  if ((!body && !_tkAtt.length) || !_curTicket) return;
+  const att = _tkAtt.slice(); _tkAtt = []; renderTkAttBar();
+  inp.value = '';
+  try {
+    await api.admin.ticketReply(_curTicket.id, body, att);
+    await pullTicketMessages(true);
+    document.getElementById('tkStatus').value = 'answered';
+    loadTickets();
+  } catch (err) { showError('خطأ', err.message); inp.value = body; }
+}
+
+async function setTicketStatus() {
+  if (!_curTicket) return;
+  const status = document.getElementById('tkStatus').value;
+  await api.admin.ticketStatus(_curTicket.id, status).catch(err => showError('خطأ', err.message));
+  loadTickets();
+}
+
+// ─── Merchant Path Submissions ────────────────────────────────────────────────
+async function loadMerchantPath() {
+  const rows = await api.admin.merchantPathSubs().catch(() => []);
+  const el = document.getElementById('mpSubsList');
+  if (!rows.length) { el.innerHTML = '<div class="az-empty" style="padding:2rem;text-align:center;color:var(--ink-dim);">لا توجد طلبات بعد</div>'; return; }
+  const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  el.innerHTML = rows.map(s => {
+    const isNew = s.status === 'new';
+    const modeLabel = s.mode === 'current' ? 'تاجر حالي' : 'مبتدئ';
+    const details = Array.isArray(s.details) ? s.details : [];
+    const gaps = Array.isArray(s.gaps) ? s.gaps : [];
+    const recs = Array.isArray(s.recommended) ? s.recommended : [];
+    const scoreChip = s.readiness_score != null
+      ? `<span class="badge" style="background:var(--accent-soft);color:var(--accent);">جاهزية ${s.readiness_score}/100</span>` : '';
+    const perfChip = s.performance_health != null
+      ? `<span class="badge" style="background:var(--bg-card);color:var(--ink-dim);">أداء ${s.performance_health}%</span>` : '';
+    return `<div class="panel" data-date="${s.created_at || ''}" style="border:1px solid ${isNew?'var(--accent)':'var(--line)'};padding:1.1rem 1.3rem;">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:.7rem;">
+        <div>
+          <strong>${e(s.user_name||'مستخدم')}</strong>
+          <span style="color:var(--ink-dim);font-size:.82rem;"> · ${e(s.user_email||'')}</span>
+          ${s.contact?`<span style="color:var(--ink-dim);font-size:.82rem;"> · الجوال: ${e(s.contact)}</span>`:''}
+        </div>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+          <span class="badge" style="background:${s.mode==='current'?'rgba(99,102,241,.15)':'rgba(34,197,94,.15)'};color:${s.mode==='current'?'#6366f1':'#22c55e'};">${modeLabel}</span>
+          ${scoreChip}${perfChip}
+          <span class="badge" style="background:${isNew?'rgba(245,158,11,.15)':'var(--bg-card)'};color:${isNew?'#f59e0b':'var(--ink-dim)'};">${isNew?'جديد':'تمت المعالجة'}</span>
+          <span style="color:var(--ink-dim);font-size:.78rem;">${fmt(s.created_at)}</span>
+        </div>
+      </div>
+      ${gaps.length?`<div style="margin-bottom:.6rem;display:flex;gap:.3rem;flex-wrap:wrap;">${gaps.map(g=>`<span class="badge" style="background:rgba(239,68,68,.12);color:#ef4444;font-size:.72rem;">${e(g.label||g.key)}</span>`).join('')}</div>`:''}
+      <details style="margin-bottom:.6rem;">
+        <summary style="cursor:pointer;font-weight:700;font-size:.9rem;color:var(--accent);">عرض كل اختيارات التاجر (${details.length})</summary>
+        <table class="admin-table" style="margin-top:.6rem;"><tbody>
+          ${details.map(d=>`<tr><td style="width:45%;color:var(--ink-dim);font-size:.83rem;">${e(d.q)}</td><td style="font-size:.85rem;"><strong>${e(d.a)}</strong></td></tr>`).join('')}
+        </tbody></table>
+      </details>
+      ${recs.length?`<div style="font-size:.83rem;color:var(--ink-dim);margin-bottom:.7rem;">خدمات مُرشّحة: ${recs.map(r=>e(r.name)).join(' · ')}</div>`:''}
+      <div style="display:flex;gap:.5rem;">
+        ${isNew?`<button class="action-btn action-toggle" onclick="markMpHandled(${s.id})">تمت المعالجة ✓</button>`:''}
+        <button class="action-btn action-delete" onclick="deleteMpSub(${s.id})">حذف</button>
+      </div>
+    </div>`;
+  }).join('');
+  runFilter('mpSubsList');
+}
+
+async function markMpHandled(id) {
+  await api.admin.updateMerchantPathSub(id, { status: 'handled' }).catch(err => showError('خطأ', err.message));
+  loadMerchantPath();
+}
+async function deleteMpSub(id) {
+  showConfirm('حذف الطلب', 'هل أنت متأكد من حذف هذا الطلب نهائياً؟', async () => {
+    await api.admin.deleteMerchantPathSub(id).catch(err => showError('خطأ', err.message));
+    loadMerchantPath();
+  }, 'حذف');
 }
 
 // ─── Modal Helpers ────────────────────────────────────────────────────────────
@@ -922,7 +1815,80 @@ async function loadDashboard() {
   } catch (err) {
     console.error(err);
   }
+  loadAnalytics();
+  loadTickets(); // لتحديث شارة التذاكر المفتوحة
+  loadAnalyses(); // لتحديث شارة طلبات التحليلات الجديدة
 }
+
+// ─── لوحة التحليلات ────────────────────────────────────────────────────────────
+const TOOL_AR = { analyzer:'محلل المتجر', generator:'مولّد الأوصاف', 'image-gen':'مولّد الصور',
+  whatsapp:'قوالب واتساب', competitor:'محلل المنافسين', 'social-plan':'خطة السوشيال',
+  'store-policies':'سياسات المتجر', 'launch-campaign':'حملة الإطلاق', calculator:'حاسبة الربح',
+  calendar:'تقويم المواسم', 'merchant-path':'مسار التاجر', chat:'المساعد الذكي' };
+const _esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+function _timeAgo(mins) { if (mins < 1) return 'الآن'; if (mins < 60) return `قبل ${mins} د`; const h = Math.round(mins/60); if (h < 24) return `قبل ${h} س`; return `قبل ${Math.round(h/24)} يوم`; }
+
+function setRangeQuick(btn, days) {
+  document.querySelectorAll('.an-q').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const to = new Date(), from = new Date(Date.now() - days * 864e5);
+  document.getElementById('anFrom').value = from.toISOString().slice(0, 10);
+  document.getElementById('anTo').value = to.toISOString().slice(0, 10);
+  loadAnalytics();
+}
+
+async function loadAnalytics(manual) {
+  if (manual) document.querySelectorAll('.an-q').forEach(b => b.classList.remove('active'));
+  // قيمة افتراضية أول مرة: آخر 7 أيام
+  if (!document.getElementById('anFrom').value) {
+    document.getElementById('anFrom').value = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+    document.getElementById('anTo').value = new Date().toISOString().slice(0, 10);
+  }
+  const params = {};
+  const from = document.getElementById('anFrom').value, to = document.getElementById('anTo').value;
+  if (from) params.from = from; if (to) params.to = to;
+  let d;
+  try { d = await api.admin.statsFull(params); } catch (e) { return; }
+
+  document.getElementById('an-online').textContent = d.online;
+  document.getElementById('an-active').textContent = d.activeUsers;
+  document.getElementById('an-new').textContent = d.newUsers;
+  document.getElementById('an-runs').textContent = d.totalRuns;
+  document.getElementById('an-total').textContent = d.totalUsers;
+
+  const max = Math.max(1, ...d.toolUsage.map(t => Number(t.count)));
+  const toolsBox = document.getElementById('an-tools');
+  toolsBox.innerHTML = d.toolUsage.length
+    ? d.toolUsage.map((t, i) => {
+        const pct = Math.max(8, Math.round((Number(t.count) / max) * 100));
+        return `<div class="an-bar-row">
+          <div class="an-bar-name"><span class="an-bar-rank">${i + 1}</span>${_esc(TOOL_AR[t.tool_name] || t.tool_name)}</div>
+          <div class="an-bar-track"><div class="an-bar-fill ${i === 0 ? 'top' : ''}" data-w="${pct}"></div></div>
+          <div class="an-bar-val">${t.count}</div></div>`;
+      }).join('')
+    : '<div class="an-sub" style="color:var(--ink-dim);font-size:.8rem;padding:1rem;text-align:center;">لا بيانات في هذه الفترة</div>';
+  // أنيميشن نمو الأشرطة
+  requestAnimationFrame(() => toolsBox.querySelectorAll('.an-bar-fill').forEach(f => { f.style.width = f.dataset.w + '%'; }));
+
+  document.getElementById('an-recent').innerHTML = d.recentActive.length
+    ? d.recentActive.map(u => {
+        const mins = Math.round((Date.now() - new Date(u.last_seen)) / 60000);
+        const on = mins < (d.onlineWindow || 5);
+        return `<div class="an-row"><span>${_esc(u.name || '—')}<div class="an-sub">${_esc(u.email || '')}</div></span>
+          <span>${on ? '<span class="an-on">● متصل الآن</span>' : `<span class="an-sub">${_timeAgo(mins)}</span>`}</span></div>`;
+      }).join('')
+    : '<div class="an-sub" style="color:var(--ink-dim);font-size:.8rem;">لا يوجد</div>';
+
+  document.getElementById('an-topusers').innerHTML = d.topUsers.length
+    ? d.topUsers.map(u => `<div class="an-row"><span>${_esc(u.name || '—')}<div class="an-sub">${_esc(u.email || '')}</div></span>
+        <span class="an-bar-val">${u.runs} عملية</span></div>`).join('')
+    : '<div class="an-sub" style="color:var(--ink-dim);font-size:.8rem;">لا نشاط في هذه الفترة</div>';
+}
+
+// تحديث "المتصل الآن" دورياً أثناء عرض لوحة التحكم
+setInterval(() => {
+  if (currentSection === 'dashboard' && !document.hidden) loadAnalytics();
+}, 30000);
 
 // ─── CSV Export ──────────────────────────────────────────────────────────────
 function downloadCSV(filename, rows) {
@@ -970,7 +1936,7 @@ async function loadBookings() {
   const status = document.getElementById('bookingStatusFilter')?.value;
   const rows = await api.admin.allBookings(status).catch(() => []);
   document.getElementById('bookingsTable').innerHTML = rows.map(b => `
-    <tr>
+    <tr data-date="${b.created_at || ''}">
       <td><strong>${b.name}</strong></td>
       <td style="font-size:0.82rem;">${b.email}</td>
       <td style="font-size:0.82rem;">${b.phone || '—'}</td>
@@ -982,6 +1948,7 @@ async function loadBookings() {
         <button class="action-btn action-delete" onclick="deleteBooking(${b.id})">حذف</button>
       </td>
     </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد طلبات</td></tr>';
+  runFilter('bookingsTable');
 }
 
 function editBooking(b) {
@@ -1017,12 +1984,48 @@ function expiryBadge(expiryDate) {
   if (daysLeft < 0) {
     return `<span style="color:#ef4444;font-weight:700;font-size:0.8rem;" title="منتهي">● ${fmt(expiryDate)}</span>`;
   } else if (daysLeft <= 7) {
-    return `<span style="color:#f59e0b;font-weight:700;font-size:0.8rem;" title="${daysLeft} أيام متبقية">⚠ ${fmt(expiryDate)}</span>`;
+    return `<span style="color:#f59e0b;font-weight:700;font-size:0.8rem;" title="${daysLeft} أيام متبقية">${fmt(expiryDate)}</span>`;
   }
   return `<span style="font-size:0.8rem;color:var(--ink-dim);">${fmt(expiryDate)}</span>`;
 }
 
+let _couponCats = [];
+async function loadCouponCategories() {
+  _couponCats = await api.admin.couponCategories().catch(() => []);
+  // الشرائح (إدارة)
+  const chips = document.getElementById('catChips');
+  if (chips) {
+    chips.innerHTML = _couponCats.map(c => `
+      <span style="display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-card);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;font-size:.83rem;">
+        ${c.name}
+        <button onclick="deleteCouponCat(${c.id})" title="حذف" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:.95rem;line-height:1;">✕</button>
+      </span>`).join('') || '<span style="color:var(--ink-dim);font-size:.83rem;">لا توجد أقسام بعد</span>';
+  }
+  // قائمة الفورم
+  const sel = document.getElementById('couponCategory');
+  if (sel) {
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— اختر القسم —</option>' +
+      _couponCats.map(c => `<option value="${c.slug}">${c.name}</option>`).join('');
+    sel.value = cur;
+  }
+}
+async function addCouponCategory() {
+  const inp = document.getElementById('newCatName');
+  const name = inp.value.trim();
+  if (!name) { showError('حقل مطلوب', 'اكتب اسم القسم'); return; }
+  try { await api.admin.addCouponCategory({ name }); inp.value = ''; loadCouponCategories(); }
+  catch (err) { showError('خطأ', err.message); }
+}
+function deleteCouponCat(id) {
+  showConfirm('حذف القسم', 'سيُحذف القسم من الفلاتر. الكوبونات المرتبطة به تبقى كما هي. متابعة؟', async () => {
+    await api.admin.deleteCouponCategory(id).catch(err => showError('خطأ', err.message));
+    loadCouponCategories();
+  }, 'حذف');
+}
+
 async function loadCoupons() {
+  loadCouponCategories();
   const rows = await api.admin.allCoupons().catch(() => []);
   document.getElementById('couponsTable').innerHTML = rows.map(c => `
     <tr>
@@ -1030,7 +2033,7 @@ async function loadCoupons() {
       <td><code style="background:var(--bg-card);padding:0.2rem 0.5rem;border-radius:4px;font-size:0.85rem;">${c.code}</code></td>
       <td style="color:var(--accent);font-weight:700;">${c.discount}</td>
       <td>${platformBadge(c.platform)}</td>
-      <td style="font-size:0.8rem;">${c.category || '—'}</td>
+      <td style="font-size:0.8rem;">${(_couponCats.find(x => x.slug === c.category) || {}).name || c.category || '—'}</td>
       <td>${expiryBadge(c.expiry_date)}</td>
       <td style="text-align:center;">${c.is_featured ? '★' : '—'}</td>
       <td style="text-align:center;"><span style="color:${c.is_active ? '#22c55e' : '#ef4444'}">${c.is_active ? '●' : '○'}</span></td>
@@ -1268,8 +2271,14 @@ async function deleteReview(id) {
 
 // ─── Users ────────────────────────────────────────────────────────────────────
 let _allUsers = [];
+let _toolList = [];   // قائمة كل الأدوات (من tool_settings) — لعرض التحكم لكل مستخدم
 async function loadUsers() {
-  _allUsers = await api.admin.users().catch(() => []);
+  const [users, tools] = await Promise.all([
+    api.admin.users().catch(() => []),
+    api.admin.toolSettings().catch(() => []),
+  ]);
+  _allUsers = users;
+  _toolList = (tools || []).sort((a, b) => a.display_name.localeCompare(b.display_name, 'ar'));
   renderUsers(_allUsers);
 }
 
@@ -1278,48 +2287,174 @@ function filterUsers(q) {
   renderUsers(term ? _allUsers.filter(u => u.name.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)) : _allUsers);
 }
 
+// فلتر عميل عام: يُخفي صفوف/كروت لا تطابق البحث (لكل الأقسام)
+function adminFilter(containerId, q) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const nq = String(q || '').trim().toLowerCase();
+  let shown = 0;
+  Array.from(el.children).forEach(row => {
+    if (row.dataset && row.dataset.noFilter) return;
+    const match = !nq || (row.textContent || '').toLowerCase().includes(nq);
+    row.style.display = match ? '' : 'none';
+    if (match) shown++;
+  });
+  const empty = document.getElementById(containerId + 'Empty');
+  if (empty) empty.style.display = (nq && shown === 0) ? 'block' : 'none';
+}
+
+// فلتر موحّد: بحث نصّي + نطاق زمني (من/إلى) — يعتمد على data-date في كل صف/كرت
+// أسماء الحقول: <id>_q للبحث، <id>_from و<id>_to للتاريخ
+function runFilter(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const q = (document.getElementById(containerId + '_q')?.value || '').trim().toLowerCase();
+  const from = document.getElementById(containerId + '_from')?.value;
+  const to = document.getElementById(containerId + '_to')?.value;
+  const fromT = from ? new Date(from + 'T00:00:00').getTime() : null;
+  const toT = to ? new Date(to + 'T23:59:59').getTime() : null;
+  let shown = 0;
+  Array.from(el.children).forEach(row => {
+    if (row.dataset && row.dataset.noFilter) return;
+    const okText = !q || (row.textContent || '').toLowerCase().includes(q);
+    let okDate = true;
+    if (fromT || toT) {
+      const ds = row.dataset ? row.dataset.date : '';
+      if (!ds) okDate = false;
+      else { const t = new Date(ds).getTime(); if (fromT && t < fromT) okDate = false; if (toT && t > toT) okDate = false; }
+    }
+    const show = okText && okDate;
+    row.style.display = show ? '' : 'none';
+    if (show) shown++;
+  });
+  const empty = document.getElementById(containerId + 'Empty');
+  if (empty) empty.style.display = (shown === 0) ? 'block' : 'none';
+}
+// عناصر التحكم (بحث + من/إلى) كنص HTML موحّد
+function filterControls(containerId, ph) {
+  return `<div class="flt-row">
+    <input type="text" class="admin-search" id="${containerId}_q" placeholder="${ph || 'بحث...'}" oninput="runFilter('${containerId}')" style="max-width:180px;">
+    <label class="flt-date">من <input type="date" id="${containerId}_from" onchange="runFilter('${containerId}')"></label>
+    <label class="flt-date">إلى <input type="date" id="${containerId}_to" onchange="runFilter('${containerId}')"></label>
+  </div>`;
+}
+
+// 3 حالات لكل أداة لكل مستخدم: افتراضي (حسب الإعداد العام) / مسموح دائماً / ممنوع دائماً
 function renderUsers(rows) {
-  document.getElementById('usersTable').innerHTML = rows.map(u => {
-    const ta = u.tools_access || { analyzer: true, generator: true };
-    const analyzerOn = ta.analyzer !== false;
-    const generatorOn = ta.generator !== false;
-    const toolBadge = (label, on, tool, uid) =>
-      `<button onclick="toggleTool(${uid},'${tool}',${!on})" style="
-        background:${on ? 'var(--accent-soft)' : 'var(--bg-card)'};
-        color:${on ? 'var(--accent)' : 'var(--ink-dim)'};
-        border:1px solid ${on ? 'var(--accent)' : 'var(--line)'};
-        border-radius:20px; padding:0.15rem 0.55rem; font-size:0.72rem;
-        cursor:pointer; font-family:var(--font-arabic); white-space:nowrap;
-      ">${on ? '✓' : '✗'} ${label}</button>`;
-    return `<tr>
-      <td style="color:var(--ink-dim);font-size:0.8rem;">${u.id}</td>
-      <td><strong>${u.name}</strong></td>
-      <td style="font-size:0.82rem;">${u.email}</td>
+  const toolBadge = (uid, tool) => {
+    const ta = (_allUsers.find(u => u.id === uid) || {}).tools_access || {};
+    const v = ta[tool.tool_name]; // true | false | undefined
+    const st = v === true
+      ? { bg: 'rgba(34,197,94,.15)', col: '#22c55e', bd: '#22c55e', ic: '✓' }
+      : v === false
+      ? { bg: 'rgba(239,68,68,.15)', col: '#ef4444', bd: '#ef4444', ic: '✗' }
+      : { bg: 'var(--bg-card)', col: 'var(--ink-dim)', bd: 'var(--line)', ic: '◦' };
+    return `<button onclick="cycleTool(${uid},'${tool.tool_name}')" title="افتراضي ← مسموح ← ممنوع"
+      style="background:${st.bg};color:${st.col};border:1px solid ${st.bd};border-radius:20px;
+      padding:0.15rem 0.55rem;font-size:0.72rem;cursor:pointer;font-family:var(--font-arabic);white-space:nowrap;">
+      ${st.ic} ${tool.display_name}</button>`;
+  };
+  document.getElementById('usersTable').innerHTML = rows.map(u => `
+    <tr data-date="${u.created_at || ''}">
+      <td><strong style="cursor:pointer;color:var(--accent);" onclick="openUserDetail(${u.id})" title="عرض التفاصيل">${u.name}</strong></td>
       <td><span class="badge" style="background:${u.is_admin?'var(--accent-soft)':'var(--bg-card)'};color:${u.is_admin?'var(--accent)':'var(--ink-dim)'};">${u.is_admin?'أدمن':'مستخدم'}</span></td>
-      <td style="display:flex;gap:0.3rem;flex-wrap:wrap;">
-        ${toolBadge('محلل', analyzerOn, 'analyzer', u.id)}
-        ${toolBadge('مولّد', generatorOn, 'generator', u.id)}
-      </td>
       <td style="color:var(--ink-dim);font-size:0.8rem;">${fmt(u.created_at)}</td>
       <td>
+        <button class="action-btn" style="background:var(--accent-soft);color:var(--accent);" onclick="openUserDetail(${u.id})">تفاصيل</button>
         <button class="action-btn action-toggle" onclick="toggleAdmin(${u.id})">${u.is_admin?'إزالة أدمن':'جعله أدمن'}</button>
         <button class="action-btn action-delete" onclick="deleteUser(${u.id})">حذف</button>
       </td>
-    </tr>`;
-  }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد مستخدمون</td></tr>';
+    </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد مستخدمون</td></tr>';
+  runFilter('usersTable');
 }
 
-async function toggleTool(userId, tool, newValue) {
+// تدوير الحالة: افتراضي → مسموح → ممنوع → افتراضي
+async function cycleTool(userId, tool) {
   const user = _allUsers.find(u => u.id === userId);
   if (!user) return;
-  const ta = { ...(user.tools_access || { analyzer: true, generator: true }), [tool]: newValue };
-  await api.admin.updateUserTools(userId, ta).catch(err => showError('خطأ', err.message));
-  loadUsers();
+  const ta = { ...(user.tools_access || {}) };
+  const cur = ta[tool];
+  if (cur === undefined) ta[tool] = true;       // افتراضي → مسموح
+  else if (cur === true) ta[tool] = false;      // مسموح → ممنوع
+  else delete ta[tool];                          // ممنوع → افتراضي
+  user.tools_access = ta; // تحديث محلي فوري
+  renderUsers(_allUsers);
+  await api.admin.updateUserTools(userId, ta).catch(err => { showError('خطأ', err.message); loadUsers(); });
 }
 
 async function toggleAdmin(id) {
   await api.admin.toggleAdmin(id).catch(err => showError('خطأ', err.message));
   loadUsers();
+}
+
+const _toolNameMap = () => Object.fromEntries((_toolList || []).map(t => [t.tool_name, t.display_name]));
+// تدوير صلاحية أداة من داخل نافذة التفاصيل ثم تحديثها
+async function cycleToolInModal(userId, tool) {
+  const user = _allUsers.find(u => u.id === userId);
+  if (!user) return;
+  const ta = { ...(user.tools_access || {}) };
+  const cur = ta[tool];
+  if (cur === undefined) ta[tool] = true; else if (cur === true) ta[tool] = false; else delete ta[tool];
+  user.tools_access = ta;
+  try { await api.admin.updateUserTools(userId, ta); } catch (err) { showError('خطأ', err.message); }
+  openUserDetail(userId); // إعادة فتح النافذة بالبيانات المحدّثة
+}
+async function openUserDetail(id) {
+  openModal('userModal');
+  const body = document.getElementById('userModalBody');
+  body.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--ink-dim);">جارٍ التحميل...</div>';
+  let u;
+  try { u = await api.admin.userDetail(id); }
+  catch (err) { body.innerHTML = `<div style="padding:2rem;text-align:center;color:#ef4444;">${err.message || 'تعذّر التحميل'}</div>`; return; }
+  const e = s => String(s ?? '—').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const names = _toolNameMap();
+  const online = u.last_seen && (Date.now() - new Date(u.last_seen).getTime() < 3 * 60000);
+  const row = (label, val) => `<div style="display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--line);font-size:.88rem;"><span style="color:var(--ink-dim);">${label}</span><span style="font-weight:600;text-align:left;word-break:break-word;">${val}</span></div>`;
+  // الأدوات المتاحة: افتراضي/مسموح/ممنوع
+  const ta = u.tools_access || {};
+  const toolsChips = (_toolList || []).map(t => {
+    const v = ta[t.tool_name];
+    const st = v === true ? { c:'#22c55e', t:'مسموح' } : v === false ? { c:'#ef4444', t:'ممنوع' } : { c:'var(--ink-dim)', t:'افتراضي' };
+    return `<button onclick="cycleToolInModal(${u.id},'${t.tool_name}')" title="افتراضي ← مسموح ← ممنوع"
+      class="badge" style="background:${st.c}1f;color:${st.c};border:1px solid ${st.c}55;cursor:pointer;font-family:var(--font-arabic);">${e(t.display_name)}: ${st.t}</button>`;
+  }).join('');
+  const usageRows = (u.usage || []).length
+    ? u.usage.map(x => `<tr><td>${e(names[x.tool_name] || x.tool_name)}</td><td style="text-align:center;font-weight:700;color:var(--accent);">${x.count}</td><td style="color:var(--ink-dim);font-size:.8rem;">${fmt(x.last_used)}</td></tr>`).join('')
+    : '<tr><td colspan="3" style="text-align:center;color:var(--ink-dim);padding:1rem;">لا استخدام بعد</td></tr>';
+  const histRows = (u.history || []).length
+    ? u.history.map(h => {
+        const inp = h.input_data ? (h.input_data.storeUrl || h.input_data.url || h.input_data.productName || h.input_data.topic || '') : '';
+        return `<tr><td>${e(names[h.tool_name] || h.tool_name)}</td><td style="color:var(--ink-dim);font-size:.8rem;word-break:break-word;">${e(inp)}</td><td style="color:var(--ink-dim);font-size:.78rem;white-space:nowrap;">${fmt(h.created_at)}</td></tr>`;
+      }).join('')
+    : '<tr><td colspan="3" style="text-align:center;color:var(--ink-dim);padding:1rem;">لا سجل بعد</td></tr>';
+  const anaRows = (u.analyses || []).length
+    ? u.analyses.map(a => `<tr><td><a href="${e(a.store_url)}" target="_blank" style="color:var(--accent);">${e(a.store_name || a.store_url)}</a></td><td style="text-align:center;font-weight:700;">${a.score ?? '—'}</td><td style="color:var(--ink-dim);font-size:.78rem;white-space:nowrap;">${fmt(a.created_at)}</td></tr>`).join('')
+    : '';
+  body.innerHTML = `
+    <div style="display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;">${e((u.name||'?').charAt(0))}</div>
+      <div>
+        <div style="font-weight:800;font-size:1.1rem;">${e(u.name)} ${u.is_admin?'<span class="badge" style="background:var(--accent-soft);color:var(--accent);">أدمن</span>':''}</div>
+        <div style="font-size:.82rem;color:${online?'#22c55e':'var(--ink-dim)'};">${online?'● متصل الآن':'غير متصل'}</div>
+      </div>
+    </div>
+    <div style="margin-bottom:1.2rem;">
+      ${row('رقم العميل', '#' + u.id)}
+      ${row('البريد الإلكتروني', e(u.email))}
+      ${row('رقم الجوال', u.phone ? `<a href="tel:${e(u.phone)}" style="color:var(--accent);">${e(u.phone)}</a>` : '—')}
+      ${row('كلمة المرور', u.has_password ? '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> مشفّرة (لا يمكن عرضها لأسباب أمنية)' : 'غير محدّدة')}
+      ${row('تاريخ التسجيل', fmt(u.created_at))}
+      ${row('آخر ظهور', u.last_seen ? fmt(u.last_seen) : '—')}
+      ${row('إجمالي مرات الاستخدام', `<b style="color:var(--accent);">${u.totalRuns || 0}</b>`)}
+    </div>
+    <h3 style="font-size:.95rem;margin:.5rem 0;">الأدوات المتاحة</h3>
+    <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1.2rem;">${toolsChips || '<span style="color:var(--ink-dim);">—</span>'}</div>
+    <h3 style="font-size:.95rem;margin:.5rem 0;">الاستخدام حسب الأداة</h3>
+    <table class="admin-table" style="width:100%;margin-bottom:1.2rem;"><thead><tr><th>الأداة</th><th style="text-align:center;">المرات</th><th>آخر استخدام</th></tr></thead><tbody>${usageRows}</tbody></table>
+    ${anaRows ? `<h3 style="font-size:.95rem;margin:.5rem 0;">تحليلات المتاجر</h3><table class="admin-table" style="width:100%;margin-bottom:1.2rem;"><thead><tr><th>المتجر</th><th style="text-align:center;">التقييم</th><th>التاريخ</th></tr></thead><tbody>${anaRows}</tbody></table>` : ''}
+    <h3 style="font-size:.95rem;margin:.5rem 0;">سجل النشاط (آخر 50)</h3>
+    <table class="admin-table" style="width:100%;"><thead><tr><th>الأداة</th><th>المُدخل</th><th>التاريخ</th></tr></thead><tbody>${histRows}</tbody></table>
+  `;
 }
 
 async function deleteUser(id) {
@@ -1335,23 +2470,58 @@ async function loadLogs() {
   const rows = await api.admin.logs(tool).catch(() => []);
   const toolLabels = { analyzer: 'محلل المتجر', generator: 'مولّد الأوصاف' };
   document.getElementById('logsTable').innerHTML = rows.map(l => `
-    <tr>
+    <tr data-date="${l.created_at || ''}">
       <td><span class="badge">${toolLabels[l.tool_name] || l.tool_name}</span></td>
       <td style="font-size:0.82rem;">${l.user_email || 'زائر'}</td>
       <td style="font-size:0.8rem;color:var(--ink-dim);max-width:200px;">${JSON.stringify(l.input_data)?.substring(0,80) || '—'}...</td>
       <td style="font-size:0.8rem;color:var(--ink-dim);">${fmt(l.created_at)}</td>
     </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا يوجد سجل</td></tr>';
+  runFilter('logsTable');
 }
 
 // ─── Tool Settings ────────────────────────────────────────────────────────────
+let _toolSettings = [];
 async function loadToolSettings() {
-  const tools = await api.admin.toolSettings().catch(() => []);
+  _toolSettings = await api.admin.toolSettings().catch(() => []);
+  renderToolSettings();
+}
+
+async function moveTool(toolName, dir) {
+  const i = _toolSettings.findIndex(t => t.tool_name === toolName);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= _toolSettings.length) return;
+  [_toolSettings[i], _toolSettings[j]] = [_toolSettings[j], _toolSettings[i]];
+  renderToolSettings(); // تحديث فوري
+  await api.admin.setToolOrder(_toolSettings.map(t => t.tool_name)).catch(err => { showError('خطأ', err.message); loadToolSettings(); });
+}
+
+function renderToolSettings() {
+  const tools = _toolSettings;
   const panel = document.getElementById('toolSettingsPanel');
   if (!tools.length) { panel.innerHTML = '<p style="color:var(--ink-dim);padding:1rem;">لا توجد أدوات مسجّلة</p>'; return; }
 
-  panel.innerHTML = tools.map(t => `
+  const opt = (val, cur, label) => `<option value="${val}" ${cur===val?'selected':''}>${label}</option>`;
+  panel.innerHTML = tools.map((t, i) => {
+    const status = t.status || 'active';
+    return `
     <div style="display:flex;align-items:center;gap:1rem;padding:1rem;border-bottom:1px solid var(--line);flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button onclick="moveTool('${t.tool_name}',-1)" ${i===0?'disabled':''} title="أعلى"
+          style="background:var(--bg);border:1px solid var(--line);border-radius:6px;color:var(--ink);cursor:pointer;width:26px;height:20px;line-height:1;${i===0?'opacity:.3;cursor:default;':''}">▲</button>
+        <button onclick="moveTool('${t.tool_name}',1)" ${i===tools.length-1?'disabled':''} title="أسفل"
+          style="background:var(--bg);border:1px solid var(--line);border-radius:6px;color:var(--ink);cursor:pointer;width:26px;height:20px;line-height:1;${i===tools.length-1?'opacity:.3;cursor:default;':''}">▼</button>
+      </div>
+      <div style="color:var(--ink-dim);font-size:.8rem;width:20px;text-align:center;">${i+1}</div>
       <div style="flex:1;min-width:120px;"><strong>${t.display_name}</strong><br><span style="font-size:.75rem;color:var(--ink-dim);">${t.tool_name}</span></div>
+      <label style="display:flex;align-items:center;gap:.5rem;white-space:nowrap;">
+        <span style="font-size:.85rem;">الحالة:</span>
+        <select id="status_${t.tool_name}" onchange="saveToolSettings('${t.tool_name}')"
+          style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-size:.85rem;font-family:var(--font-arabic);">
+          ${opt('active', status, 'متاحة')}
+          ${opt('hidden', status, 'مخفية')}
+          ${opt('coming_soon', status, 'قريباً')}
+        </select>
+      </label>
       <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;white-space:nowrap;">
         <input type="checkbox" id="paid_${t.tool_name}" ${t.is_paid?'checked':''} onchange="saveToolSettings('${t.tool_name}')">
         <span style="font-size:.85rem;">مدفوعة (يحتاج إذن)</span>
@@ -1365,16 +2535,97 @@ async function loadToolSettings() {
         <span style="font-size:.75rem;color:var(--ink-dim);">مرة/يوم</span>
       </label>
       <span id="saved_${t.tool_name}" style="font-size:.78rem;color:var(--accent);opacity:0;transition:opacity .3s;">✓ محفوظ</span>
-    </div>`).join('');
+      <div style="flex-basis:100%;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;padding-top:.6rem;border-top:1px dashed var(--line);margin-top:.2rem;">
+        <label style="display:flex;align-items:center;gap:.4rem;white-space:nowrap;"><span style="font-size:.82rem;">السعر:</span>
+          <input type="number" id="price_${t.tool_name}" value="${t.price ?? ''}" min="0" placeholder="ر.س" style="width:90px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-size:.85rem;" onchange="saveToolSettings('${t.tool_name}')"></label>
+        <label style="display:flex;align-items:center;gap:.4rem;white-space:nowrap;"><span style="font-size:.82rem;">وسم:</span>
+          <input type="text" id="badge_${t.tool_name}" value="${(t.badge||'').replace(/"/g,'&quot;')}" placeholder="جديد / الأكثر طلباً" style="width:130px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-size:.85rem;" onchange="saveToolSettings('${t.tool_name}')"></label>
+        <label style="display:flex;align-items:center;gap:.4rem;flex:1;min-width:220px;"><span style="font-size:.82rem;white-space:nowrap;">المميزات:</span>
+          <input type="text" id="features_${t.tool_name}" value="${(Array.isArray(t.features)?t.features.join('، '):'').replace(/"/g,'&quot;')}" placeholder="افصل بفاصلة: ميزة، ميزة، ميزة" style="flex:1;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-size:.85rem;" onchange="saveToolSettings('${t.tool_name}')"></label>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 async function saveToolSettings(toolName) {
   const is_paid = document.getElementById(`paid_${toolName}`)?.checked;
   const limitVal = document.getElementById(`limit_${toolName}`)?.value;
+  const status = document.getElementById(`status_${toolName}`)?.value;
   const daily_free_limit = limitVal ? parseInt(limitVal) : null;
-  await api.admin.updateToolSettings(toolName, { is_paid, daily_free_limit }).catch(err => showError('خطأ', err.message));
+  const price = document.getElementById(`price_${toolName}`)?.value;
+  const badge = document.getElementById(`badge_${toolName}`)?.value;
+  const featuresRaw = document.getElementById(`features_${toolName}`)?.value || '';
+  const features = featuresRaw.split(/[،,]/).map(x => x.trim()).filter(Boolean);
+  await api.admin.updateToolSettings(toolName, { is_paid, daily_free_limit, status, price, badge, features }).catch(err => showError('خطأ', err.message));
   const saved = document.getElementById(`saved_${toolName}`);
   if (saved) { saved.style.opacity = 1; setTimeout(() => saved.style.opacity = 0, 2000); }
+}
+
+// ─── الباقات والأسعار ───
+let _plans = [];
+async function loadPlans() {
+  if (!_toolSettings.length) { try { _toolSettings = await api.admin.toolSettings(); } catch {} }
+  _plans = await api.admin.plans().catch(() => []);
+  const el = document.getElementById('plansList');
+  const ex = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  if (!_plans.length) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--ink-dim);">لا باقات بعد — أضف باقة جديدة</div>'; return; }
+  el.innerHTML = _plans.map(p => `
+    <div class="panel" style="padding:1rem 1.2rem;${p.active?'':'opacity:.55;'}">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;">
+        <div><strong style="font-size:1.05rem;">${ex(p.name)}</strong>
+          ${p.badge?`<span class="badge" style="background:var(--accent-soft);color:var(--accent);margin-inline-start:.4rem;">${ex(p.badge)}</span>`:''}
+          ${p.active?'':'<span class="badge" style="background:var(--bg-card);color:var(--ink-dim);">غير مفعّلة</span>'}</div>
+        <div style="font-weight:800;color:var(--accent);">${p.price!=null?ex(p.price)+' ر.س':'—'} <span style="font-size:.75rem;color:var(--ink-dim);font-weight:400;">/ ${ex(p.period||'')}</span></div>
+      </div>
+      ${(p.features&&p.features.length)?`<ul style="margin:.6rem 0;padding-inline-start:1.2rem;font-size:.85rem;color:var(--ink-dim);">${p.features.slice(0,8).map(f=>`<li>${ex(f)}</li>`).join('')}</ul>`:''}
+      ${(p.tools&&p.tools.length)?`<div style="font-size:.78rem;color:var(--ink-dim);">الأدوات: ${p.tools.map(ex).join('، ')}</div>`:''}
+      <div style="display:flex;gap:.5rem;margin-top:.7rem;">
+        <button class="action-btn" style="background:var(--accent-soft);color:var(--accent);" onclick="openPlanModal(${p.id})">تعديل</button>
+        <button class="action-btn" style="background:rgba(239,68,68,.12);color:#ef4444;" onclick="deletePlan(${p.id})">حذف</button>
+      </div>
+    </div>`).join('');
+}
+function openPlanModal(id) {
+  const p = id ? _plans.find(x => x.id === id) : null;
+  document.getElementById('planModalT').textContent = p ? 'تعديل الباقة' : 'باقة جديدة';
+  document.getElementById('planId').value = p ? p.id : '';
+  document.getElementById('planName').value = p ? p.name : '';
+  document.getElementById('planPrice').value = p && p.price != null ? p.price : '';
+  document.getElementById('planPeriod').value = p ? (p.period || 'شهرياً') : 'شهرياً';
+  document.getElementById('planBadge').value = p ? (p.badge || '') : '';
+  document.getElementById('planFeatures').value = p && p.features ? p.features.join('\n') : '';
+  document.getElementById('planActive').checked = p ? !!p.active : true;
+  document.getElementById('planSort').value = p ? (p.sort_order || 100) : 100;
+  // اختيار الأدوات (من إعدادات الأدوات)
+  const tools = _toolSettings.length ? _toolSettings : [];
+  const sel = (p && p.tools) || [];
+  document.getElementById('planTools').innerHTML = tools.map(t =>
+    `<label style="display:flex;align-items:center;gap:.3rem;font-size:.8rem;background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.3rem .6rem;cursor:pointer;"><input type="checkbox" class="planToolCb" value="${t.tool_name}" ${sel.includes(t.tool_name)?'checked':''}> ${t.display_name}</label>`).join('') || '<span style="color:var(--ink-dim);font-size:.8rem;">حمّل إعدادات الأدوات أولاً</span>';
+  document.getElementById('planModal').style.display = 'flex';
+}
+async function savePlan() {
+  const id = document.getElementById('planId').value;
+  const data = {
+    name: document.getElementById('planName').value.trim(),
+    price: document.getElementById('planPrice').value,
+    period: document.getElementById('planPeriod').value.trim(),
+    badge: document.getElementById('planBadge').value.trim(),
+    features: document.getElementById('planFeatures').value.split('\n').map(x => x.trim()).filter(Boolean),
+    tools: [...document.querySelectorAll('.planToolCb:checked')].map(x => x.value),
+    active: document.getElementById('planActive').checked,
+    sort_order: parseInt(document.getElementById('planSort').value) || 100,
+  };
+  if (!data.name) { showError('مطلوب', 'أدخل اسم الباقة'); return; }
+  try {
+    if (id) await api.admin.updatePlan(id, data); else await api.admin.createPlan(data);
+    document.getElementById('planModal').style.display = 'none';
+    showToast && showToast('تم حفظ الباقة', 'success');
+    loadPlans();
+  } catch (err) { showError('خطأ', err.message); }
+}
+async function deletePlan(id) {
+  const doIt = async () => { await api.admin.deletePlan(id).catch(err => showError('خطأ', err.message)); loadPlans(); };
+  showConfirm ? showConfirm('حذف الباقة', 'سيتم حذف هذه الباقة. متابعة؟', doIt, 'حذف') : (confirm('حذف الباقة؟') && doIt());
 }
 
 // ─── Tool Access Requests ─────────────────────────────────────────────────────
@@ -1384,7 +2635,7 @@ async function loadToolRequests() {
   const statusMap = { pending: { label: 'معلق', color: 'var(--gold,#f59e0b)' }, approved: { label: 'موافق', color: '#22c55e' }, rejected: { label: 'مرفوض', color: '#ef4444' } };
   document.getElementById('toolRequestsTable').innerHTML = rows.map(r => {
     const st = statusMap[r.status] || statusMap.pending;
-    return `<tr>
+    return `<tr data-date="${r.created_at || ''}">
       <td><strong>${r.user_name}</strong><br><span style="font-size:.78rem;color:var(--ink-dim);">${r.user_email}</span></td>
       <td><span class="badge">${toolLabels[r.tool_name] || r.tool_name}</span></td>
       <td style="font-size:.82rem;max-width:200px;">${r.reason || '—'}</td>
@@ -1396,6 +2647,7 @@ async function loadToolRequests() {
       </td>
     </tr>`;
   }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--ink-dim);padding:2rem;">لا توجد طلبات</td></tr>';
+  runFilter('toolRequestsTable');
 }
 
 async function decideRequest(id, status) {
@@ -1504,5 +2756,6 @@ updateGradientPreview();
 renderNotifs();
 checkNotifications();
 </script>
+<script src="../assets/header.js?v=16"></script>
 </body>
 </html>

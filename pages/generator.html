@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/styles.css?v=8">
 <style>
   .gen-section { padding: 6rem 2rem; max-width: 1400px; margin: 0 auto; }
   .gen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
@@ -23,6 +23,24 @@
   .gen-loading { display: none; text-align: center; padding: 3rem; }
   .gen-loading.visible { display: block; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  /* رفع صور المنتج */
+  .img-drop { border: 2px dashed var(--line-strong); border-radius: 12px; padding: 1rem; cursor: pointer; transition: border-color .2s, background .2s; }
+  .img-drop:hover, .img-drop.drag { border-color: var(--accent); background: var(--accent-soft); }
+  .img-drop-empty { display: flex; flex-direction: column; align-items: center; gap: .4rem; color: var(--ink-dim); padding: .6rem; text-align: center; }
+  .img-drop-empty svg { color: var(--accent); }
+  .img-drop-empty span { font-weight: 700; color: var(--ink); font-size: .9rem; }
+  .img-drop-empty small { font-size: .72rem; }
+  .img-preview { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .img-thumb { position: relative; width: 84px; height: 84px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-strong); }
+  .img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-thumb-x { position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; border: none; cursor: pointer; font-size: .7rem; line-height: 1; display: flex; align-items: center; justify-content: center; }
+  .img-add { width: 84px; height: 84px; border-radius: 10px; border: 2px dashed var(--line-strong); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--ink-dim); cursor: pointer; }
+  .img-add:hover { border-color: var(--accent); color: var(--accent); }
+  /* أزرار مقطعية (طول/زاوية) */
+  .seg { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .seg-btn { background: var(--bg-card); border: 1px solid var(--line); color: var(--ink-dim); border-radius: 99px; padding: .4rem .9rem; font-size: .82rem; font-weight: 600; cursor: pointer; font-family: var(--font-arabic); transition: all .15s; }
+  .seg-btn:hover { border-color: var(--line-accent); color: var(--ink); }
+  .seg-btn.active { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -37,12 +55,9 @@
     <li><a href="tools.html" class="active">الأدوات</a></li>
     <li><a href="coupons.html">الكوبونات</a></li>
     <li><a href="calendar.html">المواسم</a></li>
-    <li><a href="services.html">الخدمات</a></li>
-    <li><a href="works.html">أعمالنا</a></li>
     <li><a href="blog.html">المدونة</a></li>
     <li><a href="about.html">عن المنصة</a></li>
   </ul>
-  <a href="services.html" class="nav-cta">احجز استشارة</a>
   <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع"><span class="icon-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg></span><span class="icon-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
   <button class="mobile-menu-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
 </nav>
@@ -53,6 +68,10 @@
       <span class="badge" style="margin-bottom: 1.5rem;">أداة 03</span>
       <h1>مولّد <em>أوصاف المنتجات</em></h1>
       <p>اكتب اسم منتجك وميزاته، نولّد لك وصفاً عربياً احترافياً محسّناً لـ SEO، مع عناوين بديلة، كلمات مفتاحية، ومحتوى للسوشيال ميديا.</p>
+      <a href="bulk.html" class="btn-secondary" style="margin-top:1rem;display:inline-flex;gap:.4rem;padding:.55rem 1.1rem;font-size:.88rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        توليد جماعي (عدة منتجات / CSV)
+      </a>
     </div>
   </div>
 </section>
@@ -67,22 +86,51 @@
         <label class="label">اسم المنتج <span style="color: var(--danger);">*</span></label>
         <input type="text" id="productName" class="input" placeholder="مثل: قميص كتاني مريح للرجال" />
       </div>
-      
+
       <div class="field">
-        <label class="label">التصنيف</label>
-        <input type="text" id="productCategory" class="input" placeholder="مثل: أزياء، إلكترونيات، عطور، طعام، رياضة..." />
+        <label class="label">صور المنتج <span style="color:var(--ink-dim);font-size:.78rem;">(حتى 4 صور — تساعد الذكاء على وصف أدق)</span></label>
+        <div id="imgDrop" class="img-drop" onclick="document.getElementById('imgInput').click()">
+          <input type="file" id="imgInput" accept="image/*" multiple style="display:none;" />
+          <div id="imgDropEmpty" class="img-drop-empty">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>اسحب الصور هنا أو اضغط للرفع</span>
+            <small>JPG / PNG — حتى 4 صور</small>
+          </div>
+          <div id="imgPreview" class="img-preview" style="display:none;"></div>
+        </div>
       </div>
-      
+
       <div class="field">
-        <label class="label">المميزات الأساسية <span style="color: var(--danger);">*</span></label>
-        <textarea id="productFeatures" class="textarea" placeholder="اكتب الميزات سطر تلو الآخر، مثل:&#10;قطن 100% مستورد&#10;تفصيل مريح وعملي&#10;متوفر بـ 5 ألوان"></textarea>
+        <label class="label">نقاط بيع رئيسية <span style="color:var(--ink-dim);font-size:.78rem;">(2-3 نقاط سريعة — الذكاء يوسّعها · مطلوبة لو ما رفعت صور)</span></label>
+        <textarea id="productFeatures" class="textarea" placeholder="اكتب نقاط سريعة فقط:&#10;عود كمبودي أصلي&#10;ثبات 12 ساعة&#10;عبوة 100 مل"></textarea>
+        <div style="font-size:.72rem;color:var(--ink-dim);margin-top:.3rem;display:flex;align-items:center;gap:.3rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.5.4.8 1 .9 1.6h6.2c.1-.6.4-1.2.9-1.6A7 7 0 0 0 12 2z"/></svg> التصنيف يُكتشف تلقائياً من الاسم والصور.</div>
       </div>
-      
+
       <div class="field">
-        <label class="label">الجمهور المستهدف</label>
-        <input type="text" id="targetAudience" class="input" placeholder="مثل: الرجال من 25-45 سنة، يحبون العطور الفاخرة" />
+        <label class="label">طول الوصف</label>
+        <div class="seg" id="lengthSeg">
+          <button type="button" class="seg-btn" data-length="short">مختصر</button>
+          <button type="button" class="seg-btn active" data-length="medium">متوسط</button>
+          <button type="button" class="seg-btn" data-length="detailed">مفصّل</button>
+        </div>
       </div>
-      
+
+      <div class="field">
+        <label class="label">زاوية التسويق</label>
+        <div class="seg" id="angleSeg">
+          <button type="button" class="seg-btn active" data-angle="auto">تلقائي</button>
+          <button type="button" class="seg-btn" data-angle="gift">هدية</button>
+          <button type="button" class="seg-btn" data-angle="professional">احترافي</button>
+          <button type="button" class="seg-btn" data-angle="saving">توفير</button>
+          <button type="button" class="seg-btn" data-angle="luxury">فخامة</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">كلمات مفتاحية مستهدفة <span style="color:var(--ink-dim);font-size:.78rem;">(اختياري — للـSEO)</span></label>
+        <input type="text" id="productKeywords" class="input" placeholder="مثل: عطر رجالي فاخر، عود كمبودي" />
+      </div>
+
       <div class="field">
         <label class="label">نبرة الكتابة</label>
         <div class="tone-options">
@@ -92,7 +140,7 @@
           <div class="tone-option" data-tone="youthful"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> شبابية</div>
         </div>
       </div>
-      
+
       <button id="generateBtn" class="btn-primary" style="width: 100%; margin-top: 1rem; justify-content: center;">
         ولّد الوصف الآن
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -100,9 +148,19 @@
     </div>
 
     <div class="panel">
-      <h2>النتيجة</h2>
-      <p class="panel-sub">جاهزة للنسخ والاستخدام مباشرة</p>
-      
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem;flex-wrap:wrap;">
+        <div>
+          <h2>النتيجة</h2>
+          <p class="panel-sub">جاهزة للنسخ والاستخدام مباشرة</p>
+        </div>
+        <div id="exportBar" style="display:none;gap:.4rem;flex-wrap:wrap;">
+          <button class="seg-btn" onclick="exportResult('pdf')">PDF</button>
+          <button class="seg-btn" onclick="exportResult('word')">Word</button>
+          <button class="seg-btn" onclick="exportResult('csv')">CSV</button>
+          <button class="seg-btn" onclick="exportResult('copy')">نسخ الكل</button>
+        </div>
+      </div>
+
       <div id="output">
         <div class="output-empty">
           <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -128,12 +186,12 @@
         <svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>
         <div class="logo-text"><span class="logo-text-ar">أدوات التاجر</span><span class="logo-text-en">Tajer Tools</span></div>
       </a>
-      <p>منصة عربية تجمع كل ما يحتاجه التاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية، وفريق متخصص جاهز عند الطلب.</p>
+      <p>أدوات التاجر — منتج من <strong>خبراء المنصات</strong>، فريق سعودي متخصص في تأسيس المتاجر الإلكترونية على سلة وربطها بالأدوات التقنية والتسويقية.</p>
       <div class="footer-social">
-        <a href="#" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-        <a href="#" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        <a href="#" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
-        <a href="#" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a href="https://wa.me/966507060592" target="_blank" rel="noopener" class="footer-social-link" aria-label="واتساب"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="https://x.com/sallatips" target="_blank" rel="noopener" class="footer-social-link" aria-label="تويتر X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://www.tiktok.com/@sallatips" target="_blank" rel="noopener" class="footer-social-link" aria-label="تيك توك"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.82a4.85 4.85 0 01-1.01-.13z"/></svg></a>
+        <a href="https://instagram.com/sallatips" target="_blank" rel="noopener" class="footer-social-link" aria-label="انستقرام"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
       </div>
     </div>
     <div class="footer-col">
@@ -142,14 +200,11 @@
       <a href="tools.html">الأدوات المجانية</a>
       <a href="coupons.html">الكوبونات</a>
       <a href="calendar.html">تقويم المواسم</a>
-      <a href="services.html">الخدمات</a>
     </div>
     <div class="footer-col">
       <h4>الفريق</h4>
       <a href="about.html">من نحن</a>
-      <a href="services.html">احجز معنا</a>
-      <a href="works.html">أعمالنا</a>
-      <a href="#">تواصل معنا</a>
+      <a href="https://wa.me/966507060592" target="_blank" rel="noopener">تواصل معنا</a>
     </div>
     <div class="footer-col">
       <h4>قانوني</h4>
@@ -160,14 +215,16 @@
   </div>
   <div class="footer-bottom">
     <div>© 2026 أدوات التاجر — جميع الحقوق محفوظة.</div>
-    <div class="footer-accent-line">adwat-altajer.com</div>
+    <div class="footer-accent-line">salatips.com</div>
   </div>
 </footer>
 
-<script src="../assets/api.js"></script>
+<script src="../assets/api.js?v=30"></script>
 <script src="../assets/main.js"></script>
 <script>
   let selectedTone = 'luxury';
+  let selectedLength = 'medium';
+  let selectedAngle = 'auto';
 
   document.querySelectorAll('.tone-option').forEach(opt => {
     opt.addEventListener('click', () => {
@@ -176,6 +233,14 @@
       selectedTone = opt.dataset.tone;
     });
   });
+  document.querySelectorAll('#lengthSeg .seg-btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#lengthSeg .seg-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active'); selectedLength = b.dataset.length;
+  }));
+  document.querySelectorAll('#angleSeg .seg-btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#angleSeg .seg-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active'); selectedAngle = b.dataset.angle;
+  }));
 
   function esc(str) {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -191,6 +256,69 @@
 
   let _genImgData = null;
 
+  // ── رفع عدة صور للمنتج ──
+  let _productImages = []; // data URLs
+  const _imgInput = document.getElementById('imgInput');
+  const _imgPreview = document.getElementById('imgPreview');
+  const _imgEmpty = document.getElementById('imgDropEmpty');
+  const _imgDrop = document.getElementById('imgDrop');
+
+  function renderImgPreview() {
+    if (!_productImages.length) {
+      _imgPreview.style.display = 'none';
+      _imgEmpty.style.display = 'flex';
+      return;
+    }
+    _imgEmpty.style.display = 'none';
+    _imgPreview.style.display = 'flex';
+    _imgPreview.innerHTML = _productImages.map((src, i) =>
+      `<div class="img-thumb"><img loading="lazy" src="${src}" alt="صورة ${i+1}"><button type="button" class="img-thumb-x" onclick="event.stopPropagation();removeProductImage(${i})">✕</button></div>`
+    ).join('') + (_productImages.length < 4 ? '<div class="img-add" onclick="event.stopPropagation();document.getElementById(\'imgInput\').click()">+</div>' : '');
+  }
+  window.removeProductImage = function (i) { _productImages.splice(i, 1); renderImgPreview(); };
+
+  // ضغط الصورة client-side (تصغير الأبعاد + JPEG) قبل الرفع — أسرع وأخف
+  function compressImage(file, maxDim = 1280, quality = 0.82) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxDim || height > maxDim) {
+            if (width >= height) { height = Math.round(height * maxDim / width); width = maxDim; }
+            else { width = Math.round(width * maxDim / height); height = maxDim; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width; canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          try { resolve(canvas.toDataURL('image/jpeg', quality)); }
+          catch (_) { resolve(ev.target.result); } // fallback للأصل
+        };
+        img.onerror = () => resolve(ev.target.result);
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  async function handleFiles(files) {
+    const room = 4 - _productImages.length;
+    const list = Array.from(files).slice(0, room).filter(f => f.type.startsWith('image/'));
+    for (const file of list) {
+      if (file.size > 12 * 1024 * 1024) { showError('حجم كبير', `${file.name}: الحد 12 ميجابايت`); continue; }
+      const dataUrl = await compressImage(file);
+      _productImages.push(dataUrl);
+      renderImgPreview();
+    }
+    if (files.length > room) showToast('الحد الأقصى 4 صور', 'info');
+  }
+  if (_imgInput) _imgInput.addEventListener('change', e => { handleFiles(e.target.files); _imgInput.value = ''; });
+  if (_imgDrop) {
+    ['dragenter','dragover'].forEach(ev => _imgDrop.addEventListener(ev, e => { e.preventDefault(); _imgDrop.classList.add('drag'); }));
+    ['dragleave','drop'].forEach(ev => _imgDrop.addEventListener(ev, e => { e.preventDefault(); _imgDrop.classList.remove('drag'); }));
+    _imgDrop.addEventListener('drop', e => { if (e.dataTransfer?.files) handleFiles(e.dataTransfer.files); });
+  }
+
   function downloadGenImg() {
     if (!_genImgData) return;
     const a = document.createElement('a');
@@ -199,152 +327,196 @@
     a.click();
   }
 
-  function renderOutput(result) {
-    const titles = result.alternativeTitles || [];
-    const allTitles = [result.title, ...titles].filter(Boolean);
-    const kw = result.keywords || {};
-    const kwFlat = Array.isArray(kw) ? kw : [...(kw.primary||[]), ...(kw.secondary||[]), ...(kw.longTail||[])];
-    const social = result.socialPost || {};
-    const faq = result.faq || [];
-    const wordCount = (result.description || '').split(/\s+/).filter(Boolean).length;
-
-    return `
-      <div class="output-section" id="genImgSection">
-        <div class="output-label" style="display:flex;align-items:center;gap:.4rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>صورة المنتج بالذكاء الاصطناعي</span></div>
-        <div id="genImgBox" style="display:flex;align-items:center;justify-content:center;gap:.6rem;padding:1.2rem;background:var(--bg-card);border:1px dashed var(--line-strong);border-radius:var(--radius-md);color:var(--ink-dim);font-size:.85rem;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite;flex-shrink:0;"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
-          جاري توليد صورة احترافية للمنتج...
-        </div>
-      </div>
-
-      <!-- ① السطر الافتتاحي -->
-      ${result.openingHook ? `
-      <div class="output-section">
-        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>السطر الافتتاحي للإعلانات</span>${cpBtn('hookContent')}</div>
-        <div id="hookContent" style="background:linear-gradient(135deg,var(--accent-soft),transparent);border:1px solid var(--line-accent);border-radius:12px;padding:1.2rem 1.5rem;font-size:1.15rem;font-weight:600;line-height:1.8;color:var(--ink);">"${esc(result.openingHook)}"</div>
-      </div>` : ''}
-
-      <!-- ② الوصف المختصر للبطاقة -->
-      ${result.shortDescription ? `
-      <div class="output-section">
-        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>وصف بطاقة المنتج</span>${cpBtn('shortDesc')}</div>
-        <div id="shortDesc" class="output-content" style="background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;line-height:1.9;">${esc(result.shortDescription)}</div>
-      </div>` : ''}
-
-      <!-- ③ العناوين -->
-      <div class="output-section">
-        <div class="output-label"><span>العناوين المقترحة للمنتج</span></div>
-        ${allTitles.map((t,i) => `
-          <div style="background:var(--bg-card);border:1px solid var(${i===0?'--accent':'--line'});border-radius:10px;padding:0.85rem 1rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;">
-            ${i===0?'<span style="font-size:.7rem;background:var(--accent);color:#fff;padding:.15rem .5rem;border-radius:6px;flex-shrink:0;">الأساسي</span>':'<span style="font-size:.75rem;color:var(--ink-dim);flex-shrink:0;">بديل '+(i)+'</span>'}
-            <span id="title_${i}" style="flex:1;font-size:.95rem;font-weight:${i===0?'700':'400'}">${esc(t)}</span>
-            <button class="copy-icon-btn" onclick="navigator.clipboard.writeText(document.getElementById('title_${i}').textContent.trim());this.textContent='تم ✓';this.classList.add('copied');setTimeout(()=>{this.textContent='انسخ';this.classList.remove('copied')},1800)">انسخ</button>
-          </div>`).join('')}
-      </div>
-
-      <!-- ④ الوصف الكامل -->
-      <div class="output-section">
-        <div class="output-label">
-          <span>وصف المنتج الكامل (SEO) — ${wordCount} كلمة</span>
-          ${cpBtn('descContent')}
-        </div>
-        <div class="output-content" id="descContent" style="white-space:pre-line;line-height:2.1;font-size:1rem;">${esc(result.description || '')}</div>
-      </div>
-
-      <!-- ⑤ نقاط البيع -->
-      <div class="output-section">
-        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>نقاط البيع الرئيسية (Feature → Benefit)</span></div>
-        ${(result.bulletPoints || []).map((b,i) => `
-          <div style="display:flex;gap:0.8rem;align-items:start;padding:0.7rem 0;border-bottom:1px solid var(--line);">
-            <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:1px;">${i+1}</span>
-            <span style="line-height:1.8;">${esc(b)}</span>
-          </div>`).join('')}
-      </div>
-
-      <!-- ⑥ الكلمات المفتاحية -->
-      <div class="output-section">
-        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>الكلمات المفتاحية المستهدفة</span></div>
-        ${typeof kw === 'object' && !Array.isArray(kw) && kw.primary ? `
-          <div style="margin-bottom:1rem;">
-            <div style="font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.1em;">رئيسية</div>
-            <div class="keywords-list">${(kw.primary||[]).map(k=>`<span class="keyword" style="background:var(--accent-soft);color:var(--accent);border-color:var(--accent)">${esc(k)}</span>`).join('')}</div>
-          </div>
-          <div style="margin-bottom:1rem;">
-            <div style="font-size:.75rem;font-weight:600;color:var(--ink-dim);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.1em;">ثانوية</div>
-            <div class="keywords-list">${(kw.secondary||[]).map(k=>`<span class="keyword">${esc(k)}</span>`).join('')}</div>
-          </div>
-          <div>
-            <div style="font-size:.75rem;font-weight:600;color:#22c55e;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.1em;">Long-tail — جمل بحث طويلة</div>
-            <div class="keywords-list">${(kw.longTail||[]).map(k=>`<span class="keyword" style="background:rgba(34,197,94,.1);color:#22c55e;border-color:rgba(34,197,94,.3)">${esc(k)}</span>`).join('')}</div>
-          </div>` : `<div class="keywords-list">${kwFlat.map(k=>`<span class="keyword">${esc(k)}</span>`).join('')}</div>`}
-      </div>
-
-      <!-- ⑦ Meta Description -->
-      <div class="output-section">
-        <div class="output-label">
-          <span>وصف Meta للـ SEO</span>
-          ${cpBtn('metaContent')}
-        </div>
-        <div class="output-content" id="metaContent" style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.9rem 1rem;">${esc(result.metaDescription || '')}</div>
-        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.4rem;">
-          <div style="flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden;">
-            <div style="height:100%;width:${Math.min(100,(result.metaDescription||'').length/160*100)}%;background:${(result.metaDescription||'').length>=150&&(result.metaDescription||'').length<=160?'#22c55e':'var(--accent-warm)'};transition:width .3s;"></div>
-          </div>
-          <span style="font-size:.75rem;color:var(--ink-dim);">${(result.metaDescription||'').length} / 160</span>
-        </div>
-      </div>
-
-      <!-- ⑧ نص الإعلان -->
-      ${result.adCopy ? `
-      <div class="output-section">
-        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>نص الإعلان (Meta / Google)</span>${cpBtn('adCopyContent')}</div>
-        <div id="adCopyContent" style="background:rgba(168,85,247,.07);border:1px solid var(--line-accent);border-radius:10px;padding:1rem 1.2rem;line-height:1.9;">${esc(result.adCopy)}</div>
-      </div>` : ''}
-
-      <!-- ⑨ السوشيال ميديا -->
-      <div class="output-section">
-        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>محتوى السوشيال ميديا</span></div>
-        ${[
-          {platform:'انستقرام', key:'instagram', icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>`, color:'#e1306c', id:'ig'},
-          {platform:'تويتر / X', key:'twitter', icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`, color:'var(--ink)', id:'tw'},
-          {platform:'واتساب', key:'whatsapp', icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`, color:'#25d366', id:'wa'},
-        ].map(p => {
-          const text = typeof social === 'string' ? social : (social[p.key] || '');
-          if (!text) return '';
-          return `<div style="border:1px solid var(--line);border-radius:12px;padding:1.1rem;margin-bottom:.8rem;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;">
-              <span style="font-weight:700;font-size:.9rem;color:${p.color};">${p.icon} ${p.platform}</span>
-              <button class="copy-icon-btn" onclick="navigator.clipboard.writeText(document.getElementById('social_${p.id}').innerText);this.textContent='تم ✓';this.classList.add('copied');setTimeout(()=>{this.textContent='انسخ';this.classList.remove('copied')},1800)">انسخ</button>
-            </div>
-            <div id="social_${p.id}" style="white-space:pre-line;font-size:.9rem;line-height:1.85;color:var(--ink-dim);">${esc(text)}</div>
-          </div>`;
-        }).join('')}
-      </div>
-
-      <!-- ⑩ FAQ -->
-      ${faq.length ? `
-      <div class="output-section">
-        <div class="output-label"><span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>الأسئلة الشائعة</span></div>
-        ${faq.map((f,i) => `
-          <div style="border:1px solid var(--line);border-radius:10px;padding:1.1rem;margin-bottom:.7rem;">
-            <div style="font-weight:700;margin-bottom:.5rem;color:var(--accent);">س: ${esc(f.q)}</div>
-            <div style="color:var(--ink-dim);font-size:.92rem;line-height:1.8;">ج: ${esc(f.a)}</div>
-          </div>`).join('')}
-      </div>` : ''}
-
-      <!-- ⑪ عنوان الإيميل -->
-      ${result.emailSubject ? `
-      <div class="output-section">
-        <div class="output-label">
-          <span style="display:inline-flex;align-items:center;gap:.35rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>عنوان الإيميل التسويقي</span>
-          ${cpBtn('emailSubj')}
-        </div>
-        <div id="emailSubj" style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.9rem 1rem;font-weight:600;">${esc(result.emailSubject)}</div>
-        <div style="font-size:.75rem;color:var(--ink-dim);margin-top:.3rem;">${(result.emailSubject||'').length} / 55 حرف</div>
-      </div>` : ''}
-    `;
+  // ── تصدير النتيجة (PDF / Word / CSV / نسخ) ──
+  let _lastResult = null, _lastProductName = '';
+  function resultPlainText(r) {
+    const lines = [];
+    if (r.intro) lines.push(r.intro, '');
+    (r.sections || []).forEach(s => {
+      lines.push((s.heading || '') + ':');
+      (s.points || []).forEach(p => lines.push('• ' + p));
+      lines.push('');
+    });
+    if (!r.intro && !(r.sections || []).length && r.description) lines.push(r.description, '');
+    if (r.tags && r.tags.length) lines.push('الوسوم: ' + r.tags.join('، '), '');
+    if (r.pageTitle) lines.push('عنوان الصفحة: ' + r.pageTitle);
+    if (r.pageDescription) lines.push('وصف الصفحة: ' + r.pageDescription);
+    return lines.join('\n');
+  }
+  function exportResult(kind) {
+    if (!_lastResult) return;
+    // ادمج النسخة المختارة حالياً من الوصف
+    const r = Object.assign({}, _lastResult, _descVariants[_descIndex] || {});
+    const name = _lastProductName || 'product';
+    const safe = name.replace(/[\\/:*?"<>|]/g, '').slice(0, 40) || 'product';
+    if (kind === 'copy') {
+      navigator.clipboard.writeText(resultPlainText(r)); showToast('تم نسخ النتيجة كاملة', 'success'); return;
+    }
+    if (kind === 'csv') {
+      const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+      const rows = [['الحقل', 'القيمة'],
+        ['اسم المنتج', name],
+        ['وصف المنتج', resultPlainText(r).replace(/\n/g, ' ')],
+        ['عنوان الصفحة', r.pageTitle || ''],
+        ['وصف الصفحة', r.pageDescription || ''],
+        ['الوسوم', (r.tags || []).join('، ')],
+      ];
+      const csv = '﻿' + rows.map(row => row.map(q).join(',')).join('\r\n');
+      downloadBlob(csv, `${safe}.csv`, 'text/csv;charset=utf-8');
+      showToast('تم تنزيل CSV', 'success'); return;
+    }
+    // PDF / Word — نبني HTML منسّق
+    const esc2 = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c]));
+    let bodyHtml = '<h1>' + esc2(name) + '</h1>';
+    if (r.intro) bodyHtml += '<p>' + esc2(r.intro) + '</p>';
+    (r.sections || []).forEach(s => {
+      bodyHtml += '<h2>' + esc2(s.heading || '') + '</h2><ul>' + (s.points || []).map(p => '<li>' + esc2(p) + '</li>').join('') + '</ul>';
+    });
+    if (!r.intro && !(r.sections || []).length && r.description) bodyHtml += '<p>' + esc2(r.description).replace(/\n/g, '<br>') + '</p>';
+    if (r.tags && r.tags.length) bodyHtml += '<h2>الوسوم</h2><p>' + esc2(r.tags.join('، ')) + '</p>';
+    if (r.pageTitle) bodyHtml += '<h2>عنوان الصفحة</h2><p>' + esc2(r.pageTitle) + '</p>';
+    if (r.pageDescription) bodyHtml += '<h2>وصف الصفحة</h2><p>' + esc2(r.pageDescription) + '</p>';
+    const doc = '<html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>' + esc2(name) + '<\/title>' +
+      '<style>body{font-family:Tajawal,Arial,sans-serif;line-height:1.9;color:#1a1a2e;padding:24px;}h1{color:#6d28d9;}h2{color:#6d28d9;font-size:16px;border-bottom:1px solid #eee;padding-bottom:4px;margin-top:18px;}ul{padding-inline-start:1.3rem;}li{margin:.25rem 0;}<\/style><\/head><body>' + bodyHtml + '<\/body><\/html>';
+    if (kind === 'word') {
+      downloadBlob('﻿' + doc, `${safe}.doc`, 'application/msword');
+      showToast('تم تنزيل Word', 'success'); return;
+    }
+    // pdf → نافذة طباعة
+    const w = window.open('', '_blank');
+    if (!w) { showError('تنبيه', 'فعّل النوافذ المنبثقة لتصدير PDF'); return; }
+    w.document.write(doc); w.document.close();
+    w.onload = () => { w.focus(); w.print(); };
+    setTimeout(() => { try { w.focus(); w.print(); } catch (e) {} }, 500);
+  }
+  function downloadBlob(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
 
+  // ── نُسخ بديلة للوصف (A/B) ──
+  let _descVariants = [], _descIndex = 0, _lastPayload = null, _genAltBusy = false;
+  function descHtmlOf(v) {
+    let h = '';
+    if (v.intro) h += '<p style="line-height:2;margin:0 0 1rem;font-size:1rem;">' + esc(v.intro) + '</p>';
+    const secs = Array.isArray(v.sections) ? v.sections : [];
+    if (secs.length) {
+      h += secs.map(s =>
+        '<div style="margin-bottom:1rem;">' +
+          '<div style="font-weight:800;color:var(--accent);font-size:.98rem;margin-bottom:.5rem;">' + esc(s.heading || '') + '</div>' +
+          '<ul style="margin:0;padding-inline-start:1.3rem;line-height:1.95;">' +
+            (Array.isArray(s.points) ? s.points.map(p => '<li style="margin-bottom:.3rem;">' + esc(p) + '</li>').join('') : '') +
+          '</ul></div>'
+      ).join('');
+    }
+    if (!h) h = '<div style="white-space:pre-line;line-height:2.1;">' + esc(v.description || '') + '</div>';
+    return h;
+  }
+  function renderDescBlock() {
+    const el = document.getElementById('descSection');
+    if (!el || !_descVariants.length) return;
+    const v = _descVariants[_descIndex];
+    const wc = (v.description || '').split(/\s+/).filter(Boolean).length;
+    const tabs = _descVariants.length > 1
+      ? '<div style="display:flex;gap:.3rem;margin-inline-start:.5rem;">' + _descVariants.map((_, i) =>
+          `<button onclick="switchDesc(${i})" class="seg-btn" style="padding:.2rem .6rem;font-size:.72rem;${i===_descIndex?'background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#fff;border-color:var(--accent);':''}">${i+1}</button>`
+        ).join('') + '</div>'
+      : '';
+    el.innerHTML =
+      '<div class="output-label" style="align-items:center;">' +
+        '<span style="display:flex;align-items:center;">وصف المنتج الكامل — ' + wc + ' كلمة' + tabs + '</span>' +
+        '<span style="display:flex;gap:.4rem;">' +
+          `<button class="copy-icon-btn" id="genAltBtn" onclick="genAltDescription()">↻ صياغة بديلة</button>` +
+          cpBtn('descContent') +
+        '</span>' +
+      '</div>' +
+      '<div class="output-content" id="descContent" style="line-height:2;font-size:1rem;">' + descHtmlOf(v) + '</div>';
+  }
+  window.switchDesc = function (i) { _descIndex = i; renderDescBlock(); };
+  window.genAltDescription = async function () {
+    if (_genAltBusy || !_lastPayload) return;
+    if (_descVariants.length >= 4) { showToast('وصلت لأقصى عدد صياغات (4)', 'info'); return; }
+    _genAltBusy = true;
+    const btn = document.getElementById('genAltBtn');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ جارٍ توليد صياغة...'; }
+    try {
+      const r = await api.generate(_lastPayload);
+      _descVariants.push({ intro: r.intro, sections: r.sections, description: r.description });
+      _descIndex = _descVariants.length - 1;
+      renderDescBlock();
+      showToast('تمت إضافة صياغة بديلة', 'success');
+    } catch (err) { showToolError ? showToolError(err, 'generator') : showError('خطأ', err.message); }
+    finally { _genAltBusy = false; const b = document.getElementById('genAltBtn'); if (b) { b.disabled = false; b.textContent = '↻ صياغة بديلة'; } }
+  };
+
+  function renderOutput(result) {
+    const wordCount = (result.description || '').split(/\s+/).filter(Boolean).length;
+    const tags = Array.isArray(result.tags) ? result.tags : [];
+    const designs = Array.isArray(result.designs) ? result.designs : [];
+    const sections = Array.isArray(result.sections) ? result.sections : [];
+    const pageDesc = result.pageDescription || result.metaDescription || '';
+    const out = [];
+
+    // ① وصف المنتج الكامل — حاوية تُملأ عبر renderDescBlock (يدعم النسخ البديلة A/B)
+    out.push('<div class="output-section" id="descSection"></div>');
+
+    // ② الوسوم
+    if (tags.length) {
+      const chips = tags.map(t =>
+        '<span class="keyword" style="background:var(--accent-soft);color:var(--accent);border-color:var(--line-accent);cursor:pointer" onclick="navigator.clipboard.writeText(this.textContent.trim());showToast(\'تم نسخ الوسم\',\'success\')">' + esc(t) + '</span>'
+      ).join('');
+      const copyAll = '<button class="copy-icon-btn" onclick="navigator.clipboard.writeText(' + esc(JSON.stringify(tags.join('، '))) + ');this.textContent=\'تم ✓\';this.classList.add(\'copied\');setTimeout(()=>{this.textContent=\'انسخ الكل\';this.classList.remove(\'copied\')},1800)">انسخ الكل</button>';
+      out.push(
+        '<div class="output-section">' +
+          '<div class="output-label"><span>الوسوم (Tags)</span>' + copyAll + '</div>' +
+          '<div class="keywords-list">' + chips + '</div>' +
+        '</div>'
+      );
+    }
+
+    // ③ عنوان صفحة المنتج
+    out.push(
+      '<div class="output-section">' +
+        '<div class="output-label"><span>عنوان صفحة المنتج (Page Title)</span>' + cpBtn('sallaTitle') + '</div>' +
+        '<div id="sallaTitle" class="output-content" style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;font-weight:600;">' + esc(result.pageTitle || '') + '</div>' +
+        '<div style="font-size:.72rem;color:var(--ink-dim);margin-top:.3rem;">' + (result.pageTitle || '').length + ' / 60 حرف</div>' +
+      '</div>'
+    );
+
+    // ④ وصف صفحة المنتج
+    out.push(
+      '<div class="output-section">' +
+        '<div class="output-label"><span>وصف صفحة المنتج (Page Description)</span>' + cpBtn('sallaDesc') + '</div>' +
+        '<div id="sallaDesc" class="output-content" style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;line-height:1.8;">' + esc(pageDesc) + '</div>' +
+        '<div style="font-size:.72rem;color:var(--ink-dim);margin-top:.3rem;">' + pageDesc.length + ' حرف</div>' +
+      '</div>'
+    );
+
+    // ⑤ محتوى تصميمين للمنتج
+    if (designs.length) {
+      const cards = designs.map((d, i) => {
+        const sub = d.subheadline ? '<div style="color:var(--ink-dim);font-size:.9rem;margin-bottom:.5rem;">' + esc(d.subheadline) + '</div>' : '';
+        const cta = d.cta ? '<div style="display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:.8rem;border-radius:8px;padding:.3rem .8rem;margin-bottom:.6rem;">' + esc(d.cta) + '</div>' : '';
+        const vis = d.visual ? '<div style="border-top:1px dashed var(--line);padding-top:.6rem;margin-top:.3rem;"><div style="font-size:.7rem;color:var(--ink-dim);margin-bottom:.25rem;">المشهد البصري المقترح:</div><div style="font-size:.85rem;line-height:1.7;">' + esc(d.visual) + '</div></div>' : '';
+        return '<div style="background:var(--bg-card);border:1px solid var(--line-accent);border-radius:12px;padding:1.1rem;">' +
+          '<div style="font-weight:800;color:var(--accent);margin-bottom:.7rem;display:flex;justify-content:space-between;align-items:center;">' + esc(d.title || ('تصميم ' + (i + 1))) + '<span style="font-size:.65rem;background:var(--accent);color:#fff;border-radius:6px;padding:.1rem .45rem;">' + (i + 1) + '</span></div>' +
+          '<div style="font-size:1.05rem;font-weight:700;line-height:1.6;margin-bottom:.4rem;">' + esc(d.headline || '') + '</div>' +
+          sub + cta + vis +
+        '</div>';
+      }).join('');
+      out.push(
+        '<div class="output-section">' +
+          '<div class="output-label"><span>محتوى تصميمين للمنتج</span></div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">' + cards + '</div>' +
+        '</div>'
+      );
+    }
+
+    return out.join('\n');
+  }
   document.getElementById('generateBtn').addEventListener('click', async () => {
     if (!auth.isLoggedIn()) {
       showModal({ type: 'warning', title: 'يجب تسجيل الدخول', message: 'سجّل دخولك لاستخدام هذه الأداة.', actions: [
@@ -357,7 +529,8 @@
     const name = document.getElementById('productName').value.trim();
     const features = document.getElementById('productFeatures').value.trim();
 
-    if (!name || !features) { showError('حقل مطلوب', 'من فضلك أدخل اسم المنتج والمميزات'); return; }
+    if (!name) { showError('حقل مطلوب', 'من فضلك أدخل اسم المنتج'); return; }
+    if (!features && _productImages.length === 0) { showError('حقل مطلوب', 'ارفع صورة واحدة على الأقل أو اكتب مميزات المنتج'); return; }
 
     const btn = document.getElementById('generateBtn');
     const output = document.getElementById('output');
@@ -367,45 +540,27 @@
     loading.classList.add('visible');
 
     try {
-      const result = await api.generate({
+      const payload = {
         productName: name,
         features,
-        category: document.getElementById('productCategory').value,
-        targetAudience: document.getElementById('targetAudience').value.trim(),
+        images: _productImages,
+        keywords: document.getElementById('productKeywords').value.trim(),
         tone: selectedTone,
-      });
+        length: selectedLength,
+        angle: selectedAngle,
+      };
+      const result = await api.generate(payload);
 
       output.style.display = 'block';
       output.innerHTML = renderOutput(result);
+      _lastResult = result;
+      _lastProductName = name;
+      _lastPayload = payload;
+      _descVariants = [{ intro: result.intro, sections: result.sections, description: result.description }];
+      _descIndex = 0;
+      renderDescBlock();
+      document.getElementById('exportBar').style.display = 'flex';
       showToast('تم التوليد بنجاح!', 'success');
-
-      // توليد صورة المنتج بالتوازي
-      _genImgData = null;
-      api.generateImage({
-        productName: name,
-        description: features.slice(0, 180),
-        style: 'white',
-      }).then(imgResult => {
-        const box = document.getElementById('genImgBox');
-        if (!box) return;
-        _genImgData = { image: imgResult.image, mimeType: imgResult.mimeType || 'image/png', name };
-        box.innerHTML = `
-          <div>
-            <img src="data:${_genImgData.mimeType};base64,${imgResult.image}"
-                 alt="صورة ${esc(name)}"
-                 style="max-width:380px;width:100%;border-radius:var(--radius-md);display:block;margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,.18);" />
-            <div style="text-align:center;margin-top:.9rem;display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
-              <button class="btn-primary" onclick="downloadGenImg()" style="padding:.5rem 1.2rem;font-size:.85rem;gap:.4rem;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                تحميل الصورة
-              </button>
-              <a href="image-gen.html" class="btn-secondary" style="padding:.5rem 1.2rem;font-size:.85rem;">ولّد بأسلوب مختلف</a>
-            </div>
-          </div>`;
-      }).catch(() => {
-        const box = document.getElementById('genImgBox');
-        if (box) box.innerHTML = '<span style="color:var(--ink-dim);font-size:.82rem;">توليد الصورة يحتاج GEMINI_API_KEY — <a href=\'image-gen.html\' style=\'color:var(--accent)\'>افتح أداة مولّد الصور</a></span>';
-      });
 
       // Usage counter
       if (result.used !== undefined && result.limit !== null && result.limit > 0) {
@@ -437,5 +592,6 @@
   }
 </script>
 
+<script src="../assets/header.js?v=16"></script>
 </body>
 </html>
