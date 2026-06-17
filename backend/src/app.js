@@ -20,6 +20,7 @@ process.on('uncaughtException', (err) => {
 });
 
 const app = express();
+app.set('trust proxy', 1); // خلف nginx/بروكسي واحد — لقراءة IP الحقيقي وعمل rate-limit بشكل صحيح
 const db = require('./config/db');
 
 // ─── Auto-init critical tables ────────────────────────────────────────────────
