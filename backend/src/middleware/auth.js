@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { rows } = await db.query(
-      'SELECT id, email, name, is_admin, tools_access FROM users WHERE id = $1',
+      'SELECT id, email, name, is_admin, tools_access, created_at, subscription_until, plan_name FROM users WHERE id = $1',
       [decoded.userId]
     );
     if (!rows[0]) return res.status(401).json({ error: 'المستخدم غير موجود' });
@@ -30,7 +30,7 @@ const optionalAuth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { rows } = await db.query(
-      'SELECT id, email, name, is_admin, tools_access FROM users WHERE id = $1',
+      'SELECT id, email, name, is_admin, tools_access, created_at, subscription_until, plan_name FROM users WHERE id = $1',
       [decoded.userId]
     );
     if (rows[0]) req.user = rows[0];

@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=8">
+<link rel="stylesheet" href="../assets/styles.css?v=11">
 <style>
   .mp-section { padding: 5rem 1.5rem; max-width: 920px; margin: 0 auto; }
   .mp-modes { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:2rem; }
@@ -236,7 +236,7 @@
   </div>
 </footer>
 
-<script src="../assets/api.js?v=30"></script>
+<script src="../assets/api.js?v=44"></script>
 <script src="../assets/main.js?v=mp6"></script>
 <script>
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -655,6 +655,6 @@ function renderResult(r) {
 document.querySelectorAll('.mp-mode').forEach(el => el.addEventListener('click', () => selectMode(el.dataset.mode)));
 </script>
 
-<script src="../assets/header.js?v=16"></script>
+<script src="../assets/header.js?v=17"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=9">
+<link rel="stylesheet" href="../assets/styles.css?v=11">
 <style>
   * { box-sizing: border-box; }
   html, body { overflow-x: hidden; max-width: 100%; }
@@ -623,6 +623,15 @@
 
     <!-- ── Plans / Packages ── -->
     <div class="admin-section" id="section-plans">
+      <div class="panel" style="margin-bottom:1rem;">
+        <div class="panel-header"><div class="panel-title">التجربة المجانية (الافتراضية)</div></div>
+        <div style="padding:.6rem 0;display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;">
+          <label style="font-size:.88rem;">المدة الافتراضية (بالأيام):</label>
+          <input type="number" id="trialDaysInput" min="0" max="3650" style="width:110px;background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.4rem .6rem;color:var(--ink);font-family:var(--font-arabic);">
+          <button class="btn-primary" style="padding:.45rem 1rem;font-size:.84rem;" onclick="saveTrialDays()">حفظ</button>
+          <span id="trialDaysHint" style="font-size:.78rem;color:var(--ink-dim);">تُطبَّق على الأدوات التي لم تُحدّد لها مدة خاصة. لكل أداة تقدر تحدّد مدتها من «إعدادات الأدوات». (0 = وصول مفتوح)</span>
+        </div>
+      </div>
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title">الباقات والأسعار</div>
@@ -642,10 +651,11 @@
           <input type="hidden" id="planId">
           <label style="font-size:.82rem;">اسم الباقة<input id="planName" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="مثال: احترافي"></label>
           <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
-            <label style="font-size:.82rem;flex:1;">السعر (ر.س)<input id="planPrice" type="number" min="0" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="299"></label>
-            <label style="font-size:.82rem;flex:1;">المدة<input id="planPeriod" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="شهرياً" value="شهرياً"></label>
-            <label style="font-size:.82rem;flex:1;">وسم<input id="planBadge" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="الأكثر طلباً"></label>
+            <label style="font-size:.82rem;flex:1;">السعر الشهري (ر.س)<input id="planPrice" type="number" min="0" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="69"></label>
+            <label style="font-size:.82rem;flex:1;">السعر السنوي (ر.س)<input id="planPriceYearly" type="number" min="0" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="اختياري"></label>
+            <label style="font-size:.82rem;flex:1;">وسم<input id="planBadge" class="admin-search" style="width:100%;margin-top:.2rem;" placeholder="موصى به / الأكثر طلباً"></label>
           </div>
+          <input type="hidden" id="planPeriod" value="شهرياً">
           <label style="font-size:.82rem;">المميزات (سطر لكل ميزة)<textarea id="planFeatures" class="admin-search" rows="5" style="width:100%;margin-top:.2rem;resize:vertical;" placeholder="ميزة&#10;ميزة&#10;ميزة"></textarea></label>
           <label style="font-size:.82rem;">الأدوات المشمولة</label>
           <div id="planTools" style="display:flex;flex-wrap:wrap;gap:.5rem;"></div>
@@ -1119,7 +1129,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js?v=41"></script>
+<script src="../assets/api.js?v=44"></script>
 <script>
 // ─── Notifications ────────────────────────────────────────────────────────────
 let notifications = JSON.parse(localStorage.getItem('admin_notifs') || '[]');
@@ -1578,6 +1588,19 @@ async function openAssistantStore(id) {
       ${row('آخر مزامنة', s.last_synced_at?fmt(s.last_synced_at):'—')}
     </div>
     ${rep.summary?`<div style="background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.7rem;font-size:.85rem;line-height:1.7;margin-bottom:1rem;">${e(rep.summary)}</div>`:''}
+    ${(function(){
+      const act = s.subscription_until && new Date(s.subscription_until) > new Date();
+      return `<div style="background:var(--bg);border:1px solid var(--accent);border-radius:10px;padding:.9rem;margin-bottom:1.1rem;">
+        <h3 style="font-size:.95rem;margin:0 0 .4rem;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> اشتراك العميل</h3>
+        <div style="font-size:.84rem;margin-bottom:.55rem;color:${act?'#22c55e':'var(--ink-dim)'};">${act ? ('مشترك حتى ' + fmt(s.subscription_until) + (s.plan_name ? ' · ' + e(s.plan_name) : '')) : 'غير مشترك (تجربة مجانية أو منتهية)'}</div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;">
+          <input id="subPlan" placeholder="اسم الباقة" value="${e(s.plan_name||'')}" style="background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.4rem .6rem;color:var(--ink);font-family:var(--font-arabic);min-width:140px;">
+          <input id="subDays" type="number" value="30" min="1" style="width:80px;background:var(--bg-card);border:1px solid var(--line-strong);border-radius:8px;padding:.4rem .6rem;color:var(--ink);font-family:var(--font-arabic);"> <span style="font-size:.8rem;color:var(--ink-dim);">يوم</span>
+          <button class="action-btn" style="background:var(--accent);color:#fff;" onclick="grantSub(${s.user_id})">تفعيل / تمديد</button>
+          ${act ? `<button class="action-btn" onclick="cancelSub(${s.user_id})">إلغاء الاشتراك</button>` : ''}
+        </div>
+      </div>`;
+    })()}
     ${insPanel}
     <h3 style="font-size:.95rem;margin:.6rem 0;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> التنبيهات (${(d.alerts||[]).length})</h3>
     ${(d.alerts||[]).map(a=>`<div style="font-size:.82rem;color:var(--ink-dim);padding:.25rem 0;">• ${e(a.message)}</div>`).join('') || '<div style="color:var(--ink-dim);font-size:.85rem;">لا تنبيهات.</div>'}
@@ -1588,6 +1611,17 @@ async function openAssistantStore(id) {
   `;
 }
 
+async function grantSub(uid) {
+  const plan = (document.getElementById('subPlan').value || '').trim();
+  const days = parseInt(document.getElementById('subDays').value) || 30;
+  try { await api.admin.subscribeUser(uid, { plan, days }); showToast && showToast('تم تفعيل الاشتراك ' + days + ' يوم', 'success'); openAssistantStore(_asAdminStoreId); }
+  catch (e) { showError('خطأ', e.message); }
+}
+async function cancelSub(uid) {
+  if (!confirm('إلغاء اشتراك هذا العميل؟')) return;
+  try { await api.admin.unsubscribeUser(uid); showToast && showToast('أُلغي الاشتراك', 'success'); openAssistantStore(_asAdminStoreId); }
+  catch (e) { showError('خطأ', e.message); }
+}
 async function asAddInsight() {
   if (!_asAdminStoreId) return;
   const body = (document.getElementById('asInsBody').value || '').trim();
@@ -2538,6 +2572,8 @@ function renderToolSettings() {
       <div style="flex-basis:100%;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;padding-top:.6rem;border-top:1px dashed var(--line);margin-top:.2rem;">
         <label style="display:flex;align-items:center;gap:.4rem;white-space:nowrap;"><span style="font-size:.82rem;">السعر:</span>
           <input type="number" id="price_${t.tool_name}" value="${t.price ?? ''}" min="0" placeholder="ر.س" style="width:90px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-size:.85rem;" onchange="saveToolSettings('${t.tool_name}')"></label>
+        <label style="display:flex;align-items:center;gap:.4rem;white-space:nowrap;" title="مدة التجربة المجانية لهذه الأداة بالأيام. فارغ = استخدم الافتراضي العام · 0 = مفتوحة دائماً"><span style="font-size:.82rem;">تجربة (يوم):</span>
+          <input type="number" id="trial_${t.tool_name}" value="${t.trial_days ?? ''}" min="0" max="3650" placeholder="افتراضي" style="width:90px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-size:.85rem;" onchange="saveToolSettings('${t.tool_name}')"></label>
         <label style="display:flex;align-items:center;gap:.4rem;white-space:nowrap;"><span style="font-size:.82rem;">وسم:</span>
           <input type="text" id="badge_${t.tool_name}" value="${(t.badge||'').replace(/"/g,'&quot;')}" placeholder="جديد / الأكثر طلباً" style="width:130px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem;color:var(--ink);font-size:.85rem;" onchange="saveToolSettings('${t.tool_name}')"></label>
         <label style="display:flex;align-items:center;gap:.4rem;flex:1;min-width:220px;"><span style="font-size:.82rem;white-space:nowrap;">المميزات:</span>
@@ -2556,14 +2592,22 @@ async function saveToolSettings(toolName) {
   const badge = document.getElementById(`badge_${toolName}`)?.value;
   const featuresRaw = document.getElementById(`features_${toolName}`)?.value || '';
   const features = featuresRaw.split(/[،,]/).map(x => x.trim()).filter(Boolean);
-  await api.admin.updateToolSettings(toolName, { is_paid, daily_free_limit, status, price, badge, features }).catch(err => showError('خطأ', err.message));
+  const trialRaw = document.getElementById(`trial_${toolName}`)?.value;
+  const trial_days = (trialRaw === '' || trialRaw == null) ? '' : parseInt(trialRaw);
+  await api.admin.updateToolSettings(toolName, { is_paid, daily_free_limit, status, price, badge, features, trial_days }).catch(err => showError('خطأ', err.message));
   const saved = document.getElementById(`saved_${toolName}`);
   if (saved) { saved.style.opacity = 1; setTimeout(() => saved.style.opacity = 0, 2000); }
 }
 
 // ─── الباقات والأسعار ───
 let _plans = [];
+async function saveTrialDays() {
+  const v = parseInt(document.getElementById('trialDaysInput').value);
+  try { const r = await api.admin.setTrialDays(isNaN(v) ? 0 : v); showToast && showToast('تم حفظ مدة التجربة: ' + r.trialDays + ' يوم', 'success'); }
+  catch (e) { showError('خطأ', e.message); }
+}
 async function loadPlans() {
+  try { const t = await api.admin.getTrialDays(); const inp = document.getElementById('trialDaysInput'); if (inp) inp.value = t.trialDays; } catch {}
   if (!_toolSettings.length) { try { _toolSettings = await api.admin.toolSettings(); } catch {} }
   _plans = await api.admin.plans().catch(() => []);
   const el = document.getElementById('plansList');
@@ -2591,6 +2635,7 @@ function openPlanModal(id) {
   document.getElementById('planId').value = p ? p.id : '';
   document.getElementById('planName').value = p ? p.name : '';
   document.getElementById('planPrice').value = p && p.price != null ? p.price : '';
+  document.getElementById('planPriceYearly').value = p && p.price_yearly != null ? p.price_yearly : '';
   document.getElementById('planPeriod').value = p ? (p.period || 'شهرياً') : 'شهرياً';
   document.getElementById('planBadge').value = p ? (p.badge || '') : '';
   document.getElementById('planFeatures').value = p && p.features ? p.features.join('\n') : '';
@@ -2608,6 +2653,7 @@ async function savePlan() {
   const data = {
     name: document.getElementById('planName').value.trim(),
     price: document.getElementById('planPrice').value,
+    price_yearly: document.getElementById('planPriceYearly').value,
     period: document.getElementById('planPeriod').value.trim(),
     badge: document.getElementById('planBadge').value.trim(),
     features: document.getElementById('planFeatures').value.split('\n').map(x => x.trim()).filter(Boolean),
@@ -2756,6 +2802,15 @@ updateGradientPreview();
 renderNotifs();
 checkNotifications();
 </script>
-<script src="../assets/header.js?v=16"></script>
+<script src="../assets/header.js?v=17"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

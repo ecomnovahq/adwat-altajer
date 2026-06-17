@@ -369,6 +369,7 @@ function renderDash(d) {
   const datesEl = document.getElementById('asSparkDates');
   datesEl.innerHTML = '';
   renderScoreChart(snapRows);
+  renderForecast(snapRows, s.target_score);
   if (snapRows.length > 1) {
     const sameDay = new Date(snapRows[0].created_at).toDateString() === new Date(snapRows[snapRows.length-1].created_at).toDateString();
     const fmtD = ts => { try { const dd = new Date(ts); return sameDay ? dd.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}) : dd.toLocaleDateString('ar-EG',{day:'numeric',month:'short'}); } catch(_){ return ''; } };
@@ -422,6 +423,10 @@ function renderDash(d) {
   renderVisuals(cats);
   renderAchievements(d);
   renderExpertInsights(d);
+  renderSmartInsights(d);
+  _gaPromise = null; // إعادة جلب بيانات GA لكل تحميل
+  renderHero(d);
+  renderOverviewVisits();
   renderBell();
   refreshBell();
   loadGa();
@@ -453,6 +458,46 @@ function renderStats(prods, cats) {
     + kpiCard({ k: '#3b82f6', ic: IC.tag, value: `<span style="font-size:1.1rem">${avg||'—'}</span>`, label: 'متوسط السعر (ر.س)', delta: '' })
     + kpiCard({ k: '#3b82f6', ic: IC.tag, value: `<span style="font-size:1rem">${prices.length?min+'-'+max:'—'}</span>`, label: 'نطاق السعر', delta: '' })
     + kpiCard({ k: (n-withDesc) ? '#ef4444' : '#22c55e', ic: IC.bag, value: (n - withDesc), label: 'بحاجة وصف', delta: '' });
+}
+
+// ─── توقّع مسار التقييم (انحدار خطّي على اللقطات التاريخية) ───
+function renderForecast(rows, target) {
+  const el = document.getElementById('asForecast'); if (!el) return;
+  if (!rows || rows.length < 2) { el.innerHTML = ''; return; }
+  // نقاط (أيام منذ أول لقطة, التقييم)
+  const t0 = new Date(rows[0].created_at).getTime();
+  const pts = rows.map(r => [(new Date(r.created_at).getTime() - t0) / 86400000, r.score]);
+  const n = pts.length;
+  const sx = pts.reduce((a, p) => a + p[0], 0), sy = pts.reduce((a, p) => a + p[1], 0);
+  const sxx = pts.reduce((a, p) => a + p[0] * p[0], 0), sxy = pts.reduce((a, p) => a + p[0] * p[1], 0);
+  const denom = n * sxx - sx * sx;
+  const cur = rows[rows.length - 1].score;
+  const lastDay = pts[n - 1][0];
+  let html = '';
+  if (Math.abs(denom) < 1e-6) { el.innerHTML = ''; return; }
+  const slope = (n * sxy - sx * sy) / denom;          // نقاط/يوم
+  const intercept = (sy - slope * sx) / n;
+  const per30 = slope * 30;
+  const proj30 = Math.max(0, Math.min(100, Math.round(intercept + slope * (lastDay + 30))));
+  const trendCol = per30 > 1 ? '#22c55e' : per30 < -1 ? '#ef4444' : 'var(--ink-dim)';
+  const arrow = per30 > 1 ? '▲' : per30 < -1 ? '▼' : '◆';
+  let line = `<span style="color:${trendCol};font-weight:700;">${arrow} بالوتيرة الحالية: ${proj30}/100 خلال 30 يوم</span> (${per30 >= 0 ? '+' : ''}${Math.round(per30)} نقطة/شهر تقريبًا)`;
+  // متى نصل للهدف؟
+  if (target && cur < target) {
+    if (slope > 0.05) {
+      const daysToTarget = Math.ceil((target - cur) / slope);
+      if (daysToTarget <= 365) line += `<br><span style="color:var(--accent);">تصل لهدفك (${target}) خلال ~${daysToTarget} يوم بالوتيرة الحالية.</span>`;
+      else line += `<br><span style="color:#d97706;">الوتيرة الحالية بطيئة جدًا لبلوغ هدفك (${target}) — كثّف التحسينات.</span>`;
+    } else {
+      line += `<br><span style="color:#d97706;">تقييمك لا يتقدّم نحو هدفك (${target}) — راجع توصيات «أولوياتك».</span>`;
+    }
+  } else if (target && cur >= target) {
+    line += `<br><span style="color:#22c55e;">تجاوزت هدفك (${target}) — ارفع الهدف للحفاظ على الزخم.</span>`;
+  }
+  html = `<div style="font-size:.8rem;line-height:1.8;background:var(--bg-card);border:1px solid var(--line);border-radius:8px;padding:.5rem .7rem;">
+    <div style="display:flex;align-items:center;gap:.35rem;font-weight:700;font-size:.78rem;margin-bottom:.2rem;color:var(--ink-dim);"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:.9em;height:.9em;"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 5-6"/></svg> توقّع المسار</div>
+    ${line}</div>`;
+  el.innerHTML = html;
 }
 
 // ─── مخطّط تطوّر التقييم (SVG: مساحة + خط + نقاط + قيم + تواريخ) ───
@@ -723,6 +768,183 @@ function compareThis(url) {
 }
 
 // ─── صحة المتجر + أولويات هذا الأسبوع (توجيه ذكي مشتق من البيانات) ───
+// جلب GA مرة واحدة لكل تحميل (يتشاركه كرت الملخّص وكرت الزيارات)
+let _gaPromise = null;
+function getGa() {
+  if (!_gaPromise) _gaPromise = (async () => {
+    let st; try { st = await api.gaStatus(); } catch { return { connected: false }; }
+    if (!st || !st.connected) return { connected: false };
+    let report = null; try { report = await api.gaReport(); } catch { /* skip */ }
+    return { connected: true, report };
+  })();
+  return _gaPromise;
+}
+
+// ─── كرت الملخّص العصري (بروح «مساعد النمو») ───
+let _heroData = null, _heroMode = 'score';
+async function renderHero(d) {
+  const card = document.getElementById('asHero'); if (!card) return;
+  const s = d.store || {}; const rep = s.latest_report || {};
+  if (!s.store_url) { card.style.display = 'none'; return; }
+  card.style.display = '';
+  const mEl = document.getElementById('asHeroMonth'); if (mEl) mEl.textContent = new Date().toLocaleDateString('ar-EG', { month: 'long' }) + ' ' + new Date().getFullYear();
+  const prods = _allProds || (d.products || []);
+  const sn = (d.snapshots || []).filter(x => x.score != null);
+  _heroData = {
+    score: sn.map(x => ({ v: x.score, d: x.created_at })),
+    products: sn.map(x => ({ v: (x.report && x.report.metrics && x.report.metrics.products), d: x.created_at })).filter(p => p.v != null),
+    productsCount: rep.productsCount ?? prods.length,
+  };
+  renderHeroChart();
+  // أيقونات SVG
+  const icUsers = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>';
+  const icStar = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+  const icBag = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>';
+  const badge = (kc, svg, n, l) => `<div class="as-hero-kpi"><div class="as-hero-kpi-badge" style="--kc:${kc}">${svg}</div><div><div class="as-hero-kpi-n">${n}</div><div class="as-hero-kpi-l">${l}</div></div></div>`;
+  const kpisEl = document.getElementById('asHeroKpis');
+  const ga = await getGa();
+  const visits = (ga.connected && ga.report) ? (ga.report.users || 0).toLocaleString('en-US') : '—';
+  kpisEl.innerHTML =
+      badge('var(--accent)', icUsers, visits, ga.connected ? 'الزيارات (آخر فترة)' : 'الزيارات — اربط GA')
+    + badge(sc(s.latest_score), icStar, (s.latest_score ?? '—'), 'التقييم العام')
+    + badge('#3b82f6', icBag, (_heroData.productsCount || 0).toLocaleString('en-US'), 'المنتجات');
+  // شريط الهدف
+  const goalEl = document.getElementById('asHeroGoal');
+  if (s.target_score) {
+    const p = Math.min(100, Math.round((s.latest_score || 0) / s.target_score * 100));
+    goalEl.innerHTML = `<div class="as-hero-goal-top"><span>هدف التقييم: <b style="color:var(--accent)">${p}%</b></span><span style="color:var(--ink-dim);">${s.latest_score || 0} / ${s.target_score} <span style="cursor:pointer;color:var(--accent);" onclick="switchTab('settings')" title="تعديل الهدف">✎</span></span></div><div class="as-hero-goal-bar"><div class="as-hero-goal-fill" style="width:${p}%"></div></div>`;
+  } else {
+    goalEl.innerHTML = `<div class="as-hero-goal-top"><span style="color:var(--ink-dim);">حدّد هدف تقييم لمتجرك لتتابع تقدّمك شهريًا</span><button class="copy-icon-btn" onclick="switchTab('settings')">تحديد هدف</button></div>`;
+  }
+  // دعوة لإجراء
+  document.getElementById('asHeroCta').innerHTML = `<div class="as-hero-cta-txt">فريق الخبراء يأخذ بيدك خطوة بخطوة لرفع تقييم متجرك ومبيعاتك.</div><button class="btn-primary" style="padding:.5rem 1.2rem;white-space:nowrap;" onclick="switchTab('analysis')">أطلق حملتك</button>`;
+}
+function renderHeroChart() {
+  const el = document.getElementById('asHeroChart'); if (!el || !_heroData) return;
+  const pts = (_heroMode === 'products' ? _heroData.products : _heroData.score) || [];
+  const label = _heroMode === 'products' ? 'عدد المنتجات عبر المزامنات' : 'تطوّر التقييم عبر المزامنات';
+  if (pts.length < 2) {
+    el.innerHTML = `<div class="as-hero-cap">${label}</div><div style="margin:auto;text-align:center;color:var(--ink-dim);font-size:.82rem;line-height:1.8;padding:1.2rem 0;">يظهر المخطّط بعد مزامنتين أو أكثر<br><span style="font-size:.74rem;">كل مزامنة تُضيف عمودًا جديدًا</span></div>`;
+    return;
+  }
+  const show = pts.slice(-8); // آخر 8 نقاط
+  const vals = show.map(p => p.v), max = Math.max(...vals), min = Math.min(...vals), span = Math.max(1, max - min);
+  const fmtD = d => { try { return new Date(d).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' }); } catch { return ''; } };
+  const cols = show.map((p, i) => {
+    const h = Math.round(35 + ((p.v - min) / span) * 65);
+    return `<div class="as-hero-col"><div class="as-hero-col-v">${p.v}</div><div class="as-hero-col-track"><div class="as-hero-bar${i === show.length - 1 ? ' peak' : ''}" style="height:${h}%"></div></div><div class="as-hero-col-d">${e(fmtD(p.d))}</div></div>`;
+  }).join('');
+  el.innerHTML = `<div class="as-hero-cap">${label}</div><div class="as-hero-bars">${cols}</div>`;
+}
+function setHeroChart(mode) {
+  _heroMode = mode;
+  const b1 = document.getElementById('asHeroGScore'), b2 = document.getElementById('asHeroGProducts');
+  if (b1) b1.classList.toggle('active', mode === 'score');
+  if (b2) b2.classList.toggle('active', mode === 'products');
+  renderHeroChart();
+}
+
+// ─── الزيارات (Google Analytics) داخل لوحة النظرة العامة + ملاحظات ذكية ───
+async function renderOverviewVisits() {
+  const box = document.getElementById('asVisits'); if (!box) return;
+  const ga = await getGa();
+  if (!ga.connected) {
+    box.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;">
+      <div style="font-size:.85rem;color:var(--ink-dim);line-height:1.7;max-width:520px;">اربط Google Analytics لترى زيارات متجرك ومصادرها ومعدّل التحويل هنا مباشرة — ويستخدمها المساعد في تحليله.</div>
+      <button class="btn-primary" style="padding:.5rem 1.1rem;white-space:nowrap;" onclick="switchTab('performance')">ربط Google Analytics</button>
+    </div>`;
+    return;
+  }
+  try {
+    const r = ga.report;
+    if (!r) throw new Error('تعذّر جلب الزيارات الآن');
+    const dur = s => s >= 60 ? Math.floor(s / 60) + 'د ' + (s % 60) + 'ث' : (s || 0) + 'ث';
+    const convRate = r.sessions ? Math.round(r.conversions / r.sessions * 1000) / 10 : 0;
+    box.innerHTML = `<div class="as-kpis">
+        ${kpiCard({ k: 'var(--accent)', ic: IC.target, value: (r.users || 0).toLocaleString('en-US'), label: 'زائر' })}
+        ${kpiCard({ k: '#3b82f6', ic: IC.grid, value: (r.sessions || 0).toLocaleString('en-US'), label: 'جلسة' })}
+        ${kpiCard({ k: '#8b5cf6', ic: IC.file, value: (r.pageViews || 0).toLocaleString('en-US'), label: 'مشاهدة صفحة' })}
+        ${kpiCard({ k: convRate >= 1 ? '#22c55e' : '#f59e0b', ic: IC.check, value: (r.conversions || 0).toLocaleString('en-US'), label: `تحويل (${convRate}%)` })}
+      </div>
+      ${(r.sources || []).length ? `<div class="as-section-t" style="margin-top:.7rem;font-size:.85rem;">أعلى مصادر الزيارات</div><div style="display:flex;gap:.4rem;flex-wrap:wrap;">${r.sources.slice(0, 5).map(s => `<span style="font-size:.78rem;background:var(--bg-card);border:1px solid var(--line);border-radius:99px;padding:.2rem .7rem;">${e(s.name)} <b style="color:var(--accent)">${(s.sessions || 0).toLocaleString('en-US')}</b></span>`).join('')}</div>` : ''}
+      <div id="asVisitsSmart" style="margin-top:.6rem;font-size:.82rem;line-height:1.8;"></div>
+      <div style="text-align:left;margin-top:.5rem;"><span style="color:var(--ink-dim);font-size:.72rem;">${e(r.range || '')}</span></div>`;
+    animateCounts(box);
+    // ملاحظات ذكية على الزيارات
+    const bits = [];
+    if (r.bounceRate >= 60) bits.push(`<span style="color:#ef4444;">معدّل الارتداد مرتفع (${r.bounceRate}%) — حسّن سرعة المتجر وصفحات الهبوط.</span>`);
+    else if (r.bounceRate) bits.push(`معدّل الارتداد ${r.bounceRate}% · متوسط الجلسة ${dur(r.avgDuration)}.`);
+    if (r.sources && r.sources.length) bits.push(`أكثر مصدر: <b>${e(r.sources[0].name)}</b>.`);
+    if (r.sessions && convRate < 1) bits.push(`<span style="color:#f59e0b;">معدّل التحويل منخفض (${convRate}%) — راجع الأسعار والأوصاف وطرق الدفع.</span>`);
+    else if (convRate >= 2) bits.push(`<span style="color:#22c55e;">معدّل تحويل جيد (${convRate}%).</span>`);
+    const sm = document.getElementById('asVisitsSmart'); if (sm) sm.innerHTML = bits.join(' ');
+  } catch (err) {
+    box.innerHTML = `<div style="color:#f59e0b;font-size:.84rem;">${e(err.message || 'تعذّر جلب الزيارات')} <button class="copy-icon-btn" style="margin-inline-start:.4rem;" onclick="switchTab('performance')">إدارة الربط</button></div>`;
+  }
+}
+
+// ─── نظرة ذكية: مؤشّرات محسوبة من البيانات (فورية، بلا تكلفة ذكاء) ───
+function renderSmartInsights(d) {
+  const kpisEl = document.getElementById('asSmartKpis'), sumEl = document.getElementById('asSmartSummary');
+  if (!kpisEl) return;
+  const prods = _allProds || (d.products || []);
+  const n = prods.length;
+  const card = document.getElementById('asSmartCard');
+  if (!n) { if (card) card.style.display = 'none'; return; }
+  if (card) card.style.display = '';
+  const pct = x => Math.round(x / n * 100);
+  const withDesc = prods.filter(p => p.has_description).length;
+  const withImg = prods.filter(p => prodImages(p).length).length;
+  const withSeo = prods.filter(p => p.seo).length;
+  const withCat = prods.filter(p => p.category).length;
+  // اكتمال المحتوى المركّب (وصف + صورة + SEO)
+  const completion = Math.round((pct(withDesc) + pct(withImg) + pct(withSeo)) / 3);
+  const cCol = completion >= 80 ? '#22c55e' : completion >= 50 ? '#f59e0b' : '#ef4444';
+  // أكبر فرصة: البُعد الأكثر نقصًا
+  const gaps = [
+    { k: 'وصف', miss: n - withDesc, act: "switchTab('analysis')" },
+    { k: 'صورة', miss: n - withImg, act: "switchTab('products');var f=document.getElementById('asProdFilter');if(f){f.value='noimg';renderProds(1);}" },
+    { k: 'SEO', miss: n - withSeo, act: "switchTab('analysis')" },
+    { k: 'تصنيف', miss: n - withCat, act: "switchTab('products')" },
+  ].sort((a, b) => b.miss - a.miss);
+  const top = gaps[0];
+  // اتجاه التقييم منذ آخر مزامنة
+  const sn = (d.snapshots || []).filter(x => x.score != null);
+  const score = d.store.latest_score ?? (sn.length ? sn[sn.length - 1].score : null);
+  const prev = sn.length > 1 ? sn[sn.length - 2].score : null;
+  const delta = (prev != null && score != null) ? score - prev : null;
+  const dCol = delta == null ? 'var(--ink-dim)' : delta > 0 ? '#22c55e' : delta < 0 ? '#ef4444' : 'var(--ink-dim)';
+  const dTxt = delta == null ? 'أول مزامنة' : delta > 0 ? `▲ +${delta}` : delta < 0 ? `▼ ${delta}` : '= ثابت';
+  // أضعف قسم اكتمالًا (≥3 منتجات)
+  const byCat = {};
+  prods.forEach(p => { const c = p.category || 'بدون قسم'; (byCat[c] = byCat[c] || []).push(p); });
+  let weakCat = null;
+  Object.entries(byCat).forEach(([c, arr]) => {
+    if (arr.length < 3 || c === 'بدون قسم') return;
+    const comp = Math.round(arr.filter(p => p.has_description && prodImages(p).length).length / arr.length * 100);
+    if (!weakCat || comp < weakCat.comp) weakCat = { c, comp, count: arr.length };
+  });
+
+  kpisEl.innerHTML =
+      kpiCard({ k: cCol, ic: IC.check, value: completion + '%', label: 'اكتمال المحتوى (وصف·صورة·SEO)' })
+    + kpiCard({ k: top.miss ? '#f59e0b' : '#22c55e', ic: IC.bag, value: top.miss, label: top.miss ? `الأكبر فرصة: بلا ${top.k}` : 'لا فجوات منتجات' })
+    + kpiCard({ k: dCol, ic: IC.target, value: (score ?? '—'), label: `التقييم ${dTxt} منذ آخر مزامنة` })
+    + (weakCat
+        ? kpiCard({ k: weakCat.comp < 50 ? '#ef4444' : '#f59e0b', ic: IC.grid, value: weakCat.comp + '%', label: `أضعف قسم: ${weakCat.c}` })
+        : kpiCard({ k: '#22c55e', ic: IC.grid, value: Object.keys(byCat).length, label: 'عدد الأقسام' }));
+  animateCounts(kpisEl);
+
+  // جملة ذكية مركّبة + زر إجراء لأكبر فرصة
+  if (sumEl) {
+    const bits = [];
+    if (delta != null && delta !== 0) bits.push(delta > 0 ? `تقييمك تحسّن <b style="color:#22c55e">${delta}+</b> نقطة منذ آخر مزامنة` : `تقييمك تراجع <b style="color:#ef4444">${delta}</b> نقطة — انتبه`);
+    if (top.miss) bits.push(`<b>${top.miss}</b> منتج بلا ${top.k} (${pct(top.miss)}%) — أكبر فرصة نمو الآن`);
+    if (weakCat && weakCat.comp < 60) bits.push(`قسم «${e(weakCat.c)}» الأضعف اكتمالًا (${weakCat.comp}%)`);
+    const line = bits.length ? bits.join(' · ') : 'متجرك في حالة جيدة — كل المؤشّرات مكتملة.';
+    sumEl.innerHTML = `${line} ${top.miss ? `<button class="as-prod-ask" style="display:inline-block;width:auto;padding:.25rem .8rem;margin-inline-start:.4rem;" onclick="${top.act}">عالج الآن</button>` : ''}`;
+  }
+}
+
 // تحليل الخبير البشري (يُغذّى من لوحة التحكم)
 function renderExpertInsights(d) {
   const card = document.getElementById('asExpertCard'), list = document.getElementById('asExpertList');
@@ -1537,6 +1759,39 @@ async function trackFromCompare(url) {
 }
 
 // ─── تصدير تقرير PDF ───
+// تحليل التسعير الذكي مقابل السوق
+async function runPricingAnalysis() {
+  const out = document.getElementById('asPricingOut'), btn = document.getElementById('asPricingBtn');
+  if (!out) return;
+  if (btn) { btn.disabled = true; btn.textContent = 'جارٍ التحليل…'; }
+  out.innerHTML = '<div style="text-align:center;padding:1.5rem;color:var(--ink-dim);">جارٍ سحب أسعار السوق وتحليلها… (قد يستغرق دقيقة-دقيقتين)</div>';
+  try {
+    const r = await api.asstPricing();
+    const posMeta = { above: ['أسعارك أعلى من السوق', '#ef4444'], below: ['أسعارك أقل من السوق', '#f59e0b'], aligned: ['أسعارك متوافقة مع السوق', '#22c55e'] };
+    const [pTxt, pCol] = posMeta[r.position] || posMeta.aligned;
+    const mx = Math.max(r.myStats.avg, r.marketStats.avg, 1);
+    const bar = (lbl, val, col) => `<div style="margin:.35rem 0;"><div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.2rem;"><span>${lbl}</span><b style="color:${col}">${val} ر.س</b></div><div style="height:8px;background:var(--line);border-radius:99px;overflow:hidden;"><div style="height:100%;width:${Math.round(val / mx * 100)}%;background:${col};border-radius:99px;"></div></div></div>`;
+    const prodRows = (r.products || []).map(p => `<tr>
+      <td style="padding:.4rem .5rem;border-top:1px solid var(--line);">${e(p.name)}</td>
+      <td style="padding:.4rem .5rem;border-top:1px solid var(--line);white-space:nowrap;">${e(String(p.current ?? '—'))}</td>
+      <td style="padding:.4rem .5rem;border-top:1px solid var(--line);white-space:nowrap;color:var(--accent);font-weight:700;">${e(String(p.suggestion ?? '—'))}</td>
+      <td style="padding:.4rem .5rem;border-top:1px solid var(--line);color:var(--ink-dim);font-size:.8rem;">${e(p.reason || '')}</td>
+    </tr>`).join('');
+    out.innerHTML = `
+      <div style="display:inline-block;font-weight:700;font-size:.85rem;color:${pCol};background:${pCol}1a;border-radius:99px;padding:.2rem .8rem;margin-bottom:.5rem;">${pTxt}</div>
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;margin-bottom:.6rem;">
+        ${bar('متوسط أسعارك', r.myStats.avg, 'var(--accent)')}
+        ${bar('متوسط السوق', r.marketStats.avg, '#3b82f6')}
+        <div style="font-size:.74rem;color:var(--ink-dim);margin-top:.4rem;">مقارنة مع: ${(r.competitors || []).map(e).join('، ')} · عيّنة السوق ${r.marketStats.count} سعر</div>
+      </div>
+      ${r.summary ? `<p style="font-size:.88rem;line-height:1.8;margin:.2rem 0 .6rem;">${e(r.summary)}</p>` : ''}
+      ${(r.categoryNotes || []).length ? `<ul class="as-list">${r.categoryNotes.map(x => `<li>${e(x)}</li>`).join('')}</ul>` : ''}
+      ${prodRows ? `<div style="overflow-x:auto;margin-top:.5rem;"><table style="width:100%;border-collapse:collapse;font-size:.85rem;"><thead><tr style="color:var(--ink-dim);font-size:.76rem;text-align:start;"><th style="padding:.3rem .5rem;text-align:start;">المنتج</th><th style="padding:.3rem .5rem;text-align:start;">الحالي</th><th style="padding:.3rem .5rem;text-align:start;">المقترح</th><th style="padding:.3rem .5rem;text-align:start;">السبب</th></tr></thead><tbody>${prodRows}</tbody></table></div>` : ''}
+      ${(r.actions || []).length ? `<div class="as-section-t" style="margin-top:.7rem;font-size:.85rem;">خطوات عملية</div><ul class="as-list">${r.actions.map(x => `<li>${e(x)}</li>`).join('')}</ul>` : ''}`;
+  } catch (err) {
+    out.innerHTML = `<div style="color:#ef4444;font-size:.85rem;padding:1rem;">${e(err.message || 'تعذّر التحليل')}</div>`;
+  } finally { if (btn) { btn.disabled = false; btn.textContent = 'حلّل الأسعار'; } }
+}
 // مشاركة ملخص المتجر عبر واتساب
 function shareReportWhatsApp() {
   const d = _lastData; if (!d || !d.store) { showError('لا بيانات', 'زامن متجرك أولاً'); return; }

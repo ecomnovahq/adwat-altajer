@@ -72,6 +72,22 @@ db.query(`
   )
 `).catch(e => logger.error('plans init error:', e.message));
 
+// إعدادات عامة (مفتاح/قيمة) — تُستخدم لمدة التجربة المجانية وغيرها
+db.query(`
+  CREATE TABLE IF NOT EXISTS app_config (
+    key   VARCHAR(60) PRIMARY KEY,
+    value TEXT
+  )
+`).then(() => db.query(`INSERT INTO app_config (key,value) VALUES ('trial_days','7') ON CONFLICT (key) DO NOTHING`))
+  .catch(e => logger.error('app_config init error:', e.message));
+// اشتراك المستخدم: تاريخ انتهاء الاشتراك + اسم الباقة (يضبطهما الأدمن عند الترقية)
+db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_until TIMESTAMPTZ`).catch(() => {});
+db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS plan_name VARCHAR(120)`).catch(() => {});
+// مدة تجربة مجانية لكل أداة على حدة (null = استخدم الافتراضي العام trial_days)
+db.query(`ALTER TABLE tool_settings ADD COLUMN IF NOT EXISTS trial_days INTEGER`).catch(() => {});
+// سعر سنوي اختياري للباقة (للتبديل شهري/سنوي وحساب الخصم)
+db.query(`ALTER TABLE plans ADD COLUMN IF NOT EXISTS price_yearly NUMERIC`).catch(() => {});
+
 db.query(`
   CREATE TABLE IF NOT EXISTS tool_logs (
     id          SERIAL PRIMARY KEY,

@@ -965,6 +965,16 @@ async function checkToolPermission(userId, toolName, userToolsAccess) {
       return { allowed: false, code: 'TOOL_COMING', toolName, displayName: dn,
         message: 'هذه الأداة قادمة قريباً، ترقّبها!' };
 
+    // 2.5) بوابة الاشتراك/التجربة المجانية — تُقفل بعد انتهاء التجربة (إلا المشترك/الأدمن)
+    try {
+      const { subscriptionState } = require('../subscription');
+      const ur = (await db.query('SELECT is_admin, created_at, subscription_until, plan_name FROM users WHERE id=$1', [userId])).rows[0];
+      const sub = await subscriptionState(ur, { trialDays: (s.trial_days != null ? s.trial_days : undefined) });
+      if (sub.locked && explicit !== true)
+        return { allowed: false, code: 'TRIAL_ENDED', toolName, displayName: dn, trialEndsAt: sub.trialEndsAt,
+          message: 'انتهت فترتك المجانية. رقّ باقتك لمواصلة استخدام الأدوات.' };
+    } catch { /* لا تمنع عند خطأ غير متوقع */ }
+
     // 3) مدفوعة (تحتاج إذن صريح)
     if (s.is_paid && explicit !== true)
       return { allowed: false, code: 'TOOL_PAID', toolName, displayName: dn,
@@ -999,8 +1009,16 @@ router.get('/settings', ar(async (req, res) => {
 
 // باقات الاشتراك المفعّلة (عرض عام)
 router.get('/plans', ar(async (req, res) => {
-  const { rows } = await db.query('SELECT id,name,price,period,badge,features,tools FROM plans WHERE active=true ORDER BY sort_order ASC, id ASC');
+  const { rows } = await db.query('SELECT id,name,price,price_yearly,period,badge,features,tools FROM plans WHERE active=true ORDER BY sort_order ASC, id ASC');
   res.json(rows);
+}));
+
+// حالة اشتراك المستخدم الحالي + الباقات (للبانر ونافذة الترقية)
+router.get('/subscription', auth, ar(async (req, res) => {
+  const { subscriptionState } = require('../subscription');
+  const st = await subscriptionState(req.user);
+  const plans = (await db.query('SELECT id,name,price,price_yearly,period,badge,features,tools FROM plans WHERE active=true ORDER BY sort_order ASC, id ASC')).rows;
+  res.json({ ...st, plans });
 }));
 
 // ─── 15-Layer AI Call Functions ───────────────────────────────────────────────

@@ -387,6 +387,8 @@ async function scrapeStoreFull(rawUrl, { limit = 100, onProgress } = {}) {
         ...pageUrls.filter(u => pageKind(u) === 'أقسام').map(u => ({ name: slugToName(u), href: u })),
       ];
       const br = await crawlWithBrowser(base, cap, seedCats);
+      // ادمج HTML المعروض بعد JS (يحوي الفوتر: أيقونات الدفع + التوثيق) ليراه الفحص التقني
+      if (br.homeHtml && br.homeHtml.length > 500) info.html = (info.html || '') + '\n<!--rendered-->\n' + br.homeHtml;
       (br.products || []).forEach(p => {
         browserMap.set(p.url, p);
         if (!urlCategory.has(p.url) && p.category) urlCategory.set(p.url, p.category);
@@ -431,6 +433,24 @@ async function scrapeStoreFull(rawUrl, { limit = 100, onProgress } = {}) {
   prog(90, 'مراجعة البيانات: إزالة التكرار واسترجاع الصور/الأوصاف…');
   // مراجعة وتنظيف: دمج المكرّرات + استرجاع الصورة/الوصف من النسخة الأغنى
   const cleanProducts = dedupeProducts(products);
+  // إثراء المنتجات الناقصة (بلا صورة ووصف) عبر المتصفّح — صفحات منتجات تُبنى بالـJS بلا JSON-LD
+  try {
+    const bare = cleanProducts.filter(p => !p.image && !(p.images && p.images.length) && !p.hasDescription).map(p => p.url).filter(Boolean);
+    if (bare.length) {
+      prog(93, `إثراء ${Math.min(bare.length, 15)} منتج ناقص عبر المتصفّح…`);
+      const { enrichProductsWithBrowser } = require('./browser-scraper');
+      const enriched = await enrichProductsWithBrowser(bare, 15);
+      cleanProducts.forEach(p => {
+        const en = enriched[p.url]; if (!en) return;
+        if (!p.image && en.image) p.image = en.image;
+        if (en.images && en.images.length) p.images = [...new Set([...(p.images || []), ...en.images])];
+        if (!p.price && en.price) p.price = en.price;
+        if (!p.category && en.category) p.category = en.category;
+        if (!p.name && en.name) p.name = en.name;
+        if (!p.hasDescription && en.hasDescription) { p.description = en.description; p.hasDescription = true; }
+      });
+    }
+  } catch { /* best-effort */ }
   // الصفحات: اسم مقروء + رابط + نوع
   const pages = pageUrls.map(u => ({ url: u, name: browserPageNames[u] || slugToName(u), kind: pageKind(u) }));
   // الأقسام النهائية: من القائمة + من المنتجات المربوطة

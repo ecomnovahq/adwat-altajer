@@ -78,14 +78,14 @@ function auditStore(html, url) {
   ]);
 
   // ── الثقة والتوثيق ──
-  const maroof = /maroof|معروف/i.test(html);
+  const verified = /maroof|معروف|منصة الأعمال|مركز الأعمال|موثّ?ق|business\.sa|الأعمال السعودي|المركز السعودي/i.test(html);
   const trustBadges = /ضمان|مضمون|دفع آمن|secure.*payment|money.?back|آمن/i.test(html);
   const policies = /سياسة|الاستبدال|الاسترجاع|الخصوصية|privacy|return|refund|terms|الشروط/i.test(html);
   const contact = /تواصل|اتصل|whatsapp|wa\.me|tel:|mailto:|الهاتف|جوال/i.test(html);
-  const cr = /سجل تجاري|رقم السجل|commercial.?reg|الرقم الضريبي|vat|ضريب/i.test(html);
+  const cr = /سجل\s*(ال)?تجاري|رقم السجل|commercial.?reg|الرقم الضريبي|\bc\.?r\.?\s*\d|vat|ضريب/i.test(html);
   const trust = scoreChecks([
     { ok: https, w: 2, label: 'اتصال آمن (SSL)', fix: 'فعّل شهادة SSL (https) فوراً — أساسية للثقة والدفع.' },
-    { ok: maroof, w: 2, label: 'توثيق معروف', fix: 'وثّق متجرك في «معروف» وأضف الشارة — يرفع ثقة المتسوّق السعودي.' },
+    { ok: verified, w: 2, label: 'توثيق المتجر', fix: 'وثّق متجرك (معروف/منصة الأعمال) وأضف الشارة — يرفع ثقة المتسوّق السعودي.' },
     { ok: policies, w: 1, label: 'صفحات السياسات', fix: 'أضف صفحات: الاسترجاع، الخصوصية، الشروط.' },
     { ok: contact, w: 1, label: 'وسيلة تواصل واضحة', fix: 'أبرِز وسيلة تواصل (واتساب/هاتف).' },
     { ok: cr, w: 1, label: 'سجل تجاري/ضريبي', fix: 'أضف السجل التجاري والرقم الضريبي في الفوتر.' },

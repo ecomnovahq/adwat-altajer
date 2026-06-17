@@ -11,8 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=9">
-<link rel="stylesheet" href="../assets/assistant.css?v=6">
+<link rel="stylesheet" href="../assets/styles.css?v=11">
+<link rel="stylesheet" href="../assets/assistant.css?v=10">
 </head>
 <body>
 
@@ -125,6 +125,15 @@
             <div class="as-section-t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> تحليل الأسعار حسب القسم</div>
             <div id="asCatStats" style="font-size:.85rem;"></div>
           </div>
+          <!-- تحليل التسعير الذكي مقابل السوق (المنافسون) -->
+          <div class="as-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;">
+              <div class="as-section-t" style="margin:0;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg> تسعيرك مقابل السوق <span style="font-size:.7rem;background:var(--accent-soft);color:var(--accent);border-radius:99px;padding:0 .5rem;">ذكاء</span></div>
+              <button class="btn-primary" id="asPricingBtn" style="padding:.45rem .9rem;font-size:.82rem;" onclick="runPricingAnalysis()">حلّل الأسعار</button>
+            </div>
+            <p style="font-size:.8rem;color:var(--ink-dim);margin:.3rem 0 0;">يقارن أسعار منتجاتك بمتوسط أسعار منافسيك المتابَعين ويقترح تعديلات لكل منتج. (يتطلب إضافة منافسين في «مراقبة المنافسين»).</p>
+            <div id="asPricingOut" style="margin-top:.7rem;"></div>
+          </div>
           <div class="as-card">
             <div class="as-section-t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> أدوات القسم</div>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
@@ -170,6 +179,19 @@
 
         <!-- نظرة عامة -->
         <div class="as-tabpane" id="tab-overview">
+          <!-- كرت الملخّص العصري -->
+          <div class="as-card" id="asHero" style="display:none;">
+            <div class="as-hero-head">
+              <div class="as-hero-title"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg> ملخّص <span id="asHeroMonth"></span></div>
+              <div class="as-hero-toggle"><button id="asHeroGScore" class="active" onclick="setHeroChart('score')">التقييم</button><button id="asHeroGProducts" onclick="setHeroChart('products')">المنتجات</button></div>
+            </div>
+            <div class="as-hero-body">
+              <div class="as-hero-chart" id="asHeroChart"></div>
+              <div class="as-hero-kpis" id="asHeroKpis"></div>
+            </div>
+            <div class="as-hero-goal" id="asHeroGoal"></div>
+            <div class="as-hero-cta" id="asHeroCta"></div>
+          </div>
           <!-- صحة المتجر + أولويات هذا الأسبوع -->
           <div class="as-card" id="asHealthCard" style="background:linear-gradient(135deg,var(--accent-soft),transparent);">
             <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
@@ -190,6 +212,17 @@
             <div id="asExpertList" style="display:flex;flex-direction:column;gap:.6rem;"></div>
           </div>
           <div class="as-dash-grid">
+          <!-- نظرة ذكية: مؤشّرات محسوبة من البيانات -->
+          <div class="as-card span2" id="asSmartCard">
+            <div class="as-section-t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12c.5.5 1 1.5 1 3h6c0-1.5.5-2.5 1-3a7 7 0 0 0-4-12z"/><path d="M9.5 9.5 12 12l2.5-2.5"/></svg> نظرة ذكية</div>
+            <div id="asSmartSummary" style="font-size:.88rem;line-height:1.8;color:var(--ink);margin-bottom:.7rem;"></div>
+            <div class="as-kpis" id="asSmartKpis"></div>
+          </div>
+          <!-- الزيارات من Google Analytics (في اللوحة مباشرة) -->
+          <div class="as-card span2" id="asVisitsCard">
+            <div class="as-section-t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg> زيارات متجرك <span style="font-size:.7rem;background:var(--accent-soft);color:var(--accent);border-radius:99px;padding:0 .5rem;">Google Analytics</span></div>
+            <div id="asVisits"><div style="color:var(--ink-dim);font-size:.85rem;">جارٍ التحقق…</div></div>
+          </div>
           <div class="as-card span2">
             <div class="as-section-t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> إحصائيات متجرك</div>
             <div class="as-kpis" id="asStats"></div>
@@ -218,6 +251,7 @@
             <div id="asTrend" style="font-size:.85rem;margin-bottom:.6rem;color:var(--ink-dim);"></div>
             <div class="as-spark" id="asSpark" title="تطوّر التقييم"></div>
             <div id="asSparkDates" style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--ink-dim);margin-top:.4rem;"></div>
+            <div id="asForecast" style="margin-top:.6rem;"></div>
           </div>
           <div class="as-card">
             <div class="as-section-t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12c.5.5 1 1.5 1 3h6c0-1.5.5-2.5 1-3a7 7 0 0 0-4-12z"/></svg> توصيات المساعد</div>
@@ -415,8 +449,8 @@
 <!-- طبقة الجولة الترحيبية -->
 <div class="tour-ov" id="tourOv"><div class="tour-spot" id="tourSpot"></div><div class="tour-pop" id="tourPop"></div></div>
 
-<script src="../assets/api.js?v=41"></script>
-<script src="../assets/assistant.js?v=11"></script>
-<script src="../assets/header.js?v=16"></script>
+<script src="../assets/api.js?v=44"></script>
+<script src="../assets/assistant.js?v=18"></script>
+<script src="../assets/header.js?v=17"></script>
 </body>
 </html>

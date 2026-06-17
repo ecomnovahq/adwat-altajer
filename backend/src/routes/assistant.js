@@ -313,6 +313,13 @@ async function getAiQuota(userId) {
 }
 // يُرجع Error إن تجاوز الحد (للتعامل معه في المسار) أو {quota,used,remaining}
 async function aiQuotaGuard(userId) {
+  // بوابة الاشتراك/التجربة — تُقفل بعد انتهاء التجربة (إلا المشترك/الأدمن)
+  try {
+    const { subscriptionState } = require('../subscription');
+    const ur = (await db.query('SELECT is_admin, created_at, subscription_until, plan_name FROM users WHERE id=$1', [userId])).rows[0];
+    const sub = await subscriptionState(ur);
+    if (sub.locked) { const e = new Error('انتهت فترتك المجانية. رقّ باقتك لمواصلة استخدام مساعد التاجر.'); e.status = 402; e.code = 'TRIAL_ENDED'; return e; }
+  } catch { /* لا تمنع عند خطأ */ }
   const quota = await getAiQuota(userId);
   if (quota <= 0) return { quota: 0, used: 0, remaining: Infinity }; // 0 = غير محدود
   const used = await aiUsedThisMonth(userId);
@@ -1148,6 +1155,53 @@ router.post('/compare', auth, ar(async (req, res) => {
     summary: r.summary || '', pricing: r.pricing || '',
     advantages: r.advantages || [], gaps: r.gaps || [], plan: r.plan || [],
     competitorUrl: compUrl,
+  });
+}));
+
+// ─── تحليل التسعير الذكي: أسعار متجري مقابل متوسط السوق (المنافسون المتابَعون) ──
+router.post('/pricing-analysis', auth, ar(async (req, res) => {
+  const store = await resolveStore(req.user.id, reqStoreId(req));
+  if (!store) return res.status(400).json({ error: 'أضف متجرك أولاً' });
+  const q = await aiQuotaGuard(req.user.id); if (q instanceof Error) return res.status(q.status).json({ error: q.message });
+
+  const num = v => { const n = parseFloat(v); return !isNaN(n) && n > 0 ? n : null; };
+  const myProds = (await db.query('SELECT name,price,category FROM store_products WHERE store_id=$1 AND price IS NOT NULL', [store.id])).rows
+    .filter(p => num(p.price));
+  if (!myProds.length) return res.status(400).json({ error: 'لا أسعار لمنتجاتك بعد — زامن متجرك أولاً.' });
+
+  const comps = (await db.query('SELECT url,name FROM competitors WHERE store_id=$1 ORDER BY id ASC LIMIT 3', [store.id])).rows;
+  if (!comps.length) return res.status(400).json({ error: 'أضف منافسين في «مراقبة المنافسين» أولاً لمقارنة الأسعار.' });
+
+  let market = [];
+  for (const c of comps) {
+    try { const sc = await scrapeStoreFull(c.url, { limit: 40 }); (sc.products || []).forEach(p => { const n = num(p.price); if (n) market.push({ name: p.name, price: n }); }); }
+    catch { /* غير حرج */ }
+  }
+  if (market.length < 3) return res.status(502).json({ error: 'تعذّر سحب أسعار كافية من المنافسين، حاول لاحقاً.' });
+
+  const stats = arr => { const v = arr.slice().sort((a, b) => a - b); return { avg: Math.round(v.reduce((a, b) => a + b, 0) / v.length), min: v[0], max: v[v.length - 1], median: v[Math.floor(v.length / 2)], count: v.length }; };
+  const myStats = stats(myProds.map(p => num(p.price)));
+  const marketStats = stats(market.map(m => m.price));
+  const byCat = {}; myProds.forEach(p => { const n = num(p.price); const c = p.category || 'بدون قسم'; (byCat[c] = byCat[c] || []).push(n); });
+  const catAvgs = Object.entries(byCat).map(([c, a]) => `${c}: ${Math.round(a.reduce((x, y) => x + y, 0) / a.length)}`).slice(0, 12).join(' | ');
+
+  const prompt = `أنت محلل تسعير لمتجر تجزئة خليجي. قارن أسعار متجري بأسعار السوق (المنافسين) وأعطِ توصيات عملية بالريال السعودي.
+متجري — متوسط: ${myStats.avg} · أدنى: ${myStats.min} · أعلى: ${myStats.max} · عدد: ${myStats.count}
+متوسط أسعار أقسامي: ${catAvgs}
+السوق (المنافسون) — متوسط: ${marketStats.avg} · وسيط: ${marketStats.median} · أدنى: ${marketStats.min} · أعلى: ${marketStats.max} · عيّنة: ${marketStats.count}
+عيّنة من منتجاتي (اسم | سعر | قسم):
+${myProds.slice(0, 40).map(p => `${p.name} | ${p.price} | ${p.category || '-'}`).join('\n')}
+عيّنة من منتجات المنافسين (اسم | سعر):
+${market.slice(0, 40).map(m => `${m.name} | ${m.price}`).join('\n')}
+أعد JSON فقط — ركّز على 5-8 منتجات أهمها (مبالغ في سعرها أو رخيصة جداً مقابل السوق):
+{"position":"<above|below|aligned>","summary":"<جملتان عن موقعي السعري>","categoryNotes":["<ملاحظة تسعير لقسم>"],"products":[{"name":"<منتج من متجري>","current":<السعر>,"suggestion":"<سعر/نطاق مقترح>","reason":"<سبب موجز>"}],"actions":["<خطوة تسعير عملية>"]}`;
+  let r; try { r = await aiJSON(prompt, { temperature: 0.4, maxTokens: 2200 }); } catch { r = {}; }
+  await logGen(req.user.id, 'gen_campaign', { pricing: true });
+  res.json({
+    myStats, marketStats,
+    position: r.position || 'aligned', summary: r.summary || '',
+    categoryNotes: r.categoryNotes || [], products: r.products || [], actions: r.actions || [],
+    competitors: comps.map(c => c.name || c.url),
   });
 }));
 

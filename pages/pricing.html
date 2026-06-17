@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الباقات والأسعار — أدوات التاجر</title>
+<meta name="description" content="باقات اشتراك أدوات التاجر — اختر الخطة المناسبة لمتجرك واستفد من كل الأدوات والمساعد الذكي بلا حدود.">
+<meta property="og:title" content="الباقات والأسعار — أدوات التاجر">
+<meta property="og:description" content="باقات مرنة لكل تاجر — اشترك واستفد من كل أدوات المنصة والمساعد الذكي.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css?v=11">
+</head>
+<body>
+
+<section class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <span class="badge" style="margin-bottom:1.2rem;">الباقات</span>
+      <h1>باقات <em>تناسب نموّك</em></h1>
+      <p>اختر الخطة المناسبة لمتجرك — كل الأدوات والمساعد الذكي في مكان واحد، بلا حدود.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2rem 1.2rem 5rem; max-width: 1200px; margin: 0 auto;">
+  <div style="text-align:center;"><div class="pr-toggle" id="plansToggle"><button data-per="monthly" class="active">شهري</button><button data-per="yearly">سنوي</button></div></div>
+  <div class="pr-grid" id="plansGrid"><div style="grid-column:1/-1;text-align:center;color:var(--ink-dim);">جارٍ تحميل الباقات…</div></div>
+  <p style="text-align:center;color:var(--ink-dim);font-size:.85rem;margin-top:2.5rem;">كل الباقات تشمل تحديثات مستمرة ودعمًا من فريق خبراء المنصات. للاستفسار: <a href="https://wa.me/966507060592" target="_blank" rel="noopener" style="color:var(--accent);">تواصل عبر واتساب</a>.</p>
+</section>
+
+<script src="../assets/api.js?v=44"></script>
+<script>
+(async function(){
+  var grid=document.getElementById('plansGrid'); if(!grid||typeof api==='undefined')return;
+  var period='monthly', plans=[];
+  try{ plans=await api.getPlans(); }catch(e){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--ink-dim);">تعذّر تحميل الباقات حالياً.</div>'; return; }
+  if(!plans||!plans.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--ink-dim);">لا توجد باقات متاحة حالياً — تواصل معنا.</div>'; return; }
+  function draw(){ renderPricingInto(grid, plans, period); }
+  var tg=document.getElementById('plansToggle');
+  if(tg) tg.querySelectorAll('button').forEach(function(b){ b.onclick=function(){ tg.querySelectorAll('button').forEach(function(x){x.classList.remove('active');}); b.classList.add('active'); period=b.dataset.per; draw(); }; });
+  if(tg && !plans.some(function(p){return p.price_yearly!=null&&p.price_yearly!=='';})) tg.style.display='none';
+  draw();
+})();
+</script>
+<script src="../assets/header.js?v=17"></script>
+</body>
+</html>

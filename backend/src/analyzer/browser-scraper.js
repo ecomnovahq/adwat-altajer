@@ -140,9 +140,11 @@ async function crawlWithBrowser(baseUrl, limit = 100, seedCats = []) {
     await page.setDefaultNavigationTimeout(25000);
 
     // 1) الرئيسية → الأقسام + منتجات الواجهة
+    let homeHtml = '';
     try {
       await page.goto(origin, { waitUntil: 'networkidle2', timeout: 25000 });
-      await autoScroll(page, 4000);
+      await autoScroll(page, 4000); // تمرير حتى الفوتر لتحميل أيقونات الدفع/التوثيق
+      try { homeHtml = await page.content(); } catch { /* skip */ } // HTML بعد تنفيذ JS (للفحص التقني)
     } catch { /* skip */ }
     let cats = [], socials = {}, pages = [];
     try { cats = await page.evaluate(extractCategoryLinksInPage); } catch { cats = []; }
@@ -187,7 +189,7 @@ async function crawlWithBrowser(baseUrl, limit = 100, seedCats = []) {
 
     const all = [...products.values()].filter(p => isProdUrl(p.url)).slice(0, limit);
     logger.info(`[browser-scraper] ${all.length} منتج · ${cats.length} قسم · ${pages.length} صفحة عبر المتصفّح`);
-    return { products: all, categories: cats.map(c => c.name), socials, pages };
+    return { products: all, categories: cats.map(c => c.name), socials, pages, homeHtml };
   } catch (e) {
     logger.warn('[browser-scraper] فشل: ' + (e.message || '').slice(0, 80));
     return { products: [], categories: [] };
@@ -196,4 +198,58 @@ async function crawlWithBrowser(baseUrl, limit = 100, seedCats = []) {
   }
 }
 
-module.exports = { crawlWithBrowser };
+// إثراء المنتجات الناقصة (بلا صورة/وصف) بفتح صفحاتها في المتصفّح (للمتاجر المبنية بالـJS)
+async function enrichProductsWithBrowser(urls, limit = 15) {
+  const list = [...new Set((urls || []).filter(Boolean))].slice(0, limit);
+  if (!list.length) return {};
+  const out = {};
+  let browser;
+  try {
+    browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-blink-features=AutomationControlled'], timeout: 30000 });
+    const page = await browser.newPage();
+    await page.evaluateOnNewDocument(() => { Object.defineProperty(navigator, 'webdriver', { get: () => undefined }); });
+    await page.setUserAgent(UA);
+    await page.setViewport({ width: 1280, height: 900 });
+    await page.setDefaultNavigationTimeout(20000);
+    for (const u of list) {
+      try {
+        await page.goto(u, { waitUntil: 'networkidle2', timeout: 20000 });
+        const data = await page.evaluate(() => {
+          const abs = s => { try { return new URL(String(s).trim(), location.href).href; } catch { return ''; } };
+          const meta = (sel, attr = 'content') => { const el = document.querySelector(sel); return el ? (el.getAttribute(attr) || '') : ''; };
+          let ld = null;
+          document.querySelectorAll('script[type="application/ld+json"]').forEach(el => {
+            if (ld) return;
+            try { const j = JSON.parse(el.textContent); const arr = Array.isArray(j) ? j : (j['@graph'] || [j]); const p = arr.find(x => x && /product/i.test(x['@type'] || '')); if (p) ld = p; } catch { /* skip */ }
+          });
+          const name = ((ld && ld.name) || meta('meta[property="og:title"]') || (document.querySelector('h1') || {}).textContent || document.title || '').trim().slice(0, 160);
+          const offers = ld && ld.offers ? (Array.isArray(ld.offers) ? ld.offers[0] : ld.offers) : null;
+          let price = (offers && (offers.price || offers.lowPrice)) || '';
+          if (!price) { const pe = document.querySelector('[class*="price" i],[class*="amount" i]'); if (pe) { const m = pe.textContent.replace(/[^\d.,]/g, ' ').match(/[\d.]+/); if (m) price = m[0]; } }
+          let imgs = [];
+          if (ld && ld.image) imgs = (Array.isArray(ld.image) ? ld.image : [ld.image]).map(x => (x && typeof x === 'object') ? (x.url || x['@id'] || '') : x);
+          const og = meta('meta[property="og:image"]') || meta('meta[property="og:image:secure_url"]'); if (og) imgs.push(og);
+          document.querySelectorAll('[class*="gallery" i] img,[class*="product" i] img,[class*="slider" i] img,[class*="thumb" i] img,[itemprop="image"]').forEach(im => {
+            const s = im.getAttribute('src') || im.getAttribute('data-src') || im.getAttribute('data-lazy-src') || im.getAttribute('data-original') || ''; if (s) imgs.push(s);
+          });
+          imgs = [...new Set(imgs.map(abs).filter(s => /^https?:\/\//.test(s) && !/(logo|placeholder|blank|sprite|icon)\b/i.test(s)))].slice(0, 10);
+          let desc = (ld && ld.description) || meta('meta[property="og:description"]') || meta('meta[name="description"]') || '';
+          if (!desc || desc.trim().length < 40) { const d = document.querySelector('[itemprop="description"],[class*="description" i],#description,[class*="product-detail" i],[class*="product-content" i]'); if (d) { const t = d.textContent.replace(/\s+/g, ' ').trim(); if (t.length > (desc || '').length) desc = t; } }
+          desc = String(desc).replace(/\s+/g, ' ').trim().slice(0, 1200);
+          let category = ''; if (ld && ld.category) category = String(Array.isArray(ld.category) ? ld.category[0] : ld.category).trim();
+          if (!category) { const cr = [...document.querySelectorAll('[class*="breadcrumb" i] a')].map(a => a.textContent.trim()).filter(Boolean); if (cr.length >= 2) category = cr[cr.length - 2]; }
+          return { name, price: price ? String(price) : null, images: imgs, description: desc, category: category.slice(0, 80) };
+        });
+        if (data && (data.images.length || (data.description && data.description.length >= 20))) {
+          out[u] = { url: u, name: data.name, price: data.price, currency: 'SAR', image: data.images[0] || null, images: data.images, description: data.description, category: data.category, hasDescription: (data.description || '').replace(/<[^>]+>/g, '').trim().length >= 20 };
+        }
+      } catch { /* skip */ }
+    }
+    logger.info(`[browser-enrich] أُثري ${Object.keys(out).length}/${list.length} منتج ناقص`);
+  } catch (e) { logger.warn('[browser-enrich] فشل: ' + (e.message || '').slice(0, 80)); }
+  finally { if (browser) await browser.close().catch(() => {}); }
+  return out;
+}
+
+module.exports = { crawlWithBrowser, enrichProductsWithBrowser };

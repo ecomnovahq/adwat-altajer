@@ -25,6 +25,7 @@
     var L = [
       { l: 'الرئيسية', h: home, f: 'index.html' },
       { l: 'الأدوات', h: root + 'tools.html', f: 'tools.html' },
+      { l: 'الباقات', h: root + 'pricing.html', f: 'pricing.html' },
       { l: 'الكوبونات', h: root + 'coupons.html', f: 'coupons.html' },
       { l: 'المواسم', h: root + 'calendar.html', f: 'calendar.html' },
       { l: 'المدوّنة', h: root + 'blog.html', f: 'blog.html' },
@@ -207,6 +208,7 @@
       { n: 'مولّد صور المنتجات', d: 'صور احترافية بالذكاء', kw: 'صور تصوير منتج', f: 'image-gen.html' },
       { n: 'مسار التاجر', d: 'خطة تأسيس أو تقييم متجرك', kw: 'مسار تقييم تأسيس مبتدئ', f: 'merchant-path.html' },
       { n: 'كل الأدوات', d: 'تصفّح كل أدوات المنصة', kw: 'ادوات', f: 'tools.html' },
+      { n: 'الباقات والأسعار', d: 'خطط الاشتراك المناسبة لمتجرك', kw: 'باقات اشتراك سعر اسعار خطط ترقية', f: 'pricing.html' },
       { n: 'الكوبونات', d: 'كوبونات خصم حصرية', kw: 'كوبون خصم عرض', f: 'coupons.html' },
       { n: 'المدوّنة', d: 'مقالات ونصائح', kw: 'مقالات مدونة', f: 'blog.html' },
       { n: 'عن المنصة', d: 'من نحن وخبراء المنصات', kw: 'عن من نحن تواصل', f: 'about.html' },

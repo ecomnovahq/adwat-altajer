@@ -1673,3 +1673,26 @@ footer::before {
 
 
 
+
+/* ─── جدول الأسعار العصري (الباقات) ─── */
+.pr-toggle { display: inline-flex; background: var(--bg-alt); border: 1px solid var(--line); border-radius: 99px; padding: 4px; margin: 0 auto 2.2rem; }
+.pr-toggle button { border: none; background: none; color: var(--ink-dim); font-family: var(--font-arabic); font-weight: 700; font-size: .9rem; padding: .5rem 1.5rem; border-radius: 99px; cursor: pointer; transition: .2s; }
+.pr-toggle button.active { background: var(--accent); color: #fff; }
+.pr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; align-items: stretch; max-width: 1120px; margin: 0 auto; }
+.pr-card { position: relative; background: var(--bg-alt); border: 1px solid var(--line); border-radius: 20px; padding: 2.2rem 1.6rem 1.8rem; display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s, border-color .25s; }
+.pr-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,.14); }
+.pr-rec { border: 2px solid var(--accent); box-shadow: 0 16px 44px rgba(124,58,237,.22); }
+.pr-badge { position: absolute; top: -15px; inset-inline-start: 50%; transform: translateX(50%); background: linear-gradient(135deg, var(--accent-2,#a855f7), var(--accent)); color: #fff; font-size: .8rem; font-weight: 800; border-radius: 99px; padding: .42rem 1.2rem; display: inline-flex; align-items: center; gap: .35rem; box-shadow: 0 6px 16px rgba(124,58,237,.4); white-space: nowrap; }
+.pr-name { font-size: 1.15rem; font-weight: 800; color: var(--ink-dim); margin-bottom: .7rem; }
+.pr-saverow { display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; }
+.pr-old { font-size: 1rem; color: var(--ink-dim); text-decoration: line-through; font-weight: 600; }
+.pr-save { background: #ef4444; color: #fff; font-size: .7rem; font-weight: 800; border-radius: 99px; padding: .18rem .6rem; }
+.pr-price { font-size: 2.1rem; font-weight: 800; color: var(--ink); margin-bottom: .2rem; line-height: 1.15; }
+.pr-price small { font-size: .8rem; font-weight: 600; color: var(--ink-dim); }
+.pr-feats-t { font-weight: 800; font-size: .95rem; margin: 1.3rem 0 .9rem; }
+.pr-feats { list-style: none; padding: 0; margin: 0 0 1.5rem; display: flex; flex-direction: column; gap: .75rem; flex: 1; }
+.pr-feats li { display: flex; align-items: flex-start; gap: .6rem; font-size: .88rem; line-height: 1.6; color: var(--ink); }
+.pr-ck { width: 20px; height: 20px; flex-shrink: 0; color: #22c55e; background: rgba(34,197,94,.14); border-radius: 50%; padding: 3px; margin-top: 1px; }
+.pr-btn { display: block; text-align: center; background: var(--accent); color: #fff; border-radius: 12px; padding: .8rem; font-weight: 800; font-size: .92rem; text-decoration: none; transition: opacity .2s; }
+.pr-rec .pr-btn { background: linear-gradient(135deg, var(--accent-2,#a855f7), var(--accent)); }
+.pr-btn:hover { opacity: .9; }

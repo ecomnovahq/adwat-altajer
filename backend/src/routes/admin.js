@@ -185,7 +185,7 @@ router.get('/assistant-stores', adminAuth, async (req, res) => {
   res.json(rows);
 });
 router.get('/assistant-stores/:id', adminAuth, async (req, res) => {
-  const s = (await db.query(`SELECT s.*, u.name AS user_name, u.email AS user_email, u.phone AS user_phone
+  const s = (await db.query(`SELECT s.*, u.name AS user_name, u.email AS user_email, u.phone AS user_phone, u.subscription_until, u.plan_name
     FROM merchant_stores s LEFT JOIN users u ON u.id=s.user_id WHERE s.id=$1`, [req.params.id])).rows[0];
   if (!s) return res.status(404).json({ error: 'غير موجود' });
   const products = (await db.query('SELECT name,price,currency,image,has_description FROM store_products WHERE store_id=$1 LIMIT 200', [req.params.id])).rows;
@@ -289,11 +289,13 @@ router.get('/tool-settings', adminAuth, async (req, res) => {
 });
 
 router.put('/tool-settings/:toolName', adminAuth, async (req, res) => {
-  const { is_paid, daily_free_limit, status, display_name, price, badge, features } = req.body;
+  const { is_paid, daily_free_limit, status, display_name, price, badge, features, trial_days } = req.body;
   const allowedStatus = ['active', 'hidden', 'coming_soon'];
   const newStatus = allowedStatus.includes(status) ? status : null;
   const priceVal = (price === '' || price == null || isNaN(parseFloat(price))) ? null : parseFloat(price);
   const featuresVal = Array.isArray(features) ? JSON.stringify(features.filter(Boolean).map(x => String(x).slice(0, 160)).slice(0, 20)) : null;
+  // مدة التجربة لكل أداة: قيمة رقمية = خاص بالأداة · فارغ/'' = استخدم الافتراضي العام (null)
+  const trialVal = (trial_days === '' || trial_days == null || isNaN(parseInt(trial_days))) ? null : Math.max(0, Math.min(3650, parseInt(trial_days)));
   const { rows } = await db.query(
     `UPDATE tool_settings SET
        is_paid=$1,
@@ -303,9 +305,10 @@ router.put('/tool-settings/:toolName', adminAuth, async (req, res) => {
        price=$5,
        badge=$6,
        features=COALESCE($7, features),
+       trial_days=$8,
        updated_at=NOW()
-     WHERE tool_name=$8 RETURNING *`,
-    [!!is_paid, daily_free_limit || null, newStatus, display_name || null, priceVal, (badge || '').slice(0, 40) || null, featuresVal, req.params.toolName]
+     WHERE tool_name=$9 RETURNING *`,
+    [!!is_paid, daily_free_limit || null, newStatus, display_name || null, priceVal, (badge || '').slice(0, 40) || null, featuresVal, trialVal, req.params.toolName]
   );
   if (!rows[0]) return res.status(404).json({ error: 'الأداة غير موجودة' });
   res.json(rows[0]);
@@ -320,6 +323,7 @@ function planBody(b) {
   return {
     name: String(b.name || '').slice(0, 120),
     price: (b.price === '' || b.price == null || isNaN(parseFloat(b.price))) ? null : parseFloat(b.price),
+    price_yearly: (b.price_yearly === '' || b.price_yearly == null || isNaN(parseFloat(b.price_yearly))) ? null : parseFloat(b.price_yearly),
     period: String(b.period || 'شهرياً').slice(0, 30),
     badge: (String(b.badge || '').slice(0, 40)) || null,
     features: Array.isArray(b.features) ? JSON.stringify(b.features.filter(Boolean).map(x => String(x).slice(0, 160)).slice(0, 30)) : '[]',
@@ -332,21 +336,45 @@ router.post('/plans', adminAuth, async (req, res) => {
   const p = planBody(req.body);
   if (!p.name) return res.status(400).json({ error: 'أدخل اسم الباقة' });
   const { rows } = await db.query(
-    `INSERT INTO plans (name,price,period,badge,features,tools,sort_order,active) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
-    [p.name, p.price, p.period, p.badge, p.features, p.tools, p.sort_order, p.active]);
+    `INSERT INTO plans (name,price,price_yearly,period,badge,features,tools,sort_order,active) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
+    [p.name, p.price, p.price_yearly, p.period, p.badge, p.features, p.tools, p.sort_order, p.active]);
   res.status(201).json(rows[0]);
 });
 router.put('/plans/:id', adminAuth, async (req, res) => {
   const p = planBody(req.body);
   if (!p.name) return res.status(400).json({ error: 'أدخل اسم الباقة' });
   const { rows } = await db.query(
-    `UPDATE plans SET name=$1,price=$2,period=$3,badge=$4,features=$5,tools=$6,sort_order=$7,active=$8 WHERE id=$9 RETURNING *`,
-    [p.name, p.price, p.period, p.badge, p.features, p.tools, p.sort_order, p.active, req.params.id]);
+    `UPDATE plans SET name=$1,price=$2,price_yearly=$3,period=$4,badge=$5,features=$6,tools=$7,sort_order=$8,active=$9 WHERE id=$10 RETURNING *`,
+    [p.name, p.price, p.price_yearly, p.period, p.badge, p.features, p.tools, p.sort_order, p.active, req.params.id]);
   if (!rows[0]) return res.status(404).json({ error: 'الباقة غير موجودة' });
   res.json(rows[0]);
 });
 router.delete('/plans/:id', adminAuth, async (req, res) => {
   await db.query('DELETE FROM plans WHERE id=$1', [req.params.id]);
+  res.json({ ok: true });
+});
+
+// ─── مدة التجربة المجانية + الاشتراكات اليدوية ──────────────────────────────
+router.get('/config/trial-days', adminAuth, async (req, res) => {
+  const { rows } = await db.query("SELECT value FROM app_config WHERE key='trial_days'");
+  res.json({ trialDays: parseInt(rows[0] && rows[0].value) || 0 });
+});
+router.put('/config/trial-days', adminAuth, async (req, res) => {
+  const n = Math.max(0, Math.min(3650, parseInt(req.body.trialDays) || 0));
+  await db.query("INSERT INTO app_config (key,value) VALUES ('trial_days',$1) ON CONFLICT (key) DO UPDATE SET value=$1", [String(n)]);
+  res.json({ ok: true, trialDays: n });
+});
+// منح/تمديد اشتراك لمستخدم (ترقية يدوية بعد الدفع)
+router.post('/users/:id/subscribe', adminAuth, async (req, res) => {
+  const days = Math.max(1, Math.min(3650, parseInt(req.body.days) || 30));
+  const plan = (req.body.plan || '').toString().slice(0, 120) || null;
+  const until = new Date(Date.now() + days * 86400000);
+  const { rows } = await db.query('UPDATE users SET subscription_until=$1, plan_name=$2 WHERE id=$3 RETURNING id', [until, plan, req.params.id]);
+  if (!rows[0]) return res.status(404).json({ error: 'غير موجود' });
+  res.json({ ok: true, subscription_until: until, plan });
+});
+router.delete('/users/:id/subscribe', adminAuth, async (req, res) => {
+  await db.query('UPDATE users SET subscription_until=NULL, plan_name=NULL WHERE id=$1', [req.params.id]);
   res.json({ ok: true });
 });
 

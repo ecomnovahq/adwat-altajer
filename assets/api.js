@@ -78,6 +78,7 @@ async function _apiRequest(method, endpoint, body, blobResponse = false) {
     err.displayName = data.displayName;
     err.limit = data.limit;
     err.used = data.used;
+    if (data.code === 'TRIAL_ENDED' && typeof showUpgradeModal === 'function') showUpgradeModal('trial');
     throw err;
   }
   return data;
@@ -118,6 +119,7 @@ const api = {
   generateImage:     (data)               => apiRequest('POST', '/tools/generate-image', data),
   getToolSettings:   ()                   => apiRequest('GET', '/tools/settings'),
   getPlans:          ()                   => apiRequest('GET', '/tools/plans'),
+  getSubscription:   ()                   => apiRequest('GET', '/tools/subscription'),
   requestToolAccess: (toolName, reason)   => apiRequest('POST', '/tools/request-access', { toolName, reason }),
   chat:              (message, history, context) => apiRequest('POST', '/tools/chat', { message, history, context }),
   merchantPath:      (data)                  => apiRequest('POST', '/tools/merchant-path', data),
@@ -179,6 +181,7 @@ const api = {
   asstTaskReorder:function (ids) { return apiRequest('POST', '/assistant/tasks/reorder', { ids, storeId: this._sid() }); },
   asstBulk:       function (type, category) { return apiRequest('POST', `/assistant/bulk/${type}`, { storeId: this._sid(), category: category || '' }); },
   asstCompare:    function (url) { return apiRequest('POST', '/assistant/compare', { url, storeId: this._sid() }); },
+  asstPricing:    function () { return apiRequest('POST', '/assistant/pricing-analysis', { storeId: this._sid() }); },
   asstExportCsv:  function () { return apiRequest('GET', '/assistant/export' + this._q()); },
   // Google Analytics (الأداء)
   gaStatus:       function () { return apiRequest('GET', '/integrations/ga/status' + this._q()); },
@@ -245,6 +248,10 @@ const api = {
     createPlan:         (data)         => apiRequest('POST', '/admin/plans', data),
     updatePlan:         (id, data)     => apiRequest('PUT', `/admin/plans/${id}`, data),
     deletePlan:         (id)           => apiRequest('DELETE', `/admin/plans/${id}`),
+    getTrialDays:       ()             => apiRequest('GET', '/admin/config/trial-days'),
+    setTrialDays:       (trialDays)    => apiRequest('PUT', '/admin/config/trial-days', { trialDays }),
+    subscribeUser:      (uid, data)    => apiRequest('POST', `/admin/users/${uid}/subscribe`, data),
+    unsubscribeUser:    (uid)          => apiRequest('DELETE', `/admin/users/${uid}/subscribe`),
     toolRequests:       ()             => apiRequest('GET', '/admin/tool-requests'),
     updateToolRequest:  (id, data)     => apiRequest('PUT', `/admin/tool-requests/${id}`, data),
     merchantPathSubs:   ()             => apiRequest('GET', '/admin/merchant-path'),
@@ -349,7 +356,22 @@ window.tjSetAutoRefresh = function () {};
 .tj-btn-danger{background:#ef4444;color:#fff}
 .tj-btn-danger:hover{opacity:.85}
 .tj-btn-success{background:#22c55e;color:#fff}
-.tj-btn-success:hover{opacity:.85}`;
+.tj-btn-success:hover{opacity:.85}
+.tj-modal-wide{max-width:860px}
+.tj-plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin:.4rem 0 1.2rem;text-align:right}
+.tj-plan{position:relative;background:var(--bg,#0b0e17);border:1px solid var(--line,#1a1f35);border-radius:16px;padding:1.2rem 1rem;display:flex;flex-direction:column;transition:transform .2s,border-color .2s,box-shadow .2s}
+.tj-plan:hover{transform:translateY(-4px);border-color:var(--accent,#6366f1);box-shadow:0 14px 34px rgba(99,102,241,.18)}
+.tj-plan-hot{border-color:var(--accent,#6366f1);box-shadow:0 8px 26px rgba(99,102,241,.18)}
+.tj-plan-badge{position:absolute;top:-11px;inset-inline-start:50%;transform:translateX(50%);background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;font-size:.68rem;font-weight:700;border-radius:99px;padding:.18rem .8rem;white-space:nowrap}
+.tj-plan-name{font-weight:800;font-size:1.05rem;margin-bottom:.3rem;color:var(--ink,#f0eeff)}
+.tj-plan-price{font-weight:800;font-size:1.5rem;color:var(--accent,#6366f1);margin-bottom:.8rem}
+.tj-plan-price small{font-size:.7rem;color:var(--ink-dim,#888);font-weight:600}
+.tj-plan-feats{list-style:none;padding:0;margin:0 0 1rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+.tj-plan-feats li{font-size:.82rem;color:var(--ink,#f0eeff);line-height:1.5;padding-inline-start:1.2rem;position:relative}
+.tj-plan-feats li::before{content:'';position:absolute;inset-inline-start:0;top:.45em;width:7px;height:7px;border-radius:50%;background:var(--accent,#6366f1)}
+.tj-plan-btn{display:block;text-align:center;background:var(--accent,#6366f1);color:#fff;border-radius:10px;padding:.55rem;font-weight:700;font-size:.85rem;text-decoration:none;transition:opacity .2s}
+.tj-plan-btn:hover{opacity:.88}
+@media(max-width:560px){.tj-plans{grid-template-columns:1fr}}`;
   document.head.appendChild(s);
 })();
 
@@ -435,10 +457,75 @@ function showToolError(err, toolName) {
         }},
       ],
     });
+  } else if (err.code === 'TRIAL_ENDED') {
+    showUpgradeModal('trial');
   } else {
     showError('حدث خطأ', err.message);
   }
 }
+
+// ─── نافذة الباقات / الترقية (مشتركة لكل الصفحات) ─────────────────────────────
+async function showUpgradeModal(reason) {
+  if (document.getElementById('tjUpgrade')) return; // نافذة واحدة فقط
+  let plans = [];
+  try { plans = await api.getPlans(); } catch { /* skip */ }
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const wa = (typeof WHATSAPP_NUMBER !== 'undefined' ? WHATSAPP_NUMBER : '');
+  const feats = p => Array.isArray(p.features) ? p.features : (() => { try { return JSON.parse(p.features || '[]'); } catch { return []; } })();
+  const cards = plans.length ? plans.map(p => `
+    <div class="tj-plan${p.badge ? ' tj-plan-hot' : ''}">
+      ${p.badge ? `<span class="tj-plan-badge">${esc(p.badge)}</span>` : ''}
+      <div class="tj-plan-name">${esc(p.name)}</div>
+      <div class="tj-plan-price">${p.price != null && p.price !== '' ? esc(p.price) + ' <small>ر.س / ' + esc(p.period || 'شهرياً') + '</small>' : 'حسب الطلب'}</div>
+      <ul class="tj-plan-feats">${feats(p).slice(0, 8).map(f => `<li>${esc(f)}</li>`).join('')}</ul>
+      <a class="tj-plan-btn" href="https://wa.me/${wa}?text=${encodeURIComponent('مرحباً، أريد الاشتراك في باقة ' + (p.name || ''))}" target="_blank" rel="noopener">اشترك الآن</a>
+    </div>`).join('') : '<div style="color:var(--ink-dim,#888);padding:1.2rem;text-align:center;">لا توجد باقات متاحة حالياً — تواصل معنا.</div>';
+  const overlay = document.createElement('div');
+  overlay.className = 'tj-overlay'; overlay.id = 'tjUpgrade';
+  overlay.innerHTML = `<div class="tj-modal tj-modal-wide">
+    <div class="tj-modal-title">${reason === 'trial' ? 'انتهت فترتك المجانية' : 'رقّ باقتك'}</div>
+    <div class="tj-modal-msg">اختر الباقة المناسبة لمواصلة استخدام كل الأدوات والمساعد بلا حدود.</div>
+    <div class="tj-plans">${cards}</div>
+    <div class="tj-modal-actions"><button class="tj-btn tj-btn-secondary" id="tjUpClose">لاحقاً</button></div>
+  </div>`;
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+  overlay.querySelector('#tjUpClose').onclick = () => overlay.remove();
+}
+window.showUpgradeModal = showUpgradeModal;
+
+// ─── عرض جدول الأسعار العصري (مشترك: صفحة الأدوات + صفحة الباقات + نافذة الترقية) ──
+function _planFeatures(p) { return Array.isArray(p.features) ? p.features : (() => { try { return JSON.parse(p.features || '[]'); } catch { return []; } })(); }
+function renderPricingInto(el, plans, period) {
+  if (!el) return;
+  period = period || 'monthly';
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const wa = (typeof WHATSAPP_NUMBER !== 'undefined' ? WHATSAPP_NUMBER : '');
+  const ck = '<svg class="pr-ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  if (!plans || !plans.length) { el.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--ink-dim);">لا توجد باقات متاحة حالياً.</div>'; return; }
+  el.innerHTML = plans.map(p => {
+    const rec = /موص|recommend|الأكثر|مميز|الأفضل/i.test(p.badge || '');
+    const m = (p.price === '' || p.price == null) ? null : Number(p.price);
+    const y = (p.price_yearly === '' || p.price_yearly == null) ? null : Number(p.price_yearly);
+    let price, per = 'شهرياً', save = '';
+    if (period === 'yearly' && y != null) {
+      price = y; per = 'سنوياً';
+      if (m != null) { const full = m * 12; if (full > y) { const pct = Math.round((1 - y / full) * 100); save = `<span class="pr-old">${full.toLocaleString('en-US')}</span><span class="pr-save">وفّر ${pct}%</span>`; } }
+    } else { price = m; per = 'شهرياً'; }
+    const priceTxt = (price != null) ? `${Number(price).toLocaleString('en-US')} <small>ر.س / ${per}</small>` : 'حسب الطلب';
+    const feats = _planFeatures(p);
+    return `<div class="pr-card${rec ? ' pr-rec' : ''}">
+      ${rec ? `<div class="pr-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><path d="M20 6L9 17l-5-5"/></svg> ${esc(p.badge || 'موصى به')}</div>` : ''}
+      <div class="pr-name">${esc(p.name)}</div>
+      ${save ? `<div class="pr-saverow">${save}</div>` : ''}
+      <div class="pr-price">${priceTxt}</div>
+      <div class="pr-feats-t">المميزات</div>
+      <ul class="pr-feats">${feats.length ? feats.map(f => `<li>${ck}<span>${esc(f)}</span></li>`).join('') : '<li style="color:var(--ink-dim);">—</li>'}</ul>
+      <a class="pr-btn" href="https://wa.me/${wa}?text=${encodeURIComponent('مرحباً، أريد الاشتراك في باقة ' + (p.name || '') + (period === 'yearly' ? ' (سنوي)' : ''))}" target="_blank" rel="noopener">اشترك الآن</a>
+    </div>`;
+  }).join('');
+}
+window.renderPricingInto = renderPricingInto;
 
 // ─── Nav Auth UI ─────────────────────────────────────────────────────────────
 function initNavAuth() {
