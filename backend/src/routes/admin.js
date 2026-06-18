@@ -430,37 +430,44 @@ function adminGaClient() {
 }
 const _gaOpt = { timeout: 15000 }; // مهلة لكل طلب GA
 router.get('/analytics', adminAuth, async (req, res) => {
+  const log = (m) => { try { require('../logger').info('GA-analytics: ' + m); } catch {} };
+  log('enter');
   const pid = String(process.env.GA_PLATFORM_PROPERTY || '').replace(/[^0-9]/g, '');
-  if (!pid) return res.json({ configured: false });
+  if (!pid) { log('no pid'); return res.json({ configured: false }); }
   const client = adminGaClient();
-  if (!client) return res.json({ configured: false, needsServer: true });
+  if (!client) { log('no client'); return res.json({ configured: false, needsServer: true }); }
   const property = `properties/${pid}`;
-  try {
-    const num = (r, i = 0) => Number(r.rows?.[0]?.metricValues?.[i]?.value || 0);
+  const num = (r, i = 0) => Number(r.rows?.[0]?.metricValues?.[i]?.value || 0);
+  // ضمان عدم التعلّق: مهلة قصوى 17 ثانية ترجع خطأ بدل ما تعلّق المتصفّح
+  const guard = new Promise((_, rej) => setTimeout(() => rej(new Error('GA timeout (17s)')), 17000));
+  const work = (async () => {
+    log('core...');
     const [core] = await client.runReport({ property,
       dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
       metrics: [{ name: 'activeUsers' }, { name: 'sessions' }, { name: 'screenPageViews' }] }, _gaOpt);
+    log('today...');
     const [today] = await client.runReport({ property,
       dateRanges: [{ startDate: 'today', endDate: 'today' }],
       metrics: [{ name: 'activeUsers' }, { name: 'sessions' }] }, _gaOpt);
+    log('cities...');
     const [cityR] = await client.runReport({ property,
       dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
       dimensions: [{ name: 'city' }], metrics: [{ name: 'activeUsers' }],
       orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }], limit: 8 }, _gaOpt);
-    const [dailyR] = await client.runReport({ property,
-      dateRanges: [{ startDate: '13daysAgo', endDate: 'today' }],
-      dimensions: [{ name: 'date' }], metrics: [{ name: 'activeUsers' }],
-      orderBys: [{ dimension: { dimensionName: 'date' } }] }, _gaOpt);
-    res.json({
+    log('done all');
+    return {
       configured: true, range: 'آخر 28 يوماً',
       users: num(core, 0), sessions: num(core, 1), pageViews: num(core, 2),
       today: { users: num(today, 0), sessions: num(today, 1) },
       cities: (cityR.rows || []).map(r => ({ city: r.dimensionValues[0].value, users: Number(r.metricValues[0].value || 0) })),
-      daily: (dailyR.rows || []).map(r => ({ date: r.dimensionValues[0].value, users: Number(r.metricValues[0].value || 0) })),
-    });
+    };
+  })();
+  try {
+    const out = await Promise.race([work, guard]);
+    res.json(out);
   } catch (e) {
-    try { require('../logger').warn('admin/analytics fail: ' + (e.message || '').slice(0, 200)); } catch {}
-    res.status(502).json({ configured: true, error: 'تعذّر جلب بيانات Google Analytics — تأكد من صلاحية حساب الخدمة وProperty ID.' });
+    log('FAIL: ' + (e.message || '').slice(0, 200));
+    res.status(502).json({ configured: true, error: 'تعذّر جلب بيانات Google Analytics: ' + (e.message || '').slice(0, 120) });
   }
 });
 
