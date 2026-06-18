@@ -10,7 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=9">
+<link rel="stylesheet" href="../assets/styles.css?v=13">
+<link rel="stylesheet" href="../assets/responsive.css?v=1">
 <style>
   * { box-sizing: border-box; }
   html, body { overflow-x: hidden; max-width: 100%; }
@@ -577,6 +578,7 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:0.3rem;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               تصدير CSV
             </button>
+            <button class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="openAddUserModal()">+ إضافة مستخدم</button>
           </div>
         </div>
         <div style="overflow-x:auto;">
@@ -584,6 +586,25 @@
             <thead><tr><th>الاسم</th><th>الدور</th><th>التاريخ</th><th>إجراء</th></tr></thead>
             <tbody id="usersTable"></tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- مودال إضافة مستخدم يدويًا -->
+    <div id="addUserModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;padding:1rem;">
+      <div style="background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:16px;max-width:440px;width:100%;padding:1.6rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
+          <h3 style="margin:0;font-size:1.1rem;">إضافة مستخدم جديد</h3>
+          <button onclick="closeAddUserModal()" style="background:none;border:none;color:#ef4444;font-size:1.4rem;cursor:pointer;line-height:1;">✕</button>
+        </div>
+        <div style="display:grid;gap:.8rem;">
+          <input id="auName" placeholder="الاسم" class="admin-search" style="max-width:none;width:100%;">
+          <input id="auEmail" type="email" placeholder="البريد الإلكتروني" class="admin-search" style="max-width:none;width:100%;">
+          <input id="auPhone" placeholder="الجوال (اختياري)" class="admin-search" style="max-width:none;width:100%;">
+          <input id="auPass" type="text" placeholder="كلمة المرور (6 أحرف على الأقل)" class="admin-search" style="max-width:none;width:100%;">
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer;"><input type="checkbox" id="auAdmin"> صلاحيات مدير</label>
+          <div id="auMsg" style="font-size:.82rem;color:#ef4444;min-height:1rem;"></div>
+          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="submitAddUser(this)">إنشاء المستخدم</button>
         </div>
       </div>
     </div>
@@ -635,9 +656,31 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title">الباقات والأسعار</div>
-          <button class="btn-primary" style="padding:.5rem 1rem;font-size:.85rem;" onclick="openPlanModal()">+ باقة جديدة</button>
+          <div style="display:flex;gap:.5rem;">
+            <button class="btn-secondary" style="padding:.5rem 1rem;font-size:.85rem;" onclick="openGenPlansModal()">✨ توليد بالذكاء</button>
+            <button class="btn-primary" style="padding:.5rem 1rem;font-size:.85rem;" onclick="openPlanModal()">+ باقة جديدة</button>
+          </div>
         </div>
         <div id="plansList" style="display:flex;flex-direction:column;gap:1rem;padding:.5rem 0;"></div>
+      </div>
+
+      <!-- مودال توليد الباقات بالذكاء -->
+      <div id="genPlansModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;padding:1rem;">
+        <div style="background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:16px;max-width:460px;width:100%;padding:1.6rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
+            <h3 style="margin:0;font-size:1.1rem;">✨ توليد باقات بالذكاء الاصطناعي</h3>
+            <button onclick="closeGenPlansModal()" style="background:none;border:none;color:#ef4444;font-size:1.4rem;cursor:pointer;line-height:1;">✕</button>
+          </div>
+          <div style="display:grid;gap:.8rem;">
+            <label style="font-size:.82rem;">الأداة / الخدمة<input id="gpTool" class="admin-search" style="width:100%;max-width:none;margin-top:.2rem;" value="مساعد التاجر"></label>
+            <label style="font-size:.82rem;">مفتاح الأداة (اختياري — يربط الباقات بأداة)<input id="gpToolKey" class="admin-search" style="width:100%;max-width:none;margin-top:.2rem;" value="assistant" placeholder="مثال: assistant"></label>
+            <label style="font-size:.82rem;">عدد الباقات<input id="gpCount" type="number" min="1" max="6" value="3" class="admin-search" style="width:100%;max-width:none;margin-top:.2rem;"></label>
+            <label style="font-size:.82rem;">ملاحظات للذكاء (اختياري)<textarea id="gpNotes" class="admin-search" rows="2" style="width:100%;max-width:none;margin-top:.2rem;resize:vertical;" placeholder="مثال: استهدف المتاجر الناشئة، أسعار اقتصادية"></textarea></label>
+            <div id="gpMsg" style="font-size:.82rem;color:var(--ink-dim);min-height:1rem;"></div>
+            <button class="btn-primary" style="width:100%;justify-content:center;" onclick="submitGenPlans(this)">توليد وإضافة الباقات</button>
+            <p style="font-size:.76rem;color:var(--ink-dim);margin:0;">الباقات تُضاف مباشرة وتقدر تعدّلها أو تحذفها بعدها من القائمة.</p>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Plan modal -->
@@ -1129,7 +1172,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js?v=43"></script>
+<script src="../assets/api.js?v=45"></script>
 <script>
 // ─── Notifications ────────────────────────────────────────────────────────────
 let notifications = JSON.parse(localStorage.getItem('admin_notifs') || '[]');
@@ -2306,6 +2349,29 @@ async function deleteReview(id) {
 // ─── Users ────────────────────────────────────────────────────────────────────
 let _allUsers = [];
 let _toolList = [];   // قائمة كل الأدوات (من tool_settings) — لعرض التحكم لكل مستخدم
+function openAddUserModal() {
+  const get = id => document.getElementById(id);
+  get('auMsg').textContent = '';
+  ['auName','auEmail','auPhone','auPass'].forEach(i => get(i).value = '');
+  get('auAdmin').checked = false;
+  get('addUserModal').style.display = 'flex';
+}
+function closeAddUserModal() { document.getElementById('addUserModal').style.display = 'none'; }
+async function submitAddUser(btn) {
+  const get = id => document.getElementById(id);
+  const data = { name: get('auName').value.trim(), email: get('auEmail').value.trim(), phone: get('auPhone').value.trim(), password: get('auPass').value, is_admin: get('auAdmin').checked };
+  const msg = get('auMsg'); msg.style.color = '#ef4444';
+  if (!data.name || !data.email || data.password.length < 6) { msg.textContent = 'املأ الاسم والبريد وكلمة مرور 6 أحرف على الأقل'; return; }
+  btn.disabled = true; const t = btn.textContent; btn.textContent = 'جاري الإنشاء...';
+  try {
+    await api.admin.addUser(data);
+    msg.style.color = '#22c55e'; msg.textContent = 'تم الإنشاء بنجاح ✓';
+    await loadUsers();
+    setTimeout(closeAddUserModal, 800);
+  } catch (e) { msg.textContent = e.message || 'تعذّر الإنشاء'; }
+  finally { btn.disabled = false; btn.textContent = t; }
+}
+
 async function loadUsers() {
   const [users, tools] = await Promise.all([
     api.admin.users().catch(() => []),
@@ -2606,6 +2672,22 @@ async function saveTrialDays() {
   try { const r = await api.admin.setTrialDays(isNaN(v) ? 0 : v); showToast && showToast('تم حفظ مدة التجربة: ' + r.trialDays + ' يوم', 'success'); }
   catch (e) { showError('خطأ', e.message); }
 }
+function openGenPlansModal() { document.getElementById('gpMsg').textContent = ''; document.getElementById('genPlansModal').style.display = 'flex'; }
+function closeGenPlansModal() { document.getElementById('genPlansModal').style.display = 'none'; }
+async function submitGenPlans(btn) {
+  const get = id => document.getElementById(id);
+  const data = { tool: get('gpTool').value.trim() || 'مساعد التاجر', toolKey: get('gpToolKey').value.trim(), count: parseInt(get('gpCount').value) || 3, notes: get('gpNotes').value.trim() };
+  const msg = get('gpMsg'); msg.style.color = 'var(--ink-dim)'; msg.textContent = '⏳ جاري التوليد بالذكاء الاصطناعي... (قد يستغرق ~15 ثانية)';
+  btn.disabled = true; const t = btn.textContent; btn.textContent = 'جاري التوليد...';
+  try {
+    const r = await api.admin.generatePlans(data);
+    msg.style.color = '#22c55e'; msg.textContent = `تم توليد ${(r.plans || []).length} باقة وإضافتها ✓`;
+    await loadPlans();
+    setTimeout(closeGenPlansModal, 1000);
+  } catch (e) { msg.style.color = '#ef4444'; msg.textContent = e.message || 'تعذّر التوليد'; }
+  finally { btn.disabled = false; btn.textContent = t; }
+}
+
 async function loadPlans() {
   try { const t = await api.admin.getTrialDays(); const inp = document.getElementById('trialDaysInput'); if (inp) inp.value = t.trialDays; } catch {}
   if (!_toolSettings.length) { try { _toolSettings = await api.admin.toolSettings(); } catch {} }
@@ -2802,6 +2884,15 @@ updateGradientPreview();
 renderNotifs();
 checkNotifications();
 </script>
-<script src="../assets/header.js?v=16"></script>
+<script src="../assets/header.js?v=17"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
