@@ -300,10 +300,12 @@
 .as-plan-feats li { position: relative; padding-inline-start: 1.5rem; font-size: .86rem; color: var(--ink-dim); }
 .as-plan-feats li::before { content: '✓'; position: absolute; inset-inline-start: 0; color: var(--accent); font-weight: 800; }
 .as-plan-btn { width: 100%; justify-content: center; }
-/* تقييم الأداة بالنجوم */
-.as-rate-t { font-weight: 800; font-size: 1rem; margin-bottom: .6rem; }
-.as-stars { display: flex; gap: .2rem; direction: ltr; }
-.as-star { background: none; border: none; font-size: 1.9rem; line-height: 1; cursor: pointer; color: var(--line-strong); padding: 0 .1rem; transition: color .15s, transform .1s; }
+/* تقييم الأداة بالنجوم (مدمج) */
+.as-rate-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.as-rate-t { font-weight: 800; font-size: 1rem; }
+.as-rate-thanks { text-align: center; font-weight: 700; color: #22c55e; padding: .3rem; }
+.as-stars { display: inline-flex; gap: .15rem; direction: ltr; }
+.as-star { background: none; border: none; font-size: 1.8rem; line-height: 1; cursor: pointer; color: var(--line-strong); padding: 0 .1rem; transition: color .12s, transform .1s; }
 .as-star.on { color: #f5b50a; }
 .as-star:hover { transform: scale(1.15); }
 /* ترحيب بأسلوب سلة */

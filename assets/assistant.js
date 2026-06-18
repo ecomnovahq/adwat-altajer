@@ -369,28 +369,31 @@ async function renderPlanCard() {
   el.style.display = '';
 }
 
-// ─── تقييم العميل للأداة (نجوم) ───
+// ─── تقييم العميل للأداة (نجوم — بسيط: اضغط نجمة فيُحفظ ثم يختفي) ───
 async function renderRateCard() {
   const el = document.getElementById('asRateCard');
   if (!el) return;
-  let cur = { rating: 0, comment: '' };
+  let cur = { rating: 0 };
   try { cur = await api.asstGetRate(); } catch {}
-  const stars = (active) => { let h = ''; for (let i = 1; i <= 5; i++) h += `<button type="button" class="as-star${i <= active ? ' on' : ''}" data-v="${i}" aria-label="${i}">★</button>`; return h; };
-  el.innerHTML = `<div class="as-rate-t">قيّم تجربتك مع مساعد التاجر</div>
-    <div class="as-stars" id="asStars">${stars(cur.rating)}</div>
-    <textarea id="asRateComment" class="as-input" rows="2" placeholder="رأيك يهمّنا (اختياري)" style="width:100%;margin-top:.6rem;">${e(cur.comment || '')}</textarea>
-    <div style="display:flex;align-items:center;gap:.6rem;margin-top:.6rem;"><button class="btn-primary" id="asRateSave" style="padding:.5rem 1.2rem;">${cur.rating ? 'تحديث التقييم' : 'إرسال التقييم'}</button><span id="asRateMsg" style="font-size:.82rem;"></span></div>`;
+  if (cur && cur.rating > 0) { el.style.display = 'none'; return; } // قيّم مسبقًا → لا تظهر
+  el.className = 'as-card as-rate';
+  el.innerHTML = `<div class="as-rate-row">
+    <span class="as-rate-t">قيّم تجربتك مع مساعد التاجر</span>
+    <span class="as-stars">${[1,2,3,4,5].map(i => `<button type="button" class="as-star" data-v="${i}" aria-label="${i} نجوم">★</button>`).join('')}</span>
+  </div>`;
   el.style.display = '';
-  let val = cur.rating;
-  el.querySelectorAll('.as-star').forEach(b => b.onclick = () => { val = +b.dataset.v; el.querySelectorAll('.as-star').forEach(x => x.classList.toggle('on', +x.dataset.v <= val)); });
-  document.getElementById('asRateSave').onclick = async (ev) => {
-    const msg = document.getElementById('asRateMsg');
-    if (!val) { msg.style.color = '#ef4444'; msg.textContent = 'اختر عدد النجوم'; return; }
-    ev.target.disabled = true;
-    try { await api.asstRate(val, document.getElementById('asRateComment').value.trim()); msg.style.color = '#22c55e'; msg.textContent = 'شكراً لتقييمك ❤'; ev.target.textContent = 'تحديث التقييم'; }
-    catch { msg.style.color = '#ef4444'; msg.textContent = 'تعذّر الحفظ'; }
-    ev.target.disabled = false;
-  };
+  const stars = el.querySelectorAll('.as-star');
+  stars.forEach(b => {
+    b.onmouseenter = () => stars.forEach(x => x.classList.toggle('on', +x.dataset.v <= +b.dataset.v));
+    b.onmouseleave = () => stars.forEach(x => x.classList.remove('on'));
+    b.onclick = async () => {
+      const v = +b.dataset.v;
+      stars.forEach(x => x.classList.toggle('on', +x.dataset.v <= v));
+      try { await api.asstRate(v, ''); } catch {}
+      el.innerHTML = '<div class="as-rate-thanks">شكراً لتقييمك ❤</div>';
+      setTimeout(() => { el.style.display = 'none'; }, 1500);
+    };
+  });
 }
 
 function renderDash(d) {
