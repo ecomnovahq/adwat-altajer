@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=11">
+<link rel="stylesheet" href="../assets/styles.css?v=12">
 <style>
   .account-page {
     padding: 8rem 2rem 6rem;
@@ -73,13 +73,17 @@
     display: flex; gap: .5rem; margin-bottom: 2rem;
     border-bottom: 1px solid var(--line);
     padding-bottom: 0;
+    overflow-x: auto; flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
   }
+  .account-tabs::-webkit-scrollbar { display: none; }
   .account-tab {
     padding: .7rem 1.25rem;
     border: none; background: none;
     color: var(--ink-dim); font-size: .9rem; font-family: var(--font-arabic);
     cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
     transition: all var(--transition); font-weight: 500;
+    flex-shrink: 0; white-space: nowrap;
   }
   .account-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
   .account-tab:hover:not(.active) { color: var(--ink); border-bottom-color: var(--line-strong); }
