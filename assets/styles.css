@@ -444,6 +444,22 @@ select:focus-visible, [tabindex]:focus-visible, .tool-card:focus-visible, .mp-op
   .xp-burger { display: flex; }
   .xp-nav-inner { padding: 0 1.2rem; }
 }
+/* جوال: تصغير الهيدر حتى تتسع كل الأيقونات بدون طفح */
+@media (max-width: 600px) {
+  .xp-nav-inner { padding: 0 .7rem; gap: .3rem; }
+  .xp-lead { gap: .3rem; }
+  .xp-logo { gap: .4rem; }
+  .xp-logo .logo-svg { width: 26px; height: 36px; }
+  .xp-logo-txt b { font-size: .9rem; }
+  .xp-logo-txt i { display: none; }
+  .xp-actions { gap: .05rem; }
+  .xp-ic { width: 34px; height: 34px; border-radius: 8px; }
+  .xp-ic svg { width: 17px; height: 17px; }
+}
+@media (max-width: 360px) {
+  .xp-logo-txt b { font-size: .82rem; }
+  .xp-ic { width: 32px; height: 32px; }
+}
 /* نافذة البحث */
 .xp-search { position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
   display: none; align-items: flex-start; justify-content: center; padding: 12vh 1.2rem 2rem; }
