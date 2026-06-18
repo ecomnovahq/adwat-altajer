@@ -31,11 +31,7 @@
       { l: 'المدوّنة', h: root + 'blog.html', f: 'blog.html' },
       { l: 'عن المنصة', h: root + 'about.html', f: 'about.html' },
     ];
-    // روابط تظهر للمسجّلين فقط
-    try { if (localStorage.getItem('tajer-token')) {
-      L.splice(5, 0, { l: 'نتائجي', h: root + 'history.html', f: 'history.html' });
-      L.splice(6, 0, { l: 'رسائلي', h: root + 'messages.html', f: 'messages.html' });
-    } } catch (e) {}
+    // «نتائجي» و«رسائلي» متاحان من صفحة الحساب والمساعد العائم — أُزيلا من القائمة الرئيسية لإبقائها نظيفة
     var act = function (f) { return f === file ? ' class="active"' : ''; };
     var navHtml = L.map(function (x) { return '<a href="' + x.h + '"' + act(x.f) + '>' + x.l + '</a>'; }).join('');
 
