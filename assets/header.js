@@ -16,7 +16,7 @@
     var p = location.pathname;
     var inPages = /\/pages\//.test(p);
     var root = inPages ? '' : 'pages/';
-    var home = inPages ? '../index.html' : 'index.html';
+    var home = inPages ? '../' : './';  // الجذر النظيف بدل index.html في الرابط
     var file = (p.split('/').pop() || 'index.html').toLowerCase();
 
     // صفحات لها تخطيط مستقل (لوحة التحكم) — لا تُحقن الهيدر/الفوتر العام
