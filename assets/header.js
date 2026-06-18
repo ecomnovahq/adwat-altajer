@@ -168,6 +168,7 @@
           '<div class="xp-foot-col"><h4>المنصة</h4>' + colCompany + '</div>' +
           '<div class="xp-foot-col"><h4>تواصل معنا</h4>' +
             '<a href="https://wa.me/966507060592" target="_blank" rel="noopener">واتساب: 0507060592</a>' +
+            '<a href="mailto:support@adwat.cloud">support@adwat.cloud</a>' +
             '<a href="https://salatips.com" target="_blank" rel="noopener">salatips.com</a>' +
             '<a href="' + root + 'about.html">الدعم والمساعدة</a>' +
           '</div>' +
