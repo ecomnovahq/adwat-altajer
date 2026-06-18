@@ -2,6 +2,19 @@
    الترتيب: لوجو (يمين) · روابط (وسط) · أيقونات (شمال: حساب + بحث + تبديل الوضع) · زر القائمة (جوال)
    قائمة الجوال: درج جانبي من اليمين بعنوان "القائمة الرئيسية". */
 (function () {
+  // ── Google Analytics 4 (تتبّع زيارات المنصة) ──
+  (function () {
+    var GA_ID = 'G-9DQDLRH3B8';
+    if (window.__gaLoaded) return; window.__gaLoaded = true;
+    var s = document.createElement('script'); s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+  })();
+
   // التقاط حدث التثبيت مبكّراً (قد يقع قبل بناء الهيدر)
   var _deferredInstall = null;
   window.addEventListener('beforeinstallprompt', function (e) {
