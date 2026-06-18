@@ -422,12 +422,13 @@ function adminGaClient() {
   try {
     if (!process.env.GA_CREDENTIALS_JSON && !process.env.GOOGLE_APPLICATION_CREDENTIALS) { _adminGa = null; return null; }
     const { BetaAnalyticsDataClient } = require('@google-analytics/data');
-    const opts = {};
+    const opts = { fallback: 'rest' }; // REST بدل gRPC (يتجنّب التعلّق على السيرفر)
     if (process.env.GA_CREDENTIALS_JSON) { try { opts.credentials = JSON.parse(process.env.GA_CREDENTIALS_JSON); } catch {} }
     _adminGa = new BetaAnalyticsDataClient(opts);
   } catch (e) { _adminGa = null; }
   return _adminGa;
 }
+const _gaOpt = { timeout: 15000 }; // مهلة لكل طلب GA
 router.get('/analytics', adminAuth, async (req, res) => {
   const pid = String(process.env.GA_PLATFORM_PROPERTY || '').replace(/[^0-9]/g, '');
   if (!pid) return res.json({ configured: false });
@@ -438,18 +439,18 @@ router.get('/analytics', adminAuth, async (req, res) => {
     const num = (r, i = 0) => Number(r.rows?.[0]?.metricValues?.[i]?.value || 0);
     const [core] = await client.runReport({ property,
       dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
-      metrics: [{ name: 'activeUsers' }, { name: 'sessions' }, { name: 'screenPageViews' }] });
+      metrics: [{ name: 'activeUsers' }, { name: 'sessions' }, { name: 'screenPageViews' }] }, _gaOpt);
     const [today] = await client.runReport({ property,
       dateRanges: [{ startDate: 'today', endDate: 'today' }],
-      metrics: [{ name: 'activeUsers' }, { name: 'sessions' }] });
+      metrics: [{ name: 'activeUsers' }, { name: 'sessions' }] }, _gaOpt);
     const [cityR] = await client.runReport({ property,
       dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
       dimensions: [{ name: 'city' }], metrics: [{ name: 'activeUsers' }],
-      orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }], limit: 8 });
+      orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }], limit: 8 }, _gaOpt);
     const [dailyR] = await client.runReport({ property,
       dateRanges: [{ startDate: '13daysAgo', endDate: 'today' }],
       dimensions: [{ name: 'date' }], metrics: [{ name: 'activeUsers' }],
-      orderBys: [{ dimension: { dimensionName: 'date' } }] });
+      orderBys: [{ dimension: { dimensionName: 'date' } }] }, _gaOpt);
     res.json({
       configured: true, range: 'آخر 28 يوماً',
       users: num(core, 0), sessions: num(core, 1), pageViews: num(core, 2),
