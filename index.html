@@ -259,6 +259,16 @@
 .tool-card:hover .tool-card-icon.g { background: var(--gold);   color: #fff; border-color: transparent; }
 .tool-card-name { font-weight: 700; font-size: 0.93rem; margin-bottom: 0.3rem; }
 .tool-card-desc { font-size: 0.8rem; color: var(--ink-dim); line-height: 1.65; }
+/* بطاقة مساعد التاجر المميّزة (الأداة الأبرز) */
+.tool-feature { display:flex; align-items:center; gap:1.5rem; justify-content:space-between; background:linear-gradient(135deg, var(--accent-2), var(--accent)); color:#fff; border-radius:22px; padding:1.9rem 2.1rem; margin-bottom:1.6rem; text-decoration:none; position:relative; overflow:hidden; box-shadow:0 16px 48px rgba(99,102,241,.28); transition:transform .25s, box-shadow .25s; }
+.tool-feature:hover { transform:translateY(-4px); box-shadow:0 24px 60px rgba(99,102,241,.4); }
+.tool-feature-badge { position:absolute; top:1rem; inset-inline-start:1.2rem; background:rgba(255,255,255,.22); backdrop-filter:blur(6px); padding:.3rem .85rem; border-radius:99px; font-size:.72rem; font-weight:800; }
+.tool-feature-body { flex:1; padding-top:.6rem; }
+.tool-feature-body h3 { font-size:1.55rem; font-weight:800; margin:0 0 .5rem; }
+.tool-feature-body p { font-size:.95rem; line-height:1.75; opacity:.96; margin:0 0 1.1rem; max-width:580px; }
+.tool-feature-cta { display:inline-block; background:#fff; color:var(--accent); font-weight:800; padding:.6rem 1.4rem; border-radius:99px; font-size:.9rem; }
+.tool-feature-icon { flex-shrink:0; width:92px; height:92px; background:rgba(255,255,255,.18); border-radius:24px; display:flex; align-items:center; justify-content:center; }
+@media (max-width:640px){ .tool-feature { flex-direction:column; text-align:center; padding:2.4rem 1.3rem 1.6rem; } .tool-feature-icon{ order:-1; width:76px; height:76px; } .tool-feature-body p{ margin-inline:auto; } }
 .tool-tag {
   display: inline-block; margin-top: 0.55rem; font-size: 0.65rem; font-weight: 700;
   color: var(--accent); background: var(--accent-soft); border: 1px solid var(--line-accent);
@@ -651,6 +661,18 @@
       </p>
     </div>
 
+    <a href="pages/assistant.html" class="tool-feature" data-reveal>
+      <span class="tool-feature-badge">⭐ الأداة الأبرز</span>
+      <div class="tool-feature-body">
+        <h3>مساعد التاجر الذكي</h3>
+        <p>اربط متجرك وخلّي الذكاء الاصطناعي يشتغل عنك: تحليل تلقائي، لوحة إحصائيات ذكية، مراقبة المنافسين، توليد المحتوى، تحليل التسعير، وخطة نمو — كل ده في مكان واحد يتحدّث مع كل مزامنة.</p>
+        <span class="tool-feature-cta">ابدأ الآن مجانًا ←</span>
+      </div>
+      <div class="tool-feature-icon">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v1H7a2 2 0 0 0-2 2v3a4 4 0 0 0 0 8h.5"/><path d="M12 2a3 3 0 0 1 3 3v1h2a2 2 0 0 1 2 2v3a4 4 0 0 1 0 8h-.5"/><path d="M9 13v2M15 13v2M9 19h6"/></svg>
+      </div>
+    </a>
+
     <div class="tools-grid">
       <a href="pages/analyzer.html" class="tool-card" data-reveal data-delay="1">
         <div class="tool-card-icon">
@@ -920,7 +942,7 @@
   </div>
 </footer>
 
-<script src="assets/api.js?v=44"></script>
+<script src="assets/api.js?v=45"></script>
 <script src="assets/tool-display.js?v=1"></script>
 <script>
   /* عدّ تصاعدي لأرقام تقرير الـmockup + تعبئة الحلقة والأشرطة عند الظهور */

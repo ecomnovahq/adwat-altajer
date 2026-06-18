@@ -225,6 +225,31 @@ router.get('/users', adminAuth, async (req, res) => {
   res.json(rows);
 });
 
+// إضافة مستخدم يدويًا من لوحة التحكم
+router.post('/users', adminAuth, async (req, res) => {
+  try {
+    const bcrypt = require('bcryptjs');
+    const email = String(req.body.email || '').trim().toLowerCase();
+    const name = String(req.body.name || '').trim();
+    const password = String(req.body.password || '');
+    const phone = String(req.body.phone || '').trim() || null;
+    const is_admin = !!req.body.is_admin;
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return res.status(400).json({ error: 'بريد إلكتروني غير صالح' });
+    if (!name) return res.status(400).json({ error: 'الاسم مطلوب' });
+    if (password.length < 6) return res.status(400).json({ error: 'كلمة المرور 6 أحرف على الأقل' });
+    const exists = (await db.query('SELECT 1 FROM users WHERE email = $1', [email])).rows[0];
+    if (exists) return res.status(409).json({ error: 'البريد مستخدم بالفعل' });
+    const hash = await bcrypt.hash(password, 10);
+    const { rows } = await db.query(
+      'INSERT INTO users (email, password_hash, name, phone, is_admin) VALUES ($1,$2,$3,$4,$5) RETURNING id, email, name, is_admin, tools_access, phone, created_at',
+      [email, hash, name, phone, is_admin]
+    );
+    res.json({ ok: true, user: rows[0] });
+  } catch (err) {
+    res.status(500).json({ error: 'تعذّر إنشاء المستخدم' });
+  }
+});
+
 // تفاصيل مستخدم واحد — بياناته + الاستخدام + السجل
 router.get('/users/:id', adminAuth, async (req, res) => {
   try {
@@ -352,6 +377,40 @@ router.put('/plans/:id', adminAuth, async (req, res) => {
 router.delete('/plans/:id', adminAuth, async (req, res) => {
   await db.query('DELETE FROM plans WHERE id=$1', [req.params.id]);
   res.json({ ok: true });
+});
+
+// توليد باقات بالذكاء الاصطناعي — يقترح الأسعار والمميزات ويضيفها (قابلة للتعديل لاحقًا)
+router.post('/plans/generate', adminAuth, async (req, res) => {
+  try {
+    const { aiJSON } = require('../ai');
+    const count = Math.min(6, Math.max(1, parseInt(req.body.count) || 3));
+    const tool = String(req.body.tool || 'مساعد التاجر').slice(0, 120);
+    const toolKey = String(req.body.toolKey || '').slice(0, 50);
+    const notes = String(req.body.notes || '').slice(0, 500);
+    const prompt = `أنت خبير تسعير منتجات SaaS عربية موجّهة لتجار المتاجر الإلكترونية (سلة/زد) في السوق السعودي/الخليجي.
+صمّم ${count} باقات اشتراك متدرّجة لأداة: "${tool}".
+${notes ? 'ملاحظات المالك: ' + notes : ''}
+القواعد: أسعار بالريال السعودي واقعية، المميزات متدرّجة منطقيًا (الأعلى يشمل الأدنى + إضافات)، باقة وسطى واحدة فقط "موصى به"، السعر السنوي بخصم ~20% عن (الشهري×12).
+أعد JSON فقط بدون أي شرح بالشكل التالي:
+{"plans":[{"name":"اسم عربي قصير","price":<رقم شهري>,"price_yearly":<رقم سنوي>,"badge":"موصى به" أو "","features":["ميزة 1","ميزة 2","ميزة 3","ميزة 4"],"sort_order":10}]}
+لكل باقة 4 إلى 7 مميزات عربية واضحة موجّهة للتاجر. رتّب sort_order تصاعديًا (10,20,30...).`;
+    const out = await aiJSON(prompt, { temperature: 0.6, maxTokens: 2200 });
+    const gen = Array.isArray(out && out.plans) ? out.plans : [];
+    if (!gen.length) return res.status(502).json({ error: 'تعذّر توليد الباقات، حاول مرة أخرى' });
+    const inserted = [];
+    let order = 10;
+    for (const raw of gen.slice(0, count)) {
+      const p = planBody({ ...raw, period: 'شهرياً', sort_order: raw.sort_order || order, tools: toolKey ? [toolKey] : [] });
+      if (!p.name) continue;
+      const { rows } = await db.query(
+        `INSERT INTO plans (name,price,price_yearly,period,badge,features,tools,sort_order,active) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
+        [p.name, p.price, p.price_yearly, p.period, p.badge, p.features, p.tools, p.sort_order, p.active]);
+      inserted.push(rows[0]); order += 10;
+    }
+    res.json({ ok: true, plans: inserted });
+  } catch (e) {
+    res.status(500).json({ error: 'تعذّر توليد الباقات بالذكاء الاصطناعي' });
+  }
 });
 
 // ─── مدة التجربة المجانية + الاشتراكات اليدوية ──────────────────────────────
