@@ -618,6 +618,24 @@ router.delete('/chat', auth, ar(async (req, res) => {
   res.json({ ok: true });
 }));
 
+// ─── تقييم العميل للأداة ───
+router.get('/rate', auth, ar(async (req, res) => {
+  const tool = String(req.query.tool || 'assistant').slice(0, 60);
+  const { rows } = await db.query('SELECT rating, comment FROM tool_ratings WHERE user_id=$1 AND tool=$2', [req.user.id, tool]);
+  res.json(rows[0] || { rating: 0, comment: '' });
+}));
+router.post('/rate', auth, ar(async (req, res) => {
+  const rating = Math.max(1, Math.min(5, parseInt(req.body.rating) || 0));
+  const comment = String(req.body.comment || '').slice(0, 500);
+  const tool = String(req.body.tool || 'assistant').slice(0, 60);
+  if (!rating) return res.status(400).json({ error: 'تقييم غير صالح' });
+  await db.query(
+    `INSERT INTO tool_ratings (user_id, tool, rating, comment) VALUES ($1,$2,$3,$4)
+     ON CONFLICT (user_id, tool) DO UPDATE SET rating=$3, comment=$4, created_at=NOW()`,
+    [req.user.id, tool, rating, comment || null]);
+  res.json({ ok: true, rating, comment });
+}));
+
 // ─── أدوات لكل منتج: تحسين الوصف / SEO / ضغط الصورة ───────────────────────────
 async function getMyProduct(userId, pid) {
   const { rows } = await db.query(

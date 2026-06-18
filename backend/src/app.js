@@ -265,6 +265,19 @@ db.query(`
   db.query(`ALTER TABLE assistant_chats ADD COLUMN IF NOT EXISTS store_id INTEGER`)
 ).catch(e => logger.error('assistant_chats init:', e.message));
 
+// ─── تقييمات الأدوات من العملاء ───
+db.query(`
+  CREATE TABLE IF NOT EXISTS tool_ratings (
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL,
+    tool       VARCHAR(60) NOT NULL DEFAULT 'assistant',
+    rating     SMALLINT NOT NULL,
+    comment    TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (user_id, tool)
+  )
+`).catch(e => logger.error('tool_ratings init:', e.message));
+
 // ─── ترقيات مساعد التاجر: تعدّد المتاجر + معرض الصور + محتوى مولّد + سجل التغييرات ──
 db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS max_stores INTEGER NOT NULL DEFAULT 1`)
   .catch(e => logger.error('users.max_stores init:', e.message));

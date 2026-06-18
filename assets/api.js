@@ -150,6 +150,8 @@ const api = {
   asstAlertsSeen: function () { return apiRequest('POST', '/assistant/alerts/seen', { storeId: this._sid() }); },
   asstChat:       function (data) { return apiRequest('POST', '/assistant/chat', { ...data, storeId: this._sid() }); },
   asstChatHistory: function () { return apiRequest('GET', '/assistant/chat' + this._q()); },
+  asstGetRate:    function () { return apiRequest('GET', '/assistant/rate'); },
+  asstRate:       function (rating, comment) { return apiRequest('POST', '/assistant/rate', { rating, comment }); },
   asstClearChat:  function () { return apiRequest('DELETE', '/assistant/chat', { storeId: this._sid() }); },
   asstProdDesc:   (id, lang) => apiRequest('POST', `/assistant/product/${id}/description`, { lang: lang || 'ar' }),
   asstProdPrice:  (id, cost) => apiRequest('POST', `/assistant/product/${id}/price-suggestion`, { cost }),
@@ -721,6 +723,10 @@ function initNavAuth() {
 
   // State
   let chatHistory = [];
+  // حفظ محادثة المساعد الذكي محليًا لكل مستخدم (لا تضيع عند التحديث)
+  function _tjChatKey() { try { const u = JSON.parse(localStorage.getItem('tajer-user') || 'null'); return 'tj-aichat-' + ((u && (u.id || u.email)) || 'guest'); } catch { return 'tj-aichat-guest'; } }
+  function _tjLoadChat() { try { return JSON.parse(localStorage.getItem(_tjChatKey()) || '[]'); } catch { return []; } }
+  function _tjSaveChat() { try { localStorage.setItem(_tjChatKey(), JSON.stringify(chatHistory.slice(-20))); } catch {} }
   let chatOpen = false;
   let chatBusy = false;
   let ticketMode = false, ticketId = null, ticketLastId = 0, ticketPoll = null, awaitingCustomTopic = false, _pendingAtt = null;
@@ -790,11 +796,16 @@ function initNavAuth() {
   // بدء محادثة جديدة مع المساعد الذكي
   function openNewChat() {
     stopTicketPoll();
-    ticketMode = false; ticketId = null; awaitingCustomTopic = false; chatHistory = [];
+    ticketMode = false; ticketId = null; awaitingCustomTopic = false;
+    chatHistory = _tjLoadChat();
     document.getElementById('tjChatName').textContent = 'تاجر — مساعدك الذكي';
     document.getElementById('tjChatStatusTxt').textContent = '● متاح الآن · يجيب فوراً';
-    document.getElementById('tjChatMsgs').innerHTML = '';
-    addBubble(`السلام عليكم${userName ? ' ' + userName : ''}! حياك الله — أنا تاجر مساعدك الذكي. اسألني عن متجرك أو اطلب «التواصل مع خدمة العملاء».`, 'tj-msg-bot');
+    const _box = document.getElementById('tjChatMsgs'); _box.innerHTML = '';
+    if (chatHistory.length) {
+      chatHistory.forEach(m => addBubble(m.content, m.role === 'user' ? 'tj-msg-user' : 'tj-msg-bot'));
+    } else {
+      addBubble(`السلام عليكم${userName ? ' ' + userName : ''}! حياك الله — أنا تاجر مساعدك الذكي. اسألني عن متجرك أو اطلب «التواصل مع خدمة العملاء».`, 'tj-msg-bot');
+    }
     showView('chat');
   }
 
@@ -949,6 +960,7 @@ function initNavAuth() {
       chatHistory.push({ role: 'user', content: message });
       chatHistory.push({ role: 'assistant', content: data.reply });
       if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+      _tjSaveChat();
       typing.remove();
       addBubble(data.reply, 'tj-msg-bot');
     } catch {

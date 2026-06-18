@@ -300,6 +300,12 @@
 .as-plan-feats li { position: relative; padding-inline-start: 1.5rem; font-size: .86rem; color: var(--ink-dim); }
 .as-plan-feats li::before { content: '✓'; position: absolute; inset-inline-start: 0; color: var(--accent); font-weight: 800; }
 .as-plan-btn { width: 100%; justify-content: center; }
+/* تقييم الأداة بالنجوم */
+.as-rate-t { font-weight: 800; font-size: 1rem; margin-bottom: .6rem; }
+.as-stars { display: flex; gap: .2rem; direction: ltr; }
+.as-star { background: none; border: none; font-size: 1.9rem; line-height: 1; cursor: pointer; color: var(--line-strong); padding: 0 .1rem; transition: color .15s, transform .1s; }
+.as-star.on { color: #f5b50a; }
+.as-star:hover { transform: scale(1.15); }
 /* ترحيب بأسلوب سلة */
 .as-greet { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
 .as-greet-hi { font-size: 1.5rem; font-weight: 800; line-height: 1.3; }
