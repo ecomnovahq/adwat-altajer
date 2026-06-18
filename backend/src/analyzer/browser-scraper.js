@@ -2,6 +2,7 @@
 // يحلّ مشكلة متاجر سلة/زد المعتمدة على JS التي لا يراها الزحف الساكن.
 const puppeteer = require('puppeteer-core');
 const logger = require('../logger');
+const { puppeteerProxyArgs, authenticatePage } = require('../proxy'); // بروكسي اختياري
 
 const CHROME_PATH = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
@@ -131,9 +132,10 @@ async function crawlWithBrowser(baseUrl, limit = 100, seedCats = []) {
   const products = new Map(); // url → {url,name,price,image,category}
   try {
     browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-blink-features=AutomationControlled'], timeout: 30000 });
+      args: [...puppeteerProxyArgs(), '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-blink-features=AutomationControlled'], timeout: 30000 });
     const origin = new URL(baseUrl).origin;
     const page = await browser.newPage();
+    await authenticatePage(page);
     await page.evaluateOnNewDocument(() => { Object.defineProperty(navigator, 'webdriver', { get: () => undefined }); });
     await page.setUserAgent(UA);
     await page.setViewport({ width: 1366, height: 900 });
@@ -206,8 +208,9 @@ async function enrichProductsWithBrowser(urls, limit = 15) {
   let browser;
   try {
     browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-blink-features=AutomationControlled'], timeout: 30000 });
+      args: [...puppeteerProxyArgs(), '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-blink-features=AutomationControlled'], timeout: 30000 });
     const page = await browser.newPage();
+    await authenticatePage(page);
     await page.evaluateOnNewDocument(() => { Object.defineProperty(navigator, 'webdriver', { get: () => undefined }); });
     await page.setUserAgent(UA);
     await page.setViewport({ width: 1280, height: 900 });

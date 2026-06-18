@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer-core');
 const logger = require('../logger');
+const { puppeteerProxyArgs, authenticatePage } = require('../proxy'); // بروكسي اختياري
 
 const CHROME_PATH =
   process.env.CHROME_PATH ||
@@ -50,7 +51,7 @@ async function takeStoreScreenshots(baseUrl) {
     browser = await puppeteer.launch({
       executablePath: CHROME_PATH,
       headless: true,
-      args: [...LAUNCH_ARGS, '--disable-blink-features=AutomationControlled'],
+      args: [...puppeteerProxyArgs(), ...LAUNCH_ARGS, '--disable-blink-features=AutomationControlled'],
       timeout: 30000,
     });
 
@@ -59,6 +60,7 @@ async function takeStoreScreenshots(baseUrl) {
 
     // ── صفحة 1: الرئيسية — ديسكتوب + جوال + استخراج روابط داخلية ──────────
     const p1 = await browser.newPage();
+    await authenticatePage(p1);
     // Bypass headless browser detection
     await p1.evaluateOnNewDocument(() => {
       Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
@@ -141,6 +143,7 @@ async function takeStoreScreenshots(baseUrl) {
     if (extraUrl) {
       try {
         const p2 = await browser.newPage();
+        await authenticatePage(p2);
         await setupPage(p2);
         const isProduct = /product|item|منتج/i.test(extraUrl);
         const label = isProduct ? 'صفحة منتج' : 'صفحة تصنيف / متجر';

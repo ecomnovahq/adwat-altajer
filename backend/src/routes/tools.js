@@ -663,7 +663,7 @@ function buildTechnicalChecks(scraped, seoFiles, pageSpeed) {
 async function simulateBehavior(url) {
   try {
     const { chromium } = require('playwright');
-    const browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    const browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'], ...require('../proxy').playwrightProxy() });
     const page = await browser.newPage();
     await page.setViewportSize({ width: 390, height: 844 });
     const t0 = Date.now();

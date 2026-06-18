@@ -1,6 +1,7 @@
 // وحدة سحب المتجر ومنتجاته (best-effort) — تُستخدم في «مساعد التاجر»
 const axios = require('axios');
 const cheerio = require('cheerio');
+const { axiosProxy } = require('../proxy'); // بروكسي اختياري لتجاوز حجب المتاجر
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36';
 const H = { 'User-Agent': UA, 'Accept-Language': 'ar,en;q=0.8' };
@@ -113,7 +114,7 @@ async function crawlCategoryProducts(base, cats, cap = 400) {
       if (visited.has(pageUrl)) break;
       visited.add(pageUrl);
       let html;
-      try { html = String((await axios.get(pageUrl, { timeout: 12000, headers: H })).data); }
+      try { html = String((await axios.get(pageUrl, { ...axiosProxy, timeout: 12000, headers: H })).data); }
       catch { break; }
       const $ = cheerio.load(html);
       let added = 0;
@@ -132,7 +133,7 @@ async function fetchStoreInfo(url, _attempt = 0) {
   if (_attempt === 0) await assertPublicUrl(url); // حماية SSRF
   let resp;
   try {
-    resp = await axios.get(url, { timeout: 20000, maxRedirects: 6, headers: H });
+    resp = await axios.get(url, { ...axiosProxy, timeout: 20000, maxRedirects: 6, headers: H });
   } catch (e) {
     if (_attempt < 2) { await new Promise(r => setTimeout(r, 1500 * (_attempt + 1))); return fetchStoreInfo(url, _attempt + 1); }
     throw e;
@@ -185,7 +186,7 @@ async function urlsFromSitemap(base) {
     if (visited.has(sm) || depth > 3 || productUrls.size >= HARD_CAP) return;
     visited.add(sm);
     let data;
-    try { data = String((await axios.get(sm, { timeout: 9000, headers: H })).data); } catch { return; }
+    try { data = String((await axios.get(sm, { ...axiosProxy, timeout: 9000, headers: H })).data); } catch { return; }
     const locs = (data.match(/<loc>([^<]+)<\/loc>/gi) || []).map(l => l.replace(/<\/?loc>/gi, '').trim());
     const subMaps = locs.filter(u => /\.xml($|\?)/i.test(u));
     const pages = locs.filter(u => !/\.xml($|\?)/i.test(u));
@@ -207,7 +208,7 @@ async function fetchPlatformProducts(base) {
   try {
     let page = 1;
     while (page <= 5 && out.length < HARD_CAP) {
-      const r = await axios.get(`${base}/products.json?limit=250&page=${page}`, { timeout: 12000, headers: { ...H, Accept: 'application/json' } });
+      const r = await axios.get(`${base}/products.json?limit=250&page=${page}`, { ...axiosProxy, timeout: 12000, headers: { ...H, Accept: 'application/json' } });
       const prods = r.data && Array.isArray(r.data.products) ? r.data.products : [];
       if (!prods.length) break;
       for (const p of prods) {
@@ -229,7 +230,7 @@ async function fetchPlatformProducts(base) {
   // 2) WooCommerce — Store API العامة
   try {
     for (let pg = 1; pg <= 5 && out.length < HARD_CAP; pg++) {
-      const r = await axios.get(`${base}/wp-json/wc/store/v1/products?per_page=100&page=${pg}`, { timeout: 12000, headers: { ...H, Accept: 'application/json' } });
+      const r = await axios.get(`${base}/wp-json/wc/store/v1/products?per_page=100&page=${pg}`, { ...axiosProxy, timeout: 12000, headers: { ...H, Accept: 'application/json' } });
       const prods = Array.isArray(r.data) ? r.data : [];
       if (!prods.length) break;
       for (const p of prods) {
@@ -255,7 +256,7 @@ async function fetchPlatformProducts(base) {
 async function fetchProduct(url) {
   try {
     await assertPublicUrl(url); // حماية SSRF
-    const r = await axios.get(url, { timeout: 12000, maxRedirects: 4, headers: H });
+    const r = await axios.get(url, { ...axiosProxy, timeout: 12000, maxRedirects: 4, headers: H });
     const $ = cheerio.load(r.data);
     // JSON-LD أولاً (الأدق)
     let ld = null;

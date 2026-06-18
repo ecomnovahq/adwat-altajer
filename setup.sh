@@ -67,6 +67,7 @@ DATABASE_URL=postgresql://$DB_USER:$DB_PASS@localhost:5432/$DB_NAME
 JWT_SECRET=$JWT
 GEMINI_API_KEY=ضع_مفتاح_Gemini_هنا
 GROQ_API_KEY=
+PROXY_URL=
 CHROME_PATH=/usr/bin/google-chrome
 PG_DUMP_PATH=pg_dump
 NODE_ENV=production
