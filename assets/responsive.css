@@ -1,0 +1,18 @@
+/* ════════════════════════════════════════════════════════════
+   تجاوب عام لكل المنصة — يضمن توافق كل الصفحات مع كل الشاشات
+   يُحمَّل بعد styles.css في كل صفحة. (v1)
+   تابلت ≤920: عمودان | جوال ≤600: عمود واحد
+════════════════════════════════════════════════════════════ */
+@media (max-width: 920px) {
+  .an-bar-row,.an-cards,.an-grid2,.az-cat-grid,.az-comp-grid,.az-crit-row,.az-cwv-grid,.az-form-row,.az-hero,.az-id-grid,.az-lh-scores,.az-rev-grid,.az-screens-grid,.az-steps,.az-svc-grid,.az-tech-checks,.blog-grid,.calc-grid,.comp-bars,.comp-form-grid,.contact-row,.coupons-grid,.days-options,.filters-bar,.form-row,.form-row-2,.gen-grid,.hero-saas,.home-works-grid,.how-grid,.imggen-layout,.input-row,.lc-ads,.lc-email-meta,.lc-grid,.lc-kpis,.mp-modes,.mp-scores,.mp-svc-grid,.ms-layout,.ot-grid,.platform-options,.pol-grid,.process-steps,.reviews-grid,.score-compare,.season-options,.season-stats,.services-grid,.sp-grid,.sp-times,.stats-grid,.stats-row,.style-grid,.sw-grid,.tips-grid,.tk-layout,.tone-options-3,.tools-grid,.values-grid,.wa-grid,.works-full-grid,.works-stats { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 600px) {
+  .an-bar-row,.an-cards,.an-grid2,.az-cat-grid,.az-comp-grid,.az-crit-row,.az-cwv-grid,.az-form-row,.az-hero,.az-id-grid,.az-lh-scores,.az-rev-grid,.az-screens-grid,.az-steps,.az-svc-grid,.az-tech-checks,.blog-grid,.calc-grid,.comp-bars,.comp-form-grid,.contact-row,.coupons-grid,.days-options,.filters-bar,.form-row,.form-row-2,.gen-grid,.hero-saas,.home-works-grid,.how-grid,.imggen-layout,.input-row,.lc-ads,.lc-email-meta,.lc-grid,.lc-kpis,.mp-modes,.mp-scores,.mp-svc-grid,.ms-layout,.ot-grid,.platform-options,.pol-grid,.process-steps,.reviews-grid,.score-compare,.season-options,.season-stats,.services-grid,.sp-grid,.sp-times,.stats-grid,.stats-row,.style-grid,.sw-grid,.tips-grid,.tk-layout,.tone-options-3,.tools-grid,.values-grid,.wa-grid,.works-full-grid,.works-stats,
+  [style*="1fr 1fr"], #asVisualGrid { grid-template-columns: 1fr !important; }
+  /* جداول قابلة للتمرير أفقيًا بدل كسر العرض */
+  table { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+  /* منع أي تمدّد أفقي */
+  body, .as-page, section, main { max-width: 100%; }
+  /* تصغير الحشوات الكبيرة على الجوال */
+  section[class*="page"], .account-page, .as-page { padding-left: 1rem; padding-right: 1rem; }
+}
