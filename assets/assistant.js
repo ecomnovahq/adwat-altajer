@@ -330,6 +330,45 @@ function openAddStore() {
 }
 
 let _lastData = null;
+// ─── بطاقة الباقة الحالية + تحفيز الترقية للباقة الأعلى ───
+async function renderPlanCard() {
+  const el = document.getElementById('asPlanCard');
+  if (!el) return;
+  let st;
+  try { st = await api.getSubscription(); } catch { return; }
+  if (!st || st.status === 'admin') { el.style.display = 'none'; return; }
+  const plans = (st.plans || []);
+  if (!plans.length) { el.style.display = 'none'; return; }
+
+  // الباقة الحالية + الأعلى منها
+  let curIdx = -1;
+  if (st.status === 'subscribed' && st.plan) curIdx = plans.findIndex(p => p.name === st.plan);
+  const next = curIdx >= 0 ? (plans[curIdx + 1] || null) : (plans.find(p => p.badge) || plans[0]);
+
+  const curLabel = st.status === 'subscribed' ? (st.plan || 'مشترك')
+    : st.status === 'trial' ? `تجربة مجانية — باقٍ ${st.daysLeft} يوم`
+    : st.status === 'expired' ? 'انتهت التجربة' : 'الباقة المجانية';
+
+  const feats = (next && Array.isArray(next.features)) ? next.features : [];
+  const priceTxt = next ? `${next.price} ${next.period === 'yearly' ? 'ر.س/سنة' : 'ر.س/شهر'}` : '';
+
+  let html = `<div class="as-card as-plan">
+    <div class="as-plan-head">
+      <div><div class="as-plan-cur">باقتك الحالية</div><div class="as-plan-name">${e(curLabel)}</div></div>
+      ${next ? `<span class="as-plan-badge">${e(next.badge || 'ترقية متاحة')}</span>` : '<span class="as-plan-badge ok">أعلى باقة ✓</span>'}
+    </div>`;
+  if (next) {
+    html += `<div class="as-plan-up">
+      <div class="as-plan-up-t">ارتقِ إلى باقة «${e(next.name)}» 🚀</div>
+      <ul class="as-plan-feats">${feats.slice(0, 5).map(f => `<li>${e(f)}</li>`).join('')}</ul>
+      <button class="btn-primary as-plan-btn" onclick="showUpgradeModal('upgrade')">ترقية الآن${priceTxt ? ' — ' + e(priceTxt) : ''}</button>
+    </div>`;
+  }
+  html += `</div>`;
+  el.innerHTML = html;
+  el.style.display = '';
+}
+
 function renderDash(d) {
   _lastData = d;
   const s = d.store, rep = s.latest_report || {};
@@ -351,6 +390,7 @@ function renderDash(d) {
     + kpiCard({ k: '#3b82f6', ic: IC.file, value: pagesN, label: 'صفحات المتجر', delta: deltaBadge(pagesN, pm.pages, true) })
     + kpiCard({ k: alertsN ? '#ef4444' : '#22c55e', ic: IC.bell, value: alertsN, label: 'تنبيهات مفتوحة', delta: '' });
   animateCounts(document.getElementById('asKpis'));
+  renderPlanCard();
   // عدّادات التبويبات
  document.getElementById('asTabProdN').textContent = (d.products||[]).length;
  { const pn = document.getElementById('asTabPageN'); if (pn) pn.textContent = (d.pages||rep.pages||[]).length; }

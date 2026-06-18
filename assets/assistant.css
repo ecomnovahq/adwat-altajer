@@ -284,6 +284,22 @@
 .as-menu-pop.on { display: block; }
 .as-menu-pop button { display: flex; align-items: center; gap: .5rem; width: 100%; background: none; border: none; color: var(--ink); font-family: var(--font-arabic); font-size: .85rem; padding: .6rem .9rem; cursor: pointer; text-align: start; }
 .as-menu-pop button:hover { background: var(--bg-card); color: var(--accent); }
+/* إصلاح قائمة الإجراءات على الجوال (كانت تخرج عن الشاشة) */
+@media (max-width: 600px) {
+  .as-menu-pop.on { position: fixed; top: 64px; left: .75rem; right: .75rem; inset-inline-start: auto; inset-inline-end: auto; min-width: 0; width: auto; max-width: calc(100vw - 1.5rem); }
+}
+/* بطاقة الباقة والترقية */
+.as-plan-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.as-plan-cur { font-size: .75rem; color: var(--ink-dim); }
+.as-plan-name { font-size: 1.1rem; font-weight: 800; color: var(--ink); margin-top: .15rem; }
+.as-plan-badge { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--line-accent); font-size: .72rem; font-weight: 700; padding: .3rem .7rem; border-radius: 99px; white-space: nowrap; }
+.as-plan-badge.ok { background: rgba(34,197,94,.12); color: #22c55e; border-color: rgba(34,197,94,.3); }
+.as-plan-up { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--line-strong); }
+.as-plan-up-t { font-weight: 800; font-size: .98rem; margin-bottom: .7rem; }
+.as-plan-feats { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: .45rem; }
+.as-plan-feats li { position: relative; padding-inline-start: 1.5rem; font-size: .86rem; color: var(--ink-dim); }
+.as-plan-feats li::before { content: '✓'; position: absolute; inset-inline-start: 0; color: var(--accent); font-weight: 800; }
+.as-plan-btn { width: 100%; justify-content: center; }
 /* طيّ الشات على الديسكتوب */
 .as-grid.chat-off { grid-template-columns: 1fr; }
 .as-grid.chat-off .as-chat { display: none; }

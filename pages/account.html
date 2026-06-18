@@ -169,6 +169,10 @@
       <div class="account-email" id="acctEmail"></div>
     </div>
     <span class="account-badge" id="acctBadge">مستخدم</span>
+    <a id="acctAdminBtn" href="admin.html" class="btn-primary" style="display:none;margin-right:auto;padding:.5rem 1rem;font-size:.85rem;gap:.4rem;align-items:center;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      العودة إلى لوحة التحكم
+    </a>
     <button class="btn-secondary" style="margin-right:.5rem;padding:.5rem 1rem;font-size:.85rem;" onclick="api.logout()">
       تسجيل الخروج
     </button>
@@ -266,6 +270,7 @@ document.getElementById('acctAvatar').textContent = user?.name?.charAt(0)?.toUpp
 document.getElementById('acctName').textContent = user?.name || '';
 document.getElementById('acctEmail').textContent = user?.email || '';
 document.getElementById('acctBadge').textContent = user?.is_admin ? 'مدير' : 'مستخدم';
+if (user?.is_admin) { const ab = document.getElementById('acctAdminBtn'); if (ab) ab.style.display = 'inline-flex'; }
 
 // ─── Tabs ─────────────────────────────────────────────────────────────────────
 const tabLoaded = {};
