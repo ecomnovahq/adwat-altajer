@@ -430,7 +430,7 @@ function adminGaClient() {
 }
 const _gaOpt = { timeout: 15000 }; // مهلة لكل طلب GA
 router.get('/analytics', adminAuth, async (req, res) => {
-  const log = (m) => { try { require('../logger').info('GA-analytics: ' + m); } catch {} };
+  const log = (m) => { try { require('../logger').warn('GA-analytics: ' + m); } catch {} };
   log('enter');
   const pid = String(process.env.GA_PLATFORM_PROPERTY || '').replace(/[^0-9]/g, '');
   if (!pid) { log('no pid'); return res.json({ configured: false }); }
