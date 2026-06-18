@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/styles.css?v=13">
 <link rel="stylesheet" href="../assets/responsive.css?v=1">
-<link rel="stylesheet" href="../assets/assistant.css?v=12">
+<link rel="stylesheet" href="../assets/assistant.css?v=13">
 </head>
 <body>
 
@@ -34,6 +34,13 @@
 
   <!-- اللوحة -->
   <div id="asDash" style="display:none;">
+    <!-- ترحيب -->
+    <div class="as-greet" id="asGreeting">
+      <div>
+        <div class="as-greet-hi">حيّاك الله <span id="asGreetName"></span> 👋</div>
+        <div class="as-greet-sub">بارك الله في سعيك ورزقك ✨</div>
+      </div>
+    </div>
     <!-- شريط علوي: بحث عام + جرس إشعارات -->
     <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:1rem;">
       <div style="position:relative;flex:1;max-width:460px;">
@@ -454,7 +461,7 @@
 <div class="tour-ov" id="tourOv"><div class="tour-spot" id="tourSpot"></div><div class="tour-pop" id="tourPop"></div></div>
 
 <script src="../assets/api.js?v=45"></script>
-<script src="../assets/assistant.js?v=19"></script>
+<script src="../assets/assistant.js?v=20"></script>
 <script src="../assets/header.js?v=17"></script>
 </body>
 </html>

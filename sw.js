@@ -3,7 +3,7 @@
    - HTML والـAPI: network-first (دائماً أحدث نسخة — يحل مشكلة الكاش القديم)
    - الأصول الثابتة (css/js/خطوط/صور): stale-while-revalidate (سريع + يتحدّث بالخلفية)
 */
-const CACHE = 'tajer-v9';
+const CACHE = 'tajer-v10';
 const ASSET_RE = /\.(css|js|svg|png|jpg|jpeg|webp|woff2?)(\?|$)/i;
 
 self.addEventListener('install', (e) => { self.skipWaiting(); });

@@ -300,6 +300,20 @@
 .as-plan-feats li { position: relative; padding-inline-start: 1.5rem; font-size: .86rem; color: var(--ink-dim); }
 .as-plan-feats li::before { content: '✓'; position: absolute; inset-inline-start: 0; color: var(--accent); font-weight: 800; }
 .as-plan-btn { width: 100%; justify-content: center; }
+/* ترحيب بأسلوب سلة */
+.as-greet { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
+.as-greet-hi { font-size: 1.5rem; font-weight: 800; line-height: 1.3; }
+.as-greet-sub { font-size: .88rem; color: var(--ink-dim); margin-top: .25rem; }
+/* تحسين الجوال — مظهر أنظف أقرب لتطبيق سلة */
+@media (max-width: 600px) {
+  .as-greet-hi { font-size: 1.2rem; }
+  .as-greet-sub { font-size: .8rem; }
+  .as-card { border-radius: 18px; padding: 1rem; margin-bottom: 1rem; }
+  .as-kpis { grid-template-columns: 1fr 1fr !important; gap: .7rem; }
+  .as-kpi2 { padding: .9rem .85rem; border-radius: 16px; }
+  .as-kpi2-n { font-size: 1.5rem; }
+  .as-page { padding-left: .9rem; padding-right: .9rem; }
+}
 /* طيّ الشات على الديسكتوب */
 .as-grid.chat-off { grid-template-columns: 1fr; }
 .as-grid.chat-off .as-chat { display: none; }

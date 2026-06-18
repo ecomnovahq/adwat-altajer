@@ -371,6 +371,7 @@ async function renderPlanCard() {
 
 function renderDash(d) {
   _lastData = d;
+  try { const u = (window.auth && auth.getUser && auth.getUser()) || {}; const gn = document.getElementById('asGreetName'); if (gn) gn.textContent = (u.name || '').split(' ')[0] || ''; } catch {}
   const s = d.store, rep = s.latest_report || {};
  document.getElementById('asName').textContent = s.store_name || 'متجرك';
   // الرأس اللاصق
