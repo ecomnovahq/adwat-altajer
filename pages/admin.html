@@ -404,6 +404,15 @@
         <div class="stat-card"><div class="stat-label">استخدام الأدوات (30 يوم)</div><div class="stat-value" id="stat-tools">—</div></div>
       </div>
 
+      <!-- زيارات المنصة (Google Analytics) -->
+      <div class="panel" style="margin-bottom:1.5rem;">
+        <div class="panel-header" style="flex-wrap:wrap;gap:.5rem;">
+          <div class="panel-title">زيارات المنصة (Google Analytics)</div>
+          <span style="font-size:.78rem;color:var(--ink-dim);" id="gaRange"></span>
+        </div>
+        <div id="gaBody" style="padding:1rem;color:var(--ink-dim);font-size:.88rem;">جاري التحميل…</div>
+      </div>
+
       <!-- لوحة التحليلات بنطاق زمني -->
       <div class="panel" style="margin-bottom:1.5rem;">
         <div class="panel-header" style="flex-wrap:wrap;gap:.6rem;">
@@ -1172,7 +1181,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js?v=46"></script>
+<script src="../assets/api.js?v=47"></script>
 <script>
 // ─── Notifications ────────────────────────────────────────────────────────────
 let notifications = JSON.parse(localStorage.getItem('admin_notifs') || '[]');
@@ -1870,8 +1879,38 @@ function platformBadge(p) {
   return `<span class="platform-badge platform-${p}">${labels[p] || p}</span>`;
 }
 
+// ─── زيارات المنصة (Google Analytics) ───
+async function loadAnalytics() {
+  const body = document.getElementById('gaBody'); if (!body) return;
+  let d; try { d = await api.admin.analytics(); } catch { body.innerHTML = '<span style="color:#ef4444;">تعذّر تحميل الزيارات.</span>'; return; }
+  if (!d || !d.configured) {
+    body.innerHTML = 'لم يُربط Google Analytics بعد. أرسل Measurement ID وProperty ID + حساب الخدمة لتفعيل عرض الزيارات هنا.';
+    return;
+  }
+  if (d.error) { body.innerHTML = '<span style="color:#ef4444;">' + d.error + '</span>'; return; }
+  document.getElementById('gaRange').textContent = d.range || '';
+  const card = (v, l, c) => `<div class="stat-card"><div class="stat-value" style="color:${c||'var(--accent)'}">${(v||0).toLocaleString('en-US')}</div><div class="stat-label">${l}</div></div>`;
+  const cities = (d.cities || []).filter(c => c.city && c.city !== '(not set)');
+  const maxC = Math.max(1, ...cities.map(c => c.users));
+  body.innerHTML = `
+    <div class="stats-grid" style="margin-bottom:1.2rem;">
+      ${card(d.users, 'الزوّار (28 يوم)', 'var(--accent)')}
+      ${card(d.sessions, 'الجلسات', '#3b82f6')}
+      ${card(d.pageViews, 'مشاهدات الصفحات', '#8b5cf6')}
+      ${card(d.today.users, 'زوّار اليوم', '#22c55e')}
+    </div>
+    <div style="font-weight:700;margin:0 0 .6rem;">أكثر المدن زيارةً</div>
+    ${cities.length ? cities.map(c => `
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.45rem;">
+        <span style="min-width:90px;font-size:.82rem;">${c.city}</span>
+        <div style="flex:1;background:var(--bg-card);border-radius:99px;height:9px;overflow:hidden;"><div style="width:${Math.round(c.users/maxC*100)}%;height:100%;background:linear-gradient(90deg,var(--accent-2),var(--accent));"></div></div>
+        <span style="min-width:34px;text-align:end;font-size:.82rem;font-weight:700;">${c.users}</span>
+      </div>`).join('') : '<span style="color:var(--ink-dim);">لا توجد بيانات مدن بعد.</span>'}`;
+}
+
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 async function loadDashboard() {
+  loadAnalytics();
   try {
     const { stats, recentBookings } = await api.admin.dashboard();
     document.getElementById('stat-users').textContent = stats.users;

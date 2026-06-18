@@ -414,6 +414,55 @@ ${notes ? 'ملاحظات المالك: ' + notes : ''}
   }
 });
 
+// ─── إحصائيات زيارات المنصة من Google Analytics (GA4) ───
+let _adminGa, _adminGaTried = false;
+function adminGaClient() {
+  if (_adminGaTried) return _adminGa;
+  _adminGaTried = true;
+  try {
+    if (!process.env.GA_CREDENTIALS_JSON && !process.env.GOOGLE_APPLICATION_CREDENTIALS) { _adminGa = null; return null; }
+    const { BetaAnalyticsDataClient } = require('@google-analytics/data');
+    const opts = {};
+    if (process.env.GA_CREDENTIALS_JSON) { try { opts.credentials = JSON.parse(process.env.GA_CREDENTIALS_JSON); } catch {} }
+    _adminGa = new BetaAnalyticsDataClient(opts);
+  } catch (e) { _adminGa = null; }
+  return _adminGa;
+}
+router.get('/analytics', adminAuth, async (req, res) => {
+  const pid = String(process.env.GA_PLATFORM_PROPERTY || '').replace(/[^0-9]/g, '');
+  if (!pid) return res.json({ configured: false });
+  const client = adminGaClient();
+  if (!client) return res.json({ configured: false, needsServer: true });
+  const property = `properties/${pid}`;
+  try {
+    const num = (r, i = 0) => Number(r.rows?.[0]?.metricValues?.[i]?.value || 0);
+    const [core] = await client.runReport({ property,
+      dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
+      metrics: [{ name: 'activeUsers' }, { name: 'sessions' }, { name: 'screenPageViews' }] });
+    const [today] = await client.runReport({ property,
+      dateRanges: [{ startDate: 'today', endDate: 'today' }],
+      metrics: [{ name: 'activeUsers' }, { name: 'sessions' }] });
+    const [cityR] = await client.runReport({ property,
+      dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
+      dimensions: [{ name: 'city' }], metrics: [{ name: 'activeUsers' }],
+      orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }], limit: 8 });
+    const [dailyR] = await client.runReport({ property,
+      dateRanges: [{ startDate: '13daysAgo', endDate: 'today' }],
+      dimensions: [{ name: 'date' }], metrics: [{ name: 'activeUsers' }],
+      orderBys: [{ dimension: { dimensionName: 'date' } }] });
+    res.json({
+      configured: true, range: 'آخر 28 يوماً',
+      users: num(core, 0), sessions: num(core, 1), pageViews: num(core, 2),
+      today: { users: num(today, 0), sessions: num(today, 1) },
+      cities: (cityR.rows || []).map(r => ({ city: r.dimensionValues[0].value, users: Number(r.metricValues[0].value || 0) })),
+      daily: (dailyR.rows || []).map(r => ({ date: r.dimensionValues[0].value, users: Number(r.metricValues[0].value || 0) })),
+    });
+  } catch (e) {
+    try { require('../logger').warn('admin/analytics fail: ' + (e.message || '').slice(0, 200)); } catch {}
+    res.status(502).json({ configured: true, error: 'تعذّر جلب بيانات Google Analytics — تأكد من صلاحية حساب الخدمة وProperty ID.' });
+  }
+});
+
 // ─── مدة التجربة المجانية + الاشتراكات اليدوية ──────────────────────────────
 router.get('/config/trial-days', adminAuth, async (req, res) => {
   const { rows } = await db.query("SELECT value FROM app_config WHERE key='trial_days'");

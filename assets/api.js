@@ -238,6 +238,7 @@ const api = {
     deleteAnalysis: (id)      => apiRequest('DELETE', `/admin/analyses/${id}`),
     users:        ()          => apiRequest('GET', '/admin/users'),
     addUser:      (data)      => apiRequest('POST', '/admin/users', data),
+    analytics:    ()          => apiRequest('GET', '/admin/analytics'),
     userDetail:   (id)        => apiRequest('GET', `/admin/users/${id}`),
     toggleAdmin:  (id)        => apiRequest('PUT', `/admin/users/${id}/toggle-admin`),
     deleteUser:   (id)        => apiRequest('DELETE', `/admin/users/${id}`),
