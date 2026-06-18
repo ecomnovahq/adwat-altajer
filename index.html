@@ -262,13 +262,16 @@
 /* بطاقة مساعد التاجر المميّزة (الأداة الأبرز) */
 .tool-feature { display:flex; align-items:center; gap:1.5rem; justify-content:space-between; background:linear-gradient(135deg, var(--accent-2), var(--accent)); color:#fff; border-radius:22px; padding:1.9rem 2.1rem; margin-bottom:1.6rem; text-decoration:none; position:relative; overflow:hidden; box-shadow:0 16px 48px rgba(99,102,241,.28); transition:transform .25s, box-shadow .25s; }
 .tool-feature:hover { transform:translateY(-4px); box-shadow:0 24px 60px rgba(99,102,241,.4); }
+.tool-feature::after { content:''; position:absolute; inset-inline-end:-50px; bottom:-60px; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,.16), transparent 70%); pointer-events:none; }
 .tool-feature-badge { position:absolute; top:1rem; inset-inline-start:1.2rem; background:rgba(255,255,255,.22); backdrop-filter:blur(6px); padding:.3rem .85rem; border-radius:99px; font-size:.72rem; font-weight:800; }
-.tool-feature-body { flex:1; padding-top:.6rem; }
-.tool-feature-body h3 { font-size:1.55rem; font-weight:800; margin:0 0 .5rem; }
-.tool-feature-body p { font-size:.95rem; line-height:1.75; opacity:.96; margin:0 0 1.1rem; max-width:580px; }
-.tool-feature-cta { display:inline-block; background:#fff; color:var(--accent); font-weight:800; padding:.6rem 1.4rem; border-radius:99px; font-size:.9rem; }
-.tool-feature-icon { flex-shrink:0; width:92px; height:92px; background:rgba(255,255,255,.18); border-radius:24px; display:flex; align-items:center; justify-content:center; }
-@media (max-width:640px){ .tool-feature { flex-direction:column; text-align:center; padding:2.4rem 1.3rem 1.6rem; } .tool-feature-icon{ order:-1; width:76px; height:76px; } .tool-feature-body p{ margin-inline:auto; } }
+.tool-feature-body { flex:1; padding-top:.9rem; position:relative; z-index:1; }
+.tool-feature-body h3 { font-size:1.6rem; font-weight:800; margin:0 0 .5rem; }
+.tool-feature-body p { font-size:.95rem; line-height:1.75; opacity:.96; margin:0 0 1rem; max-width:600px; }
+.tool-feature-pills { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1.3rem; }
+.tool-feature-pills span { background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.25); padding:.34rem .8rem; border-radius:99px; font-size:.78rem; font-weight:700; white-space:nowrap; }
+.tool-feature-cta { display:inline-block; background:#fff; color:var(--accent); font-weight:800; padding:.65rem 1.5rem; border-radius:99px; font-size:.92rem; box-shadow:0 6px 18px rgba(0,0,0,.18); }
+.tool-feature-icon { flex-shrink:0; width:96px; height:96px; background:rgba(255,255,255,.18); border-radius:26px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 10px rgba(255,255,255,.06); position:relative; z-index:1; }
+@media (max-width:640px){ .tool-feature { flex-direction:column; text-align:center; padding:2.4rem 1.3rem 1.6rem; } .tool-feature-icon{ order:-1; width:78px; height:78px; } .tool-feature-body p{ margin-inline:auto; } .tool-feature-pills{ justify-content:center; } }
 .tool-tag {
   display: inline-block; margin-top: 0.55rem; font-size: 0.65rem; font-weight: 700;
   color: var(--accent); background: var(--accent-soft); border: 1px solid var(--line-accent);
@@ -615,7 +618,7 @@
   @media (max-width: 480px) { .mq-item { padding-inline-start: 2.2rem; } .mq-item img { height: 28px; } }
   @media (prefers-reduced-motion: reduce) { .mq-track { animation: none; flex-wrap: wrap; justify-content: center; } .mq-item { padding: .6rem 1rem; } }
 </style>
-<div class="mq-band" data-reveal>
+<div class="mq-band" data-reveal style="display:none;">
   <div class="mq-head">منصات وخدمات مدعومة</div>
   <div class="mq-viewport">
     <div class="mq-track" id="mqTrack">
@@ -665,7 +668,15 @@
       <span class="tool-feature-badge">⭐ الأداة الأبرز</span>
       <div class="tool-feature-body">
         <h3>مساعد التاجر الذكي</h3>
-        <p>اربط متجرك وخلّي الذكاء الاصطناعي يشتغل عنك: تحليل تلقائي، لوحة إحصائيات ذكية، مراقبة المنافسين، توليد المحتوى، تحليل التسعير، وخطة نمو — كل ده في مكان واحد يتحدّث مع كل مزامنة.</p>
+        <p>اربط متجرك وخلّي الذكاء الاصطناعي يشتغل عنك — كل ده في مكان واحد يتحدّث مع كل مزامنة.</p>
+        <div class="tool-feature-pills">
+          <span>تحليل تلقائي</span>
+          <span>لوحة إحصائيات ذكية</span>
+          <span>مراقبة المنافسين</span>
+          <span>توليد المحتوى</span>
+          <span>تحليل التسعير</span>
+          <span>خطة نمو</span>
+        </div>
         <span class="tool-feature-cta">ابدأ الآن مجانًا ←</span>
       </div>
       <div class="tool-feature-icon">
