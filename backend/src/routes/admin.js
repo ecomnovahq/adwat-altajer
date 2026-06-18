@@ -409,6 +409,7 @@ ${notes ? 'ملاحظات المالك: ' + notes : ''}
     }
     res.json({ ok: true, plans: inserted });
   } catch (e) {
+    try { require('../logger').warn('plans/generate fail: ' + (e && e.message ? e.message.slice(0, 300) : String(e))); } catch {}
     res.status(500).json({ error: 'تعذّر توليد الباقات بالذكاء الاصطناعي' });
   }
 });
