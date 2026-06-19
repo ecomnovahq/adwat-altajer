@@ -271,7 +271,15 @@ async function loadGa() {
         <input id="asGaPid" class="as-input" placeholder="GA4 Property ID (أرقام فقط)" style="flex:1;min-width:160px;">
         <button class="btn-primary" style="padding:.5rem 1rem;" onclick="connectGa()">ربط</button>
       </div>
-      <div style="font-size:.72rem;color:var(--ink-dim);margin-top:.5rem;">من GA4: الإعدارة ← إعدادات الخاصية ← Property ID. وأضف بريد حساب الخدمة كـ Viewer.</div>`;
+      <div style="font-size:.78rem;color:var(--ink-dim);margin-top:.7rem;line-height:1.9;background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:.7rem .8rem;">
+        <b style="color:var(--ink);">خطوتان سريعتان:</b><br>
+        <b>1)</b> في Google Analytics → الإدارة (⚙️) → <b>إدارة الوصول للخاصية</b> → أضف هذا البريد بصلاحية <b>Viewer</b>:<br>
+        <span style="display:inline-flex;align-items:center;gap:.4rem;margin:.3rem 0;direction:ltr;">
+          <code id="asGaSvc" style="background:var(--bg);padding:.2rem .5rem;border-radius:6px;font-size:.74rem;">tajer-ga@adwat-analytics.iam.gserviceaccount.com</code>
+          <button class="btn-secondary" style="padding:.15rem .5rem;font-size:.7rem;" onclick="navigator.clipboard.writeText('tajer-ga@adwat-analytics.iam.gserviceaccount.com').then(()=>showToast('تم نسخ البريد','success'))">نسخ</button>
+        </span><br>
+        <b>2)</b> من الإدارة → <b>إعدادات الخاصية</b> انسخ <b>Property ID</b> (أرقام) وألصقه فوق ثم اضغط «ربط».
+      </div>`;
     return;
   }
   body.innerHTML = '<div style="color:var(--ink-dim);font-size:.85rem;">جارٍ جلب بيانات الأداء...</div>';

@@ -107,7 +107,7 @@ function gaClient() {
   try {
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS && !process.env.GA_CREDENTIALS_JSON) { _gaClient = null; return null; }
     const { BetaAnalyticsDataClient } = require('@google-analytics/data');
-    const opts = {};
+    const opts = { fallback: 'rest' }; // REST بدل gRPC (يتجنّب التعلّق على السيرفر)
     if (process.env.GA_CREDENTIALS_JSON) { try { opts.credentials = JSON.parse(process.env.GA_CREDENTIALS_JSON); } catch {} }
     _gaClient = new BetaAnalyticsDataClient(opts);
   } catch (e) { logger.warn('GA client init failed: ' + e.message); _gaClient = null; }
@@ -151,19 +151,19 @@ router.get('/ga/report', auth, ar(async (req, res) => {
       property,
       dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
       metrics: [{ name: 'activeUsers' }, { name: 'sessions' }, { name: 'screenPageViews' }, { name: 'conversions' }, { name: 'averageSessionDuration' }, { name: 'bounceRate' }],
-    });
+    }, { timeout: 15000 });
     const m = core.rows?.[0]?.metricValues || [];
     const num = i => Number(m[i]?.value || 0);
     const [sources] = await client.runReport({
       property, dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
       dimensions: [{ name: 'sessionDefaultChannelGroup' }], metrics: [{ name: 'sessions' }],
       orderBys: [{ metric: { metricName: 'sessions' }, desc: true }], limit: 6,
-    });
+    }, { timeout: 15000 });
     const [pages] = await client.runReport({
       property, dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
       dimensions: [{ name: 'pageTitle' }], metrics: [{ name: 'screenPageViews' }],
       orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }], limit: 6,
-    });
+    }, { timeout: 15000 });
     res.json({
       ok: true, range: 'آخر 28 يوماً',
       users: num(0), sessions: num(1), pageViews: num(2), conversions: num(3),
