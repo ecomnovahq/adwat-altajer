@@ -220,6 +220,9 @@
   /* ارفع الأزرار العائمة فوق الشريط السفلي حتى لا تغطّي «المساعد» */
   .tj-widgets { bottom: 4.75rem !important; }
   .tj-chat-window, #asChatReopen { bottom: 8rem !important; }
+  /* ── تبسيط الجوال: العناصر الملخّصة تظهر في «اللوحة» فقط، وباقي الأقسام نظيفة ── */
+  .as-stickybar { display: none !important; }
+  #asDash:not([data-sec="overview"]) .as-sum { display: none !important; }
 }
 /* ─── سحب وإفلات المهام ─── */
 .as-task[draggable=true] { cursor: grab; }

@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/styles.css?v=13">
 <link rel="stylesheet" href="../assets/responsive.css?v=1">
-<link rel="stylesheet" href="../assets/assistant.css?v=15">
+<link rel="stylesheet" href="../assets/assistant.css?v=16">
 </head>
 <body>
 
@@ -33,16 +33,16 @@
   </div>
 
   <!-- اللوحة -->
-  <div id="asDash" style="display:none;">
+  <div id="asDash" style="display:none;" data-sec="overview">
     <!-- ترحيب -->
-    <div class="as-greet" id="asGreeting">
+    <div class="as-greet as-sum" id="asGreeting">
       <div>
         <div class="as-greet-hi">حيّاك الله <span id="asGreetName"></span> 👋</div>
         <div class="as-greet-sub">بارك الله في سعيك ورزقك ✨</div>
       </div>
     </div>
     <!-- شريط علوي: بحث عام + جرس إشعارات -->
-    <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:1rem;">
+    <div class="as-sum" style="display:flex;gap:.6rem;align-items:center;margin-bottom:1rem;">
       <div style="position:relative;flex:1;max-width:460px;">
         <span style="position:absolute;inset-inline-start:.7rem;top:50%;transform:translateY(-50%);color:var(--ink-dim);pointer-events:none;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
         <input id="asGlobalSearch" placeholder="ابحث في منتجاتك أو الإجراءات..." autocomplete="off" oninput="globalSearch(this.value)" onfocus="globalSearch(this.value)" style="width:100%;background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:.55rem 2.2rem;color:var(--ink);font-family:var(--font-arabic);">
@@ -60,7 +60,7 @@
       <button class="btn-primary" style="margin-inline-start:auto;padding:.35rem .8rem;font-size:.78rem;" onclick="document.getElementById('asSyncBtn').click()">مزامنة</button>
       <span class="sb-score" id="asStickyScore">—</span>
     </div>
-    <div class="as-head">
+    <div class="as-head as-sum">
       <div>
         <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
           <select id="asStoreSwitch" onchange="switchStore(this.value)" style="display:none;background:var(--bg-card);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:.4rem .7rem;font-family:var(--font-arabic);font-weight:700;font-size:.9rem;max-width:240px;"></select>
@@ -85,13 +85,13 @@
     </div>
 
     <!-- شريط مؤشرات الأداء (كامل العرض) -->
-    <div class="as-card"><div class="as-kpis" id="asKpis"></div></div>
+    <div class="as-card as-sum"><div class="as-kpis" id="asKpis"></div></div>
 
     <!-- بطاقة الباقة والترقية -->
-    <div id="asPlanCard" style="display:none;"></div>
+    <div id="asPlanCard" class="as-sum" style="display:none;"></div>
 
     <!-- تقييم الأداة -->
-    <div id="asRateCard" class="as-card as-rate" style="display:none;"></div>
+    <div id="asRateCard" class="as-card as-rate as-sum" style="display:none;"></div>
 
     <div class="as-grid">
       <!-- العمود الأيمن: تبويبات منظّمة -->
@@ -464,7 +464,7 @@
 <div class="tour-ov" id="tourOv"><div class="tour-spot" id="tourSpot"></div><div class="tour-pop" id="tourPop"></div></div>
 
 <script src="../assets/api.js?v=47"></script>
-<script src="../assets/assistant.js?v=22"></script>
+<script src="../assets/assistant.js?v=23"></script>
 <script src="../assets/header.js?v=20"></script>
 </body>
 </html>

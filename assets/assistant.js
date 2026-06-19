@@ -164,6 +164,7 @@ function showSkeleton() {
 
 // ─── شريط التنقّل السفلي (جوال) ───
 function bottomNav(name) {
+  { const _d = document.getElementById('asDash'); if (_d) _d.dataset.sec = name; }
   document.querySelectorAll('#asBottomNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   if (name === 'chat') {
     document.querySelector('.as-grid')?.classList.remove('chat-off');
@@ -1071,6 +1072,7 @@ function renderHealth(d, cats) {
 }
 // تبديل تبويب برمجياً
 function switchTab(name) {
+  { const _d = document.getElementById('asDash'); if (_d) _d.dataset.sec = name; }
   document.querySelectorAll('#asTabs .as-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.as-tabpane').forEach(p => p.style.display = 'none');
   const pane = document.getElementById('tab-' + name);
