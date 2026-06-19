@@ -1094,6 +1094,7 @@ async function aiCallVisual(screenshots, scraped, storeUrl) {
   const prompt = `${imageParts.length ? `[تحليل بصري — ${imageParts.length} صورة]` : '[تحليل نصي]'}
 حلّل التصميم البصري للمتجر: ${storeUrl}
 ${base}
+ملاحظة مهمة: آخر صورة هي «الفوتر» — افحصه بدقّة: طرق الدفع الظاهرة (مدى/فيزا/ماستر/Apple Pay/تابي/تمارا/STC Pay/الدفع عند الاستلام)، شارات الثقة والتوثيق، السجل التجاري، روابط التواصل والسياسات — واعكس كل ذلك في التقييم وإشارات الثقة.
 أجب بـ JSON صارم فقط — ابدأ بـ { مباشرة. جميع الأسماء بالعربية فقط.
 IMPORTANT: visualScore وكل score داخل items يجب أن يكون من 0 إلى 100 (وليس من 0 إلى 10).
 {"visualScore":0,

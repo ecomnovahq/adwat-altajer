@@ -93,6 +93,9 @@ async function takeStoreScreenshots(baseUrl) {
     }).catch(() => {});
     await delay(2000); // Wait for footer payment icons / social links to render
 
+    // Step 3b: لقطة للفوتر (طرق الدفع + الشعارات + المعلومات) — مهمة جدًا للتحليل البصري الدقيق
+    const homeFooter = await p1.screenshot({ type: 'jpeg', quality: 84, fullPage: false, encoding: 'base64' }).catch(() => null);
+
     // Step 4: Capture fully-rendered HTML including footer (payment methods, social, technologies)
     let renderedHtml = '';
     try { renderedHtml = await p1.content(); } catch (e) { /* non-fatal */ }
@@ -132,6 +135,14 @@ async function takeStoreScreenshots(baseUrl) {
         url: baseUrl,
         desktop: homeDesktop || null,
         mobile:  homeMobile  || null,
+      });
+    }
+    if (homeFooter) {
+      pages.push({
+        label: 'الفوتر (طرق الدفع والمعلومات والثقة)',
+        url: baseUrl,
+        desktop: homeFooter,
+        mobile: null,
       });
     }
 
