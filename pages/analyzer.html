@@ -402,6 +402,8 @@
 .chk-w   { color:var(--accent-warm); font-weight:700; font-size:.8rem; }
 
 /* ── Competitors ── */
+/* إخفاء قسمي المنافسين والخدمات المقترحة */
+#secServices, #secComp { display:none !important; }
 .az-comp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
 @media(max-width:700px){ .az-comp-grid { grid-template-columns:1fr; } }
 .az-svc-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
@@ -602,7 +604,7 @@
         أداة 01
       </span>
       <h1>محلل <em>المتجر</em> الذكي</h1>
-      <p>تقرير شامل لمتجرك على سلة أو زد — ثيم، سرعة، دفع، تصميم، منافسين، وتوصيات مالية قابلة للتنفيذ.</p>
+      <p>تقرير شامل لمتجرك على سلة أو زد — ثيم، سرعة، دفع، تصميم، وتوصيات مالية قابلة للتنفيذ.</p>
       <div style="display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-top:1.5rem;">
         <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:99px;padding:.3rem .85rem;font-size:.78rem;color:var(--accent-3);font-weight:600;">15 معياراً</span>
         <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:99px;padding:.3rem .85rem;font-size:.78rem;color:var(--accent-3);font-weight:600;">${IC.cam} لقطات حقيقية</span>
@@ -643,7 +645,6 @@
       <span class="az-form-chip"><span>✓</span> طرق الدفع</span>
       <span class="az-form-chip"><span>✓</span> تحليل التصميم</span>
       <span class="az-form-chip"><span>✓</span> Core Web Vitals</span>
-      <span class="az-form-chip"><span>✓</span> منافسين</span>
     </div>
 
     <div id="usageWrap" style="margin-top:.75rem;"></div>
@@ -1083,7 +1084,7 @@ function renderSticky(r) {
   // أزرار قفز للأقسام الظاهرة فقط
   const jumps = [
     ['secCriteria', 'المعايير'], ['secPayment', 'الدفع'], ['secTrust', 'الثقة'],
-    ['secSpeed', 'الأداء'], ['secServices', 'الخدمات'], ['secActions', 'التوصيات'], ['secComp', 'المنافسون'],
+    ['secSpeed', 'الأداء'], ['secActions', 'التوصيات'],
   ];
   document.getElementById('azStickyJumps').innerHTML = jumps.filter(([id]) => {
     const el = document.getElementById(id); return el && el.style.display !== 'none';
