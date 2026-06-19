@@ -301,8 +301,17 @@ async function loadGa() {
       <div style="text-align:left;margin-top:.6rem;"><button class="copy-icon-btn" onclick="disconnectGa()">فصل GA</button> <span style="color:var(--ink-dim);font-size:.72rem;">${e(r.range)}</span></div>`;
   } catch (err) {
     const m = err.message || 'تعذّر';
+    const isPerm = /صلاحية|permission|viewer|viewer/i.test(m);
     body.innerHTML = `<div style="color:#f59e0b;font-size:.84rem;line-height:1.8;">${e(m)}</div>
-      <div style="text-align:left;margin-top:.5rem;"><button class="copy-icon-btn" onclick="disconnectGa()">إعادة الربط</button></div>`;
+      ${isPerm ? `<div style="font-size:.78rem;color:var(--ink-dim);margin-top:.6rem;line-height:1.9;background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:.7rem .8rem;">
+        افتح Google Analytics → الإدارة (⚙️) → <b>إدارة الوصول للخاصية</b> → أضف هذا البريد بصلاحية <b>Viewer</b>:<br>
+        <span style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.3rem;direction:ltr;">
+          <code style="background:var(--bg);padding:.2rem .5rem;border-radius:6px;font-size:.74rem;">tajer-ga@adwat-analytics.iam.gserviceaccount.com</code>
+          <button class="btn-secondary" style="padding:.15rem .5rem;font-size:.7rem;" onclick="navigator.clipboard.writeText('tajer-ga@adwat-analytics.iam.gserviceaccount.com').then(()=>showToast('تم نسخ البريد','success'))">نسخ</button>
+        </span><br>ثم اضغط «تحديث» بالأسفل.
+      </div>
+      <div style="text-align:left;margin-top:.5rem;"><button class="copy-icon-btn" onclick="loadGa()">تحديث</button> <button class="copy-icon-btn" onclick="disconnectGa()">إعادة الربط</button></div>`
+      : `<div style="text-align:left;margin-top:.5rem;"><button class="copy-icon-btn" onclick="disconnectGa()">إعادة الربط</button></div>`}`;
   }
 }
 async function connectGa() {
