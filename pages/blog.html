@@ -129,9 +129,21 @@
       تحميل المزيد
     </button>
   </div>
+
+  <!-- نشرة بريدية -->
+  <section class="newsletter-box" style="margin:3.5rem auto 0;max-width:640px;background:var(--accent-soft,#f3effe);border:1px solid var(--line,#e5e7eb);border-radius:var(--radius-lg,16px);padding:2rem 1.5rem;text-align:center;">
+    <h2 style="margin:0 0 .5rem;font-size:1.4rem;color:var(--ink);">📩 اشترك في نشرة أدوات التاجر</h2>
+    <p style="color:var(--ink-dim);margin:0 0 1.25rem;">أفضل النصائح العملية لزيادة مبيعات متجرك — تصلك أسبوعياً على بريدك.</p>
+    <form id="newsletterForm" style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;max-width:460px;margin:0 auto;">
+      <input type="email" id="newsletterEmail" required placeholder="بريدك الإلكتروني"
+        style="flex:1;min-width:200px;padding:.75rem 1rem;border:1px solid var(--line,#e5e7eb);border-radius:10px;font-size:1rem;background:var(--bg,#fff);color:var(--ink);">
+      <button type="submit" class="btn-primary" style="padding:.75rem 1.75rem;white-space:nowrap;">اشترك</button>
+    </form>
+    <div id="newsletterMsg" style="margin-top:.9rem;font-size:.95rem;min-height:1.2em;"></div>
+  </section>
 </main>
 
-<script src="../assets/api.js?v=47"></script>
+<script src="../assets/api.js?v=48"></script>
 <script src="../assets/main.js"></script>
 <script>
 let currentCategory = 'all';
@@ -219,6 +231,25 @@ function loadMore() {
 }
 
 loadPosts(true);
+
+// اشتراك النشرة البريدية
+document.getElementById('newsletterForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('newsletterEmail').value.trim();
+  const msg = document.getElementById('newsletterMsg');
+  const btn = e.target.querySelector('button[type=submit]');
+  if (!email) return;
+  btn.disabled = true; msg.style.color = 'var(--ink-dim)'; msg.textContent = 'جاري الاشتراك...';
+  try {
+    const r = await api.subscribeNewsletter(email, 'blog');
+    msg.style.color = '#16a34a';
+    msg.textContent = r.message || 'تم اشتراكك بنجاح ✅';
+    document.getElementById('newsletterEmail').value = '';
+  } catch (err) {
+    msg.style.color = '#dc2626';
+    msg.textContent = err.message || 'تعذّر الاشتراك، حاول لاحقاً';
+  } finally { btn.disabled = false; }
+});
 </script>
 <script src="../assets/header.js?v=20"></script>
 </body>

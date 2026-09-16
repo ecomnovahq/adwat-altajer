@@ -433,6 +433,7 @@ app.use('/api/works', require('./routes/works'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/blog', require('./routes/blog'));
+app.use('/api/newsletter', require('./routes/newsletter'));
 app.use('/api/tickets', require('./routes/tickets'));
 app.use('/api/integrations', require('./routes/integrations'));
 const assistantRouter = require('./routes/assistant');
@@ -518,6 +519,16 @@ try {
     }
   }, { timezone: 'Asia/Riyadh' });
   logger.info('✓ محرّك المحتوى الذاتي مفعّل (أحد/ثلاثاء/خميس 6 صباحاً بتوقيت الرياض)');
+
+  // ─── نشرة بريدية أسبوعية: أحدث مقالات المدونة لكل المشتركين (الجمعة 10 صباحاً) ───
+  const newsletter = require('./routes/newsletter');
+  cron.schedule('0 10 * * 5', async () => {
+    try {
+      const r = await newsletter.sendDigest({ days: 7 });
+      logger.info(`[cron] نشرة بريدية: أُرسلت لـ ${r.sent} مشترك (${r.posts} مقال)`);
+    } catch (e) { logger.error('[cron] نشرة بريدية فشلت: ' + e.message); }
+  }, { timezone: 'Asia/Riyadh' });
+  logger.info('✓ النشرة البريدية الأسبوعية مفعّلة (الجمعة 10 صباحاً بتوقيت الرياض)');
 } catch (e) { logger.warn('node-cron غير متاح — المزامنة اليدوية فقط'); }
 
 // ─── Start ────────────────────────────────────────────────────────────────────

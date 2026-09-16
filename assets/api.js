@@ -207,6 +207,7 @@ const api = {
 
   // ─── Blog ──────────────────────────────────────────────────────────────────
   getBlogPosts:  (params = {}) => apiRequest('GET', `/blog?${new URLSearchParams(params)}`),
+  subscribeNewsletter: (email, source = 'blog') => apiRequest('POST', '/newsletter/subscribe', { email, source }),
   getBlogPost:   (slug)        => apiRequest('GET', `/blog/post/${slug}`),
 
   // ─── الحضور + تذاكر الدعم ────────────────────────────────────────────────────
