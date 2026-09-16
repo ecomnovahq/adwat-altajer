@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>أدوات التاجر — كل ما يحتاجه التاجر السعودي في مكان واحد</title>
 <meta name="description" content="منصة عربية شاملة للتاجر السعودي: أدوات تحليل ذكية، كوبونات حصرية على سلة وزد، تقويم المواسم، وخدمات احترافية.">
+<link rel="canonical" href="https://adwat.cloud/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="أدوات التاجر, التاجر السعودي, سلة, زد, تحليل متجر, توليد وصف منتجات, كوبونات سلة, تقويم المواسم, متجر إلكتروني السعودية">
+<link rel="alternate" hreflang="ar" href="https://adwat.cloud/">
+<link rel="alternate" hreflang="x-default" href="https://adwat.cloud/">
 <meta property="og:url" content="https://adwat.cloud/">
 <meta property="og:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:site_name" content="أدوات التاجر">
@@ -430,23 +435,54 @@
   "@graph": [
     {
       "@type": "Organization",
+      "@id": "https://adwat.cloud/#organization",
       "name": "أدوات التاجر",
       "alternateName": "Tajer Tools",
-      "url": "https://adwat-altajer.com/",
-      "logo": "https://adwat-altajer.com/assets/favicon.svg",
-      "description": "منصة أدوات ذكية للتجار: تحليل المتاجر، توليد المحتوى، تقويم المواسم وأكثر.",
-      "parentOrganization": { "@type": "Organization", "name": "خبراء المنصات" }
+      "url": "https://adwat.cloud/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://adwat.cloud/assets/favicon.svg"
+      },
+      "description": "منصة عربية شاملة تقدّم أدوات ذكية وخدمات احترافية للتاجر السعودي على منصتي سلة وزد: تحليل المتاجر، توليد أوصاف المنتجات، الكوبونات الحصرية، وتقويم المواسم.",
+      "parentOrganization": { "@type": "Organization", "name": "خبراء المنصات" },
+      "areaServed": { "@type": "Country", "name": "السعودية" },
+      "knowsLanguage": "ar",
+      "sameAs": [
+        "https://x.com/sallatips",
+        "https://instagram.com/sallatips",
+        "https://www.linkedin.com/company/sallatips",
+        "https://www.snapchat.com/add/sallatips"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "telephone": "+966507060592",
+        "availableLanguage": ["Arabic"]
+      }
     },
     {
       "@type": "WebSite",
+      "@id": "https://adwat.cloud/#website",
       "name": "أدوات التاجر",
-      "url": "https://adwat-altajer.com/",
+      "url": "https://adwat.cloud/",
       "inLanguage": "ar",
+      "publisher": { "@id": "https://adwat.cloud/#organization" },
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://adwat-altajer.com/pages/tools.html?q={search_term_string}",
+        "target": "https://adwat.cloud/pages/tools.html?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "أدوات التاجر",
+      "url": "https://adwat.cloud/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "ar",
+      "description": "مجموعة أدوات ذكية للتاجر السعودي: محلل المتجر، مولّد أوصاف المنتجات، حاسبة صافي الربح، تقويم المواسم، محلل المنافسين، وقوالب واتساب.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "SAR" },
+      "publisher": { "@id": "https://adwat.cloud/#organization" }
     }
   ]
 }

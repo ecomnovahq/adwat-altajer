@@ -1,3 +1,6 @@
+# أدوات التاجر — https://adwat.cloud
+# نسمح لكل الزواحف (بما فيها زواحف الذكاء الاصطناعي) بأرشفة الصفحات العامة
+
 User-agent: *
 Allow: /
 Disallow: /pages/admin.html
@@ -7,5 +10,46 @@ Disallow: /pages/history.html
 Disallow: /pages/messages.html
 Disallow: /pages/forgot-password.html
 Disallow: /pages/reset-password.html
+Disallow: /pages/assistant.html
 
-Sitemap: https://adwat-altajer.com/sitemap.xml
+# ── زواحف الذكاء الاصطناعي (نسمح لها صراحةً حتى تقتبس الموقع في نتائجها) ──
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://adwat.cloud/sitemap.xml

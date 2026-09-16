@@ -3185,7 +3185,7 @@ ${comps?`
 
 <!-- ── FOOTER ── -->
 <div style="margin-top:20px;padding-top:10px;border-top:2px solid #e5e7eb;display:flex;justify-content:space-between;font-size:7.5pt;color:#9ca3af;">
-  <span>أدوات التاجر — adwat-altajer.com</span>
+  <span>أدوات التاجر — adwat.cloud</span>
   <span>تم التوليد بالذكاء الاصطناعي — ${date}</span>
 </div>
 </body></html>`;

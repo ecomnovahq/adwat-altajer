@@ -8,6 +8,9 @@
 <meta property="og:title" content="مقال — أدوات التاجر">
 <meta property="og:description" content="مقال من مدونة أدوات التاجر — نصائح ومعلومات عملية للتاجر السعودي.">
 <meta property="og:url" content="https://adwat.cloud/pages/blog-post.html">
+<link rel="canonical" href="https://adwat.cloud/pages/blog-post.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="alternate" hreflang="ar" href="https://adwat.cloud/pages/blog-post.html">
 <meta property="og:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:site_name" content="أدوات التاجر">
 <meta name="twitter:card" content="summary_large_image">
@@ -121,6 +124,45 @@ async function loadPost() {
   try {
     const post = await api.getBlogPost(slug);
     document.title = `${post.title} — أدوات التاجر`;
+
+    // ── SEO ديناميكي: canonical + Open Graph + بيانات Article (للأرشفة وظهور AI) ──
+    try {
+      const canonicalUrl = `https://adwat.cloud/pages/blog-post.html?slug=${encodeURIComponent(slug)}`;
+      const plain = (post.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      const desc = (post.excerpt || plain).slice(0, 160);
+      const img = post.cover_image || 'https://adwat.cloud/assets/favicon.svg';
+      const setMeta = (sel, attr, val) => {
+        let el = document.head.querySelector(sel);
+        if (!el) { el = document.createElement('meta'); const [k, v] = sel.replace(/[\[\]]/g, '').split('='); el.setAttribute(k, v.replace(/["']/g, '')); document.head.appendChild(el); }
+        el.setAttribute(attr, val);
+      };
+      let link = document.head.querySelector('link[rel="canonical"]');
+      if (!link) { link = document.createElement('link'); link.rel = 'canonical'; document.head.appendChild(link); }
+      link.href = canonicalUrl;
+      setMeta('meta[name="description"]', 'content', desc);
+      setMeta('meta[property="og:url"]', 'content', canonicalUrl);
+      setMeta('meta[property="og:title"]', 'content', post.title);
+      setMeta('meta[property="og:description"]', 'content', desc);
+      setMeta('meta[property="og:image"]', 'content', img);
+      setMeta('meta[property="og:type"]', 'content', 'article');
+      const ld = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": post.title,
+        "description": desc,
+        "image": img,
+        "inLanguage": "ar",
+        "datePublished": post.created_at || undefined,
+        "dateModified": post.updated_at || post.created_at || undefined,
+        "author": { "@type": post.author_name ? "Person" : "Organization", "name": post.author_name || "فريق أدوات التاجر" },
+        "publisher": { "@type": "Organization", "name": "أدوات التاجر", "logo": { "@type": "ImageObject", "url": "https://adwat.cloud/assets/favicon.svg" } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl }
+      };
+      const s = document.createElement('script');
+      s.type = 'application/ld+json';
+      s.textContent = JSON.stringify(ld);
+      document.head.appendChild(s);
+    } catch (e) { /* تجاهل أخطاء الـSEO الديناميكي */ }
 
     const coverHtml = post.cover_image
       ? `<div class="post-cover"><img src="${post.cover_image}" alt="${post.title}" loading="lazy" /></div>`
