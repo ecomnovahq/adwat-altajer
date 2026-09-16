@@ -39,18 +39,29 @@ function slugify(text) {
   return text.trim().replace(/\s+/g, '-').replace(/[^؀-ۿ\w-]/g, '').toLowerCase().substring(0, 80);
 }
 
-// اختَر موضوعاً لم يُنشر بعد (بمطابقة العناوين الحالية)، وإلا دوّر على الأقل استخداماً
+// سجلّ دائم للمواضيع المستخدمة (موثوق — لا يعتمد على عنوان الذكاء الاصطناعي)
+db.query(`
+  CREATE TABLE IF NOT EXISTS auto_blog_log (
+    id         SERIAL PRIMARY KEY,
+    topic_key  TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+  )
+`).catch(() => {});
+
+// اختَر موضوعاً لم يُستخدم بعد؛ وإن استُنفدت كلها اختر الأقدم استخداماً (LRU) بزاوية جديدة
 async function pickTopic() {
-  let publishedTitles = [];
+  let usage = new Map(); // topic_key -> آخر استخدام
   try {
-    const { rows } = await db.query('SELECT title FROM blog_posts ORDER BY created_at DESC LIMIT 200');
-    publishedTitles = rows.map(r => r.title || '');
-  } catch { /* الجدول قد لا يكون جاهزاً */ }
-  const unused = TOPICS.filter(tp => !publishedTitles.some(pt => pt.includes(tp.t.slice(0, 20))));
+    const { rows } = await db.query('SELECT topic_key, MAX(created_at) AS last FROM auto_blog_log GROUP BY topic_key');
+    for (const r of rows) usage.set(r.topic_key, r.last);
+  } catch { /* الجدول قد لا يكون جاهزاً بعد */ }
+
+  const unused = TOPICS.filter(tp => !usage.has(tp.t));
   if (unused.length) return unused[Math.floor(Math.random() * unused.length)];
-  // كل المواضيع نُشرت — اطلب زاوية جديدة على موضوع عشوائي
-  const base = TOPICS[Math.floor(Math.random() * TOPICS.length)];
-  return { ...base, fresh: true };
+
+  // كل المواضيع استُخدمت — اختر الأقدم استخداماً واطلب زاوية جديدة
+  const sorted = [...TOPICS].sort((a, b) => new Date(usage.get(a.t) || 0) - new Date(usage.get(b.t) || 0));
+  return { ...sorted[0], fresh: true };
 }
 
 function buildPrompt(topic) {
@@ -144,6 +155,9 @@ async function generateAndPublish() {
      art.category || topic.cat || 'عام', tags, 'فريق أدوات التاجر', readTime]
   );
   logger.info(`[auto-blog] ✓ نُشر مقال #${rows[0].id}: ${rows[0].title.slice(0, 50)}`);
+
+  // سجّل الموضوع المستخدم (لمنع التكرار مستقبلاً)
+  db.query('INSERT INTO auto_blog_log (topic_key) VALUES ($1)', [topic.t]).catch(() => {});
 
   await regenerateSitemap();
   return rows[0];
