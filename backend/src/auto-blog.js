@@ -6,10 +6,35 @@
 const fs = require('fs');
 const path = require('path');
 const db = require('./config/db');
-const { aiJSON } = require('./ai');
+const { aiJSON, aiImage } = require('./ai');
 const logger = require('./logger');
 
 const SITE = 'https://adwat.cloud';
+const BLOG_IMG_DIR = path.join(__dirname, '..', '..', 'assets', 'blog'); // repo/assets/blog
+
+const IMG_THEMES = {
+  'تجارة إلكترونية': 'e-commerce online store, shopping bags and cart, mobile commerce, product boxes',
+  'تسويق': 'digital marketing, social media engagement, growth arrow charts, megaphone',
+  'تحسين محركات البحث': 'SEO search engine optimization, magnifying glass over a browser window, ranking bars',
+  'تصميم متاجر': 'website and store UI design, storefront, branding palette, layout blocks',
+  'أدوات الذكاء الاصطناعي': 'AI technology and automation, futuristic dashboard, robot assistant, data'
+};
+
+// ولّد صورة غلاف احترافية للمقال واحفظها؛ يعيد رابطها أو null عند الفشل (غير قاطع)
+async function generateCover(postId, category) {
+  try {
+    fs.mkdirSync(BLOG_IMG_DIR, { recursive: true });
+    const theme = IMG_THEMES[category] || 'modern e-commerce business, online shopping';
+    const prompt = `A clean modern professional flat vector illustration for a blog article cover banner about: ${theme}. Context: Saudi Arabian e-commerce and online store owners. Style: minimal, elegant, vibrant purple (#7c3aed) and violet gradient accents on a soft light background, wide 16:9 banner composition, high quality, corporate, friendly. Absolutely no text, no words, no letters, no numbers in the image.`;
+    const img = await aiImage(prompt);
+    const ext = (img.mimeType || '').includes('jpeg') ? 'jpg' : (img.mimeType || '').includes('webp') ? 'webp' : 'png';
+    fs.writeFileSync(path.join(BLOG_IMG_DIR, postId + '.' + ext), Buffer.from(img.data, 'base64'));
+    return `${SITE}/assets/blog/${postId}.${ext}`;
+  } catch (e) {
+    logger.warn('[auto-blog] فشل توليد صورة الغلاف: ' + e.message);
+    return null;
+  }
+}
 
 // ── بنك المواضيع الاستراتيجي ──────────────────────────────────────────────────
 // كل موضوع يستهدف كلمات مفتاحية للتاجر السعودي ويربط داخلياً بصفحة أداة/خدمة
@@ -158,6 +183,13 @@ async function generateAndPublish() {
 
   // سجّل الموضوع المستخدم (لمنع التكرار مستقبلاً)
   db.query('INSERT INTO auto_blog_log (topic_key) VALUES ($1)', [topic.t]).catch(() => {});
+
+  // ولّد صورة غلاف واربطها (غير قاطع — المقال يبقى منشوراً حتى لو فشلت)
+  const cover = await generateCover(rows[0].id, art.category || topic.cat || 'عام');
+  if (cover) {
+    await db.query('UPDATE blog_posts SET cover_image=$1 WHERE id=$2', [cover, rows[0].id]).catch(() => {});
+    rows[0].cover_image = cover;
+  }
 
   await regenerateSitemap();
   return rows[0];
