@@ -1891,7 +1891,7 @@ function platformBadge(p) {
 }
 
 // ─── زيارات المنصة (Google Analytics) ───
-async function loadAnalytics() {
+async function loadGA() {
   const body = document.getElementById('gaBody'); if (!body) return;
   let d; try { d = await api.admin.analytics(); } catch { body.innerHTML = '<span style="color:#ef4444;">تعذّر تحميل الزيارات.</span>'; return; }
   if (!d || !d.configured) {
@@ -1921,7 +1921,8 @@ async function loadAnalytics() {
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 async function loadDashboard() {
-  loadAnalytics();
+  loadGA();        // لوحة زيارات Google Analytics
+  loadAnalytics(); // لوحة تحليلات استخدام الأدوات
   try {
     const { stats, recentBookings } = await api.admin.dashboard();
     document.getElementById('stat-users').textContent = stats.users;
@@ -1942,7 +1943,6 @@ async function loadDashboard() {
   } catch (err) {
     console.error(err);
   }
-  loadAnalytics();
   loadTickets(); // لتحديث شارة التذاكر المفتوحة
   loadAnalyses(); // لتحديث شارة طلبات التحليلات الجديدة
 }
