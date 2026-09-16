@@ -505,6 +505,19 @@ try {
     catch (e) { logger.error('[cron] فشل النسخ الاحتياطي: ' + e.message); alertError('daily-backup', e); }
   });
   logger.info('✓ النسخ الاحتياطي اليومي لقاعدة البيانات مفعّل (4 صباحاً)');
+
+  // ─── محرّك المحتوى الذاتي: ٣ مقالات SEO أسبوعياً (أحد/ثلاثاء/خميس 6 صباحاً) ───
+  const autoBlog = require('./auto-blog');
+  cron.schedule('0 6 * * 0,2,4', async () => {
+    try {
+      const post = await autoBlog.generateAndPublish();
+      logger.info(`[cron] محرّك المحتوى: نُشر مقال جديد "${(post.title || '').slice(0, 40)}"`);
+    } catch (e) {
+      logger.error('[cron] محرّك المحتوى فشل: ' + e.message);
+      try { alertError('auto-blog', e); } catch {}
+    }
+  }, { timezone: 'Asia/Riyadh' });
+  logger.info('✓ محرّك المحتوى الذاتي مفعّل (أحد/ثلاثاء/خميس 6 صباحاً بتوقيت الرياض)');
 } catch (e) { logger.warn('node-cron غير متاح — المزامنة اليدوية فقط'); }
 
 // ─── Start ────────────────────────────────────────────────────────────────────

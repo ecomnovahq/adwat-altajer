@@ -113,4 +113,15 @@ router.delete('/:id', adminAuth, async (req, res) => {
   res.json({ message: 'تم حذف المقال' });
 });
 
+// POST توليد مقال تلقائي فوري (admin) — للإشراف والتشغيل عند الطلب
+router.post('/auto-generate', adminAuth, async (req, res) => {
+  try {
+    const autoBlog = require('../auto-blog');
+    const post = await autoBlog.generateAndPublish();
+    res.status(201).json({ message: 'تم توليد ونشر المقال', post });
+  } catch (e) {
+    res.status(500).json({ error: 'تعذّر توليد المقال: ' + (e.message || 'خطأ غير معروف') });
+  }
+});
+
 module.exports = router;
