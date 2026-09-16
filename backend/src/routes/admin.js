@@ -244,6 +244,13 @@ router.post('/users', adminAuth, async (req, res) => {
       'INSERT INTO users (email, password_hash, name, phone, is_admin) VALUES ($1,$2,$3,$4,$5) RETURNING id, email, name, is_admin, tools_access, phone, created_at',
       [email, hash, name, phone, is_admin]
     );
+    // اشتراك تلقائي في النشرة البريدية (غير قاطع؛ يحترم من ألغى سابقاً)
+    db.query(
+      `INSERT INTO newsletter_subscribers (email, name, token, source)
+       VALUES ($1,$2, md5(random()::text || clock_timestamp()::text), 'signup')
+       ON CONFLICT (email) DO NOTHING`,
+      [email, name || null]
+    ).catch(() => {});
     res.json({ ok: true, user: rows[0] });
   } catch (err) {
     res.status(500).json({ error: 'تعذّر إنشاء المستخدم' });

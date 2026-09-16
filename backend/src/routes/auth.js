@@ -99,6 +99,12 @@ router.post(
       );
       await db.query('DELETE FROM email_codes WHERE id = $1', [rec.id]);
       const user = urows[0];
+      // اشتراك تلقائي في النشرة البريدية عند التسجيل (غير قاطع؛ يحترم من ألغى سابقاً)
+      db.query(
+        `INSERT INTO newsletter_subscribers (email, name, token, source)
+         VALUES ($1,$2,$3,'signup') ON CONFLICT (email) DO NOTHING`,
+        [user.email, user.name || null, crypto.randomBytes(16).toString('hex')]
+      ).catch(() => {});
       res.status(201).json({ token: signToken(user.id), user });
     } catch (err) {
       logger.error('Auth error:', err.message);
