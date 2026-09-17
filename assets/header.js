@@ -15,6 +15,16 @@
     gtag('config', GA_ID);
   })();
 
+  // ── Microsoft Clarity (تسجيل جلسات الزوّار + خرائط حرارية) ──
+  (function () {
+    if (window.__clarityLoaded) return; window.__clarityLoaded = true;
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', 'yjs9sxfc7a');
+  })();
+
   // التقاط حدث التثبيت مبكّراً (قد يقع قبل بناء الهيدر)
   var _deferredInstall = null;
   window.addEventListener('beforeinstallprompt', function (e) {
