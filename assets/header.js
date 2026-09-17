@@ -17,7 +17,10 @@
 
   // ── Microsoft Clarity (تسجيل جلسات الزوّار + خرائط حرارية) ──
   (function () {
-    if (window.__clarityLoaded) return; window.__clarityLoaded = true;
+    if (window.__clarityLoaded) return;
+    // نصوّر زوّار/عملاء المنصة فقط — لا نسجّل لوحة تحكم الأدمن
+    if (/\/admin\.html$/i.test(location.pathname)) return;
+    window.__clarityLoaded = true;
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
       t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
