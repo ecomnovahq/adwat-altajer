@@ -34,7 +34,7 @@ db.query(`
   )
 `).then(() => db.query(`
   INSERT INTO tool_settings (tool_name, display_name, is_paid, daily_free_limit) VALUES
-    ('analyzer',        'محلل المتجر الذكي',         false, 10),
+    ('analyzer',        'محلل المتجر الذكي',         false,  1),
     ('generator',       'مولّد المحتوى',             false, 10),
     ('image-gen',       'مولّد صور المنتجات',        false,  5),
     ('whatsapp',        'قوالب واتساب',              false,  5),
@@ -42,7 +42,7 @@ db.query(`
     ('social-plan',     'خطة السوشيال ميديا',        false,  3),
     ('store-policies',  'سياسات المتجر',             false,  5),
     ('launch-campaign', 'حملة الإطلاق',              false,  3),
-    ('assistant',       'مساعد التاجر',              false,  NULL)
+    ('assistant',       'مساعد التاجر',              false,  3)
   ON CONFLICT (tool_name) DO NOTHING
 `)).then(() =>
   // حالة الظهور + ترتيب العرض (يتحكم بهما الأدمن، وينعكسان على كل الواجهات)

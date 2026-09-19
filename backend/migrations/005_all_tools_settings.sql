@@ -1,6 +1,6 @@
 -- Migration 005: Add all tool_settings entries for every tool
 INSERT INTO tool_settings (tool_name, display_name, is_paid, daily_free_limit) VALUES
-  ('analyzer',        'محلل المتاجر',              false, 10),
+  ('analyzer',        'محلل المتاجر',              false,  1),
   ('generator',       'مولّد المحتوى',             false, 10),
   ('image-gen',       'مولّد صور المنتجات',        false,  5),
   ('whatsapp',        'قوالب واتساب',              false,  5),

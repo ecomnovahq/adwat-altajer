@@ -2043,10 +2043,24 @@ router.post('/chat', optionalAuth,
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ error: errors.array()[0].msg });
 
+    // بوابة الحد اليومي + الاشتراك (للمستخدمين المسجّلين فقط — الزائر يظل يجرّب)
+    if (req.user) {
+      const perm = await checkToolPermission(req.user.id, 'assistant', req.user.tools_access);
+      if (!perm.allowed)
+        return res.status(403).json({ error: perm.message, code: perm.code, used: perm.used, limit: perm.limit });
+    }
+
     const { message, history = [], context = null } = req.body;
     const userName = req.user?.name || null;
     try {
       const reply = await aiChat(buildChatSystem(userName, context), history, message);
+      // سجّل الاستخدام حتى يُحتسب ضمن الحد اليومي
+      if (req.user) {
+        db.query(
+          'INSERT INTO tool_logs(user_id,tool_name,input_data,result_data) VALUES($1,$2,$3,$4)',
+          [req.user.id, 'assistant', { message: String(message).slice(0, 200) }, { ok: true }]
+        ).catch(() => {});
+      }
       res.json({ reply, userName });
     } catch (err) {
       logger.error('Chat error:', err?.message || String(err));
