@@ -55,7 +55,7 @@ router.post(
         subject: 'أهلاً بك في نشرة أدوات التاجر 🎉',
         html: `<div style="font-family:Tahoma,Arial,sans-serif;direction:rtl;text-align:right;line-height:1.9;color:#1a1a2e;max-width:600px;">
           <h2 style="color:#7c3aed;">أهلاً بك في نشرة أدوات التاجر 🎉</h2>
-          <p>شكراً لاشتراكك! ستصلك أفضل النصائح العملية لزيادة مبيعات متجرك الإلكتروني في السعودية — تسويق، تسعير، SEO، ومواسم البيع.</p>
+          <p>شكراً لاشتراكك! ستصلك أفضل النصائح العملية لزيادة مبيعات متجرك الإلكتروني — تسويق، تسعير، SEO، ومواسم البيع.</p>
           <p>بالمناسبة، جرّب أدواتنا المجانية الآن:</p>
           <p><a href="${SITE}/pages/tools.html" style="display:inline-block;background:#7c3aed;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700;">استكشف الأدوات</a></p>
           ${brandFooter(token)}
@@ -146,7 +146,7 @@ const FEATURED_TOOLS = [
   { name: 'مولّد حملة الإطلاق', url: '/pages/launch-campaign.html', desc: 'خطة إطلاق متكاملة لمنتجك الجديد في دقائق.' },
   { name: 'مولّد خطة السوشيال', url: '/pages/social-plan.html', desc: 'خطة محتوى شهرية جاهزة لمنصاتك الاجتماعية.' },
   { name: 'رسائل واتساب', url: '/pages/whatsapp.html', desc: 'قوالب واتساب احترافية لاستعادة السلات والعملاء.' },
-  { name: 'التقويم التسويقي', url: '/pages/calendar.html', desc: 'خطّط مبيعاتك حسب مواسم السوق السعودي.' },
+  { name: 'التقويم التسويقي', url: '/pages/calendar.html', desc: 'خطّط مبيعاتك حسب مواسم السوق والمناسبات.' },
   { name: 'مولّد سياسات المتجر', url: '/pages/store-policies.html', desc: 'سياسات متجر متوافقة ونظامية في دقائق.' },
   { name: 'أداة الكوبونات', url: '/pages/coupons.html', desc: 'صمّم عروض وكوبونات تزيد مبيعاتك بذكاء.' },
 ];
@@ -163,7 +163,7 @@ const FALLBACK_TIPS = [
 
 // ── نشرة يومية: نصيحة عملية + أداة مميّزة + تسويق للموقع ولخبراء المنصات ─────────
 async function sendDailyTip() {
-  // 1) نصيحة اليوم بالذكاء الاصطناعي (توطين سعودي) مع احتياطي
+  // 1) نصيحة اليوم بالذكاء الاصطناعي (عامة لكل التجار) مع احتياطي
   let tip;
   try {
     const { aiJSON } = require('../ai');
@@ -202,7 +202,7 @@ async function sendDailyTip() {
       <p style="color:#334155;margin:0 0 20px;">${tip.body}</p>
 
       <div style="background:#f5f3ff;border-right:4px solid #a855f7;border-radius:10px;padding:16px 18px;margin:0 0 20px;">
-        <div style="font-weight:800;color:#6d28d9;margin-bottom:4px;">🛠️ أداة اليوم: ${tool.name}</div>
+        <div style="font-weight:800;color:#6d28d9;margin-bottom:4px;">🛠️ أداة اليوم: <a href="${SITE}${tool.url}" style="color:#6d28d9;text-decoration:none;">${tool.name}</a></div>
         <div style="color:#475569;font-size:.95rem;margin-bottom:12px;">${tool.desc}</div>
         <a href="${SITE}${tool.url}" style="display:inline-block;background:#7c3aed;color:#fff;padding:9px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem;">جرّبها مجاناً</a>
       </div>
@@ -212,7 +212,7 @@ async function sendDailyTip() {
       <div style="background:#0f172a;border-radius:12px;padding:18px 20px;margin:0 0 6px;">
         <div style="color:#fff;font-weight:800;margin-bottom:6px;">تبي متجراً احترافياً يبيع من أول يوم؟</div>
         <div style="color:#cbd5e1;font-size:.92rem;margin-bottom:12px;">فريق <strong style="color:#c4b5fd;">خبراء المنصات</strong> يجهّز لك متجر سلة/زد كامل: تصميم وهوية وإعداد احترافي وربط وسائل الدفع والشحن.</div>
-        <a href="${SITE}/pages/services.html" style="display:inline-block;background:#a855f7;color:#fff;padding:9px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem;">اطلب خدمات خبراء المنصات</a>
+        <a href="https://salatips.com/ar/" target="_blank" rel="noopener" style="display:inline-block;background:#a855f7;color:#fff;padding:9px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem;">اطلب خدمات خبراء المنصات</a>
       </div>
     </div>
     ${brandFooter(token)}
