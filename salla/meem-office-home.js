@@ -4,7 +4,7 @@
   /* ---------- الإعدادات: عدّل هنا فقط ---------- */
   var CONFIG = {
     systemsUrl: "https://meemoffice.com/%D8%A3%D9%86%D8%B8%D9%85%D8%A9-%D9%85%D9%8A%D9%85-%D8%A7%D9%84%D8%B9%D9%82%D8%A7%D8%B1%D9%8A%D8%A9/c1585079166", // رابط تصنيف الأنظمة
-    whatsappUrl: "https://wa.me/966500000000", // ← ضع رقم الواتساب هنا (بالصيغة الدولية بدون + أو 00)
+    whatsappUrl: "https://api.whatsapp.com/send/?phone=966560485861&text&type=phone_number&app_absent=0", // رابط الواتساب
     words: ["تنظيم", "نظام", "احترافية"],      // الكلمات المتبدّلة داخل الأقواس
     interval: 2200                              // مدة ظهور كل كلمة (ملي ثانية)
   };
@@ -54,7 +54,7 @@
 #mo-hero h1{margin:0;font-size:clamp(46px,8.4vw,112px);font-weight:900;line-height:1.08;color:#f3efe9;letter-spacing:0}\
 #mo-hero .mh-l2{display:inline-flex;align-items:center;color:var(--g);margin-top:.04em}\
 #mo-hero .mh-br{direction:ltr;unicode-bidi:isolate;color:var(--gb);font-weight:500;font-size:.78em;line-height:1}\
-#mo-hero .mh-rot{display:inline-grid;overflow:hidden;padding:.06em .08em .2em;margin-bottom:-.14em}\
+#mo-hero .mh-rot{display:inline-grid;justify-items:start;overflow:hidden;padding:.06em .08em .2em;margin-bottom:-.14em;transition:width .5s cubic-bezier(.2,.8,.2,1)}\
 #mo-hero .mh-w{grid-area:1/1;text-align:right;white-space:nowrap;opacity:0;transform:translateY(70%);filter:blur(6px);\
   transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease,filter .5s ease}\
 #mo-hero .mh-w.on{opacity:1;transform:none;filter:none}\
@@ -115,8 +115,16 @@
   }
 
   // تبديل الكلمة داخل الأقواس: الحالية تطلع لفوق وتختفي، والجديدة تدخل من تحت
+  // وعرض المساحة بين القوسين يتغيّر مع طول الكلمة عشان القوسين يحضنونها
   function rotate(sec) {
-    var w = sec.querySelectorAll(".mh-w"), i = 0;
+    var rot = sec.querySelector(".mh-rot"), w = sec.querySelectorAll(".mh-w"), i = 0;
+    function fit() {
+      var cs = getComputedStyle(rot);
+      rot.style.width = Math.ceil(w[i].offsetWidth + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)) + "px";
+    }
+    fit();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    window.addEventListener("resize", fit);
     if (w.length < 2) return;
     setInterval(function () {
       if (document.hidden) return;
@@ -127,6 +135,7 @@
       nxt.classList.remove("out");
       nxt.classList.add("on");
       nxt.removeAttribute("aria-hidden");
+      fit();
       setTimeout(function () { cur.classList.remove("out"); }, 650);
     }, CONFIG.interval);
   }
