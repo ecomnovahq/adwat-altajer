@@ -42,7 +42,8 @@
 
   var CSS = '\
 #mo-hero{--g:#dca35a;--gb:#c78a39;--gd:#9a6a22;--bg:#18181a;--ink:#2a2118;\
-  font-family:inherit;direction:rtl;background:#f3efe9;padding:12px}\
+  font-family:inherit;direction:rtl;background:#fff;padding:0;position:relative;max-width:none}\
+html{overflow-x:clip}\
 #mo-hero *{box-sizing:border-box}\
 #mo-hero .mh-dark{position:relative;overflow:hidden;background-color:var(--bg);color:#f3efe9;\
   background-image:radial-gradient(520px 340px at 100% 0,rgba(199,138,57,.32),transparent 70%),\
@@ -77,7 +78,6 @@
   #mo-hero .mh-fg{grid-template-columns:repeat(2,auto);justify-content:center;gap:16px 34px}\
 }\
 @media (max-width:600px){\
-  #mo-hero{padding:8px}\
   #mo-hero .mh-dark{background-size:auto,72px 72px,72px 72px}\
   #mo-hero .mh-in{padding:52px 16px 46px}\
   #mo-hero .mh-eye{font-size:14px;gap:10px;margin-bottom:18px}\
@@ -140,6 +140,18 @@
     }, CONFIG.interval);
   }
 
+  // القسم بعرض الشاشة كامل حتى لو الثيم حاطّه داخل حاوية لها هوامش
+  function fullBleed(sec) {
+    function fit() {
+      sec.style.marginLeft = sec.style.marginRight = "0";
+      var r = sec.getBoundingClientRect(), vw = document.documentElement.clientWidth;
+      sec.style.marginLeft = -r.left + "px";
+      sec.style.marginRight = -(vw - r.right) + "px";
+    }
+    fit();
+    window.addEventListener("resize", fit);
+  }
+
   function mount() {
     if (!isHome() || document.getElementById("mo-hero")) return;
     var main = document.querySelector("main") || document.querySelector("#app");
@@ -156,6 +168,7 @@
     var first = main.querySelector(":scope > section");
     if (first) first.before(sec);
     else main.prepend(sec);
+    fullBleed(sec);
     rotate(sec);
   }
 
