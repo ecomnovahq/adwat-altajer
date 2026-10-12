@@ -52,7 +52,7 @@
 #mo-hero .mh-eye{display:flex;align-items:center;gap:14px;font-size:18px;font-weight:700;color:var(--g);margin:0 0 26px}\
 #mo-hero .mh-eye:before{content:"";width:34px;height:2px;background:var(--g);border-radius:2px}\
 #mo-hero h1{margin:0;font-size:clamp(46px,8.4vw,112px);font-weight:900;line-height:1.08;color:#f3efe9;letter-spacing:0}\
-#mo-hero .mh-l2{display:inline-flex;align-items:center;color:var(--g);margin-top:.04em}\
+#mo-hero .mh-l2{display:inline-flex;align-items:center;gap:.16em;color:var(--g);margin-top:.04em}\
 #mo-hero .mh-br{direction:ltr;unicode-bidi:isolate;color:var(--gb);font-weight:500;font-size:.78em;line-height:1}\
 #mo-hero .mh-rot{display:inline-grid;justify-items:start;overflow:hidden;padding:.06em .08em .2em;margin-bottom:-.14em;transition:width .5s cubic-bezier(.2,.8,.2,1)}\
 #mo-hero .mh-w{grid-area:1/1;text-align:right;white-space:nowrap;opacity:0;transform:translateY(70%);filter:blur(6px);\
@@ -104,7 +104,7 @@
     return '\
 <div class="mh-dark"><div class="mh-in">\
   <div class="mh-eye">أنظمة لإدارة الأملاك والعروض العقارية</div>\
-  <h1>عقارك يستاهل<br><span class="mh-l2"><span class="mh-br">{</span><span class="mh-rot">' + words + '</span><span class="mh-br">}</span></span></h1>\
+  <h1>عقارك يستاهل<br><span class="mh-l2"><span class="mh-br">}</span><span class="mh-rot">' + words + '</span><span class="mh-br">{</span></span></h1>\
   <p>نبني لك <b>نظامك العقاري الخاص</b>، مع <b>دعم فني وتحديثات سنة كاملة</b>.</p>\
   <div class="mh-btns">\
     <a class="mh-btn mh-pri" href="' + CONFIG.systemsUrl + '">اكتشف أنظمتنا</a>\
