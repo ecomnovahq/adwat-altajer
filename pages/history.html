@@ -8,7 +8,7 @@
 <meta property="og:title" content="نتائجي — أدوات التاجر">
 <meta property="og:description" content="سجلّ نتائجك السابقة من أدوات التاجر: التحليلات، الأوصاف، والمحتوى المولّد.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://adwat.cloud/pages/history.html">
+<meta property="og:url" content="https://adwat.cloud/history">
 <meta property="og:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:site_name" content="أدوات التاجر">
 <meta property="og:locale" content="ar_SA">
@@ -17,13 +17,13 @@
 <meta name="twitter:description" content="سجلّ نتائجك السابقة من أدوات التاجر: التحليلات، الأوصاف، والمحتوى المولّد.">
 <meta name="twitter:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta name="robots" content="noindex">
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=13">
-<link rel="stylesheet" href="../assets/responsive.css?v=1">
+<link rel="stylesheet" href="/assets/styles.css?v=13">
+<link rel="stylesheet" href="/assets/responsive.css?v=1">
 <style>
   .hs-page { max-width: 1000px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
   .hs-head { margin-bottom: 1.4rem; }
@@ -84,7 +84,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js?v=47"></script>
+<script src="/assets/api.js?v=48"></script>
 <script>
 const TOOL_NAMES = {
   analyzer: 'محلل المتاجر', generator: 'مولّد المحتوى', 'image-gen': 'مولّد صور المنتجات',
@@ -104,7 +104,7 @@ function subOf(log) {
 
 async function loadHistory() {
   if (!auth || !auth.isLoggedIn || !auth.isLoggedIn()) {
-    document.getElementById('hsList').innerHTML = '<div class="hs-empty">سجّل دخولك لعرض نتائجك السابقة. <a href="login.html" style="color:var(--accent)">تسجيل الدخول</a></div>';
+    document.getElementById('hsList').innerHTML = '<div class="hs-empty">سجّل دخولك لعرض نتائجك السابقة. <a href="/login" style="color:var(--accent)">تسجيل الدخول</a></div>';
     return;
   }
   try { _logs = await api.toolHistory(); } catch (err) {
@@ -204,6 +204,6 @@ function closeHsModal(){ document.getElementById('hsModal').classList.remove('op
 
 loadHistory();
 </script>
-<script src="../assets/header.js?v=22"></script>
+<script src="/assets/header.js?v=23"></script>
 </body>
 </html>

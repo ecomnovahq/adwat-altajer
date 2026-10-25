@@ -154,7 +154,7 @@ function expertReviewAdminHtml(r) {
     ${tags ? `<div style="margin-bottom:.5rem;">${tags}</div>` : ''}
     <div style="background:#fff7ed;border-right:3px solid #f59e0b;padding:.8rem 1rem;border-radius:6px;color:#333;line-height:1.8;font-size:14px;">${_nl(r.challenges)}</div>
     <div style="text-align:center;margin:1.6rem 0 .4rem;">
-      <a href="https://adwat.cloud/pages/admin.html" style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:.75rem 1.6rem;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">فتح الطلب في لوحة التحكم</a>
+      <a href="https://adwat.cloud/admin" style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:.75rem 1.6rem;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">فتح الطلب في لوحة التحكم</a>
     </div>
   </div>
 </div>

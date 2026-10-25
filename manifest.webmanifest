@@ -4,7 +4,7 @@
   "description": "منصة أدوات ذكية للتجار: تحليل المتاجر، توليد المحتوى، الكوبونات، تقويم المواسم وأكثر.",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "/index.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#0f0f1a",

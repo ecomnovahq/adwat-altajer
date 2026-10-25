@@ -19,7 +19,7 @@
   (function () {
     if (window.__clarityLoaded) return;
     // نصوّر زوّار/عملاء المنصة فقط — لا نسجّل لوحة تحكم الأدمن
-    if (/\/admin\.html$/i.test(location.pathname)) return;
+    if (/\/admin(\.html)?\/?$/i.test(location.pathname)) return;
     window.__clarityLoaded = true;
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
@@ -40,22 +40,23 @@
   });
   function init() {
     var p = location.pathname;
-    var inPages = /\/pages\//.test(p);
-    var root = inPages ? '' : 'pages/';
-    var home = inPages ? '../' : './';  // الجذر النظيف بدل index.html في الرابط
-    var file = (p.split('/').pop() || 'index.html').toLowerCase();
+    // روابط نظيفة: /tools بدل /pages/tools.html (nginx يخدم الصفحة ويحوّل الروابط القديمة)
+    var pg = function (f) { return f === 'index.html' ? '/' : '/' + f.replace(/\.html$/, ''); };
+    var home = '/';
+    var file = (p.replace(/\/+$/, '').split('/').pop() || 'index').toLowerCase().replace(/\.html$/, '') + '.html';
+    var inPages = file !== 'index.html';
 
     // صفحات لها تخطيط مستقل (لوحة التحكم) — لا تُحقن الهيدر/الفوتر العام
     if (file === 'admin.html') return;
 
     var L = [
       { l: 'الرئيسية', h: home, f: 'index.html' },
-      { l: 'الأدوات', h: root + 'tools.html', f: 'tools.html' },
-      { l: 'الباقات', h: root + 'pricing.html', f: 'pricing.html' },
-      { l: 'الكوبونات', h: root + 'coupons.html', f: 'coupons.html' },
-      { l: 'المواسم', h: root + 'calendar.html', f: 'calendar.html' },
-      { l: 'المدوّنة', h: root + 'blog.html', f: 'blog.html' },
-      { l: 'عن المنصة', h: root + 'about.html', f: 'about.html' },
+      { l: 'الأدوات', h: pg('tools.html'), f: 'tools.html' },
+      { l: 'الباقات', h: pg('pricing.html'), f: 'pricing.html' },
+      { l: 'الكوبونات', h: pg('coupons.html'), f: 'coupons.html' },
+      { l: 'المواسم', h: pg('calendar.html'), f: 'calendar.html' },
+      { l: 'المدوّنة', h: pg('blog.html'), f: 'blog.html' },
+      { l: 'عن المنصة', h: pg('about.html'), f: 'about.html' },
     ];
     // «نتائجي» و«رسائلي» متاحان من صفحة الحساب والمساعد العائم — أُزيلا من القائمة الرئيسية لإبقائها نظيفة
     var act = function (f) { return f === file ? ' class="active"' : ''; };
@@ -63,7 +64,7 @@
 
     var loggedIn = false;
     try { loggedIn = !!localStorage.getItem('tajer-token'); } catch (e) {}
-    var accountHref = root + (loggedIn ? 'account.html' : 'login.html');
+    var accountHref = loggedIn ? '/account' : '/login';
 
     var logo = '<svg class="logo-svg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/><polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/><polygon class="logo-bg" points="50,70 93,70 93,110 50,136"/></svg>';
     var icPerson = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
@@ -173,11 +174,11 @@
       { l: 'مسار التاجر', f: 'merchant-path.html' }, { l: 'حاسبة الربح', f: 'calculator.html' },
       { l: 'قيّم مشروعك مع خبير', f: 'expert-review.html' },
       { l: 'كل الأدوات', f: 'tools.html' }
-    ].map(function (x) { return '<a href="' + root + x.f + '">' + x.l + '</a>'; }).join('');
+    ].map(function (x) { return '<a href="' + pg(x.f) + '">' + x.l + '</a>'; }).join('');
     var colCompany = [
       { l: 'عن المنصة', f: 'about.html' }, { l: 'المدوّنة', f: 'blog.html' },
       { l: 'الكوبونات', f: 'coupons.html' }, { l: 'المواسم', f: 'calendar.html' }
-    ].map(function (x) { return '<a href="' + root + x.f + '">' + x.l + '</a>'; }).join('');
+    ].map(function (x) { return '<a href="' + pg(x.f) + '">' + x.l + '</a>'; }).join('');
     var year = new Date().getFullYear();
     var footHtml =
       '<footer class="xp-foot">' +
@@ -193,7 +194,7 @@
             '<a href="https://wa.me/966507060592" target="_blank" rel="noopener">واتساب: 0507060592</a>' +
             '<a href="mailto:support@adwat.cloud">support@adwat.cloud</a>' +
             '<a href="https://salatips.com" target="_blank" rel="noopener">salatips.com</a>' +
-            '<a href="' + root + 'about.html">الدعم والمساعدة</a>' +
+            '<a href="/about">الدعم والمساعدة</a>' +
           '</div>' +
         '</div>' +
         '<div class="xp-foot-bottom"><div class="xp-foot-bottom-in">' +
@@ -240,7 +241,7 @@
       { n: 'رسائلي والدعم', d: 'تذاكر الدعم ومحادثاتك مع الفريق', kw: 'رسائل دعم تذاكر تذكرة مساعدة شكوى', f: 'messages.html' },
     ];
     var nrm = function (s) { return String(s || '').replace(/[إأآا]/g, 'ا').replace(/[ىي]/g, 'ي').replace(/ة/g, 'ه').replace(/ـ/g, '').toLowerCase(); };
-    INDEX.forEach(function (x) { x.h = root + x.f; x._s = nrm(x.n + ' ' + x.d + ' ' + x.kw); });
+    INDEX.forEach(function (x) { x.h = pg(x.f); x._s = nrm(x.n + ' ' + x.d + ' ' + x.kw); });
 
     var icS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
     var modal = document.createElement('div');
@@ -299,7 +300,7 @@
   // تسجيل Service Worker (PWA + إدارة الكاش — HTML دائماً أحدث نسخة)
   try {
     if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
-      var swRoot = location.pathname.indexOf('/pages/') !== -1 ? '../sw.js' : 'sw.js';
+      var swRoot = '/sw.js';
       window.addEventListener('load', function () { navigator.serviceWorker.register(swRoot).catch(function(){}); });
     }
   } catch (e) {}

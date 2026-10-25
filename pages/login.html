@@ -8,7 +8,7 @@
 <meta property="og:title" content="تسجيل الدخول — أدوات التاجر">
 <meta property="og:description" content="سجّل دخولك إلى أدوات التاجر للوصول إلى الأدوات الذكية المجانية وإدارة اشتراكك.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://adwat.cloud/pages/login.html">
+<meta property="og:url" content="https://adwat.cloud/login">
 <meta property="og:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:site_name" content="أدوات التاجر">
 <meta property="og:locale" content="ar_SA">
@@ -17,13 +17,13 @@
 <meta name="twitter:description" content="سجّل دخولك إلى أدوات التاجر للوصول إلى الأدوات الذكية المجانية وإدارة اشتراكك.">
 <meta name="twitter:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=13">
-<link rel="stylesheet" href="../assets/responsive.css?v=1">
+<link rel="stylesheet" href="/assets/styles.css?v=13">
+<link rel="stylesheet" href="/assets/responsive.css?v=1">
 <style>
   .auth-page {
     min-height: 100vh;
@@ -153,7 +153,7 @@
 
 <div class="auth-page">
   <div class="auth-card">
-    <a href="../index.html" class="auth-logo">
+    <a href="/" class="auth-logo">
       <svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
         <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/>
         <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
@@ -190,7 +190,7 @@
         <div class="spinner" id="loginSpinner"></div>
       </button>
       <div style="text-align:center;margin-top:1rem;">
-        <a href="forgot-password.html" style="color:var(--ink-dim);font-size:0.83rem;text-decoration:none;">نسيت كلمة المرور؟</a>
+        <a href="/forgot-password" style="color:var(--ink-dim);font-size:0.83rem;text-decoration:none;">نسيت كلمة المرور؟</a>
       </div>
     </form>
 
@@ -240,16 +240,16 @@
     </form>
 
     <div class="auth-divider">
-      <a href="../index.html" style="color:var(--accent);text-decoration:none;font-size:0.85rem;">← العودة للرئيسية</a>
+      <a href="/" style="color:var(--accent);text-decoration:none;font-size:0.85rem;">← العودة للرئيسية</a>
     </div>
   </div>
 </div>
 
-<script src="../assets/api.js?v=47"></script>
+<script src="/assets/api.js?v=48"></script>
 <script>
   // Redirect if already logged in
   if (auth.isLoggedIn()) {
-    window.location.href = auth.isAdmin() ? 'admin.html' : '../index.html';
+    window.location.href = auth.isAdmin() ? '/admin' : '/';
   }
 
   function switchTab(tab) {
@@ -309,7 +309,7 @@
         document.getElementById('loginEmail').value,
         document.getElementById('loginPassword').value
       );
-      window.location.href = data.user.is_admin ? 'admin.html' : '../index.html';
+      window.location.href = data.user.is_admin ? '/admin' : '/';
     } catch (err) {
       showError(err.message);
       setLoading('loginBtn', 'loginSpinner', false);
@@ -341,7 +341,7 @@
     setLoading('verifyBtn', 'verifySpinner', true);
     try {
       const data = await api.verifyEmail(pendingEmail, document.getElementById('verifyCode').value.trim());
-      window.location.href = data.user.is_admin ? 'admin.html' : '../index.html';
+      window.location.href = data.user.is_admin ? '/admin' : '/';
     } catch (err) {
       showError(err.message);
       setLoading('verifyBtn', 'verifySpinner', false);
@@ -369,6 +369,6 @@
     });
   });
 </script>
-<script src="../assets/header.js?v=22"></script>
+<script src="/assets/header.js?v=23"></script>
 </body>
 </html>

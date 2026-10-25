@@ -90,7 +90,7 @@ async function pickTopic() {
 }
 
 function buildPrompt(topic) {
-  const toolUrl = `${SITE}/pages/${topic.tool}`;
+  const toolUrl = `${SITE}/${topic.tool.replace(/\.html$/, '')}`;
   return `أنت خبير في التجارة الإلكترونية والتسويق، تكتب لمدوّنة منصة "أدوات التاجر" (${SITE}) — منصة تقدّم أدوات ذكاء اصطناعي وخدمات لأصحاب المتاجر الإلكترونية (سلة، زد، وغيرها). تخاطب أصحاب المتاجر الإلكترونية بشكل عام دون توجيه لبلد معيّن.
 
 اكتب مقالاً احترافياً${topic.fresh ? ' بزاوية جديدة ومبتكرة' : ''} بعنوان يدور حول: "${topic.t}".
@@ -108,7 +108,7 @@ function buildPrompt(topic) {
 - البنية: مقدمة جذّابة، ثم عناوين فرعية <h2> و<h3>، فقرات <p>، قوائم <ul><li>، وحيث يناسب <blockquote> أو <strong>.
 - أدرج قسم أسئلة شائعة (FAQ) من ٣ إلى ٥ أسئلة داخل عناوين <h3> وأجوبتها <p> قرب النهاية.
 - رابط داخلي إجباري: اذكر أداة "${topic.toolName}" من "أدوات التاجر" بشكل طبيعي داخل المقال كحل عملي، ضمن وسم <a href="${toolUrl}">${topic.toolName}</a> (مرة أو مرتين، غير مقحمة).
-- خاتمة فيها دعوة لطيفة لتجربة أدوات "أدوات التاجر" المجانية أو الاطلاع على خدماتنا (<a href="${SITE}/pages/services.html">خدماتنا</a>).
+- خاتمة فيها دعوة لطيفة لتجربة أدوات "أدوات التاجر" المجانية أو الاطلاع على خدماتنا (<a href="${SITE}/services">خدماتنا</a>).
 - المحتوى (content) HTML نظيف فقط: استخدم <h2><h3><p><ul><li><strong><blockquote><a> — بدون <html> أو <head> أو <body> أو <style> أو <script> أو صور، وبدون Markdown.
 
 أعِد JSON صارماً بهذا الشكل بالضبط:
@@ -138,7 +138,7 @@ async function regenerateSitemap() {
     if (!rows.length) { fs.writeFileSync(sitemapPath, base, 'utf8'); return; }
 
     const entries = rows.map(r => {
-      const loc = `${SITE}/pages/blog-post.html?slug=${encodeURIComponent(r.slug)}`;
+      const loc = `${SITE}/blog-post?slug=${encodeURIComponent(r.slug)}`;
       const lastmod = (r.updated_at ? new Date(r.updated_at) : new Date()).toISOString().slice(0, 10);
       return `  <url><loc>${loc}</loc><priority>0.6</priority><changefreq>monthly</changefreq><lastmod>${lastmod}</lastmod></url>`;
     }).join('\n');

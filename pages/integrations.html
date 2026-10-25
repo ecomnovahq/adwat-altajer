@@ -8,9 +8,9 @@
 <meta property="og:title" content="ربط متجر سلة — أدوات التاجر">
 <meta property="og:description" content="اربط متجرك على سلة، استورد منتجاتك، ولّد أوصافها، وأرجِعها للمتجر بضغطة.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://adwat.cloud/pages/integrations.html">
-<link rel="canonical" href="https://adwat.cloud/pages/integrations.html">
-<link rel="alternate" hreflang="ar" href="https://adwat.cloud/pages/integrations.html">
+<meta property="og:url" content="https://adwat.cloud/integrations">
+<link rel="canonical" href="https://adwat.cloud/integrations">
+<link rel="alternate" hreflang="ar" href="https://adwat.cloud/integrations">
 <meta property="og:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:site_name" content="أدوات التاجر">
 <meta property="og:locale" content="ar_SA">
@@ -19,13 +19,13 @@
 <meta name="twitter:description" content="اربط متجرك على سلة، استورد منتجاتك، ولّد أوصافها، وأرجِعها للمتجر بضغطة.">
 <meta name="twitter:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta name="robots" content="noindex">
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=13">
-<link rel="stylesheet" href="../assets/responsive.css?v=1">
+<link rel="stylesheet" href="/assets/styles.css?v=13">
+<link rel="stylesheet" href="/assets/responsive.css?v=1">
 <style>
   .ig-page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
   .ig-card { background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.4rem; }
@@ -116,7 +116,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js?v=47"></script>
+<script src="/assets/api.js?v=48"></script>
 <script>
 const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 let _page = 1, _cur = null, _curGen = null;
@@ -124,7 +124,7 @@ let _page = 1, _cur = null, _curGen = null;
 async function init() {
   if (!auth.isLoggedIn || !auth.isLoggedIn()) {
     document.getElementById('igStatus').innerHTML = '<span class="ig-dot" style="background:#ef4444"></span> سجّل دخولك أولاً';
-    document.getElementById('igConnectBox').innerHTML = '<a href="login.html" class="btn-primary" style="padding:.6rem 1.2rem;">تسجيل الدخول</a>';
+    document.getElementById('igConnectBox').innerHTML = '<a href="/login" class="btn-primary" style="padding:.6rem 1.2rem;">تسجيل الدخول</a>';
     return;
   }
   try {
@@ -238,6 +238,6 @@ async function igPush(descText) {
 
 init();
 </script>
-<script src="../assets/header.js?v=22"></script>
+<script src="/assets/header.js?v=23"></script>
 </body>
 </html>

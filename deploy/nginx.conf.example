@@ -9,6 +9,11 @@ server {
     root /var/www/adwat;          # جذر المشروع (index.html + pages/ + assets/)
     index index.html;
 
+    # ── روابط نظيفة: /tools بدل /pages/tools.html ──
+    # الروابط القديمة → 301 للرابط النظيف (نفحص $request_uri الأصلي فلا تتأثر الإعادة الداخلية، ويُحفظ ?query)
+    if ($request_uri ~ ^/index\.html(\?.*)?$)                 { return 301 /$1; }
+    if ($request_uri ~ ^/(?:pages/)?([A-Za-z0-9-]+)\.html(\?.*)?$) { return 301 /$1$2; }
+
     # ── واجهة برمجة التطبيقات → الباك إند (PM2 على المنفذ 3001) ──
     location /api/ {
         proxy_pass http://127.0.0.1:3001;
@@ -35,6 +40,10 @@ server {
     location ~* \.(?:css|js|png|jpe?g|svg|webp|ico|woff2?)$ { expires 7d; add_header Cache-Control "public"; }
     location ~* \.html$ { add_header Cache-Control "no-cache"; }
 
-    # ── الملفات الثابتة ──
-    location / { try_files $uri $uri/ =404; }
+    # ── الملفات الثابتة + الروابط النظيفة (/x ← pages/x.html) ──
+    location / { try_files $uri $uri/ @clean; }
+    location @clean {
+        rewrite ^/([A-Za-z0-9-]+)/?$ /pages/$1.html last;
+        return 404;
+    }
 }

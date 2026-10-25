@@ -123,7 +123,7 @@ async function load() {
         </div>
         <h2 style="font-size:1.25rem;margin:0 0 .5rem;">مساعد التاجر</h2>
         <p style="color:var(--ink-dim);font-size:.9rem;line-height:1.7;margin:0 0 1.4rem;">سجّل دخولك لتحليل متجرك، متابعة منافسيك، وتوليد محتواك — كل شيء في مكان واحد.</p>
-        <a href="login.html" class="btn-primary" style="display:inline-flex;padding:.7rem 2rem;text-decoration:none;">تسجيل الدخول</a>
+        <a href="/login" class="btn-primary" style="display:inline-flex;padding:.7rem 2rem;text-decoration:none;">تسجيل الدخول</a>
       </div>`;
     return;
   }
@@ -1150,7 +1150,7 @@ function renderBell() {
   const menu = document.getElementById('asBellMenu');
   if (!menu) return;
   let html = '<div style="padding:.7rem .9rem;font-weight:800;border-bottom:1px solid var(--line);">الإشعارات</div><div style="max-height:320px;overflow-y:auto;">';
-  if (_answeredTickets) html += `<div onclick="location.href='messages.html'" style="padding:.6rem .9rem;cursor:pointer;border-bottom:1px solid var(--line);font-size:.85rem;color:var(--accent);font-weight:700;">${_answeredTickets} ردّ جديد من خدمة العملاء — افتح رسائلي</div>`;
+  if (_answeredTickets) html += `<div onclick="location.href='/messages'" style="padding:.6rem .9rem;cursor:pointer;border-bottom:1px solid var(--line);font-size:.85rem;color:var(--accent);font-weight:700;">${_answeredTickets} ردّ جديد من خدمة العملاء — افتح رسائلي</div>`;
   if (alerts.length) {
     alerts.slice(0, 8).forEach(a => {
       const c = a.severity === 'high' ? '#ef4444' : a.severity === 'medium' ? '#f59e0b' : '#3b82f6';

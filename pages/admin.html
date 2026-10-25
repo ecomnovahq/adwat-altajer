@@ -7,7 +7,7 @@
 <meta property="og:title" content="لوحة التحكم — أدوات التاجر">
 <meta property="og:description" content="منصة أدوات التاجر الذكية للتجار في السعودية والخليج.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://adwat.cloud/pages/admin.html">
+<meta property="og:url" content="https://adwat.cloud/admin">
 <meta property="og:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:site_name" content="أدوات التاجر">
 <meta property="og:locale" content="ar_SA">
@@ -16,13 +16,13 @@
 <meta name="twitter:description" content="منصة أدوات التاجر الذكية للتجار في السعودية والخليج.">
 <meta name="twitter:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=13">
-<link rel="stylesheet" href="../assets/responsive.css?v=1">
+<link rel="stylesheet" href="/assets/styles.css?v=13">
+<link rel="stylesheet" href="/assets/responsive.css?v=1">
 <style>
   * { box-sizing: border-box; }
   html, body { overflow-x: hidden; max-width: 100%; }
@@ -350,7 +350,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/><circle cx="5" cy="6" r="1.4" fill="currentColor"/><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="5" cy="18" r="1.4" fill="currentColor"/></svg>
       طلبات مسار التاجر
     </button>
-    <a class="sidebar-link" href="../index.html" target="_blank">
+    <a class="sidebar-link" href="/" target="_blank">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
       عرض الموقع
     </a>
@@ -1235,7 +1235,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js?v=49"></script>
+<script src="/assets/api.js?v=50"></script>
 <script>
 // ─── Notifications ────────────────────────────────────────────────────────────
 let notifications = JSON.parse(localStorage.getItem('admin_notifs') || '[]');
@@ -1319,7 +1319,7 @@ async function checkNotifications() {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 if (!auth.isAdmin()) {
-  window.location.href = 'login.html';
+  window.location.href = '/login';
 }
 
 const user = auth.getUser();
@@ -1330,7 +1330,7 @@ let currentSection = 'dashboard';
 
 function doLogout() {
   auth.clear();
-  window.location.href = 'login.html';
+  window.location.href = '/login';
 }
 
 // ─── قائمة الجوال (السايدبار) ───────────────────────────────────────────────────
@@ -3095,7 +3095,7 @@ updateGradientPreview();
 renderNotifs();
 checkNotifications();
 </script>
-<script src="../assets/header.js?v=22"></script>
+<script src="/assets/header.js?v=23"></script>
 </body>
 </html>
 

@@ -7,10 +7,10 @@
 <meta name="description" content="مقال من مدونة أدوات التاجر — نصائح ومعلومات عملية للتاجر السعودي.">
 <meta property="og:title" content="مقال — أدوات التاجر">
 <meta property="og:description" content="مقال من مدونة أدوات التاجر — نصائح ومعلومات عملية للتاجر السعودي.">
-<meta property="og:url" content="https://adwat.cloud/pages/blog-post.html">
-<link rel="canonical" href="https://adwat.cloud/pages/blog-post.html">
+<meta property="og:url" content="https://adwat.cloud/blog-post">
+<link rel="canonical" href="https://adwat.cloud/blog-post">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<link rel="alternate" hreflang="ar" href="https://adwat.cloud/pages/blog-post.html">
+<link rel="alternate" hreflang="ar" href="https://adwat.cloud/blog-post">
 <meta property="og:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:site_name" content="أدوات التاجر">
 <meta name="twitter:card" content="summary_large_image">
@@ -19,13 +19,13 @@
 <meta name="twitter:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:type" content="article">
 <meta property="og:locale" content="ar_SA">
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=13">
-<link rel="stylesheet" href="../assets/responsive.css?v=1">
+<link rel="stylesheet" href="/assets/styles.css?v=13">
+<link rel="stylesheet" href="/assets/responsive.css?v=1">
 <style>
   .post-page { max-width: 820px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 
@@ -76,7 +76,7 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="../index.html">
+    <a class="nav-logo" href="/">
       <svg width="22" height="30" viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
         <polygon points="50,4 93,30 93,110 50,136 7,110 7,30" fill="#6366f1"/>
         <polygon class="logo-bg" points="7,30 50,4 50,70 7,70"/>
@@ -85,11 +85,11 @@
       <span>أدوات التاجر</span>
     </a>
     <div class="nav-links">
-      <a href="../index.html">الرئيسية</a>
-      <a href="blog.html">المدونة</a>
+      <a href="/">الرئيسية</a>
+      <a href="/blog">المدونة</a>
     </div>
     <div class="nav-cta">
-      <a class="btn-primary" href="login.html">ابدأ مجاناً</a>
+      <a class="btn-primary" href="/login">ابدأ مجاناً</a>
     </div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
       <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -111,7 +111,7 @@
   </div>
 </main>
 
-<script src="../assets/api.js?v=47"></script>
+<script src="/assets/api.js?v=48"></script>
 <script>
 const slug = new URLSearchParams(location.search).get('slug');
 
@@ -127,7 +127,7 @@ async function loadPost() {
 
     // ── SEO ديناميكي: canonical + Open Graph + بيانات Article (للأرشفة وظهور AI) ──
     try {
-      const canonicalUrl = `https://adwat.cloud/pages/blog-post.html?slug=${encodeURIComponent(slug)}`;
+      const canonicalUrl = `https://adwat.cloud/blog-post?slug=${encodeURIComponent(slug)}`;
       const plain = (post.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
       const desc = (post.excerpt || plain).slice(0, 160);
       const img = post.cover_image || 'https://adwat.cloud/assets/favicon.svg';
@@ -178,9 +178,9 @@ async function loadPost() {
 
     document.getElementById('postPage').innerHTML = `
       <div class="post-breadcrumb">
-        <a href="../index.html">الرئيسية</a>
+        <a href="/">الرئيسية</a>
         <span>›</span>
-        <a href="blog.html">المدونة</a>
+        <a href="/blog">المدونة</a>
         <span>›</span>
         <span style="color:var(--ink);">${post.title}</span>
       </div>
@@ -214,7 +214,7 @@ async function loadPost() {
       ${tagsHtml}
 
       <div class="post-back">
-        <a href="blog.html" class="btn-secondary" style="padding:0.75rem 2rem;display:inline-flex;align-items:center;gap:0.5rem;">
+        <a href="/blog" class="btn-secondary" style="padding:0.75rem 2rem;display:inline-flex;align-items:center;gap:0.5rem;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           العودة للمدونة
         </a>
@@ -225,13 +225,13 @@ async function loadPost() {
         <div style="margin-bottom:1rem;opacity:0.3;"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/><line x1="8" y1="17" x2="4" y2="17"/></svg></div>
         <h2 style="color:var(--ink);">المقال غير موجود</h2>
         <p style="color:var(--ink-dim);margin:0.75rem 0 2rem;">ربما تم حذف هذا المقال أو الرابط غير صحيح.</p>
-        <a href="blog.html" class="btn-primary" style="padding:0.75rem 2rem;">العودة للمدونة</a>
+        <a href="/blog" class="btn-primary" style="padding:0.75rem 2rem;">العودة للمدونة</a>
       </div>`;
   }
 }
 
 loadPost();
 </script>
-<script src="../assets/header.js?v=22"></script>
+<script src="/assets/header.js?v=23"></script>
 </body>
 </html>

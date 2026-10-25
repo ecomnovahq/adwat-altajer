@@ -64,8 +64,8 @@ async function _apiRequest(method, endpoint, body, blobResponse = false) {
     // جلسة منتهية أو حساب محذوف → امسح الجلسة ووجّه للدخول تلقائياً
     if (res.status === 401 && token) {
       auth.clear();
-      if (!location.pathname.endsWith('login.html')) {
-        const base = location.pathname.includes('/pages/') ? 'login.html' : 'pages/login.html';
+      if (!location.pathname.endsWith('/login')) {
+        const base = '/login';
         setTimeout(() => { location.href = base; }, 1500);
       }
       const e = new Error('انتهت جلستك أو الحساب غير متاح — سجّل دخولك من جديد.');
@@ -108,8 +108,7 @@ const api = {
   resetPassword: (email, code, password) => apiRequest('POST', '/auth/reset-password', { email, code, password }),
   logout: () => {
     auth.clear();
-    const inPages = location.pathname.replace(/\\/g, '/').includes('/pages/');
-    window.location.href = inPages ? '../index.html' : 'index.html';
+    window.location.href = '/';
   },
 
   // ─── Tools ─────────────────────────────────────────────────────────────────
@@ -543,14 +542,13 @@ function initNavAuth() {
   const navCta = document.querySelector('.nav-cta');
   if (!navCta) return;
 
-  const inPages = location.pathname.replace(/\\/g, '/').includes('/pages/');
   if (user) {
     const userBtn = document.createElement('a');
     userBtn.className = 'nav-user-btn';
     userBtn.innerHTML = `<span class="nav-user-avatar">${user.name.charAt(0)}</span><span>${user.name}</span>`;
     userBtn.href = user.is_admin
-      ? (inPages ? 'admin.html' : 'pages/admin.html')
-      : (inPages ? 'account.html' : 'pages/account.html');
+      ? '/admin'
+      : '/account';
     navCta.parentNode.insertBefore(userBtn, navCta);
 
     const logoutBtn = document.createElement('button');
@@ -563,7 +561,7 @@ function initNavAuth() {
     const loginBtn = document.createElement('a');
     loginBtn.className = 'nav-login-btn';
     loginBtn.textContent = 'تسجيل الدخول';
-    loginBtn.href = inPages ? 'login.html' : 'pages/login.html';
+    loginBtn.href = '/login';
     navCta.parentNode.insertBefore(loginBtn, navCta);
     navCta.style.display = 'none';
   }
@@ -571,8 +569,8 @@ function initNavAuth() {
 
 // ─── Floating Widgets (Chat + WhatsApp) ──────────────────────────────────────
 (function initWidgets() {
-  const isAdmin = location.pathname.includes('admin.html');
-  const isLogin = location.pathname.includes('login.html');
+  const isAdmin = location.pathname.includes('/admin');
+  const isLogin = location.pathname.includes('/login');
   if (isAdmin || isLogin) return;
 
   // Inject styles
@@ -855,7 +853,7 @@ function initNavAuth() {
       addBubble('عشان أوصلك بفريق الدعم لازم تسجّل دخولك الأول.', 'tj-msg-bot');
       const a = addBubble('اضغط هنا لتسجيل الدخول', 'tj-msg-bot');
       a.style.cursor = 'pointer'; a.style.textDecoration = 'underline'; a.style.color = 'var(--accent,#6366f1)';
-      a.onclick = () => { location.href = (location.pathname.includes('/pages/') ? '' : 'pages/') + 'login.html'; };
+      a.onclick = () => { location.href = '/login'; };
       return;
     }
     if (topic === 'أخرى') {

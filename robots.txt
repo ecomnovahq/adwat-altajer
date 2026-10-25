@@ -3,13 +3,21 @@
 
 User-agent: *
 Allow: /
+Disallow: /admin
 Disallow: /pages/admin.html
+Disallow: /account
 Disallow: /pages/account.html
+Disallow: /login
 Disallow: /pages/login.html
+Disallow: /history
 Disallow: /pages/history.html
+Disallow: /messages
 Disallow: /pages/messages.html
+Disallow: /forgot-password
 Disallow: /pages/forgot-password.html
+Disallow: /reset-password
 Disallow: /pages/reset-password.html
+Disallow: /assistant
 Disallow: /pages/assistant.html
 
 # ── زواحف الذكاء الاصطناعي (نسمح لها صراحةً حتى تقتبس الموقع في نتائجها) ──

@@ -57,7 +57,7 @@ router.post(
           <h2 style="color:#7c3aed;">أهلاً بك في نشرة أدوات التاجر 🎉</h2>
           <p>شكراً لاشتراكك! ستصلك أفضل النصائح العملية لزيادة مبيعات متجرك الإلكتروني — تسويق، تسعير، SEO، ومواسم البيع.</p>
           <p>بالمناسبة، جرّب أدواتنا المجانية الآن:</p>
-          <p><a href="${SITE}/pages/tools.html" style="display:inline-block;background:#7c3aed;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700;">استكشف الأدوات</a></p>
+          <p><a href="${SITE}/tools" style="display:inline-block;background:#7c3aed;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700;">استكشف الأدوات</a></p>
           ${brandFooter(token)}
         </div>`
       }).catch(() => {});
@@ -115,7 +115,7 @@ async function sendDigest({ days = 7 } = {}) {
 
   const items = posts.map(p => `
     <div style="margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #eef2f7;">
-      <a href="${SITE}/pages/blog-post.html?slug=${encodeURIComponent(p.slug)}" style="color:#7c3aed;font-size:17px;font-weight:700;text-decoration:none;">${p.title}</a>
+      <a href="${SITE}/blog-post?slug=${encodeURIComponent(p.slug)}" style="color:#7c3aed;font-size:17px;font-weight:700;text-decoration:none;">${p.title}</a>
       <p style="color:#475569;margin:6px 0 0;">${(p.excerpt || '').slice(0, 160)}</p>
     </div>`).join('');
 
@@ -125,7 +125,7 @@ async function sendDigest({ days = 7 } = {}) {
       <h2 style="color:#7c3aed;">جديد مدوّنة أدوات التاجر 📩</h2>
       <p>أحدث المقالات لمساعدتك في تنمية متجرك:</p>
       ${items}
-      <p style="margin-top:18px;"><a href="${SITE}/pages/blog.html" style="display:inline-block;background:#7c3aed;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700;">اقرأ كل المقالات</a></p>
+      <p style="margin-top:18px;"><a href="${SITE}/blog" style="display:inline-block;background:#7c3aed;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700;">اقرأ كل المقالات</a></p>
       ${brandFooter(s.token)}
     </div>`;
     try { await sendMail({ to: s.email, subject: 'جديد مدوّنة أدوات التاجر — نصائح لمتجرك 📩', html }); sent++; }
@@ -138,17 +138,17 @@ async function sendDigest({ days = 7 } = {}) {
 
 // ── بنك الأدوات المميّزة (يدور يومياً) ────────────────────────────────────────
 const FEATURED_TOOLS = [
-  { name: 'محلل المتجر', url: '/pages/analyzer.html', desc: 'حلّل متجرك واكتشف نقاط تحسين مبيعاتك فوراً.' },
-  { name: 'مولّد أوصاف المنتجات', url: '/pages/generator.html', desc: 'اكتب أوصاف منتجات احترافية تبيع بضغطة زر.' },
-  { name: 'مولّد صور المنتجات', url: '/pages/image-gen.html', desc: 'صور منتجات احترافية بالذكاء الاصطناعي بلا استوديو.' },
-  { name: 'حاسبة الأرباح والتسعير', url: '/pages/calculator.html', desc: 'سعّر منتجاتك بذكاء واعرف صافي ربحك بدقة.' },
-  { name: 'محلل المنافسين', url: '/pages/competitor.html', desc: 'اعرف نقاط قوة منافسيك وكيف تتفوّق عليهم.' },
-  { name: 'مولّد حملة الإطلاق', url: '/pages/launch-campaign.html', desc: 'خطة إطلاق متكاملة لمنتجك الجديد في دقائق.' },
-  { name: 'مولّد خطة السوشيال', url: '/pages/social-plan.html', desc: 'خطة محتوى شهرية جاهزة لمنصاتك الاجتماعية.' },
-  { name: 'رسائل واتساب', url: '/pages/whatsapp.html', desc: 'قوالب واتساب احترافية لاستعادة السلات والعملاء.' },
-  { name: 'التقويم التسويقي', url: '/pages/calendar.html', desc: 'خطّط مبيعاتك حسب مواسم السوق والمناسبات.' },
-  { name: 'مولّد سياسات المتجر', url: '/pages/store-policies.html', desc: 'سياسات متجر متوافقة ونظامية في دقائق.' },
-  { name: 'أداة الكوبونات', url: '/pages/coupons.html', desc: 'صمّم عروض وكوبونات تزيد مبيعاتك بذكاء.' },
+  { name: 'محلل المتجر', url: '/analyzer', desc: 'حلّل متجرك واكتشف نقاط تحسين مبيعاتك فوراً.' },
+  { name: 'مولّد أوصاف المنتجات', url: '/generator', desc: 'اكتب أوصاف منتجات احترافية تبيع بضغطة زر.' },
+  { name: 'مولّد صور المنتجات', url: '/image-gen', desc: 'صور منتجات احترافية بالذكاء الاصطناعي بلا استوديو.' },
+  { name: 'حاسبة الأرباح والتسعير', url: '/calculator', desc: 'سعّر منتجاتك بذكاء واعرف صافي ربحك بدقة.' },
+  { name: 'محلل المنافسين', url: '/competitor', desc: 'اعرف نقاط قوة منافسيك وكيف تتفوّق عليهم.' },
+  { name: 'مولّد حملة الإطلاق', url: '/launch-campaign', desc: 'خطة إطلاق متكاملة لمنتجك الجديد في دقائق.' },
+  { name: 'مولّد خطة السوشيال', url: '/social-plan', desc: 'خطة محتوى شهرية جاهزة لمنصاتك الاجتماعية.' },
+  { name: 'رسائل واتساب', url: '/whatsapp', desc: 'قوالب واتساب احترافية لاستعادة السلات والعملاء.' },
+  { name: 'التقويم التسويقي', url: '/calendar', desc: 'خطّط مبيعاتك حسب مواسم السوق والمناسبات.' },
+  { name: 'مولّد سياسات المتجر', url: '/store-policies', desc: 'سياسات متجر متوافقة ونظامية في دقائق.' },
+  { name: 'أداة الكوبونات', url: '/coupons', desc: 'صمّم عروض وكوبونات تزيد مبيعاتك بذكاء.' },
 ];
 
 // ── بنك نصائح احتياطي (يُستخدم لو تعذّر توليد نصيحة بالذكاء الاصطناعي) ──────────
@@ -207,7 +207,7 @@ async function sendDailyTip() {
         <a href="${SITE}${tool.url}" style="display:inline-block;background:#7c3aed;color:#fff;padding:9px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem;">جرّبها مجاناً</a>
       </div>
 
-      ${latest ? `<p style="margin:0 0 20px;">📖 مقال يفيدك اليوم: <a href="${SITE}/pages/blog-post.html?slug=${encodeURIComponent(latest.slug)}" style="color:#7c3aed;font-weight:700;text-decoration:none;">${latest.title}</a></p>` : ''}
+      ${latest ? `<p style="margin:0 0 20px;">📖 مقال يفيدك اليوم: <a href="${SITE}/blog-post?slug=${encodeURIComponent(latest.slug)}" style="color:#7c3aed;font-weight:700;text-decoration:none;">${latest.title}</a></p>` : ''}
 
       <div style="background:#0f172a;border-radius:12px;padding:18px 20px;margin:0 0 6px;">
         <div style="color:#fff;font-weight:800;margin-bottom:6px;">تبي متجراً احترافياً يبيع من أول يوم؟</div>

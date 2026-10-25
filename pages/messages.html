@@ -8,7 +8,7 @@
 <meta property="og:title" content="رسائلي — أدوات التاجر">
 <meta property="og:description" content="تذاكر الدعم ومحادثاتك مع فريق خبراء المنصات.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://adwat.cloud/pages/messages.html">
+<meta property="og:url" content="https://adwat.cloud/messages">
 <meta name="robots" content="noindex, follow">
 <meta property="og:image" content="https://adwat.cloud/assets/favicon.svg">
 <meta property="og:site_name" content="أدوات التاجر">
@@ -17,13 +17,13 @@
 <meta name="twitter:title" content="رسائلي — أدوات التاجر">
 <meta name="twitter:description" content="تذاكر الدعم ومحادثاتك مع فريق خبراء المنصات.">
 <meta name="twitter:image" content="https://adwat.cloud/assets/favicon.svg">
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <script>(function(){var t=localStorage.getItem('tajer-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css?v=13">
-<link rel="stylesheet" href="../assets/responsive.css?v=1">
+<link rel="stylesheet" href="/assets/styles.css?v=13">
+<link rel="stylesheet" href="/assets/responsive.css?v=1">
 <style>
   .ms-page { max-width: 1050px; margin: 0 auto; padding: 2rem 1.2rem 4rem; }
   .ms-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
@@ -135,7 +135,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js?v=47"></script>
+<script src="/assets/api.js?v=48"></script>
 <script>
 const TOPICS = ['طلب خدمة', 'استفسار عن أداة', 'مشكلة تقنية', 'الفواتير والاشتراك', 'اقتراح', 'أخرى'];
 const ST = {
@@ -154,7 +154,7 @@ function timeAgo(d) {
 let _list = [], _cur = null, _lastId = 0, _poll = null;
 
 if (!auth.isLoggedIn()) {
-  location.href = 'login.html';
+  location.href = '/login';
 }
 
 async function loadList() {
@@ -291,6 +291,6 @@ async function newTicket(topic) {
   if (tid) openChat(tid);
 })();
 </script>
-<script src="../assets/header.js?v=22"></script>
+<script src="/assets/header.js?v=23"></script>
 </body>
 </html>
