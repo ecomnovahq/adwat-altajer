@@ -306,6 +306,11 @@
       طلبات التحليلات
       <span class="sidebar-badge" id="analysesBadge" style="display:none;">0</span>
     </button>
+    <button class="sidebar-link" onclick="showSection('expert-reviews')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      قيّم مشروعك مع خبير
+      <span class="sidebar-badge" id="expertBadge" style="display:none;">0</span>
+    </button>
     <button class="sidebar-link" onclick="showSection('assistant-clients')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
       عملاء مساعد التاجر
@@ -888,6 +893,29 @@
       </div>
     </div>
 
+    <div class="admin-section" id="section-expert-reviews">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">طلبات «قيّم مشروعك مع خبير»</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+            <select id="erStatusFlt" class="admin-search" style="max-width:150px;" onchange="renderExpertReviews()">
+              <option value="all">كل الحالات</option>
+              <option value="new">جديد</option>
+              <option value="in_progress">قيد التحليل</option>
+              <option value="delivered">تم تسليم الخطة</option>
+              <option value="cancelled">ملغي</option>
+            </select>
+            <input type="text" class="admin-search" id="erList_q" placeholder="بحث..." oninput="runFilter('erList')" style="max-width:140px;">
+            <label class="flt-date">من <input type="date" id="erList_from" onchange="runFilter('erList')"></label>
+            <label class="flt-date">إلى <input type="date" id="erList_to" onchange="runFilter('erList')"></label>
+            <button class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;" onclick="loadExpertReviews()">تحديث</button>
+          </div>
+        </div>
+        <div id="erStats" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;"></div>
+        <div id="erList" style="display:flex;flex-direction:column;gap:1rem;"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1207,7 +1235,7 @@
   </div>
 </div>
 
-<script src="../assets/api.js?v=47"></script>
+<script src="../assets/api.js?v=49"></script>
 <script>
 // ─── Notifications ────────────────────────────────────────────────────────────
 let notifications = JSON.parse(localStorage.getItem('admin_notifs') || '[]');
@@ -1343,6 +1371,7 @@ function showSection(name) {
     users: 'المستخدمون', logs: 'سجل الأدوات',
     'tool-settings': 'إعدادات الأدوات', 'plans': 'الباقات والأسعار', 'tool-requests': 'طلبات الوصول',
     'merchant-path': 'طلبات مسار التاجر', tickets: 'الدعم والتذاكر', analyses: 'طلبات التحليلات',
+    'expert-reviews': 'قيّم مشروعك مع خبير',
     'assistant-clients': 'عملاء مساعد التاجر',
     'assistant-stores': 'مساعد التاجر — المتاجر'
   };
@@ -1363,6 +1392,7 @@ function refreshSection() {
     users: loadUsers, logs: loadLogs,
     'tool-settings': loadToolSettings, 'plans': loadPlans, 'tool-requests': loadToolRequests,
     'merchant-path': loadMerchantPath, tickets: loadTickets, analyses: loadAnalyses,
+    'expert-reviews': loadExpertReviews,
     'assistant-clients': loadAssistantClients,
     'assistant-stores': loadAssistantStores
   };
@@ -1886,6 +1916,121 @@ async function deleteMpSub(id) {
   }, 'حذف');
 }
 
+// ─── قيّم مشروعك مع خبير ──────────────────────────────────────────────────────
+const ER_STATUS = {
+  new:         { l: 'جديد',            c: '#f59e0b' },
+  in_progress: { l: 'قيد التحليل',     c: '#6366f1' },
+  delivered:   { l: 'تم تسليم الخطة',  c: '#22c55e' },
+  cancelled:   { l: 'ملغي',            c: '#94a3b8' },
+};
+const ER_SOCIAL = { instagram: 'إنستقرام', tiktok: 'تيك توك', snapchat: 'سناب شات', x: 'إكس', other: 'أخرى' };
+const ER_BASE = { instagram: 'https://instagram.com/', tiktok: 'https://www.tiktok.com/@', snapchat: 'https://www.snapchat.com/add/', x: 'https://x.com/' };
+function erSocialHref(k, v) {
+  const s = String(v || '').trim();
+  if (/^https?:\/\//i.test(s)) return s;
+  const h = s.replace(/^@/, '');
+  if (!h || /\s/.test(h)) return '';
+  if (ER_BASE[k]) return ER_BASE[k] + h;
+  return /\./.test(h) ? 'https://' + h : '';
+}
+
+async function loadExpertReviews() {
+  const rows = await api.admin.expertReviews().catch(() => []);
+  window._erRows = rows;
+  const newCount = rows.filter(r => r.status === 'new').length;
+  const badge = document.getElementById('expertBadge');
+  if (badge) { badge.textContent = newCount; badge.style.display = newCount ? '' : 'none'; }
+  renderExpertReviews();
+}
+
+function renderExpertReviews() {
+  const rows = window._erRows || [];
+  const el = document.getElementById('erList');
+  if (!el) return;
+  const e = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  const counts = {}; rows.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
+  document.getElementById('erStats').innerHTML = Object.entries(ER_STATUS).map(([k, v]) =>
+    `<span class="badge" style="background:${v.c}1f;color:${v.c};">${v.l}: ${counts[k] || 0}</span>`).join('');
+
+  const flt = document.getElementById('erStatusFlt')?.value || 'all';
+  const list = flt === 'all' ? rows : rows.filter(r => r.status === flt);
+  if (!list.length) { el.innerHTML = '<div class="az-empty" style="padding:2rem;text-align:center;color:var(--ink-dim);">لا توجد طلبات بعد</div>'; return; }
+
+  el.innerHTML = list.map(r => {
+    const st = ER_STATUS[r.status] || ER_STATUS.new;
+    const isNew = r.status === 'new';
+    const wa = String(r.phone || '').replace(/[^\d]/g, '').replace(/^0/, '966');
+    const store = /^https?:\/\//i.test(r.store_url || '') ? r.store_url : '';
+    const socials = Object.entries(r.socials || {}).map(([k, v]) => {
+      const href = erSocialHref(k, v);
+      return href
+        ? `<a href="${e(href)}" target="_blank" rel="noopener" class="badge" style="background:var(--accent-soft);color:var(--accent);text-decoration:none;">${ER_SOCIAL[k] || e(k)} ↗</a>`
+        : `<span class="badge" style="background:var(--bg-card);color:var(--ink-dim);">${ER_SOCIAL[k] || e(k)}: ${e(v)}</span>`;
+    }).join('');
+    const tags = (Array.isArray(r.challenge_tags) ? r.challenge_tags : []).map(t =>
+      `<span class="badge" style="background:rgba(239,68,68,.12);color:#ef4444;font-size:.72rem;">${e(t)}</span>`).join('');
+    const box = (title, txt, color) => `<div style="margin-bottom:.7rem;">
+        <div style="font-size:.78rem;font-weight:700;color:var(--ink-dim);margin-bottom:.3rem;">${title}</div>
+        <div style="font-size:.86rem;line-height:1.85;white-space:pre-wrap;background:var(--bg-card);border:1px solid var(--line);border-right:3px solid ${color};border-radius:8px;padding:.7rem .9rem;">${e(txt)}</div>
+      </div>`;
+    return `<div class="panel" data-date="${r.created_at || ''}" style="border:1px solid ${isNew ? 'var(--accent)' : 'var(--line)'};padding:1.1rem 1.3rem;">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:.7rem;">
+        <div>
+          <strong style="font-size:1rem;">${e(r.name)}</strong>
+          <span style="color:var(--ink-dim);font-size:.8rem;"> · #${r.id}${r.user_id ? ' · لديه حساب' : ''}</span>
+        </div>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+          ${r.platform ? `<span class="badge" style="background:var(--bg-card);color:var(--ink-dim);">${e(r.platform)}</span>` : ''}
+          <select onchange="setExpertStatus(${r.id}, this.value)" style="background:${st.c}1f;color:${st.c};border:1px solid ${st.c}55;border-radius:99px;padding:.25rem .6rem;font-size:.78rem;font-family:var(--font-arabic);font-weight:700;cursor:pointer;">
+            ${Object.entries(ER_STATUS).map(([k, v]) => `<option value="${k}" ${k === r.status ? 'selected' : ''}>${v.l}</option>`).join('')}
+          </select>
+          <span style="color:var(--ink-dim);font-size:.78rem;">${fmt(r.created_at)}</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;font-size:.85rem;margin-bottom:.7rem;">
+        <span><span style="color:var(--ink-dim);">الجوال:</span> <a href="tel:${e(r.phone)}" style="color:var(--ink);" dir="ltr">${e(r.phone)}</a></span>
+        <span><span style="color:var(--ink-dim);">البريد:</span> <a href="mailto:${e(r.email)}" style="color:var(--ink);">${e(r.email)}</a></span>
+        <span><span style="color:var(--ink-dim);">المتجر:</span> ${store ? `<a href="${e(store)}" target="_blank" rel="noopener" style="color:var(--accent);" dir="ltr">${e(r.store_url)} ↗</a>` : e(r.store_url)}</span>
+      </div>
+      ${socials ? `<div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.8rem;">${socials}</div>` : ''}
+      ${box('نبذة عن المشروع', r.about, 'var(--accent)')}
+      ${tags ? `<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.4rem;">${tags}</div>` : ''}
+      ${box('التحديات', r.challenges, '#f59e0b')}
+      <details style="margin-bottom:.7rem;" ${r.admin_notes ? 'open' : ''}>
+        <summary style="cursor:pointer;font-weight:700;font-size:.85rem;color:var(--accent);">ملاحظات الخبير الداخلية</summary>
+        <textarea id="erNotes${r.id}" class="admin-search" style="width:100%;max-width:none;min-height:80px;margin-top:.5rem;resize:vertical;line-height:1.7;" placeholder="ملاحظات التحليل، رابط الخطة المسلّمة، مواعيد المتابعة...">${e(r.admin_notes || '')}</textarea>
+        <button class="action-btn action-toggle" style="margin-top:.4rem;" onclick="saveExpertNotes(${r.id})">حفظ الملاحظات</button>
+      </details>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        ${wa ? `<a class="action-btn" style="background:rgba(34,197,94,.14);color:#16a34a;text-decoration:none;" href="https://wa.me/${wa}" target="_blank" rel="noopener">واتساب</a>` : ''}
+        <a class="action-btn action-toggle" style="text-decoration:none;" href="mailto:${e(r.email)}?subject=${encodeURIComponent('خطة تقييم مشروعك — أدوات التاجر')}">إرسال بريد</a>
+        <button class="action-btn action-delete" onclick="deleteExpertReview(${r.id})">حذف</button>
+      </div>
+    </div>`;
+  }).join('');
+  runFilter('erList');
+}
+
+async function setExpertStatus(id, status) {
+  try { await api.admin.updateExpertReview(id, { status }); }
+  catch (err) { showError('خطأ', err.message); }
+  loadExpertReviews();
+}
+async function saveExpertNotes(id) {
+  const v = document.getElementById('erNotes' + id)?.value ?? '';
+  try {
+    await api.admin.updateExpertReview(id, { admin_notes: v });
+    const r = (window._erRows || []).find(x => x.id === id); if (r) r.admin_notes = v;
+    showSuccess('تم الحفظ', 'حُفظت الملاحظات');
+  } catch (err) { showError('خطأ', err.message); }
+}
+async function deleteExpertReview(id) {
+  showConfirm('حذف الطلب', 'هل أنت متأكد من حذف هذا الطلب نهائياً؟', async () => {
+    await api.admin.deleteExpertReview(id).catch(err => showError('خطأ', err.message));
+    loadExpertReviews();
+  }, 'حذف');
+}
+
 // ─── Modal Helpers ────────────────────────────────────────────────────────────
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
@@ -1960,6 +2105,7 @@ async function loadDashboard() {
   }
   loadTickets(); // لتحديث شارة التذاكر المفتوحة
   loadAnalyses(); // لتحديث شارة طلبات التحليلات الجديدة
+  loadExpertReviews(); // لتحديث شارة طلبات «قيّم مشروعك مع خبير»
 }
 
 // ─── لوحة التحليلات ────────────────────────────────────────────────────────────

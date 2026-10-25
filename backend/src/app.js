@@ -136,6 +136,28 @@ db.query(`
   )
 `).catch(e => logger.error('analysis_submissions init error:', e.message));
 
+// «قيّم مشروعك مع خبير» — طلبات تقييم بشري للمشروع والمتجر وتسليم خطة كاملة
+db.query(`
+  CREATE TABLE IF NOT EXISTS expert_reviews (
+    id             SERIAL PRIMARY KEY,
+    user_id        INTEGER,
+    name           VARCHAR(120) NOT NULL,
+    email          VARCHAR(255) NOT NULL,
+    phone          VARCHAR(30)  NOT NULL,
+    store_url      TEXT NOT NULL,
+    platform       VARCHAR(40),
+    socials        JSONB,
+    about          TEXT NOT NULL,
+    challenges     TEXT NOT NULL,
+    challenge_tags JSONB,
+    status         VARCHAR(20) NOT NULL DEFAULT 'new',
+    admin_notes    TEXT,
+    created_at     TIMESTAMPTZ DEFAULT NOW(),
+    updated_at     TIMESTAMPTZ DEFAULT NOW()
+  )
+`).then(() => db.query(`CREATE INDEX IF NOT EXISTS idx_expert_reviews_status ON expert_reviews (status, created_at DESC)`))
+  .catch(e => logger.error('expert_reviews init error:', e.message));
+
 // تذاكر الدعم + رسائل الدردشة
 db.query(`
   CREATE TABLE IF NOT EXISTS support_tickets (
@@ -429,6 +451,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tools', aiLimiter, require('./routes/tools'));
 app.use('/api/coupons', require('./routes/coupons'));
 app.use('/api/bookings', require('./routes/bookings'));
+app.use('/api/expert-review', require('./routes/expert-review'));
 app.use('/api/works', require('./routes/works'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/admin', require('./routes/admin'));

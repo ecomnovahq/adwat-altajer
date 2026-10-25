@@ -204,6 +204,7 @@ const api = {
   getWorks:      (category)    => apiRequest('GET', `/works${category ? `?category=${category}` : ''}`),
   getReviews:    ()            => apiRequest('GET', '/reviews'),
   submitBooking: (data)        => apiRequest('POST', '/bookings', data),
+  submitExpertReview: (data)   => apiRequest('POST', '/expert-review', data),
 
   // ─── Blog ──────────────────────────────────────────────────────────────────
   getBlogPosts:  (params = {}) => apiRequest('GET', `/blog?${new URLSearchParams(params)}`),
@@ -263,6 +264,9 @@ const api = {
     merchantPathSubs:   ()             => apiRequest('GET', '/admin/merchant-path'),
     updateMerchantPathSub: (id, data)  => apiRequest('PUT', `/admin/merchant-path/${id}`, data),
     deleteMerchantPathSub: (id)        => apiRequest('DELETE', `/admin/merchant-path/${id}`),
+    expertReviews:      ()             => apiRequest('GET', '/expert-review'),
+    updateExpertReview: (id, data)     => apiRequest('PUT', `/expert-review/${id}`, data),
+    deleteExpertReview: (id)           => apiRequest('DELETE', `/expert-review/${id}`),
 
     allCoupons:   ()          => apiRequest('GET', '/coupons/admin/all'),
     createCoupon: (data)      => apiRequest('POST', '/coupons', data),

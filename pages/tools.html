@@ -52,6 +52,7 @@
   .tool-badge svg { width: 12px; height: 12px; }
   .tool-badge.ai { background: var(--accent-soft); color: var(--accent); }
   .tool-badge.free { background: rgba(34,197,94,.14); color: #22c55e; }
+  .tool-badge.expert { background: rgba(245,158,11,.15); color: #f59e0b; }
   .tool-icon { width: 64px; height: 64px; border-radius: 16px; background: var(--bg); border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; color: var(--accent); transition: all var(--transition); }
   .tool-card:hover:not(.soon) .tool-icon { background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%); color: #fff; transform: rotate(-6deg) scale(1.08); box-shadow: 0 6px 20px rgba(168,85,247,0.35); border-color: var(--accent); }
   .tool-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.2; }
@@ -112,7 +113,7 @@
   <div class="tools-cat" data-reveal>
     <div class="tools-cat-head">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg></span>
-      <h2>تحليل وتقييم</h2><span class="cnt">4 أدوات</span>
+      <h2>تحليل وتقييم</h2><span class="cnt">5 أدوات</span>
     </div>
     <div class="tools-grid">
       <a href="analyzer.html" class="tool-card" data-reveal>
@@ -135,6 +136,13 @@
         <h3 class="tool-title">مسار التاجر</h3>
         <p class="tool-desc">مسار ذكي يبني لك خطة تأسيس إن كنت مبتدئاً، أو يقيّم جاهزية متجرك وأداءه ويرشّح الخدمات المناسبة لكل نقطة نقص.</p>
         <span class="tool-link">ابدأ مسارك<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span>
+      </a>
+      <a href="expert-review.html" class="tool-card" data-reveal>
+        <span class="tool-badge expert"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg> تقييم بشري</span>
+        <div class="tool-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 016-6h4a6 6 0 016 6v1"/><path d="M16 4l1.5 1.5L20 3"/></svg></div>
+        <h3 class="tool-title">قيّم مشروعك مع خبير</h3>
+        <p class="tool-desc">أرسل نبذة عن مشروعك وتحدياتك ورابط متجرك، ويقيّم خبير مشروعك ومتجرك بالكامل ويسلّمك خطة عمل متكاملة.</p>
+        <span class="tool-link">اطلب التقييم<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span>
       </a>
       <a href="calculator.html" class="tool-card" data-reveal>
         <span class="tool-badge free">مجاني</span>
