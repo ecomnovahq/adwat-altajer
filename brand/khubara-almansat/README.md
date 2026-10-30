@@ -14,6 +14,6 @@
 
 - **الشعار:** `logo-color.png` (على فاتح) · `logo-white.png` (على غامق، النقاط فيروزية) · `logo-white-solid.png` (أبيض كامل).
 - **الحسابات:** `sallatips` على إنستقرام وإكس وتيك توك ويوتيوب وسناب · الموقع `salatips.com` — داخل كبسولة بحواف دائرية أسفل الإطار.
-- **الخط اللاتيني:** General Sans. **الخط العربي:** مؤقت (IBM Plex Sans Arabic) لين يتحدد.
+- **الخط اللاتيني:** General Sans. **الخط العربي:** IBM Plex Sans Arabic.
 - **الخلفيات 9:16** (1080×1920) بـ`backgrounds/` — `light-*` الأساسية، و`mid-*` و`dark-*` للتنويع.
 - **ملف الهوية للمونتاج:** `profile.json` — ينسخ لمجلد بيانات مهارة المونتاج (`~/Documents/video-editor-bassam/profile.json`) مع ملفات الشعار.
