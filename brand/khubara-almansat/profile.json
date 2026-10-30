@@ -1,0 +1,71 @@
+{
+ "_": "هوية خبراء المنصات — سلسلة «تجارة من الصفر». فاتح أولاً: الخلفيات البيضاء والسماوية هي الأساس، والغامقة للتنويع فقط.",
+ "handle": "@sallatips",
+ "bg": "#F7F9FC",
+ "ink": "#0A1A4A",
+ "acc": "#0164FF",
+ "clay": "#004CC3",
+ "warm": "#2A7DFF",
+ "mut": "#757E9A",
+ "sky": "#BBDCFE",
+ "cream": "#FFFFFF",
+ "sand": "#E6F0FF",
+ "font": "IBM Plex Sans Arabic",
+ "fontLocal": false,
+ "captionSize": 55,
+ "captionWeight": 500,
+ "captionMaxW": 700,
+ "maxLines": 2,
+ "hookSize": 90,
+ "helperSize": 48,
+ "handleSize": 32,
+ "numerals": "western",
+ "safeTop": 200,
+ "safeBottom": 420,
+ "safeSide": 180,
+ "grade": false,
+ "_grade_note": "لا نلمس ألوان صورته ولا صوته إلا بطلبه الصريح.",
+ "zoomAnchor": 0.3,
+ "faceAnchor": 0.3,
+ "noZoom": false,
+ "logo": "logo-color.png",
+ "brand": {
+  "name": "خبراء المنصات",
+  "series": "تجارة من الصفر",
+  "site": "salatips.com",
+  "social": "sallatips",
+  "platforms": [
+   "instagram",
+   "x",
+   "tiktok",
+   "youtube",
+   "snapchat"
+  ],
+  "logoBlue": "#3891C9",
+  "teal": "#4ADEDE",
+  "electric": "#0164FF",
+  "royal": "#3A1FFF",
+  "navy": "#0A1A4A",
+  "paleSky": "#E8F1FE",
+  "latinFont": "General Sans",
+  "logos": {
+   "onLight": "logo-color.png",
+   "onDark": "logo-white.png",
+   "mono": "logo-white-solid.png"
+  },
+  "lightFirst": true,
+  "backgroundsLight": [
+   "backgrounds/light-01-white-shapes.png",
+   "backgrounds/light-02-soft-circles.png",
+   "backgrounds/light-03-sky-gradient.png",
+   "backgrounds/light-04-blur-blobs.png"
+  ],
+  "backgroundsAccent": [
+   "backgrounds/mid-05-paper-blue.png",
+   "backgrounds/mid-06-glow-blue.png",
+   "backgrounds/dark-07-ribbon.png",
+   "backgrounds/dark-08-frame.png"
+  ]
+ },
+ "_font_note": "خط عربي مؤقت لين يختار صاحب الهوية خطه — الشعار مرسوم يدوياً وما فيه خط مسمّى بالملف."
+}
